@@ -53,7 +53,7 @@ const ProjectCard: React.FC<{detail:any}> = ({detail}) => {
           <ProjectCardHeadTitleBox>
             <div>{detail === null ? <ValueSkeleton width={300}/>:detail?.projectname}</div>
             <div>
-              {detail?.projecttokenname.trim() ? <span>{detail.projecttokenname}</span> : ''}
+              {detail?.projecttokenname.trim() ? <span>{detail?.projecttokenname}</span> : ''}
               <ImgBox alt="" src={UpcomingImg} height={30} />
             </div>
           </ProjectCardHeadTitleBox>
@@ -65,7 +65,7 @@ const ProjectCard: React.FC<{detail:any}> = ({detail}) => {
           {detail === null ? <ValueSkeleton width={498} height={270}/>:<ImgBox alt="" width={498} height={270} src={`data:image/jpeg;base64,${detail?.projecthead}`}/>}
         </ProjectContainerItemBox>
         <ProjectContainerItemBox>
-          {detail === null ? <ValueSkeleton height={100} width={622}/>: detail.projectdescription}
+          {detail === null ? <ValueSkeleton height={100} width={622}/>: detail?.projectdescription}
         </ProjectContainerItemBox>
       </ProjectContainerBox>
     </ProjectCardBox>

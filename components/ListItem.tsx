@@ -9,22 +9,22 @@ const ListWaperItem: React.FC<{ item: ProjectItemType }> = ({ item }) => {
   return (
     <ListWaperItemBox>
       <ListWaperItemPicBox>
-        <ListWaperItemImage alt=""  src={`data:image/jpeg;base64,${item.projecthead}`} height={389} width={719} />
+        <ListWaperItemImage alt=""  src={`data:image/jpeg;base64,${item?.projecthead}`} height={389} width={719} />
       </ListWaperItemPicBox>
       <ListWaperItemLineBox>
         <div>
           <ListWaperItemUserLineBox>
-            <ListWaperItemUserImage alt=""  src={`data:image/jpeg;base64,${item.projectlogo}`} height={88} width={88} />
+            <ListWaperItemUserImage alt=""  src={`data:image/jpeg;base64,${item?.projectlogo}`} height={88} width={88} />
             <ListWaperItemUserNameBox>
-              <div className="title">{item.projectname}</div>
+              <div className="title">{item?.projectname}</div>
               <div className="token">
-                {item.projecttokenname}
+                {item?.projecttokenname}
                 {/* <ListWaperItemStatusImage alt="" src={StatusImgs[item.status]}/> */}
               </div>
             </ListWaperItemUserNameBox>
           </ListWaperItemUserLineBox>
           <ListWaperItemUserDescBox>
-            {item.projectdescription}
+            {item?.projectdescription}
           </ListWaperItemUserDescBox>
         </div>
         <ListWaperButtonBox to={`/ft/${item.id}`} variant="secondary">

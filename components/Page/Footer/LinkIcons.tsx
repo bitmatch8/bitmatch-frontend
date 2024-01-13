@@ -23,10 +23,10 @@ const LinkIcon: React.FC<{ to: string; icon: "Github" | "X" | "Telegram" | "Gitb
 export default () => {
   return (
     <FooterLinksBox>
-      <LinkIcon icon="X" to="#" />
+      <LinkIcon icon="X" to="https://twitter.com/deindex_BTC" />
       <LinkIcon icon="Github" to="#" />
-      <LinkIcon icon="Telegram" to="#" />
-      <LinkIcon icon="GitbookIcon" to="#" />
+      <LinkIcon icon="Telegram" to="https://t.me/deindexbtc" />
+      <LinkIcon icon="GitbookIcon" to="https://public-9.gitbook.io/deindex/" />
     </FooterLinksBox>
   )
 }

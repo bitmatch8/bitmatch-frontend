@@ -4,7 +4,7 @@ import Button from "@/components/Button"
 import Page from "@/components/Page"
 import styled from "@emotion/styled"
 import { useEffect } from "react"
-import ListWaperItem from "./ListItem"
+import ListWaperItem from "../../components/ListItem"
 import {
   luanchSlice,
   useSelector,
