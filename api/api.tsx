@@ -6,5 +6,5 @@ export const fetchDashboardApi=()=>{
 }
 export const fetchProjectInfoSelectInfoApi=(params:any)=>{
 	const query_params = objectToUrlParams(params)	
-	return Ajax.get(`/projectInfo/selectInfo?${query_params}`)
+	return Ajax.get(`/projectInfo/selectInfo?status=1&${query_params}`)
 }

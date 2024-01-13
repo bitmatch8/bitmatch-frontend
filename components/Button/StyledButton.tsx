@@ -1,17 +1,17 @@
 import styled from "@emotion/styled"
 import { BaseButtonProps } from "./types"
-
+import { Button as ButtonBase } from "@mui/material"
 interface TransientButtonProps extends BaseButtonProps {
   $isLoading?: boolean
   isError?: boolean
 }
 
-export const getButtonBgColor = ({variant}:TransientButtonProps) => {
-  return variant === 'secondary'? 'transparent' : "#F7931A"
+export const getButtonBgColor = ({ variant }: TransientButtonProps) => {
+  return variant === "secondary" ? "transparent" : "#F7931A"
 }
 
-export const getButtonBorderColor = ({variant}:TransientButtonProps) => {
-  return variant === 'secondary'? '3px solid #C2C5C8;' : "none"
+export const getButtonBorderColor = ({ variant }: TransientButtonProps) => {
+  return variant === "secondary" ? "3px solid #C2C5C8;" : "none"
 }
 const StyledButton = styled.button<TransientButtonProps>`
   user-select: none;
@@ -35,8 +35,16 @@ const StyledButton = styled.button<TransientButtonProps>`
   width: 200px;
   border-radius: 16px;
   text-decoration: none;
+  &.button--disabled {
+    color: #fff;
+    background: #a7a7a7;
+  }
   &:hover {
-    border:none;
+    &.button--disabled {
+      color: #fff;
+      background: #a7a7a7;
+    }
+    border: none;
     background: linear-gradient(135deg, #f7931a 0%, #d87600 100%);
   }
 `

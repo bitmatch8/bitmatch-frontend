@@ -10,7 +10,7 @@ export type ProjectItemType={
   projectdescription:string
   projectlogo?:string
   logoSuffix?:string
-  projecthead?:string
+  projecthead?:any
   headSuffix?:string
   projectnft?:string
   nftSuffix?:string

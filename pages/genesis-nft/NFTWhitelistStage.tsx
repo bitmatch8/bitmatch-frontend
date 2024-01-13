@@ -46,6 +46,14 @@ const WhitelistStageLine: React.FC<{
     </WhitelistStageLineItemBox>
   )
 }
+const WhitelistStageButton:React.FC=()=>{
+
+  const onCLick=()=>{
+    
+  }
+
+  return <WhitelistStageButtonBox onClick={onCLick} >01D 24H 59M 59S</WhitelistStageButtonBox>
+}
 const WhitelistStage: React.FC = () => {
   const [value,setValue]=useState('')
   const onChangeInput = (e: any) => {
@@ -99,7 +107,7 @@ const WhitelistStage: React.FC = () => {
           <FooterTextLineBox>My Shares 8,000 $Frog</FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
-          <WhitelistStageButtonBox>01D 24H 59M 59S</WhitelistStageButtonBox>
+         <WhitelistStageButton/> 
           <FooterTextLineBox>
             <span className="g">Balance</span>
             <span>1.23456789 BTC</span>

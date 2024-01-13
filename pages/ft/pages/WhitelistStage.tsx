@@ -43,6 +43,11 @@ const WhitelistStageLine: React.FC<{
     </WhitelistStageLineItemBox>
   )
 }
+const WhitelistStageButton:React.FC=()=>{
+  return <WhitelistStageButtonBox>
+  01D 24H 59M 59S
+  </WhitelistStageButtonBox>
+}
 const WhitelistStage: React.FC = () => {
   return (
     <WhitelistStageBox>
@@ -93,9 +98,7 @@ const WhitelistStage: React.FC = () => {
 		{/* <WhitelistStageLineItemValBox>My Shares   8,000 $Frog</WhitelistStageLineItemValBox>	 */}
 	</WhitelistStageFooterItem>
 	<WhitelistStageFooterItem>
-		<WhitelistStageButtonBox>
-		01D 24H 59M 59S
-		</WhitelistStageButtonBox>
+    <WhitelistStageButton/>	
 		<FooterTextLineBox>
 		<span className="g">
 		Balance

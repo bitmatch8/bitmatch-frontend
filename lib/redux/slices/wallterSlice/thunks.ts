@@ -11,7 +11,10 @@ export const connectUnisat = createAppAsyncThunk(
   'wallter/connectUnisat',
   async () => {
     const unisat = (window as any)?.unisat
-    const [address] = await unisat.getAccounts();
+    const [address] = await unisat.requestAccounts();
+                // handleAccountsChanged(result);
+    // const [address] = await unisat.getAccounts()
+    // console.log({address},await unisat.getAccounts().then(console.log))
     return {address} 
     // The value we return becomes the `fulfilled` action payload
   }
