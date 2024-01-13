@@ -16,6 +16,11 @@ export default function ToastModals() {
 }
 
 const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
+  const {
+    pageSize,
+    tabType,
+  } = useSelector(selectLuanch)
+
   const [second, setSecond] = useState((item.endTime || 0) - Date.now())
   const dispatch = useDispatch()
   useEffect(()=>{
@@ -25,13 +30,6 @@ const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
     window.addEventListener('click',fun)
     return window.removeEventListener('click',fun)
   },[])
-
-
-
-  const {
-    pageSize,
-    tabType,
-  } = useSelector(selectLuanch)
   const onClickTab = (tabType: FilterTypeProps) => {
     dispatch(luanchSlice.actions.setTabs(tabType))
     dispatch(fetchProjectInfoSelectInfoAsync({ pageNum: 1, pageSize, tabType }))

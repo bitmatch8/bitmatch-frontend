@@ -27,6 +27,7 @@ export default Footer
 const FooterBox = styled.div`
   background-color: #0f1012;
   margin-top: 200px;
+  min-width: 1240px;
 `
 const FooterLogoItem = styled.div`
   display: flex;
