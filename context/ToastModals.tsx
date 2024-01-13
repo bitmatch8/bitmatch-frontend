@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 
-import { useSelector, useDispatch, selectToast, ToastItem, toastSlice } from "@/lib/redux"
+import { useSelector, useDispatch, selectToast, ToastItem, toastSlice, selectLuanch, FilterTypeProps, luanchSlice, fetchProjectInfoSelectInfoAsync, fetchDashboardAsync } from "@/lib/redux"
 import styled from "@emotion/styled"
 export default function ToastModals() {
   const { lists } = useSelector(selectToast)
@@ -25,6 +25,25 @@ const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
     window.addEventListener('click',fun)
     return window.removeEventListener('click',fun)
   },[])
+
+
+
+  const {
+    pageSize,
+    tabType,
+  } = useSelector(selectLuanch)
+  const onClickTab = (tabType: FilterTypeProps) => {
+    dispatch(luanchSlice.actions.setTabs(tabType))
+    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum: 1, pageSize, tabType }))
+  }
+
+  const getLists = (pageNum: number = 1) => {
+    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum, pageSize, tabType }))
+  }
+  useEffect(() => {
+    getLists()
+    onClickTab('ALL')
+  }, [])
   return (
     <ToastItemBox>
       <ToastItemContxtBox>{item.contxt}</ToastItemContxtBox>

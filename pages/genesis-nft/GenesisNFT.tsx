@@ -3,29 +3,51 @@
 import Page from "@/components/Page";
 import DetailTitle from "../ft/DetailTitle";
 import { Spaced } from "@/components/Spaced";
-import ProjectCard from "../ft/pages/ProjectCard";
+import ProjectCard from "./ProjectCard";
 import NftImg from '@/assets/img/nft_img.png'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NFTWhitelistStage from "./NFTWhitelistStage";
 import PublicStage from "../ft/pages/PublicStage";
 import ProjectInformation from "../ft/pages/ProjectInformation";
 import styled from "@emotion/styled";
 import Button from "@/components/Button";
 import OrderHistory from "./OrderHistory";
+import { fetchProjectInfoApi } from "@/api/api";
 
-export default function IndexPage() {
+export default function GenesisNFT() {
 	const [tabId, setTabId] = useState(0)
+  const [detail,setDetail]=useState<any>(null)
+  const [whtielist,setWhtielist]=useState(null)
+  const id = 56
 	const onClickTabItem = (id: number) => setTabId(id)
+  
 	const ProjectTabList = [
 	  "Whitelist Stage",
 	  "Public Stage",
 	  "Project Information",
 	]
-	const ProjectShowBlock = [<NFTWhitelistStage/>,<PublicStage/>,<ProjectInformation/>][tabId]
+  const initWhtielist=async()=>{
+
+  }
+  const initPage= async()=>{
+    const {data,code} = await fetchProjectInfoApi(id)
+    if(code === 0){
+      setDetail(data)
+    }
+  }
+  useEffect(()=>{
+    if(detail){
+      initWhtielist()
+    }
+  },[detail])
+  useEffect(()=>{
+    initPage()
+  },[id])
+	const ProjectShowBlock = [<NFTWhitelistStage detail={detail}/>,<PublicStage/>,<ProjectInformation/>][tabId]
 	return <Page>
 		     <DetailTitle title="BitMatch Genesis NFT"/> 
       <Spaced size="80"/>
-      <ProjectCard cardImg={NftImg} title="BitMatch Genesis NFT"/>
+      <ProjectCard detail={detail}/>
       <ProjectTabsBox>
         {ProjectTabList.map((txt, key) => (
           <ProjectTabsItemBox

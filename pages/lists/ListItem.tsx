@@ -1,23 +1,11 @@
 /* Components */
 
 import Button from "@/components/Button"
-import Page from "@/components/Page"
 import styled from "@emotion/styled"
-import { useState } from "react"
-import DemoImg_01 from "@/assets/img/demo_1.png"
-import DemoUser_01 from "@/assets/img/demo_user.png"
 import Image from "next/image"
-import UpcommingImg1 from "@/assets/img/upcomming1.png"
-import UpCommingImg2 from "@/assets/img/upcomming2.png"
-import EndedImg from "@/assets/img/ended.png"
 import { ProjectItemType } from "@/lib/redux"
 
 const ListWaperItem: React.FC<{ item: ProjectItemType }> = ({ item }) => {
-  const StatusImgs: { [key: string]: any } = {
-    "Upcoming1": UpcommingImg1,
-    "Ended": EndedImg,
-    "Upcoming2": UpCommingImg2,
-  }
   return (
     <ListWaperItemBox>
       <ListWaperItemPicBox>
@@ -86,10 +74,6 @@ const ListWaperItemUserNameBox = styled.div`
 const ListWaperItemUserLineBox = styled.div`
   display: flex;
   gap: 24px;
-`
-const ListWaperItemStatusImage = styled(Image)`
-  width: auto;
-  height: 30px;
 `
 const ListWaperItemUserImage = styled(Image)`
 border-radius: 20px;

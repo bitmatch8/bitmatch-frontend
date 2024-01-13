@@ -4,8 +4,9 @@ import { Spaced } from "@/components/Spaced"
 import TokenSymbol from "@/components/TokenSymbol"
 import NFTSHOWImg from "@/assets/img/nft_show.png"
 import styled from "@emotion/styled"
-import { CSSProperties, ReactNode, useMemo, useState } from "react"
+import { CSSProperties, ReactNode, useEffect, useMemo, useState } from "react"
 import Input from "@/components/Input"
+import { fetchProjectInfoApi } from "@/api/api"
 
 const WhitelistStageProgress: React.FC<{ total: number; num: number }> = ({
   total,
@@ -54,7 +55,7 @@ const WhitelistStageButton:React.FC=()=>{
 
   return <WhitelistStageButtonBox onClick={onCLick} >01D 24H 59M 59S</WhitelistStageButtonBox>
 }
-const WhitelistStage: React.FC = () => {
+const WhitelistStage: React.FC<{detail:any}> = ({detail}) => {
   const [value,setValue]=useState('')
   const onChangeInput = (e: any) => {
     let { value } = e.target;
@@ -67,6 +68,7 @@ const WhitelistStage: React.FC = () => {
       setValue(value)
     }
   }
+ 
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>
