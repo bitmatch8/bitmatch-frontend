@@ -48,7 +48,7 @@ export default function ProjectLists() {
               </ProjectItemInfoContxtBox>
               <Spaced size="80"/>
             {/* </div> */}
-            <ViewButton variant='secondary' to="/ft/1">View</ViewButton>
+            <ViewButton variant='secondary' to="/ft/57">View</ViewButton>
           </ProjectItemInfoBox>
         </ProjectItemTowBox> 
         <ProjectItemTowBox>
