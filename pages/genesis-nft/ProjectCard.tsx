@@ -1,14 +1,15 @@
 import styled from "@emotion/styled"
-import DemoUserImg from "@/assets/img/demo_user.png"
 import UpcomingImg from "@/assets/img/upcomming1.png"
+import endedImg from "@/assets/img/ended.png"
+import Upcomming2Img from "@/assets/img/upcomming2.png"
+
 import Image from "next/image"
 import LinkIcon from "@/components/Svg/LinkIcon"
 import Link from "next/link"
 import XIcon from "@/components/Svg/XIcon"
 import GithubIcon from "@/components/Svg/GithubIcon"
 import TelegramIcon from "@/components/Svg/TelegramIcon"
-import DemoImg from "@/assets/img/demo_1.png"
-import React from "react"
+import React, { useMemo } from "react"
 import ValueSkeleton from "@/components/ValueSkeleton"
 import GitbookIcon from "@/components/Svg/GitbookIcon"
 
@@ -40,9 +41,23 @@ const LinkItem: React.FC<{ SvgIcon: any; to?: string }> = ({
   )
 }
 
-const ProjectCard: React.FC<{detail:any}> = ({detail}) => {
-  const title = ''
-  console.log({detail})
+
+const statueSymbol: { [symbol: string]: any } = {
+  'white_NotStarted':UpcomingImg,
+  'white_Ended':endedImg,
+  'white_InProgress':Upcomming2Img,
+  'public_NotStarted':UpcomingImg,
+  'public_Ended':endedImg,
+  'public_InProgress':UpcomingImg 
+}
+
+const ProjectCard: React.FC<{detail:any,buyType:any}> = ({detail,buyType}) => {
+
+  const StatusImg = useMemo(()=>{
+    if (buyType === null || !statueSymbol[buyType])
+      return null 
+    return statueSymbol[buyType]
+  },[buyType])
   return (
     <ProjectCardBox>
       <ProjectCardHeadBox>
@@ -54,7 +69,7 @@ const ProjectCard: React.FC<{detail:any}> = ({detail}) => {
             <div>{detail === null ? <ValueSkeleton width={300}/>:detail?.projectname}</div>
             <div>
               {detail?.projecttokenname.trim() ? <span>{detail?.projecttokenname}</span> : ''}
-              <ImgBox alt="" src={UpcomingImg} height={30} />
+              {StatusImg === null ? <ValueSkeleton width={50} height={30}/> :<ImgBox alt="" src={StatusImg} height={30} />}
             </div>
           </ProjectCardHeadTitleBox>
         </ProjectCardHeadLeftBox>

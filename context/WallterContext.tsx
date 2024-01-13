@@ -9,6 +9,11 @@ import {
   selectWallter,
   addToast,
   connectUnisat,
+  selectLuanch,
+  toastSlice,
+  FilterTypeProps,
+  luanchSlice,
+  fetchProjectInfoSelectInfoAsync,
 } from '@/lib/redux'
 
 export default function WallterContext() {
@@ -62,6 +67,22 @@ export default function WallterContext() {
     }
   }
 
+  const {
+    pageSize,
+    tabType,
+  } = useSelector(selectLuanch)
+  const onClickTab = (tabType: FilterTypeProps) => {
+    dispatch(luanchSlice.actions.setTabs(tabType))
+    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum: 1, pageSize, tabType }))
+  }
+
+  const getLists = (pageNum: number = 1) => {
+    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum:1, pageSize:100, tabType }))
+  }
+  useEffect(() => {
+    getLists()
+    onClickTab('ALL')
+  }, [])
   useEffect(() => {
     checkUnisat().then()
   }, [])

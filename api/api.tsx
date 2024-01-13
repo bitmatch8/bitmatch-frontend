@@ -11,6 +11,6 @@ export const fetchProjectInfoSelectInfoApi=(params:any)=>{
 export const fetchProjectInfoApi=(id:number)=>{
 	return Ajax.get(`/projectInfo/${id}`)
 }
-export const fetchWhtielistInfoApi=(id:any,type:1 | 2 = 1)=>{
-	return Ajax.get(`/whtielist/${id}?type=${type}`)
+export const fetchWhtielistInfoApi=(id:any)=>{
+	return Ajax.get(`/whtielist/${id}`)
 }
