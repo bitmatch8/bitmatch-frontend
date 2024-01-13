@@ -168,7 +168,7 @@ const OrderHistoryItem: React.FC<{
   const StateComponents = [StateSucceeded, StateWaiting, StateCancelled][
     item.state
   ]
-  const onCopy = (e: MouseEvent) => {
+  const onCopy = (e:any) => {
     e.stopPropagation()
   }
   return (

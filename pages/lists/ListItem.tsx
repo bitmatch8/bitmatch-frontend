@@ -21,7 +21,7 @@ const ListWaperItem: React.FC<{ item: ProjectItemType }> = ({ item }) => {
   return (
     <ListWaperItemBox>
       <ListWaperItemPicBox>
-        <ListWaperItemImage alt="" src={DemoImg_01} width={719} />
+        <ListWaperItemImage alt=""  src={`data:image/jpeg;base64,${item.projecthead}`} height={389} width={719} />
       </ListWaperItemPicBox>
       <ListWaperItemLineBox>
         <div>
@@ -92,7 +92,7 @@ const ListWaperItemStatusImage = styled(Image)`
   height: 30px;
 `
 const ListWaperItemUserImage = styled(Image)`
-
+border-radius: 20px;
 `
 const ListWaperItemLineBox = styled.div`
   flex: 1;
