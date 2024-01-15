@@ -22,6 +22,8 @@ export const buySlice = createSlice({
       })
       .addCase(buySubmitAsync.fulfilled, (state, action) => {
         state.status = 'idle'
+      }).addCase(buySubmitAsync.rejected, (state, action) => {
+        state.status = 'idle'
       })
   },
 })

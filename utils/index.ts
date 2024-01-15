@@ -82,3 +82,22 @@ export const objectToUrlParams=(obj:any)=>{
   }
   return params.join('&');
 }
+
+
+
+//1705153787492
+//1705388400000
+export const foramtDateInfo = (item: any, type: string) => {
+  if (item === null) {
+    return null
+  }
+  const endtime = new Date(item.enttime)
+  const starttime = new Date(item.starttime)
+  if (starttime.getTime() > Date.now()) {
+    return `${type}_NotStarted`
+  } else if (endtime.getTime() < Date.now()) {
+    return `${type}_Ended`
+  } else if (starttime.getTime() < Date.now()) {
+    return `${type}_InProgress`
+  }
+}

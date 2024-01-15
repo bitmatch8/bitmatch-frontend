@@ -12,18 +12,18 @@ import TelegramIcon from "@/components/Svg/TelegramIcon"
 import React, { useMemo } from "react"
 import ValueSkeleton from "@/components/ValueSkeleton"
 import GitbookIcon from "@/components/Svg/GitbookIcon"
+import DiscordIcon from "@/components/Svg/DiscordIcon"
 
 const ProjectLinks: React.FC<{detail:any}> = ({detail}) => {
   return (
     <ProjectCardHeadLinksBox>
       {detail === null ?<ValueSkeleton width={300} height={30}/>:<>
-      
       {detail?.website ? <LinkItem SvgIcon={LinkIcon} to={detail.website} />:''}
       {detail?.twitter ? <LinkItem SvgIcon={XIcon} to={detail.twitter} />:''}
       {detail?.github ? <LinkItem SvgIcon={GithubIcon} to={detail.github} />:''}
       {detail?.telegram ? <LinkItem SvgIcon={TelegramIcon} to={detail.telegram} />:''}
       {detail?.gitbook ? <LinkItem SvgIcon={GitbookIcon} to={detail.gitbook} />:''}
-      
+      {detail?.discord ? <LinkItem SvgIcon={DiscordIcon} to={detail.discord} />:''} 
       </>}
     </ProjectCardHeadLinksBox>
   )

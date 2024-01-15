@@ -1,8 +1,9 @@
 /* Instruments */
 import type { FilterTypeProps } from "@/lib/redux"
 import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
-import { fetchProjectInfoSelectInfoApi } from "@/api/api"
+import { fetchProjectInfoSelectInfoApi, submitOderListSave } from "@/api/api"
 import useUnisat from "@/hook/useUnisat"
+import { parseFixedAmount } from "@/utils/formatBalance"
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
@@ -12,18 +13,46 @@ import useUnisat from "@/hook/useUnisat"
 export const buySubmitAsync = createAppAsyncThunk(
   "buy/submit",
   async ({
+    projectname,
+      type,
+      tokenname,
+      fromaddr,
+      fundaddr,
+      stage,
+      receivedAddr,
+      transmitAddr,
+      pid,
+      buyAmount,
+
     toAddress,
     satoshis,
-  }: {
-    toAddress: string
-    satoshis: number
-  }) => {
+    callback
+  }: any) => {
+    console.log('start')
+    const amount = parseFixedAmount(satoshis,9).toNumber()
     const unisat = useUnisat()
-
-    const txid = await unisat.sendBitcoin(
+    const txHash = await unisat.sendBitcoin(
       toAddress,
-      satoshis
+      amount
     );
-    return txid
+    const params = {
+      projectname,
+      type,
+      tokenname,
+      fromaddr,
+      fundaddr,
+      stage,
+      receivedAddr,
+      amount,
+      transmitAddr,
+      pid,
+      buyAmount,
+      txHash,
+    }
+    const res = await submitOderListSave(params)
+    callback(txHash)
+    console.log({res,params})
+    // console.log({txHash})
+    return txHash
   }
 )

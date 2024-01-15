@@ -40,12 +40,13 @@ const StyledButton = styled.button<TransientButtonProps>`
     background: #a7a7a7;
   }
   &:hover {
+    border: none;
+    background: linear-gradient(135deg, #f7931a 0%, #d87600 100%);
     &.button--disabled {
       color: #fff;
       background: #a7a7a7;
     }
-    border: none;
-    background: linear-gradient(135deg, #f7931a 0%, #d87600 100%);
+   
   }
 `
 

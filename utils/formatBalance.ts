@@ -1,10 +1,15 @@
 import BigNumber from 'bignumber.js'
-import { BigNumber as EthersBigNumber, FixedNumber } from '@ethersproject/bignumber'
-import { formatUnits } from '@ethersproject/units'
+import { BigNumber as EthersBigNumber, FixedNumber,parseFixed } from '@ethersproject/bignumber'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 // import { getLanguageCodeFromLS } from '@pancakeswap/localization'
 // import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
 import _trimEnd from 'lodash/trimEnd'
-
+export const parseFixedAmount=(amount:any,decimals:any)=>{
+  return parseUnits(String(amount),String(decimals))
+}
+export const formatUnitsAmount=(amount:any,decimals:any)=>{
+  return formatUnits(amount,decimals)
+}
 /**
  * Take a formatted amount, e.g. 15 BNB and convert it to full decimal value, e.g. 15000000000000000
  */
@@ -79,6 +84,7 @@ export const formatBigNumberToFixed = (number: EthersBigNumber, displayDecimals 
 export const formatFixedNumber = (number: FixedNumber, displayDecimals = 18, decimals = 18) => {
   // Remove decimal
   const [leftSide] = number.toString().split('.')
+  
   return formatBigNumber(EthersBigNumber.from(leftSide), displayDecimals, decimals)
 }
 

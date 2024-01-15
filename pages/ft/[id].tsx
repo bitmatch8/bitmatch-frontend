@@ -3,33 +3,116 @@
 import Button from "@/components/Button"
 import Page from "@/components/Page"
 import styled from "@emotion/styled"
-import React, { useState } from "react"
-import WhitelistStage from "./pages/WhitelistStage"
-import ProjectCard from "./pages/ProjectCard"
+import React, { useEffect, useMemo, useState } from "react"
 import { Spaced } from "@/components/Spaced"
-import OrderHistory from "./pages/OrderHistory"
-import PublicStage from "./pages/PublicStage"
-import DetailTitle from "./DetailTitle"
-import DemoImg from "@/assets/img/demo_1.png"
+import DetailTitle from "@/components/ProjectCard/DetailTitle"
+import { fetchProjectInfoApi, fetchWhtielistInfoApi } from "@/api/api"
+import { useSelector } from "react-redux"
+import { selectWallter } from "@/lib/redux"
+import { foramtDateInfo } from "@/utils"
+import ProjectCard from "@/components/ProjectCard"
+import ProjectTabs from "@/components/ProjectTabs"
+import { useRouter } from "next/router"
 export default function IndexPage() {
-  const [tabId, setTabId] = useState(0)
-  const onClickTabItem = (id: number) => setTabId(id)
-  const ProjectTabList = [
-    "Whitelist Stage",
-    "Public Stage",
-    "Project Information",
-  ]
-  const ProjectShowBlock = [
-    <WhitelistStage />,
-    <PublicStage />,
-    // <ProjectInformation />,
-  ][tabId]
+  const {
+    query: { id }
+  }: any = useRouter();
+  const [detail, setDetail] = useState<any>(null)
+  const [publicInfo, setPublicInfo] = useState(null)
+  const [whiteInfo, setWhiteInfo] = useState(null)
+  const [singlePersonPurchased, setSinglePersonPurchased] = useState(null)
+  const { address } = useSelector(selectWallter)
+
+  const whiteType = useMemo(() => {
+    return foramtDateInfo(whiteInfo, "white")
+  }, [whiteInfo])
+
+  const publicType = useMemo(() => {
+    return foramtDateInfo(whiteInfo, "public")
+  }, [publicInfo])
+
+  const buyType = useMemo(() => {
+    if (whiteType === null && whiteType === null)
+      return null
+    if (whiteType && whiteType !== "white_Ended") {
+      return whiteType
+    } else if (!publicType) {
+      return whiteType
+    } else {
+      return publicType
+    }
+  }, [whiteType, publicType])
+
+  const initWhtielist = async () => {
+    const public_res = await fetchWhtielistInfoApi({
+      id: detail?.pubid,
+      address,
+    })
+    const white_res = await fetchWhtielistInfoApi({
+      id: detail?.wid,
+      address,
+    })
+    if (public_res?.code === 0) {
+      setPublicInfo(public_res.data)
+    }
+    if (white_res?.code === 0) {
+      setWhiteInfo(white_res.data)
+    }
+  }
+  const initPage = async () => {
+    const { data, code } = await fetchProjectInfoApi({ id, address })
+    if (code === 0) {
+      setDetail(data)
+      setSinglePersonPurchased(data?.singlePersonPurchased || 0)
+    }
+  }
+  useEffect(() => {
+    if (detail) {
+      initWhtielist()
+    }
+  }, [detail, address])
+  useEffect(() => {
+    initPage()
+  }, [id, address])
+
+  const ProjectTabList = useMemo(() => {
+    if (!whiteInfo && !publicInfo) {
+      return null
+    }
+    const arr = []
+    if (whiteInfo) {
+      arr.push("Whitelist Stage")
+    }
+    if (publicInfo) {
+      arr.push("Public Stage")
+    }
+    arr.push("Project Information")
+    return arr
+  }, [whiteInfo, publicInfo])
+
+  const tabId = useMemo(() => {
+    if (whiteType === "white_Ended" && publicType) {
+      if (publicType === "public_Ended") {
+        return 0
+      }
+      return 1
+    }
+    return 0
+  }, [publicType, whiteType])
+  console.log({detail})
   return (
     <Page>
-      <DetailTitle title="Bitcoin Frogs" />
+      <DetailTitle title={detail === null ? null : detail?.projectname} />
       <Spaced size="80" />
-      <ProjectCard symbol="$Frog" title="Bitcoin Frogs" cardImg={DemoImg} />
-      <ProjectTabsBox>
+      <ProjectCard detail={detail} buyType={buyType} />
+      <ProjectTabs
+        tabId={tabId}
+        ProjectTabList={ProjectTabList}
+        detail={detail}
+        whiteInfo={whiteInfo}
+        publicInfo={publicInfo}
+      />
+      {/* <ProjectTabsBox>
         {ProjectTabList.map((txt, key) => (
           <ProjectTabsItemBox
             onClick={() => onClickTabItem(key)}
@@ -38,10 +121,10 @@ export default function IndexPage() {
             {txt}
           </ProjectTabsItemBox>
         ))}
-      </ProjectTabsBox>
-      {ProjectShowBlock}
+      </ProjectTabsBox> */}
+      {/* {ProjectShowBlock} */}
       <Spaced size="150" />
-      <OrderHistory />
+      {/* <OrderHistory /> */}
     </Page>
   )
 }

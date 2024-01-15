@@ -15,7 +15,7 @@ const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
   height: ${({ size }) => size};
   width: ${({ size }) => size};
   path {
-    stroke: #6add83;
+    stroke: #ccc;
   }
 `
 
@@ -24,7 +24,7 @@ const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
  * need ...rest for layered styles on top
  */
 export default function CircleLoader({
-  size = '16px',
+  size = '24px',
   stroke,
   ...rest
 }: {

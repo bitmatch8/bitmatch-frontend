@@ -20,3 +20,17 @@ export const fetchWhtielistInfoApi=(params:any)=>{
 export const fetchProjectDetailsApi=(id:any)=>{
 	return Ajax.get(`/projectDetails/${id}`)
 }
+
+export const submitOderListSave=(params:any)=>{
+	return Ajax.post('/orderlist/oderListSave/',params)
+}
+export const fetchSelectFaddress=(params:any)=>{
+	const query_params = objectToUrlParams(params)	
+	return Ajax.get(`/orderlist/selectFaddress?${query_params}`)
+}
+//http://localhost:8066/whtielist/queryByWhitelist
+// export const queryByWhitelist
+export const fetchQueryByWhitelist=(params:any)=>{
+	const query_params = objectToUrlParams(params)	
+	return Ajax.get(`/whtielist/queryByWhitelist?${query_params}`)
+}

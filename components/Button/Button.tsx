@@ -13,7 +13,7 @@ const Button = <E extends ElementType = "button">(props: ButtonProps<E>): JSX.El
     classNames.push("button--loading");
   }
 
-  if (isDisabled && !isLoading) {
+  if (isDisabled ) {
     classNames.push("button--disabled");
   }
 
