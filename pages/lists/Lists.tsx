@@ -5,6 +5,13 @@ import Page from "@/components/Page"
 import styled from "@emotion/styled"
 import { useEffect } from "react"
 import ListWaperItem from "../../components/ListItem"
+import ValueSkeleton from "@/components/ValueSkeleton"
+import { number_format } from "@/utils"
+import LoaderBox from "@/components/Loader/LoaderBox"
+import Pagination from "@/components/Pagination"
+import { Spaced } from "@/components/Spaced"
+import lists from './lists.json'
+
 import {
   luanchSlice,
   useSelector,
@@ -14,12 +21,6 @@ import {
   fetchProjectInfoSelectInfoAsync,
   FilterTypeProps,
 } from "@/lib/redux"
-import ValueSkeleton from "@/components/ValueSkeleton"
-import { number_format } from "@/utils"
-import LoaderBox from "@/components/Loader/LoaderBox"
-import Pagination from "@/components/Pagination"
-import { Spaced } from "@/components/Spaced"
-import lists from './lists.json'
 
 
 const HeadContainerItem: React.FC<{
@@ -125,9 +126,10 @@ export default function IndexPage() {
           />
         </ListContainerTabsBox>
         <ListWaperBox loading={lists_status === "loading"}>
-          {projectList === null ? '':projectList.map((item, key) => (
+          {projectList === null ? <ListWaperItem item={null} />:projectList.map((item, key) => (
             <ListWaperItem item={item} key={key} />
           ))}
+
         </ListWaperBox>
       </ListContainerBox>
       <Spaced size="50" />

@@ -3,20 +3,15 @@
 import Button from "@/components/Button"
 import Page from "@/components/Page"
 import styled from "@emotion/styled"
-import ArrowLeftIcon from "@/components/Svg/ArrowLeftIcon"
-import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import WhitelistStage from "./pages/WhitelistStage"
 import ProjectCard from "./pages/ProjectCard"
 import { Spaced } from "@/components/Spaced"
 import OrderHistory from "./pages/OrderHistory"
-import ProjectInformation from "./pages/ProjectInformation"
 import PublicStage from "./pages/PublicStage"
 import DetailTitle from "./DetailTitle"
 import DemoImg from "@/assets/img/demo_1.png"
 export default function IndexPage() {
-  const sss  = useRouter()
-  console.log({sss})
   const [tabId, setTabId] = useState(0)
   const onClickTabItem = (id: number) => setTabId(id)
   const ProjectTabList = [
@@ -27,7 +22,7 @@ export default function IndexPage() {
   const ProjectShowBlock = [
     <WhitelistStage />,
     <PublicStage />,
-    <ProjectInformation />,
+    // <ProjectInformation />,
   ][tabId]
   return (
     <Page>

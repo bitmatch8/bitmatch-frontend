@@ -5,6 +5,7 @@ import BitcoinIcon from '@/assets/symbol/bitcoin.png'
 export const logosBySymbol: { [symbol: string]: any } = {
   "BIT": BitcoinIcon,
   "BITCOIN": BitcoinIcon,
+  "BTC": BitcoinIcon,
 }
 
 export const getTokenSymbol = (symbol: string) => {

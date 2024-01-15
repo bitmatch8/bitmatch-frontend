@@ -15,9 +15,12 @@ import {
   luanchSlice,
   fetchProjectInfoSelectInfoAsync,
 } from '@/lib/redux'
+import useUnisat from "@/hook/useUnisat"
+import { getFullDisplayBalance } from "@/utils/formatBalance"
 
 export default function WallterContext() {
   const dispatch = useDispatch()
+  const { address } = useSelector(selectWallter)
   const handleAccountsChanged = (_accounts: string[]) => {
 
     if (_accounts.length > 0) {
@@ -28,7 +31,7 @@ export default function WallterContext() {
     }
   }
   const getBasicInfo = async () => {
-    const unisat = (window as any).unisat;
+    const unisat = useUnisat();
     const [address] = await unisat.getAccounts();
     dispatch(wallterSlice.actions.setAddress({address}))
     const publicKey = await unisat.getPublicKey();
@@ -43,11 +46,11 @@ export default function WallterContext() {
     getBasicInfo()
   };
   async function checkUnisat() {
-    let unisat = (window as any).unisat
+    let unisat = useUnisat()
    
     for (let i = 1; i < 10 && !unisat; i += 1) {
       await new Promise((resolve) => setTimeout(resolve, 100 * i))
-      unisat = (window as any).unisat
+      unisat = useUnisat()
     }
     const unisatInstalled = !!unisat
     dispatch(wallterSlice.actions.setUnisatInstalled({unisatInstalled}))
@@ -76,6 +79,11 @@ export default function WallterContext() {
     dispatch(fetchProjectInfoSelectInfoAsync({ pageNum: 1, pageSize, tabType }))
   }
 
+  useEffect(()=>{
+    if(address){
+      getBasicInfo() 
+    }
+  },[address])
   const getLists = (pageNum: number = 1) => {
     dispatch(fetchProjectInfoSelectInfoAsync({ pageNum:1, pageSize:100, tabType }))
   }

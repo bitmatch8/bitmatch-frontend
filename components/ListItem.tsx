@@ -4,22 +4,22 @@ import Button from "@/components/Button"
 import styled from "@emotion/styled"
 import Image from "next/image"
 import { ProjectItemType } from "@/lib/redux"
+import ValueSkeleton from "./ValueSkeleton"
 
-const ListWaperItem: React.FC<{ item: ProjectItemType }> = ({ item }) => {
+const ListWaperItem: React.FC<{ item: ProjectItemType | null }> = ({ item }) => {
   return (
     <ListWaperItemBox>
       <ListWaperItemPicBox>
-        <ListWaperItemImage alt=""  src={`data:image/jpeg;base64,${item?.projecthead}`} height={389} width={719} />
+        {item === null ? <ValueSkeleton width={719} height={389}/> :<ListWaperItemImage alt=""  src={`data:image/jpeg;base64,${item?.projecthead}`} height={389} width={719} />}
       </ListWaperItemPicBox>
       <ListWaperItemLineBox>
         <div>
           <ListWaperItemUserLineBox>
-            <ListWaperItemUserImage alt=""  src={`data:image/jpeg;base64,${item?.projectlogo}`} height={88} width={88} />
+           {item === null ? <ValueSkeleton width={88} height={88}/> : <ListWaperItemUserImage alt=""  src={`data:image/jpeg;base64,${item?.projectlogo}`} height={88} width={88} />} 
             <ListWaperItemUserNameBox>
-              <div className="title">{item?.projectname}</div>
+              <div className="title">{item === null ?<ValueSkeleton width={260} /> : item?.projectname}</div>
               <div className="token">
-                {item?.projecttokenname}
-                {/* <ListWaperItemStatusImage alt="" src={StatusImgs[item.status]}/> */}
+              {item === null ?<ValueSkeleton width={150} /> : item?.projecttokenname}
               </div>
             </ListWaperItemUserNameBox>
           </ListWaperItemUserLineBox>
@@ -27,9 +27,9 @@ const ListWaperItem: React.FC<{ item: ProjectItemType }> = ({ item }) => {
             {item?.projectdescription}
           </ListWaperItemUserDescBox>
         </div>
-        <ListWaperButtonBox to={`/ft/${item.id}`} variant="secondary">
+        {item === null ? <ValueSkeleton width={200} height={40}/>:<ListWaperButtonBox to={`/ft/${item?.id}`} variant="secondary">
           View
-        </ListWaperButtonBox>
+        </ListWaperButtonBox>}
       </ListWaperItemLineBox>
     </ListWaperItemBox>
   )

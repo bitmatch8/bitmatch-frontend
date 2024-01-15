@@ -70,29 +70,36 @@ const ConnectButton = () => {
     )
   }
 
+  
+
+  return connected && address ? (
+    <ConnectSuccess address={address} />
+  ) : (
+    <ConnectWallButton/>
+  )
+}
+
+export default ConnectButton
+
+
+const ConnectWallButton:React.FC=()=>{
+  const dispatch = useDispatch()
+
   const [onConnect, onDismiss] = useModal(
     <ConnectModal onDismiss={() => onDismiss()} connect={()=>{
       dispatch(connectUnisat())
       onDismiss() 
     }}></ConnectModal>
   )
-
-  return connected && address ? (
-    <ConnectSuccess address={address} />
-  ) : (
-    <ConnectButtonBox
-      variant="secondary"
-      onClick={onConnect}
-      // onClick={() => dispatch(connectUnisat())}
-    >
-      Connect Wallet
-    </ConnectButtonBox>
-  )
+  return     <ConnectButtonBox
+  variant="secondary"
+  onClick={onConnect}
+  // onClick={() => dispatch(connectUnisat())}
+>
+  Connect Wallet
+</ConnectButtonBox>
 }
-
-export default ConnectButton
-
-const ConnectModal: React.FC<{ onDismiss: any,connect:any }> = ({ onDismiss,connect }) => {
+export const ConnectModal: React.FC<{ onDismiss: any,connect:any }> = ({ onDismiss,connect }) => {
   return (
     <ConnectModalBox>
       <CloseButtonBox onClick={onDismiss}>

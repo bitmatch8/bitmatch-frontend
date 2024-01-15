@@ -1,4 +1,5 @@
 /* Instruments */
+import useUnisat from '@/hook/useUnisat';
 import type { ReduxThunkAction } from '@/lib/redux'
 import { createAppAsyncThunk } from '@/lib/redux/createAppAsyncThunk'
 
@@ -10,7 +11,7 @@ import { createAppAsyncThunk } from '@/lib/redux/createAppAsyncThunk'
 export const connectUnisat = createAppAsyncThunk(
   'wallter/connectUnisat',
   async () => {
-    const unisat = (window as any)?.unisat
+    const unisat = useUnisat()
     const [address] = await unisat.requestAccounts();
                 // handleAccountsChanged(result);
     // const [address] = await unisat.getAccounts()

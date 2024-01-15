@@ -4,21 +4,21 @@ import Page from "@/components/Page"
 import DetailTitle from "../ft/DetailTitle"
 import { Spaced } from "@/components/Spaced"
 import ProjectCard from "./ProjectCard"
-import NftImg from "@/assets/img/nft_img.png"
 import { useEffect, useMemo, useState } from "react"
-import NFTWhitelistStage from "./NFTWhitelistStage"
-import PublicStage from "../ft/pages/PublicStage"
 import ProjectInformation from "../ft/pages/ProjectInformation"
 import styled from "@emotion/styled"
 import Button from "@/components/Button"
-import OrderHistory from "./OrderHistory"
 import { fetchProjectInfoApi, fetchWhtielistInfoApi } from "@/api/api"
-import { baseDate } from "@/utils"
 import ValueSkeleton from "@/components/ValueSkeleton"
+import {
+  useSelector,
+  selectWallter,
+} from "@/lib/redux"
+import WhitelistStage from "@/components/WhitelistStage"
 
 //1705153787492
 //1705388400000
-const foramtDateInfo = (item: any, type: string) => {
+export const foramtDateInfo = (item: any, type: string) => {
   if (item === null) {
     return null
   }
@@ -28,7 +28,7 @@ const foramtDateInfo = (item: any, type: string) => {
     return `${type}_NotStarted`
   } else if (endtime.getTime() < Date.now()) {
     return `${type}_Ended`
-  } else if (starttime.getTime() > Date.now()) {
+  } else if (starttime.getTime() < Date.now()) {
     return `${type}_InProgress`
   }
 }
@@ -37,7 +37,9 @@ export default function GenesisNFT() {
   const [detail, setDetail] = useState<any>(null)
   const [publicInfo, setPublicInfo] = useState(null)
   const [whiteInfo, setWhiteInfo] = useState(null)
+  const [singlePersonPurchased, setSinglePersonPurchased] = useState(null)
   const id = 56
+  const { address } = useSelector(selectWallter)
 
   const whiteType = useMemo(() => {
     return foramtDateInfo(whiteInfo, "white")
@@ -48,9 +50,8 @@ export default function GenesisNFT() {
   }, [publicInfo])
 
   const buyType = useMemo(() => {
-    if(whiteType === null && whiteType === null){
+    if (whiteType === null && whiteType === null)
       return null
-    }
     if (whiteType && whiteType !== "white_Ended") {
       return whiteType
     } else if (!publicType) {
@@ -61,8 +62,14 @@ export default function GenesisNFT() {
   }, [whiteType, publicType])
 
   const initWhtielist = async () => {
-    const public_res = await fetchWhtielistInfoApi(detail?.pubid)
-    const white_res = await fetchWhtielistInfoApi(detail?.wid)
+    const public_res = await fetchWhtielistInfoApi({
+      id: detail?.pubid,
+      address,
+    })
+    const white_res = await fetchWhtielistInfoApi({
+      id: detail?.wid,
+      address,
+    })
     if (public_res?.code === 0) {
       setPublicInfo(public_res.data)
     }
@@ -71,19 +78,20 @@ export default function GenesisNFT() {
     }
   }
   const initPage = async () => {
-    const { data, code } = await fetchProjectInfoApi(id)
+    const { data, code } = await fetchProjectInfoApi({ id, address })
     if (code === 0) {
       setDetail(data)
+      setSinglePersonPurchased(data?.singlePersonPurchased || 0)
     }
   }
   useEffect(() => {
     if (detail) {
       initWhtielist()
     }
-  }, [detail])
+  }, [detail, address])
   useEffect(() => {
     initPage()
-  }, [id])
+  }, [id, address])
 
   const ProjectTabList = useMemo(() => {
     if (!whiteInfo && !publicInfo) {
@@ -100,31 +108,42 @@ export default function GenesisNFT() {
     return arr
   }, [whiteInfo, publicInfo])
 
-  
-  const tabId= useMemo(()=>{
-    if(whiteType === 'white_Ended' && publicType){
-      if(publicType === 'public_Ended'){
+  const tabId = useMemo(() => {
+    if (whiteType === "white_Ended" && publicType) {
+      if (publicType === "public_Ended") {
         return 0
       }
       return 1
     }
     return 0
-  },[publicType,whiteType])
+  }, [publicType, whiteType])
   return (
     <Page>
-      <DetailTitle title={detail === null ? null:detail?.projectname } />
+      <DetailTitle title={detail === null ? null : detail?.projectname} />
       <Spaced size="80" />
       <ProjectCard detail={detail} buyType={buyType} />
-      <ProjectTabs tabId={tabId} ProjectTabList={ProjectTabList} detail={detail} whiteInfo={whiteInfo} publicInfo={publicInfo} /> 
+      <ProjectTabs
+        tabId={tabId}
+        ProjectTabList={ProjectTabList}
+        detail={detail}
+        whiteInfo={whiteInfo}
+        publicInfo={publicInfo}
+      />
       <Spaced size="150" />
       {/* <OrderHistory/> */}
     </Page>
   )
 }
 
-const ProjectTabs: React.FC<{ProjectTabList:any,whiteInfo:any,publicInfo:any,detail:any,tabId:any}> = ({ProjectTabList,whiteInfo,publicInfo,detail,tabId}) => {
+const ProjectTabs: React.FC<{
+  ProjectTabList: any
+  whiteInfo: any
+  publicInfo: any
+  detail: any
+  tabId: any
+}> = ({ ProjectTabList, whiteInfo, publicInfo, detail, tabId }) => {
   const [tId, setTabId] = useState<number>(tabId)
-
+  const { balance } = useSelector(selectWallter)
   const onClickTabItem = (id: number) => setTabId(id)
   const ProjectShowBlock = useMemo(() => {
     if (ProjectTabList === null) {
@@ -132,20 +151,35 @@ const ProjectTabs: React.FC<{ProjectTabList:any,whiteInfo:any,publicInfo:any,det
     }
     const arr = []
     if (whiteInfo) {
-      arr.push(<NFTWhitelistStage detail={detail} />)
+      arr.push(
+        <WhitelistStage
+          title="Bitcoin Frogs Whitelist Stage"
+          balance={balance}
+          detail={detail}
+          info={whiteInfo}
+        />
+      )
     }
     if (publicInfo) {
-      arr.push(<PublicStage />)
+      arr.push(
+        <WhitelistStage
+          title="Bitcoin Frogs Public Stage"
+          balance={balance}
+          detail={detail}
+          info={publicInfo}
+        />
+      )
     }
-    arr.push(<ProjectInformation />)
+    arr.push(<ProjectInformation show={detail.projecttype === '1'} id={detail?.pdid}/>)
     return arr[tId]
-  }, [detail, tabId,whiteInfo,publicInfo, ProjectTabList,tId])
-  return <>
-  <ProjectTabsBox>
+  }, [detail, tabId, whiteInfo, publicInfo, ProjectTabList, tId])
+  return (
+    <>
+      <ProjectTabsBox>
         {ProjectTabList === null ? (
           <ValueSkeleton width={1000} height={60} />
         ) : (
-          ProjectTabList?.map((txt:any, key:any) => (
+          ProjectTabList?.map((txt: any, key: any) => (
             <ProjectTabsItemBox
               onClick={() => onClickTabItem(key)}
               className={key === tId ? "active" : ""}
@@ -162,7 +196,8 @@ const ProjectTabs: React.FC<{ProjectTabList:any,whiteInfo:any,publicInfo:any,det
       ) : (
         ProjectShowBlock
       )}
-  </>
+    </>
+  )
 }
 const EmptyStageBox = styled.div`
   margin-top: 80px;
