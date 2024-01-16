@@ -126,7 +126,7 @@ export default function IndexPage() {
           />
         </ListContainerTabsBox>
         <ListWaperBox loading={lists_status === "loading"}>
-          {projectList === null ? <ListWaperItem item={null} />:projectList.map((item, key) => (
+          {projectList === null ? <ListWaperItem item={null} />:projectList.filter(itm=>!!itm.projecthead && !!itm.projectlogo).map((item, key) => (
             <ListWaperItem item={item} key={key} />
           ))}
 
