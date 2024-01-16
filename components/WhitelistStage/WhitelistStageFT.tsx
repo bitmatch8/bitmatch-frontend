@@ -3,12 +3,13 @@ import TokenSymbol from "@/components/TokenSymbol"
 import styled from "@emotion/styled"
 import { useMemo, useState } from "react"
 import Input from "@/components/Input"
-import { formatUnitsAmount } from "@/utils/formatBalance"
+import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
 import { addToast, useDispatch } from "@/lib/redux"
 import Notice from "../Notice"
+import { BigNumber } from "@ethersproject/bignumber"
 
 const WhitelistStageFT: React.FC<{
   detail: any
@@ -31,9 +32,11 @@ const WhitelistStageFT: React.FC<{
       setValue(value)
     }
   }
-  const price = Number(
-    (Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)
-  )
+  const price = useMemo(()=>(Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8),[info])
+  const priceBignumber = useMemo(()=>{
+    return parseFixedAmount(String(price),9)
+  },[info])
+
   const callbackSuccess=()=>{
     setValue('')
     dispatch(
@@ -45,8 +48,10 @@ const WhitelistStageFT: React.FC<{
     )
   }
   const satoshis=useMemo(()=>{
-    return Number(price) * Number((value || 0))
-  },[price])
+    return  priceBignumber.mul(BigNumber.from(String(value || 0)))
+    // return Number(price) * Number((value || 0))
+  },[price,value])
+  console.log({price:price.toString(),satoshis:satoshis.toString()})
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
@@ -56,16 +61,16 @@ const WhitelistStageFT: React.FC<{
             {detail?.projecttokenname}
           </WhitelistStageLine>
           <WhitelistStageLine title="Total Shares">
-            {info?.tokennumber} $Frog
+            {info?.tokennumber}  {detail?.projecttokenname}
           </WhitelistStageLine>
         </WhitelistStageLineBox>
         <WhitelistStageLineBox>
           <WhitelistStageLine title="Total Fundraising Amount">
             <TokenSymbol size={22} symbol={info.projectcurrency} />
-            <span>{price}</span>
+            <span>{Number(price)}</span>
           </WhitelistStageLine>
           <WhitelistStageLine title="Price">
-            {price} {info.projectcurrency} / {detail?.projecttokenname}
+            {Number(price)} {info.projectcurrency} / {detail?.projecttokenname}
           </WhitelistStageLine>
         </WhitelistStageLineBox>
         <WhitelistStageLineBox>

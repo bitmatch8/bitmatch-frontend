@@ -6,7 +6,7 @@ import styled from "@emotion/styled"
 import { useMemo, useState } from "react"
 import Input from "@/components/Input"
 import ValueSkeleton from "@/components/ValueSkeleton"
-import { formatUnitsAmount, getFullDisplayBalance } from "@/utils/formatBalance"
+import { formatUnitsAmount, getFullDisplayBalance, parseFixedAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
@@ -20,6 +20,7 @@ import {
   addToast,
 } from "@/lib/redux"
 import Notice from "../Notice"
+import { BigNumber } from "@ethersproject/bignumber"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -42,7 +43,7 @@ const WhitelistStageNFT: React.FC<{
     }
   }
   const price = useMemo(()=>{
-    return formatUnitsAmount(info.targetnumber,9)
+    return parseFixedAmount(formatUnitsAmount(info.targetnumber,9),9)
   },[info])
   // const price = Number(
   //   (Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)
@@ -58,7 +59,7 @@ const WhitelistStageNFT: React.FC<{
     )
   }
   const satoshis=useMemo(()=>{
-    return Number(info.targetnumber) * Number((value || 0))
+    return price.mul(BigNumber.from(value || 0)).toString()
   },[price,value])
 
   return (
