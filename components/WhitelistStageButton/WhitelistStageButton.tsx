@@ -38,6 +38,9 @@ const WhitelistStageButton: React.FC<{
   )
   const isWhiteUser = async () => {
     //如果是白名单查询这里做判断是否禁用按钮
+    if(!address){
+      return
+    }
     if (stage === "whitelist") {
       const {code, data} = await fetchQueryByWhitelist({
         pid: detail.id,
@@ -62,7 +65,7 @@ const WhitelistStageButton: React.FC<{
   useEffect(() => {
     isWhiteUser()
     initAddress()
-  }, [detail, address])
+  }, [detail, address,stage])
   console.log({ status })
   const onCLickBuy = () => {
     if (status === "idle" && buyAmount && disabled === false && toAddress) {
