@@ -44,20 +44,26 @@ export default function IndexPage() {
   }, [whiteType, publicType])
 
   const initWhtielist = async () => {
-    const public_res = await fetchWhtielistInfoApi({
-      id: detail?.pubid,
-      address,
-    })
-    const white_res = await fetchWhtielistInfoApi({
-      id: detail?.wid,
-      address,
-    })
-    if (public_res?.code === 0) {
-      setPublicInfo(public_res.data)
+    if(detail?.pubid){
+      const public_res = await fetchWhtielistInfoApi({
+        id: detail?.pubid,
+        address,
+      })
+      if (public_res?.code === 0) {
+        setPublicInfo(public_res.data)
+      }
     }
-    if (white_res?.code === 0) {
-      setWhiteInfo(white_res.data)
-    }
+    if(detail?.wid){
+      const white_res = await fetchWhtielistInfoApi({
+        id: detail?.wid,
+        address,
+      })
+      
+      if (white_res?.code === 0) {
+        setWhiteInfo(white_res.data)
+      }
+    } 
+
   }
   const initPage = async () => {
     const { data, code } = await fetchProjectInfoApi({ id, address:address ?address : undefined })
@@ -99,7 +105,6 @@ export default function IndexPage() {
     }
     return 0
   }, [publicType, whiteType])
-  console.log({detail})
   return (
     <Page>
       <DetailTitle title={detail === null ? null : detail?.projectname} />

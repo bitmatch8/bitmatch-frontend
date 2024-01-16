@@ -19,7 +19,7 @@ export default function GenesisNFT() {
   const [publicInfo, setPublicInfo] = useState(null)
   const [whiteInfo, setWhiteInfo] = useState(null)
   const [singlePersonPurchased, setSinglePersonPurchased] = useState(null)
-  const id = 56
+  const id = 1
   const { address } = useSelector(selectWallter)
 
   const whiteType = useMemo(() => {
@@ -43,19 +43,24 @@ export default function GenesisNFT() {
   }, [whiteType, publicType])
 
   const initWhtielist = async () => {
-    const public_res = await fetchWhtielistInfoApi({
-      id: detail?.pubid,
-      address,
-    })
-    const white_res = await fetchWhtielistInfoApi({
-      id: detail?.wid,
-      address,
-    })
-    if (public_res?.code === 0) {
-      setPublicInfo(public_res.data)
+    if(detail?.pubid){
+      const public_res = await fetchWhtielistInfoApi({
+        id: detail?.pubid,
+        address,
+      })
+      if (public_res?.code === 0) {
+        setPublicInfo(public_res.data)
+      }
     }
-    if (white_res?.code === 0) {
-      setWhiteInfo(white_res.data)
+    if(detail?.wid){
+      const white_res = await fetchWhtielistInfoApi({
+        id: detail?.wid,
+        address,
+      })
+  
+      if (white_res?.code === 0) {
+        setWhiteInfo(white_res.data)
+      }
     }
   }
   const initPage = async () => {
@@ -74,6 +79,7 @@ export default function GenesisNFT() {
     initPage()
   }, [id, address])
 
+  console.log(detail,singlePersonPurchased)
   const ProjectTabList = useMemo(() => {
     if (!whiteInfo && !publicInfo) {
       return null

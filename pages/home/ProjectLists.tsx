@@ -7,12 +7,35 @@ import BestIcon from "@/assets/img/best_1.png"
 import Image from "next/image"
 import Link from "next/link"
 import { Spaced } from "@/components/Spaced"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
+
+import {
+  luanchSlice,
+  useSelector,
+  useDispatch,
+  selectLuanch,
+  fetchDashboardAsync,
+  fetchProjectInfoSelectInfoAsync,
+  FilterTypeProps,
+} from "@/lib/redux"
+import ValueSkeleton from "@/components/ValueSkeleton"
+
 
 export default function ProjectLists() {
-  useEffect(()=>{
-    fetch('/api/projectInfo/selectInfo?pageNum=1&pageSize=10')
-  },[])
+  const dispatch = useDispatch()
+  const {
+    dashboard,
+    pageNum,
+    pageSize,
+    total: totalNum,
+    lists: projectList,
+    lists_status,
+    tabType,
+  } = useSelector(selectLuanch)
+  console.log({projectList})
+  const oneInfo = useMemo(()=>projectList?.find(itm=>itm.id === 1),[projectList])
+  const twoInfo =  useMemo(()=>projectList?.find(itm=>itm.id === 2),[projectList])
+  const threeInfo =  useMemo(()=>projectList?.find(itm=>itm.id === 3),[projectList])
   return (
     <ProjectListsBox>
       <ProjectListsTitleBox>Project list</ProjectListsTitleBox>
@@ -20,51 +43,51 @@ export default function ProjectLists() {
       <ProjectContainerBox>
         <ProjectItemBox>
           <ProjectItemImgBox>
-            <ProjectItemImage alt="" src={BestIcon} />
+            {!oneInfo ? <ValueSkeleton width={720} height={390}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${oneInfo?.projecthead}`} height={390} width={720} />}
           </ProjectItemImgBox>
           <ProjectItemInfoBox style={{display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
             <div>
-              <ProjectItemInfoTitleBox>Bitcoin Frogs</ProjectItemInfoTitleBox>
+              <ProjectItemInfoTitleBox>{!oneInfo ?<ValueSkeleton width={378} /> : oneInfo?.projectname}</ProjectItemInfoTitleBox>
               <ProjectItemInfoContxtBox>
-                10,000 timeless frog collectibles stored on the Bitcoin
-                Blockchain.These are 10,000 pure digital collectibles that will
-                remain on that will remain Bi …
+              {!oneInfo ?<ValueSkeleton width={378} height={120} /> : oneInfo?.projectdescription} 
               </ProjectItemInfoContxtBox>
             </div>
             <ViewButton variant='secondary' to="/ft/1">View</ViewButton>
           </ProjectItemInfoBox>
         </ProjectItemBox>
         <Spaced size="50"/>
-        <ProjectContainerTowBox>
+        {twoInfo && threeInfo ?<ProjectContainerTowBox>
         <ProjectItemTowBox>
           <ProjectItemImgBox>
-            <ProjectItemTowImage alt="" src={BestIcon} />
+            {/* <ProjectItemTowImage alt="" src={BestIcon} /> */}
+            {!twoInfo ? <ValueSkeleton width={554} height={300}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${twoInfo?.projecthead}`} height={554} width={300} />}
           </ProjectItemImgBox>
           <ProjectItemInfoBox>
             {/* <div> */}
-              <ProjectItemInfoTitleBox>Bitcoin Frogs</ProjectItemInfoTitleBox>
+              <ProjectItemInfoTitleBox>{!twoInfo ?<ValueSkeleton width={378} /> : twoInfo?.projectname}</ProjectItemInfoTitleBox>
               <ProjectItemInfoContxtBox>
-              10,000 timeless frog collectibles stored on the Bitcoin Blockchain.These are 10,000 pure digital collectibles on the Bitcoin Blockchain. 
+              {!twoInfo ?<ValueSkeleton width={378} height={120} /> : twoInfo?.projectdescription} 
               </ProjectItemInfoContxtBox>
               <Spaced size="80"/>
             {/* </div> */}
-            <ViewButton variant='secondary' to="/ft/57">View</ViewButton>
+            <ViewButton variant='secondary' to="/ft/2">View</ViewButton>
           </ProjectItemInfoBox>
         </ProjectItemTowBox> 
         <ProjectItemTowBox>
           <ProjectItemImgBox>
-            <ProjectItemTowImage alt="" src={BestIcon} />
+
+            {!threeInfo ? <ValueSkeleton width={554} height={300}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${threeInfo?.projecthead}`} height={554} width={300} />}
           </ProjectItemImgBox>
           <ProjectItemInfoBox>
-              <ProjectItemInfoTitleBox>Bitcoin Frogs</ProjectItemInfoTitleBox>
+          <ProjectItemInfoTitleBox>{!threeInfo ?<ValueSkeleton width={378} /> : threeInfo?.projectname}</ProjectItemInfoTitleBox>
               <ProjectItemInfoContxtBox>
-              10,000 timeless frog collectibles stored on the Bitcoin Blockchain.These are 10,000 pure digital collectibles on the Bitcoin Blockchain. 
+              {!threeInfo ?<ValueSkeleton width={378} height={120} /> : threeInfo?.projectdescription} 
               </ProjectItemInfoContxtBox>
               <Spaced size="80"/>
-            <ViewButton variant='secondary' to="/ft/1">View</ViewButton>
+            <ViewButton variant='secondary' to="/ft/3">View</ViewButton>
           </ProjectItemInfoBox>
         </ProjectItemTowBox>
-        </ProjectContainerTowBox>
+        </ProjectContainerTowBox>:''}
         <Spaced size="90"/>
         <ProjectMoreBox href={"/lists"}>
           <span>View More</span>
