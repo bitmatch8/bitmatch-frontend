@@ -16,65 +16,49 @@ const ProjectTabs: React.FC<{
   detail: any
   tabId: any
 }> = ({ ProjectTabList, whiteInfo, publicInfo, detail, tabId }) => {
-  const [tId, setTabId] = useState<number>(tabId)
+  const [tId, setTabId] = useState<string>(tabId)
   const { balance } = useSelector(selectWallter)
-  const onClickTabItem = (id: number) => setTabId(id)
+  const onClickTabItem = (id: string) => setTabId(id)
   const WhitelistStage =
     String(detail?.projecttype) === "2" ? WhitelistStageNFT : WhitelistStageFT
-  const ProjectShowBlock = useMemo(() => {
-    if (ProjectTabList === null) {
-      return null
-    }
-    const arr = []
-    if (whiteInfo) {
-      arr.push(
-        <WhitelistStage
-          stage="whitelist"
-          title="Bitcoin Frogs Whitelist Stage"
-          balance={balance}
-          detail={detail}
-          info={whiteInfo}
-        />
-      )
-    }
-    if (publicInfo) {
-      arr.push(
-        <WhitelistStage
-          stage="public"
-          title="Bitcoin Frogs Public Stage"
-          balance={balance}
-          detail={detail}
-          info={publicInfo}
-        />
-      )
-    }
-    arr.push(
-      <ProjectInformation show={detail.projecttype === "1"} id={detail?.pdid} />
-    )
-    return arr[tId]
-  }, [detail, tabId, whiteInfo, publicInfo, ProjectTabList, tId])
   return (
     <>
       <ProjectTabsBox>
         {ProjectTabList === null ? (
           <ValueSkeleton width={1000} height={60} />
         ) : (
-          ProjectTabList?.map((txt: any, key: any) => (
+          ProjectTabList?.map(({title,id}: any, key: any) => (
             <ProjectTabsItemBox
-              onClick={() => onClickTabItem(key)}
-              className={key === tId ? "active" : ""}
+              onClick={() => onClickTabItem(id)}
+              className={id === tId ? "active" : ""}
               key={key}>
-              {txt}
+              {title}
             </ProjectTabsItemBox>
           ))
         )}
       </ProjectTabsBox>
-      {ProjectShowBlock === null ? (
+      {whiteInfo === null ? (
         <EmptyStageBox>
           <ValueSkeleton width={500} height={50} />
         </EmptyStageBox>
       ) : (
-        ProjectShowBlock
+       <>
+       {whiteInfo && tId === 'white' ? <WhitelistStage
+          stage="whitelist"
+          title="Bitcoin Frogs Whitelist Stage"
+          balance={balance}
+          detail={detail}
+          info={whiteInfo}
+        />:''}
+       {publicInfo && tId === 'public'  ? <WhitelistStage
+          stage="public"
+          title="Bitcoin Frogs Public Stage"
+          balance={balance}
+          detail={detail}
+          info={publicInfo}
+        />:''}
+       {tId === 'info' ? <ProjectInformation show={detail.projecttype === "1"} id={detail?.pdid} />:''}
+       </> 
       )}
     </>
   )
@@ -109,21 +93,4 @@ const ProjectTabsBox = styled.div`
   display: flex;
   gap: 80px;
 `
-const HeadBackButtonBox = styled(Button)`
-  background-color: transparent;
-  width: auto;
-  font-size: 60px;
-  font-weight: 600;
-  color: #dbdbdb;
-  line-height: 100px;
-  &:hover {
-    color: #f8931a;
-    svg {
-      fill: #f8931a;
-    }
-    background: transparent;
-  }
-`
-const HeadContainerBox = styled.div`
-  margin: 145px auto 0px;
-`
+

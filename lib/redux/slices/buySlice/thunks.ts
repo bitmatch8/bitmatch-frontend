@@ -23,7 +23,7 @@ export const buySubmitAsync = createAppAsyncThunk(
       transmitAddr,
       pid,
       buyAmount,
-
+      price,
     toAddress,
     satoshis,
     callback
@@ -36,6 +36,7 @@ export const buySubmitAsync = createAppAsyncThunk(
       amount
     );
     const params = {
+      price,
       projectname,
       type,
       tokenname,

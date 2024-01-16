@@ -13,15 +13,17 @@ import {
   buySubmitAsync,
   selectBuy,
 } from "@/lib/redux"
+import { parseFixedAmount } from "@/utils/formatBalance"
 
 const WhitelistStageButton: React.FC<{
+  price:any,
   info: any
   detail: any
   callback: any
   satoshis: any
   buyAmount: any
   stage: any
-}> = ({ info, detail, callback, satoshis, buyAmount, stage }) => {
+}> = ({ info, detail, callback, satoshis, buyAmount, stage,price }) => {
   const dispatch = useDispatch()
   const { connected, address } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
@@ -66,11 +68,11 @@ const WhitelistStageButton: React.FC<{
     isWhiteUser()
     initAddress()
   }, [detail, address,stage])
-  console.log({ status })
   const onCLickBuy = () => {
     if (status === "idle" && buyAmount && disabled === false && toAddress) {
       dispatch(
         buySubmitAsync({
+          price:parseFixedAmount(String(price),9).toString(),
           projectname: detail.projectname,
           type: detail.projecttype,
           tokenname: detail.projecttokenname,

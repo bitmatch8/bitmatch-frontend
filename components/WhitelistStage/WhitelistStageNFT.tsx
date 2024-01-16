@@ -41,9 +41,12 @@ const WhitelistStageNFT: React.FC<{
       setValue(value)
     }
   }
-  const price = Number(
-    (Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)
-  )
+  const price = useMemo(()=>{
+    return formatUnitsAmount(info.targetnumber,9)
+  },[info])
+  // const price = Number(
+  //   (Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)
+  // )
   const callbackSuccess=()=>{
     setValue('')
     dispatch(
@@ -105,7 +108,7 @@ const WhitelistStageNFT: React.FC<{
           <FooterTextLineBox><div><span>{value || 0}</span>  {detail?.projecttokenname}</div></FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
-          <WhitelistStageButton detail={detail} info={info} satoshis={satoshis} buyAmount={value} stage={stage} callback={callbackSuccess} />
+          <WhitelistStageButton price={price} detail={detail} info={info} satoshis={satoshis} buyAmount={value} stage={stage} callback={callbackSuccess} />
           <FooterTextLineBox>
             <span className="g">Balance</span>
             <span>{formatUnitsAmount(balance.confirmed, 8)} {info.projectcurrency}</span>

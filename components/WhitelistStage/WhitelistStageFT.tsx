@@ -17,6 +17,7 @@ const WhitelistStageFT: React.FC<{
   title: string
   stage:any
 }> = ({ info, balance, title, detail,stage }) => {
+  console.log({stage})
   const dispatch=useDispatch()
   const [value, setValue] = useState("")
   const onChangeInput = (e: any) => {
@@ -101,7 +102,7 @@ const WhitelistStageFT: React.FC<{
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
-          <WhitelistStageButton detail={detail} info={info} buyAmount={value} satoshis={satoshis} stage={stage} callback={callbackSuccess} />
+          <WhitelistStageButton price={price} detail={detail} info={info} buyAmount={value} satoshis={satoshis} stage={stage} callback={callbackSuccess} />
           <FooterTextLineBox>
             <span className="g">Balance</span>
             <span>{formatUnitsAmount(balance.confirmed, 8)} {info.projectcurrency}</span>

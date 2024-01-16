@@ -44,15 +44,6 @@ export default function IndexPage() {
   }, [whiteType, publicType])
 
   const initWhtielist = async () => {
-    if(detail?.pubid){
-      const public_res = await fetchWhtielistInfoApi({
-        id: detail?.pubid,
-        address,
-      })
-      if (public_res?.code === 0) {
-        setPublicInfo(public_res.data)
-      }
-    }
     if(detail?.wid){
       const white_res = await fetchWhtielistInfoApi({
         id: detail?.wid,
@@ -63,7 +54,15 @@ export default function IndexPage() {
         setWhiteInfo(white_res.data)
       }
     } 
-
+    if(detail?.pubid){
+      const public_res = await fetchWhtielistInfoApi({
+        id: detail?.pubid,
+        address,
+      })
+      if (public_res?.code === 0) {
+        setPublicInfo(public_res.data)
+      }
+    }
   }
   const initPage = async () => {
     if(!id){
@@ -90,23 +89,23 @@ export default function IndexPage() {
     }
     const arr = []
     if (whiteInfo) {
-      arr.push("Whitelist Stage")
+      arr.push({id:'white',title:"Whitelist Stage"})
     }
     if (publicInfo) {
-      arr.push("Public Stage")
+      arr.push({id:'public',title:"Public Stage"})
     }
-    arr.push("Project Information")
+    arr.push({id:'info',title:"Project Information"})
     return arr
   }, [whiteInfo, publicInfo])
 
   const tabId = useMemo(() => {
     if (whiteType === "white_Ended" && publicType) {
       if (publicType === "public_Ended") {
-        return 0
+        return 'white'
       }
-      return 1
+      return 'public'
     }
-    return 0
+    return 'white'
   }, [publicType, whiteType])
   return (
     <Page>

@@ -86,23 +86,23 @@ export default function GenesisNFT() {
     }
     const arr = []
     if (whiteInfo) {
-      arr.push("Whitelist Stage")
+      arr.push({id:'white',title:"Whitelist Stage"})
     }
     if (publicInfo) {
-      arr.push("Public Stage")
+      arr.push({id:'public',title:"Public Stage"})
     }
-    arr.push("Project Information")
+    arr.push({id:'info',title:"Project Information"})
     return arr
   }, [whiteInfo, publicInfo])
 
   const tabId = useMemo(() => {
     if (whiteType === "white_Ended" && publicType) {
       if (publicType === "public_Ended") {
-        return 0
+        return 'white'
       }
-      return 1
+      return 'public'
     }
-    return 0
+    return 'white'
   }, [publicType, whiteType])
   return (
     <Page>
