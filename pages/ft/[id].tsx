@@ -66,6 +66,9 @@ export default function IndexPage() {
 
   }
   const initPage = async () => {
+    if(!id){
+      return
+    }
     const { data, code } = await fetchProjectInfoApi({ id, address:address ?address : undefined })
     if (code === 0) {
       setDetail(data)
