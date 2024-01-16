@@ -32,11 +32,11 @@ export const buySubmitAsync = createAppAsyncThunk(
     console.log('start',Number(satoshis),formatFixedNumber(satoshis,9,10).toString(),toAddress)
     // const amount = parseFixedAmount(satoshis,9).toNumber()
     const unisat = useUnisat()
-    console.log({toAddress,satoshis,price})
     const txHash = await unisat.sendBitcoin(
       toAddress,
       Number(satoshis)
     );
+    callback(txHash)
     const params = {
       price,
       projectname,
@@ -53,8 +53,7 @@ export const buySubmitAsync = createAppAsyncThunk(
       txHash,
     }
     const res = await submitOderListSave(params)
-    callback(txHash)
-    console.log({res,params})
+   
     // console.log({txHash})
     return txHash
   }

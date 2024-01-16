@@ -12,8 +12,10 @@ import {
   connectUnisat,
   buySubmitAsync,
   selectBuy,
+  addToast,
 } from "@/lib/redux"
 import { parseFixedAmount } from "@/utils/formatBalance"
+import Notice from "../Notice"
 
 const WhitelistStageButton: React.FC<{
   price:any,
@@ -69,6 +71,14 @@ const WhitelistStageButton: React.FC<{
     initAddress()
   }, [detail, address,stage])
   const onCLickBuy = () => {
+    if(!buyAmount){
+      dispatch(addToast({
+        contxt: (
+          <Notice icon='warning' text="Please enter the quantity" />
+        ),
+      })) 
+      return
+    }
     if (status === "idle" && buyAmount && disabled === false && toAddress ) {
       dispatch(
         buySubmitAsync({
