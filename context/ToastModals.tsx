@@ -6,9 +6,11 @@ export default function ToastModals() {
   const { lists } = useSelector(selectToast)
   return lists.length ? (
     <ToastContainerBox>
+      <Fiext>
       {lists.map((item, key) => (
         <ToastItemDom item={item} key={key} />
       ))}
+      </Fiext>
     </ToastContainerBox>
   ) : (
     <></>
@@ -16,7 +18,6 @@ export default function ToastModals() {
 }
 
 const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
-  const [second, setSecond] = useState((item.endTime || 0) - Date.now())
   const dispatch = useDispatch()
   useEffect(()=>{
     const fun = ()=>{
@@ -29,11 +30,17 @@ const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
     <ToastItemBox>
       <ToastItemContxtBox>{item.contxt}</ToastItemContxtBox>
       <ToastItemFooterBox>
-        <ToastIner second={second + 800}  />
+        <ToastIner second={(item.endTime || 0) - Date.now() + 800}  />
       </ToastItemFooterBox>
     </ToastItemBox>
   )
 }
+const Fiext=styled.div`
+  position: fixed;
+  top: 100px;
+  transform: translateX(-100%);
+  z-index: 100;
+`
 const ToastContainerBox = styled.div`
   position: absolute;
   right: 0px;

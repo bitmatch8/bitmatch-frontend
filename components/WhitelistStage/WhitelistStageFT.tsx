@@ -1,15 +1,14 @@
-import ImgBox from "@/components/ImgBox"
 import { Spaced } from "@/components/Spaced"
 import TokenSymbol from "@/components/TokenSymbol"
-import NFTSHOWImg from "@/assets/img/nft_show.png"
 import styled from "@emotion/styled"
 import { useMemo, useState } from "react"
 import Input from "@/components/Input"
-import ValueSkeleton from "@/components/ValueSkeleton"
-import { formatUnitsAmount, getFullDisplayBalance } from "@/utils/formatBalance"
+import { formatUnitsAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
+import { addToast, useDispatch } from "@/lib/redux"
+import Notice from "../Notice"
 
 const WhitelistStageFT: React.FC<{
   detail: any
@@ -18,6 +17,7 @@ const WhitelistStageFT: React.FC<{
   title: string
   stage:any
 }> = ({ info, balance, title, detail,stage }) => {
+  const dispatch=useDispatch()
   const [value, setValue] = useState("")
   const onChangeInput = (e: any) => {
     let { value } = e.target
@@ -35,6 +35,13 @@ const WhitelistStageFT: React.FC<{
   )
   const callbackSuccess=()=>{
     setValue('')
+    dispatch(
+      addToast({
+        contxt: (
+          <Notice icon='success' text="success" />
+        ),
+      })
+    )
   }
   const satoshis=useMemo(()=>{
     return Number(price) * Number((value || 0))

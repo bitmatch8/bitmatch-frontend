@@ -10,6 +10,16 @@ import { formatUnitsAmount, getFullDisplayBalance } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
+import {
+  useSelector,
+  useDispatch,
+  selectWallter,
+  connectUnisat,
+  buySubmitAsync,
+  selectBuy,
+  addToast,
+} from "@/lib/redux"
+import Notice from "../Notice"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -18,6 +28,7 @@ const WhitelistStageNFT: React.FC<{
   title: string,
   stage:any,
 }> = ({ info, balance, title,detail,stage }) => {
+  const dispatch=useDispatch()
   const [value, setValue] = useState("")
   const onChangeInput = (e: any) => {
     let { value } = e.target
@@ -35,6 +46,13 @@ const WhitelistStageNFT: React.FC<{
   )
   const callbackSuccess=()=>{
     setValue('')
+    dispatch(
+      addToast({
+        contxt: (
+          <Notice icon='success' text="Success" />
+        ),
+      })
+    )
   }
   const satoshis=useMemo(()=>{
     return Number(info.targetnumber) * Number((value || 0))

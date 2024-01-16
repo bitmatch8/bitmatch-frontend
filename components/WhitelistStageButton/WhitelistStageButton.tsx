@@ -2,6 +2,9 @@ import Button from "@/components/Button"
 import styled from "@emotion/styled"
 import { useEffect, useMemo, useState } from "react"
 import TimeCountdown from "@/components/TimeCountdown"
+import { ConnectModal } from "@/components/Page/TopBar/ConnectButton"
+import useModal from "@/hook/useModal"
+import { fetchQueryByWhitelist, fetchSelectFaddress } from "@/api/api"
 import {
   useSelector,
   useDispatch,
@@ -10,9 +13,6 @@ import {
   buySubmitAsync,
   selectBuy,
 } from "@/lib/redux"
-import { ConnectModal } from "@/components/Page/TopBar/ConnectButton"
-import useModal from "@/hook/useModal"
-import { fetchQueryByWhitelist, fetchSelectFaddress } from "@/api/api"
 
 const WhitelistStageButton: React.FC<{
   info: any
