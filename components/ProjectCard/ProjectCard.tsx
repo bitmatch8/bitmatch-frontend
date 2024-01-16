@@ -63,7 +63,7 @@ const ProjectCard: React.FC<{detail:any,buyType:any}> = ({detail,buyType}) => {
       <ProjectCardHeadBox>
         <ProjectCardHeadLeftBox>
           <ProjectCardHeadImgBox>
-            {detail === null ? <ValueSkeleton width={100} height={100}/>:<ImgBox alt="" src={`data:image/jpeg;base64,${detail?.projectlogo}`} height={100} width={100} />}
+            {detail === null ? <ValueSkeleton width={100} height={100}/>:<ImgBox style={{borderRadius:20}} alt="" src={`data:image/jpeg;base64,${detail?.projectlogo}`} height={100} width={100} />}
           </ProjectCardHeadImgBox>
           <ProjectCardHeadTitleBox>
             <div>{detail === null ? <ValueSkeleton width={300}/>:detail?.projectname}</div>
@@ -77,7 +77,7 @@ const ProjectCard: React.FC<{detail:any,buyType:any}> = ({detail,buyType}) => {
       </ProjectCardHeadBox>
       <ProjectContainerBox>
         <ProjectContainerItemBox>
-          {detail === null ? <ValueSkeleton width={498} height={270}/>:<ImgBox alt="" width={498} height={270} src={`data:image/jpeg;base64,${detail?.projecthead}`}/>}
+          {detail === null ? <ValueSkeleton width={498} height={270}/>:<ImgBox alt="" width={498} style={{borderRadius:20}} height={270} src={`data:image/jpeg;base64,${detail?.projecthead}`}/>}
         </ProjectContainerItemBox>
         <ProjectContainerItemBox>
           {detail === null ? <ValueSkeleton height={100} width={622}/>: detail?.projectdescription}

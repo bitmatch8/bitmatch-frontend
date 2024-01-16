@@ -59,7 +59,7 @@ export default function GenesisNFT() {
     }
   }
   const initPage = async () => {
-    const { data, code } = await fetchProjectInfoApi({ id, address })
+    const { data, code } = await fetchProjectInfoApi({ id, address:address ?address : undefined })
     if (code === 0) {
       setDetail(data)
       setSinglePersonPurchased(data?.singlePersonPurchased || 0)

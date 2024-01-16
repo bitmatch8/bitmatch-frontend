@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic'
 import TokenomicsEcharts from './TokenomicsEcharts'
 import { fetchProjectDetailsApi } from "@/api/api"
 import ValueSkeleton from "@/components/ValueSkeleton"
+import Image from "next/image"
 // const TokenomicsEcharts = dynamic(
 //   () => import('./TokenomicsEcharts'),
 //   { ssr: false },
@@ -57,7 +58,7 @@ Rarities of all traits within each layer are equal, allowing subjective apprecia
      {show? <>
       <PageSubTitleBox>Tokenomics</PageSubTitleBox>
       <TokenomicsEchartsBox>
-      <TokenomicsEcharts/>
+      <TokenomicsImgBox alt="" width={1120} height={639} src={`data:image/jpeg;base64,${detail?.tokenomics}`}/>
       </TokenomicsEchartsBox>
      </>:''}
     </ProjectInformationBox>
@@ -65,12 +66,15 @@ Rarities of all traits within each layer are equal, allowing subjective apprecia
 }
 export default ProjectInformation
 
+const TokenomicsImgBox=styled(Image)`
+border-radius: 20px;
+`
 const TokenomicsEchartsBox=styled.div`
   width: 1120px;
   /* height: 693px; */
   border-radius: 30px;
   margin: 40px auto;
-  background-color: #fff;
+  /* background-color: #fff; */
 `
 const InfoContainerBox=styled.div`
   padding: 20px;

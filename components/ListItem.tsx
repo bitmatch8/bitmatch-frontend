@@ -89,6 +89,7 @@ const ListWaperItemLineBox = styled.div`
 `
 const ListWaperItemImage = styled(Image)`
   height: auto;
+  border-radius: 20px;
 `
 const ListWaperItemPicBox = styled.div`
   width: 720px;
