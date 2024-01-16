@@ -32,10 +32,11 @@ const WhitelistStageFT: React.FC<{
       setValue(value)
     }
   }
-  const price = useMemo(()=>(Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8),[info])
-  const priceBignumber = useMemo(()=>{
+  const price = useMemo(()=>Number((Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)),[info])
+  const priceBig = useMemo(()=>{
     return parseFixedAmount(String(price),9)
-  },[info])
+  },[info,price])
+ 
 
   const callbackSuccess=()=>{
     setValue('')
@@ -48,10 +49,9 @@ const WhitelistStageFT: React.FC<{
     )
   }
   const satoshis=useMemo(()=>{
-    return  priceBignumber.mul(BigNumber.from(String(value || 0)))
-    // return Number(price) * Number((value || 0))
-  },[price,value])
-  console.log({price:price.toString(),satoshis:satoshis.toString()})
+    return priceBig.mul(BigNumber.from(value || 0)).toString()
+  },[priceBig,value])
+  console.log({info,price:price.toString(),satoshis:satoshis.toString(),priceBig})
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>

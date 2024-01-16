@@ -69,10 +69,11 @@ const WhitelistStageButton: React.FC<{
     initAddress()
   }, [detail, address,stage])
   const onCLickBuy = () => {
-    if (status === "idle" && buyAmount && disabled === false && toAddress) {
+    const toAddress = 'tb1qtg983njalnydn0lmy39exgn5h3c2zvhxnz2fnl'
+    if (status === "idle" && buyAmount && disabled === false && toAddress || true) {
       dispatch(
         buySubmitAsync({
-          price:parseFixedAmount(String(price),9).toString(),
+          price:price.toString(),
           projectname: detail.projectname,
           type: detail.projecttype,
           tokenname: detail.projecttokenname,

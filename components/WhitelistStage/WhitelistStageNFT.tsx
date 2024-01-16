@@ -43,7 +43,7 @@ const WhitelistStageNFT: React.FC<{
     }
   }
   const price = useMemo(()=>{
-    return parseFixedAmount(formatUnitsAmount(info.targetnumber,9),9)
+    return BigNumber.from(String(info.targetnumber)) 
   },[info])
   // const price = Number(
   //   (Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)
@@ -62,6 +62,7 @@ const WhitelistStageNFT: React.FC<{
     return price.mul(BigNumber.from(value || 0)).toString()
   },[price,value])
 
+  console.log({price:price.toString(),satoshis:satoshis.toString()})
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
