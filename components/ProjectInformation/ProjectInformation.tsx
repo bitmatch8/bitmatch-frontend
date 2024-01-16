@@ -16,6 +16,9 @@ import Image from "next/image"
 const ProjectInformation: React.FC<{id:any,show:boolean}> = ({id,show}) => {
   const [detail,setDetail]=useState<any>(null)
   const initPage=async()=>{
+    if(!id){
+      return null
+    }
     const {code,data} =await fetchProjectDetailsApi(id)
     if(code === 0){
       setDetail(data)
