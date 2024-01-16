@@ -34,7 +34,7 @@ const WhitelistStageFT: React.FC<{
   }
   const price = useMemo(()=>Number((Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)),[info])
   const priceBig = useMemo(()=>{
-    return parseFixedAmount(String(price),9)
+    return parseFixedAmount(String(price),8)
   },[info,price])
  
 
