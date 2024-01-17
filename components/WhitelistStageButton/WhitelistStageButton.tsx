@@ -118,7 +118,7 @@ const WhitelistStageButton: React.FC<{
   if (NotStarted) {
     return (
       <WhitelistStageButtonBox>
-        <TimeCountdown deadline={new Date(info.starttime)} />
+        <TimeCountdown onComplete={callback} deadline={new Date(info.starttime)} />
       </WhitelistStageButtonBox>
     )
   } else if (endtime.getTime() < Date.now()) {

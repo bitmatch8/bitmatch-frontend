@@ -4,11 +4,13 @@ import { useMemo } from "react"
 import styled from "@emotion/styled"
 
 interface ProgressCountdownProps {
-  deadline: Date
+  deadline: Date,
+  onComplete:any,
 }
 
 const TimeCountdown: React.FC<ProgressCountdownProps> = ({
   deadline,
+  onComplete
 }) => {
   const deadlineVal = useMemo(() => {
     return deadline.getTime()
@@ -35,7 +37,7 @@ const TimeCountdown: React.FC<ProgressCountdownProps> = ({
   }
   return (
     <StyledCardContentInner>
-      <Countdown date={deadlineVal} renderer={countdownRenderer} />
+      <Countdown onComplete={onComplete} date={deadlineVal} renderer={countdownRenderer} />
     </StyledCardContentInner>
   )
 }

@@ -36,15 +36,15 @@ const StyledButton = styled.button<TransientButtonProps>`
   border-radius: 16px;
   text-decoration: none;
   &.button--disabled {
-    color: #fff;
-    background: #a7a7a7;
+    color: #6F6F76;
+      background: #292C30;
   }
   &:hover {
     border: none;
     background: linear-gradient(135deg, #f7931a 0%, #d87600 100%);
     &.button--disabled {
-      color: #fff;
-      background: #a7a7a7;
+      color: #6F6F76;
+      background: #292C30;
     }
    
   }
