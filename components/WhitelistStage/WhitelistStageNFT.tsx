@@ -1,5 +1,6 @@
 import ImgBox from "@/components/ImgBox"
 import { Spaced } from "@/components/Spaced"
+import { BigNumber } from "@ethersproject/bignumber"
 import TokenSymbol from "@/components/TokenSymbol"
 import NFTSHOWImg from "@/assets/img/nft_show.png"
 import styled from "@emotion/styled"
@@ -12,8 +13,6 @@ import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
 import { useDispatch, addToast } from "@/lib/redux"
 import Notice from "../Notice"
-import { BigNumber } from "@ethersproject/bignumber"
-import WhitelistStageInput from "../WhitelistStageInput"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -54,7 +53,7 @@ const WhitelistStageNFT: React.FC<{
   const satoshis = useMemo(() => {
     return price.mul(BigNumber.from(value || 0)).toString()
   }, [price, value])
-
+  const onMax = () => {}
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
@@ -89,14 +88,24 @@ const WhitelistStageNFT: React.FC<{
         </WhitelistStageItemBox>
       </WhitelistStageCardBox>
       <Spaced size="40" />
-      <WhitelistStageProgress total={info?.tokennumber || 0} num={info?.totalPersonPurchased || 0}/>
+      <WhitelistStageProgress
+        total={info?.tokennumber || 0}
+        num={info?.totalPersonPurchased || 0}
+      />
       <Spaced size="100" />
       <WhitelistStageLineBox
         style={{ justifyContent: "space-between", gap: 0 }}>
         <WhitelistStageFooterItem>
-          <WhitelistStageInputBox placeholder="0" value={value} onChange={onChangeInput}/>
+          <WhitelistStageInputBox
+            placeholder="0"
+            value={value}
+            onMax={onMax}
+            onChange={onChangeInput}
+          />
           <FooterTextLineBox>
-            <div><span>{value || 0}</span> {detail?.projecttokenname}</div>
+            <div>
+              <span>{value || 0}</span> {detail?.projecttokenname}
+            </div>
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
