@@ -13,6 +13,7 @@ import React, { useMemo } from "react"
 import ValueSkeleton from "@/components/ValueSkeleton"
 import GitbookIcon from "@/components/Svg/GitbookIcon"
 import DiscordIcon from "@/components/Svg/DiscordIcon"
+import { BuyState } from "@/utils/types"
 
 const ProjectLinks: React.FC<{detail:any}> = ({detail}) => {
   return (
@@ -42,16 +43,16 @@ const LinkItem: React.FC<{ SvgIcon: any; to?: string }> = ({
 }
 
 
-const statueSymbol: { [symbol: string]: any } = {
-  'white_NotStarted':UpcomingImg,
-  'white_Ended':endedImg,
-  'white_InProgress':Upcomming2Img,
-  'public_NotStarted':UpcomingImg,
-  'public_Ended':endedImg,
-  'public_InProgress':UpcomingImg 
+const statueSymbol: { [typeId in BuyState]: any }  = {
+  [BuyState.Public_Ended]: endedImg,
+  [BuyState.Public_InProgress]: Upcomming2Img,
+  [BuyState.Public_NotStarted]: UpcomingImg,
+  [BuyState.White_Ended]: endedImg,
+  [BuyState.White_NotStarted]: UpcomingImg,
+  [BuyState.White_InProgress]: Upcomming2Img
 }
 
-const ProjectCard: React.FC<{detail:any,buyType:any}> = ({detail,buyType}) => {
+const ProjectCard: React.FC<{detail:any,buyType:BuyState | null}> = ({detail,buyType}) => {
 
   const StatusImg = useMemo(()=>{
     if (buyType === null || !statueSymbol[buyType])

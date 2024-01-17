@@ -1,3 +1,4 @@
+import { BuyState, DetailInfoType } from "./types"
 
 export function number_format(number:number, decimals = 6 ) {
   return Number(Number(number || 0).toFixed(decimals))
@@ -87,17 +88,14 @@ export const objectToUrlParams=(obj:any)=>{
 
 //1705153787492
 //1705388400000
-export const foramtDateInfo = (item: any, type: string) => {
-  if (item === null) {
+export const foramtDateInfo = (item: any,type:DetailInfoType ) => {
+  if(!item){
     return null
   }
-  const endtime = new Date(item.enttime)
   const starttime = new Date(item.starttime)
-  if (starttime.getTime() > Date.now()) {
-    return `${type}_NotStarted`
-  } else if (endtime.getTime() < Date.now()) {
-    return `${type}_Ended`
-  } else if (starttime.getTime() < Date.now()) {
-    return `${type}_InProgress`
+  if(type === DetailInfoType.public){
+    return starttime.getTime() > Date.now()?BuyState.Public_NotStarted : starttime.getTime() < Date.now() ? BuyState.Public_InProgress : BuyState.Public_Ended 
   }
+  return starttime.getTime() > Date.now()?BuyState.White_NotStarted : starttime.getTime() < Date.now() ? BuyState.White_InProgress : BuyState.White_Ended
+  
 }

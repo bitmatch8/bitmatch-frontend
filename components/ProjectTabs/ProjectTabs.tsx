@@ -7,6 +7,7 @@ import ValueSkeleton from "../ValueSkeleton"
 import WhitelistStageNFT from "../WhitelistStage/WhitelistStageNFT"
 import WhitelistStageFT from "../WhitelistStage/WhitelistStageFT"
 import ProjectInformation from "../ProjectInformation"
+import { DetailInfoType, ProjectType } from "@/utils/types"
 
 const ProjectTabs: React.FC<{
   ProjectTabList: any
@@ -28,8 +29,7 @@ const ProjectTabs: React.FC<{
   const [tId, setTabId] = useState<string>(tabId)
   const { balance } = useSelector(selectWallter)
   const onClickTabItem = (id: string) => setTabId(id)
-  const WhitelistStage =
-    String(detail?.projecttype) === "2" ? WhitelistStageNFT : WhitelistStageFT
+  const WhitelistStage = String(detail?.projecttype) === ProjectType.NFT ? WhitelistStageNFT : WhitelistStageFT
   return (
     <>
       <ProjectTabsBox>
@@ -52,7 +52,7 @@ const ProjectTabs: React.FC<{
         </EmptyStageBox>
       ) : (
         <>
-          {whiteInfo && tId === "white" ? (
+          {whiteInfo && tId === DetailInfoType.white ? (
             <WhitelistStage
               readData={whiteRead}
               stage="whitelist"
@@ -64,7 +64,7 @@ const ProjectTabs: React.FC<{
           ) : (
             ""
           )}
-          {publicInfo && tId === "public" ? (
+          {publicInfo && tId === DetailInfoType.public ? (
             <WhitelistStage
               readData={publicRead}
               stage="public"
@@ -76,9 +76,9 @@ const ProjectTabs: React.FC<{
           ) : (
             ""
           )}
-          {tId === "info" ? (
+          {tId === DetailInfoType.info ? (
             <ProjectInformation
-              show={detail.projecttype === "1"}
+              show={detail.projecttype === ProjectType.FT}
               id={detail?.pdid}
             />
           ) : (
