@@ -15,8 +15,8 @@ import ProjectTabs from "@/components/ProjectTabs"
 import { useRouter } from "next/router"
 export default function IndexPage() {
   const {
-    query: { id }
-  }: any = useRouter();
+    query: { id },
+  }: any = useRouter()
   const [detail, setDetail] = useState<any>(null)
   const [publicInfo, setPublicInfo] = useState(null)
   const [whiteInfo, setWhiteInfo] = useState(null)
@@ -32,8 +32,7 @@ export default function IndexPage() {
   }, [publicInfo])
 
   const buyType = useMemo(() => {
-    if (whiteType === null && whiteType === null)
-      return null
+    if (whiteType === null && whiteType === null) return null
     if (whiteType && whiteType !== "white_Ended") {
       return whiteType
     } else if (!publicType) {
@@ -43,18 +42,20 @@ export default function IndexPage() {
     }
   }, [whiteType, publicType])
 
-  const initWhtielist = async () => {
-    if(detail?.wid){
+  const readPublic = async () => {
+    if (detail?.wid) {
       const white_res = await fetchWhtielistInfoApi({
         id: detail?.wid,
         address,
       })
-      
+
       if (white_res?.code === 0) {
         setWhiteInfo(white_res.data)
       }
-    } 
-    if(detail?.pubid){
+    }
+  }
+  const readWhtie = async () => {
+    if (detail?.pubid) {
       const public_res = await fetchWhtielistInfoApi({
         id: detail?.pubid,
         address,
@@ -65,10 +66,13 @@ export default function IndexPage() {
     }
   }
   const initPage = async () => {
-    if(!id){
+    if (!id) {
       return
     }
-    const { data, code } = await fetchProjectInfoApi({ id, address:address ?address : undefined })
+    const { data, code } = await fetchProjectInfoApi({
+      id,
+      address: address ? address : undefined,
+    })
     if (code === 0) {
       setDetail(data)
       setSinglePersonPurchased(data?.singlePersonPurchased || 0)
@@ -76,7 +80,8 @@ export default function IndexPage() {
   }
   useEffect(() => {
     if (detail) {
-      initWhtielist()
+      readWhtie()
+      readPublic()
     }
   }, [detail, address])
   useEffect(() => {
@@ -89,23 +94,23 @@ export default function IndexPage() {
     }
     const arr = []
     if (whiteInfo) {
-      arr.push({id:'white',title:"Whitelist Stage"})
+      arr.push({ id: "white", title: "Whitelist Stage" })
     }
     if (publicInfo) {
-      arr.push({id:'public',title:"Public Stage"})
+      arr.push({ id: "public", title: "Public Stage" })
     }
-    arr.push({id:'info',title:"Project Information"})
+    arr.push({ id: "info", title: "Project Information" })
     return arr
   }, [whiteInfo, publicInfo])
 
   const tabId = useMemo(() => {
     if (whiteType === "white_Ended" && publicType) {
       if (publicType === "public_Ended") {
-        return 'white'
+        return "white"
       }
-      return 'public'
+      return "public"
     }
-    return 'white'
+    return "white"
   }, [publicType, whiteType])
   return (
     <Page>
@@ -113,6 +118,8 @@ export default function IndexPage() {
       <Spaced size="80" />
       <ProjectCard detail={detail} buyType={buyType} />
       <ProjectTabs
+        whiteRead={readWhtie}
+        publicRead={readPublic}
         tabId={tabId}
         ProjectTabList={ProjectTabList}
         detail={detail}

@@ -17,7 +17,8 @@ const WhitelistStageFT: React.FC<{
   balance: any
   title: string
   stage:any
-}> = ({ info, balance, title, detail,stage }) => {
+  readData:any
+}> = ({ info, balance, title, detail,stage,readData }) => {
   console.log({stage})
   const dispatch=useDispatch()
   const [value, setValue] = useState("")
@@ -47,6 +48,9 @@ const WhitelistStageFT: React.FC<{
         ),
       })
     )
+    setTimeout(() => {
+      readData()
+    }, 2000);
   }
   const satoshis=useMemo(()=>{
     return priceBig.mul(BigNumber.from(value || 0)).toString()

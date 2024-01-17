@@ -15,7 +15,17 @@ const ProjectTabs: React.FC<{
   publicInfo: any
   detail: any
   tabId: any
-}> = ({ ProjectTabList, whiteInfo, publicInfo, detail, tabId }) => {
+  whiteRead: any
+  publicRead: any
+}> = ({
+  ProjectTabList,
+  whiteInfo,
+  publicInfo,
+  detail,
+  tabId,
+  whiteRead,
+  publicRead,
+}) => {
   const [tId, setTabId] = useState<string>(tabId)
   const { balance } = useSelector(selectWallter)
   const onClickTabItem = (id: string) => setTabId(id)
@@ -27,7 +37,7 @@ const ProjectTabs: React.FC<{
         {ProjectTabList === null ? (
           <ValueSkeleton width={1000} height={60} />
         ) : (
-          ProjectTabList?.map(({title,id}: any, key: any) => (
+          ProjectTabList?.map(({ title, id }: any, key: any) => (
             <ProjectTabsItemBox
               onClick={() => onClickTabItem(id)}
               className={id === tId ? "active" : ""}
@@ -42,23 +52,40 @@ const ProjectTabs: React.FC<{
           <ValueSkeleton width={500} height={50} />
         </EmptyStageBox>
       ) : (
-       <>
-       {whiteInfo && tId === 'white' ? <WhitelistStage
-          stage="whitelist"
-          title="Bitcoin Frogs Whitelist Stage"
-          balance={balance}
-          detail={detail}
-          info={whiteInfo}
-        />:''}
-       {publicInfo && tId === 'public'  ? <WhitelistStage
-          stage="public"
-          title="Bitcoin Frogs Public Stage"
-          balance={balance}
-          detail={detail}
-          info={publicInfo}
-        />:''}
-       {tId === 'info' ? <ProjectInformation show={detail.projecttype === "1"} id={detail?.pdid} />:''}
-       </> 
+        <>
+          {whiteInfo && tId === "white" ? (
+            <WhitelistStage
+              readData={whiteRead}
+              stage="whitelist"
+              title="Bitcoin Frogs Whitelist Stage"
+              balance={balance}
+              detail={detail}
+              info={whiteInfo}
+            />
+          ) : (
+            ""
+          )}
+          {publicInfo && tId === "public" ? (
+            <WhitelistStage
+              readData={publicRead}
+              stage="public"
+              title="Bitcoin Frogs Public Stage"
+              balance={balance}
+              detail={detail}
+              info={publicInfo}
+            />
+          ) : (
+            ""
+          )}
+          {tId === "info" ? (
+            <ProjectInformation
+              show={detail.projecttype === "1"}
+              id={detail?.pdid}
+            />
+          ) : (
+            ""
+          )}
+        </>
       )}
     </>
   )
@@ -93,4 +120,3 @@ const ProjectTabsBox = styled.div`
   display: flex;
   gap: 80px;
 `
-

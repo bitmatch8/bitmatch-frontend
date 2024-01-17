@@ -28,7 +28,8 @@ const WhitelistStageNFT: React.FC<{
   balance: any
   title: string,
   stage:any,
-}> = ({ info, balance, title,detail,stage }) => {
+  readData:any
+}> = ({ info, balance, title,detail,stage,readData }) => {
   const dispatch=useDispatch()
   const [value, setValue] = useState("")
   const onChangeInput = (e: any) => {
@@ -57,6 +58,9 @@ const WhitelistStageNFT: React.FC<{
         ),
       })
     )
+    setTimeout(() => {
+      readData()
+    }, 2000);
   }
   const satoshis=useMemo(()=>{
     return price.mul(BigNumber.from(value || 0)).toString()
