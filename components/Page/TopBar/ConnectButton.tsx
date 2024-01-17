@@ -58,9 +58,8 @@ const ConnectButton = () => {
         onClick={() =>
           dispatch(
             addToast({
-              contxt: (
-                <Notice icon="warning" text="UniSat Wallet not installed" />
-              ),
+              contxt: "UniSat Wallet not installed",
+              icon:'warning'
             })
           )
         }

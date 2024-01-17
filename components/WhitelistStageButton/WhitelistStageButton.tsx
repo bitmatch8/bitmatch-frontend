@@ -73,9 +73,8 @@ const WhitelistStageButton: React.FC<{
   const onCLickBuy = () => {
     if(!buyAmount){
       dispatch(addToast({
-        contxt: (
-          <Notice icon='warning' text="Please enter the quantity" />
-        ),
+        contxt: "Please enter the quantity",
+        icon:'warning'
       })) 
       return
     }

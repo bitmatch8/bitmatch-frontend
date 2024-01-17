@@ -1,22 +1,17 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect } from "react"
 
-import styled from "@emotion/styled"
 
 import {
   wallterSlice,
   useSelector,
   useDispatch,
   selectWallter,
-  addToast,
-  connectUnisat,
   selectLuanch,
-  toastSlice,
   FilterTypeProps,
   luanchSlice,
   fetchProjectInfoSelectInfoAsync,
 } from '@/lib/redux'
 import useUnisat from "@/hook/useUnisat"
-import { getFullDisplayBalance } from "@/utils/formatBalance"
 
 export default function WallterContext() {
   const dispatch = useDispatch()
