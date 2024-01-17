@@ -22,8 +22,9 @@ import MarketplaceBgImg from "@/assets/img/Marketplace_bg.png"
 
 import ProjectLists from "./ProjectLists"
 import { Spaced } from "@/components/Spaced"
+import { Chains } from "@/utils/Chains"
 
-const ChainIconItem: React.FC<{ chain: string; width: number }> = ({
+const ChainIconItem: React.FC<{ chain: Chains; width: number }> = ({
   chain,
   width,
 }) => {
@@ -37,11 +38,11 @@ const ChainIconItem: React.FC<{ chain: string; width: number }> = ({
 const ChainLinks: React.FC = () => {
   return (
     <ChainLinksBox>
-      <ChainIconItem chain="UNISAT" width={106} />
-      <ChainIconItem chain="OKX" width={106} />
-      <ChainIconItem chain="Atomicalmarket" width={106} />
-      <ChainIconItem chain="MAGICEDEN" width={106} />
-      <ChainIconItem chain="TRAC" width={106} />
+      <ChainIconItem chain={Chains.UNISAT} width={106} />
+      <ChainIconItem chain={Chains.OKX} width={106} />
+      <ChainIconItem chain={Chains.Atomicalmarket} width={106} />
+      <ChainIconItem chain={Chains.MAGICEDEN} width={106} />
+      <ChainIconItem chain={Chains.TRAC} width={106} />
       {/* <ChainIconItem chain="ORDINALS" width={120} />
       <ChainIconItem chain="BINANCE" width={120} />
       <ChainIconItem chain="OKX" width={120} />
