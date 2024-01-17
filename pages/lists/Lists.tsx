@@ -10,7 +10,6 @@ import { number_format } from "@/utils"
 import LoaderBox from "@/components/Loader/LoaderBox"
 import Pagination from "@/components/Pagination"
 import { Spaced } from "@/components/Spaced"
-import lists from './lists.json'
 
 import {
   luanchSlice,
@@ -129,7 +128,6 @@ export default function IndexPage() {
           {projectList === null ? <ListWaperItem item={null} />:projectList.filter(itm=>!!itm.projecthead && !!itm.projectlogo).map((item, key) => (
             <ListWaperItem item={item} key={key} />
           ))}
-
         </ListWaperBox>
       </ListContainerBox>
       <Spaced size="50" />

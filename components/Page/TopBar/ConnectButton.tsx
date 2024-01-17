@@ -70,48 +70,73 @@ const ConnectButton = () => {
     )
   }
 
-  
-
   return connected && address ? (
     <ConnectSuccess address={address} />
   ) : (
-    <ConnectWallButton/>
+    <ConnectWallButton />
   )
 }
 
 export default ConnectButton
 
-
-const ConnectWallButton:React.FC=()=>{
+const ConnectWallButton: React.FC = () => {
   const dispatch = useDispatch()
 
   const [onConnect, onDismiss] = useModal(
-    <ConnectModal onDismiss={() => onDismiss()} connect={()=>{
-      dispatch(connectUnisat())
-      onDismiss() 
-    }}></ConnectModal>
+    <ConnectModal
+      onDismiss={() => onDismiss()}
+      connect={() => {
+        dispatch(connectUnisat())
+        onDismiss()
+      }}></ConnectModal>
   )
-  return     <ConnectButtonBox
-  variant="secondary"
-  onClick={onConnect}
-  // onClick={() => dispatch(connectUnisat())}
->
-  Connect Wallet
-</ConnectButtonBox>
+  return (
+    <ConnectButtonBox
+      variant="secondary"
+      onClick={onConnect}
+      // onClick={() => dispatch(connectUnisat())}
+    >
+      Connect Wallet
+    </ConnectButtonBox>
+  )
 }
-export const ConnectModal: React.FC<{ onDismiss: any,connect:any }> = ({ onDismiss,connect }) => {
+export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
+  onDismiss,
+  connect,
+}) => {
   return (
     <ConnectModalBox>
       <CloseButtonBox onClick={onDismiss}>
         <CloseIcon fill="#C2C5C8" width={36} />
       </CloseButtonBox>
-      <LogoBox onClick={connect}>
-        <ImgBox alt="" src={LogoUnisatIcon} width={77} />
-      </LogoBox>
+      <ConnectBox>
+        <LogoBox className="button" onClick={connect}>
+          <ImgBox alt="" src={LogoUnisatIcon} width={77} />
+        </LogoBox>
+        <ConnectTitle className="text">UniSat Wallet</ConnectTitle>
+      </ConnectBox>
     </ConnectModalBox>
   )
 }
 
+const ConnectBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 48px;
+  font-size: 24px;
+  font-weight: 500;
+  color: #c2c5c8;
+  line-height: 24px;
+  &:hover {
+    color: #ffffff;
+    .button {
+      border: 5px solid #f7931a;
+    }
+  }
+`
+const ConnectTitle = styled.div``
 const LogoBox = styled.div`
   width: 200px;
   height: 200px;
@@ -121,9 +146,6 @@ const LogoBox = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  &:hover {
-    border: 5px solid #f7931a;
-  }
 `
 const CloseButtonBox = styled.div`
   width: 36px;
@@ -149,6 +171,7 @@ const ConnectModalBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 48px;
 `
 
 const ImgBox = styled(Image)`

@@ -11,6 +11,7 @@ import { Providers } from "@/lib/providers"
 import WallterContext from "@/context/WallterContext"
 import dynamic from "next/dynamic"
 import Modals from "@/context/Modals"
+import './index.css'
 // import { Providers } from './providers';
 const clientSideEmotionCache = createEmotionCache()
 

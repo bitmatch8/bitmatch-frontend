@@ -131,7 +131,7 @@ export default function IndexPage() {
             </HeadContainerUseUsDescBox>
             <LinkIcons />
           </HeadContainerUseUsLeftBox>
-          <HeadContainerUseUsButton onClick={() => {}}>
+          <HeadContainerUseUsButton to="/lists">
             Use Us
           </HeadContainerUseUsButton>
         </HeadContainerUseUsBox>

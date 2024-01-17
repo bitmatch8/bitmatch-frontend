@@ -6,31 +6,24 @@ import styled from "@emotion/styled"
 import { useMemo, useState } from "react"
 import Input from "@/components/Input"
 import ValueSkeleton from "@/components/ValueSkeleton"
-import { formatUnitsAmount, getFullDisplayBalance, parseFixedAmount } from "@/utils/formatBalance"
+import { formatUnitsAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
-import {
-  useSelector,
-  useDispatch,
-  selectWallter,
-  connectUnisat,
-  buySubmitAsync,
-  selectBuy,
-  addToast,
-} from "@/lib/redux"
+import { useDispatch, addToast } from "@/lib/redux"
 import Notice from "../Notice"
 import { BigNumber } from "@ethersproject/bignumber"
+import WhitelistStageInput from "../WhitelistStageInput"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
   info: any
   balance: any
-  title: string,
-  stage:any,
-  readData:any
-}> = ({ info, balance, title,detail,stage,readData }) => {
-  const dispatch=useDispatch()
+  title: string
+  stage: any
+  readData: any
+}> = ({ info, balance, title, detail, stage, readData }) => {
+  const dispatch = useDispatch()
   const [value, setValue] = useState("")
   const onChangeInput = (e: any) => {
     let { value } = e.target
@@ -43,28 +36,24 @@ const WhitelistStageNFT: React.FC<{
       setValue(value)
     }
   }
-  const price = useMemo(()=>{
-    return BigNumber.from(String(info.targetnumber)) 
-  },[info])
-  // const price = Number(
-  //   (Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)
-  // )
-  const callbackSuccess=()=>{
-    setValue('')
+  const price = useMemo(() => {
+    return BigNumber.from(String(info.targetnumber))
+  }, [info])
+
+  const callbackSuccess = () => {
+    setValue("")
     dispatch(
       addToast({
-        contxt: (
-          <Notice icon='success' text="Success" />
-        ),
+        contxt: <Notice icon="success" text="Success" />,
       })
     )
     setTimeout(() => {
       readData()
-    }, 2000);
+    }, 2000)
   }
-  const satoshis=useMemo(()=>{
+  const satoshis = useMemo(() => {
     return price.mul(BigNumber.from(value || 0)).toString()
-  },[price,value])
+  }, [price, value])
 
   return (
     <WhitelistStageBox>
@@ -100,23 +89,31 @@ const WhitelistStageNFT: React.FC<{
         </WhitelistStageItemBox>
       </WhitelistStageCardBox>
       <Spaced size="40" />
-      <WhitelistStageProgress total={info?.tokennumber || 0} num={info?.totalPersonPurchased || 0} />
+      <WhitelistStageProgress total={info?.tokennumber || 0} num={info?.totalPersonPurchased || 0}/>
       <Spaced size="100" />
       <WhitelistStageLineBox
         style={{ justifyContent: "space-between", gap: 0 }}>
         <WhitelistStageFooterItem>
-          <WhitelistStageInputBox
-            placeholder="0"
-            value={value}
-            onChange={onChangeInput}
-          />
-          <FooterTextLineBox><div><span>{value || 0}</span>  {detail?.projecttokenname}</div></FooterTextLineBox>
+          <WhitelistStageInputBox placeholder="0" value={value} onChange={onChangeInput}/>
+          <FooterTextLineBox>
+            <div><span>{value || 0}</span> {detail?.projecttokenname}</div>
+          </FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
-          <WhitelistStageButton price={price} detail={detail} info={info} satoshis={satoshis} buyAmount={value} stage={stage} callback={callbackSuccess} />
+          <WhitelistStageButton
+            price={price}
+            detail={detail}
+            info={info}
+            satoshis={satoshis}
+            buyAmount={value}
+            stage={stage}
+            callback={callbackSuccess}
+          />
           <FooterTextLineBox>
             <span className="g">Balance</span>
-            <span>{formatUnitsAmount(balance.confirmed, 8)} {info.projectcurrency}</span>
+            <span>
+              {formatUnitsAmount(balance.confirmed, 8)} {info.projectcurrency}
+            </span>
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
       </WhitelistStageLineBox>
@@ -135,8 +132,8 @@ const FooterTextLineBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  span{
-    color:#F7931A ;
+  span {
+    color: #f7931a;
   }
   .g {
     color: #6f6f76;

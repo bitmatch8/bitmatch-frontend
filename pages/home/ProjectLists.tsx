@@ -48,7 +48,8 @@ export default function ProjectLists() {
           <ProjectItemInfoBox style={{display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
             <div>
               <ProjectItemInfoTitleBox>{!oneInfo ?<ValueSkeleton width={378} /> : oneInfo?.projectname}</ProjectItemInfoTitleBox>
-              <ProjectItemInfoContxtBox>
+              <Spaced size="30"/>
+              <ProjectItemInfoContxtBox style={{width:412,height:185}}>
               {!oneInfo ?<ValueSkeleton width={378} height={120} /> : oneInfo?.projectdescription} 
               </ProjectItemInfoContxtBox>
             </div>
@@ -60,12 +61,12 @@ export default function ProjectLists() {
         <ProjectItemTowBox>
           <ProjectItemImgBox>
             {/* <ProjectItemTowImage alt="" src={BestIcon} /> */}
-            {!twoInfo ? <ValueSkeleton width={554} height={300}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${twoInfo?.projecthead}`} height={554} width={300} />}
+            {!twoInfo ? <ValueSkeleton width={552} height={300}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${twoInfo?.projecthead}`} height={300} width={552} />}
           </ProjectItemImgBox>
           <ProjectItemInfoBox>
             {/* <div> */}
               <ProjectItemInfoTitleBox>{!twoInfo ?<ValueSkeleton width={378} /> : twoInfo?.projectname}</ProjectItemInfoTitleBox>
-              <ProjectItemInfoContxtBox>
+              <ProjectItemInfoContxtBox style={{width:552,height:120}}>
               {!twoInfo ?<ValueSkeleton width={378} height={120} /> : twoInfo?.projectdescription} 
               </ProjectItemInfoContxtBox>
               <Spaced size="80"/>
@@ -76,11 +77,11 @@ export default function ProjectLists() {
         <ProjectItemTowBox>
           <ProjectItemImgBox>
 
-            {!threeInfo ? <ValueSkeleton width={554} height={300}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${threeInfo?.projecthead}`} height={554} width={300} />}
+            {!threeInfo ? <ValueSkeleton width={552} height={300}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${threeInfo?.projecthead}`} height={300} width={552} />}
           </ProjectItemImgBox>
           <ProjectItemInfoBox>
           <ProjectItemInfoTitleBox>{!threeInfo ?<ValueSkeleton width={378} /> : threeInfo?.projectname}</ProjectItemInfoTitleBox>
-              <ProjectItemInfoContxtBox>
+              <ProjectItemInfoContxtBox style={{width:552,height:120}}>
               {!threeInfo ?<ValueSkeleton width={378} height={120} /> : threeInfo?.projectdescription} 
               </ProjectItemInfoContxtBox>
               <Spaced size="80"/>
@@ -156,7 +157,8 @@ const ProjectItemInfoContxtBox = styled.div`
   font-weight: 300;
   color: #c2c5c8;
   line-height: 36px;
-  margin-top: 30px;
+  /* margin-top: 30px; */
+  overflow: hidden;
 `
 const ProjectListsBox = styled.div`
   /* margin-top: 100px; */
@@ -169,9 +171,9 @@ const ProjectItemTowImage = styled(Image)`
   border: 0;
 `
 const ProjectItemImage = styled(Image)`
-  width: auto;
+  /* width: auto; */
   border-radius: 20px;
-  height: 390px;
+  /* height: 390px; */
   border: 0;
 `
 const ProjectItemImgBox = styled.div``
