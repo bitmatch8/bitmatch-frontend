@@ -35,7 +35,7 @@ const WhitelistStageFT: React.FC<{
   }
   const price = useMemo(()=>Number((Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)),[info])
   const priceBig = useMemo(()=>{
-    return parseFixedAmount(String(price),9)
+    return parseFixedAmount(String(price),8)
   },[info,price])
  
 
@@ -111,7 +111,7 @@ const WhitelistStageFT: React.FC<{
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
-          <WhitelistStageButton price={price} detail={detail} info={info} buyAmount={value} satoshis={satoshis} stage={stage} callback={callbackSuccess} />
+          <WhitelistStageButton price={priceBig} detail={detail} info={info} buyAmount={value} satoshis={satoshis} stage={stage} callback={callbackSuccess} />
           <FooterTextLineBox>
             <span className="g">Balance</span>
             <span>{formatUnitsAmount(balance.confirmed, 8)} {info.projectcurrency}</span>
