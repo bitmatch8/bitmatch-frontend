@@ -29,7 +29,10 @@ const ProjectTabs: React.FC<{
   const [tId, setTabId] = useState<string>(tabId)
   const { balance } = useSelector(selectWallter)
   const onClickTabItem = (id: string) => setTabId(id)
-  const WhitelistStage = String(detail?.projecttype) === ProjectType.NFT ? WhitelistStageNFT : WhitelistStageFT
+  const WhitelistStage =
+    String(detail?.projecttype) === ProjectType.NFT
+      ? WhitelistStageNFT
+      : WhitelistStageFT
   return (
     <>
       <ProjectTabsBox>
@@ -61,9 +64,7 @@ const ProjectTabs: React.FC<{
               detail={detail}
               info={whiteInfo}
             />
-          ) : (
-            ""
-          )}
+          ) : null}
           {publicInfo && tId === DetailInfoType.public ? (
             <WhitelistStage
               readData={publicRead}
@@ -73,17 +74,13 @@ const ProjectTabs: React.FC<{
               detail={detail}
               info={publicInfo}
             />
-          ) : (
-            ""
-          )}
+          ) : null}
           {tId === DetailInfoType.info ? (
             <ProjectInformation
               show={detail.projecttype === ProjectType.FT}
               id={detail?.pdid}
             />
-          ) : (
-            ""
-          )}
+          ) : null}
         </>
       )}
     </>
