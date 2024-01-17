@@ -31,9 +31,9 @@ const useBuy = (info: any, readData: any) => {
     // const reg = /^-?\d*(\.\d*)?$/;
     const reg = /^-?\d*?$/
     if ((!isNaN(value) && reg.test(value)) || value === "") {
-      if(value === ''){
-        value = ''
-      }else if (Number(value) < Number(minAmount)) {
+      if (value === "") {
+        value = ""
+      } else if (Number(value) < Number(minAmount)) {
         value = minAmount
       } else if (Number(value) > Number(maxAmount)) {
         value = maxAmount
@@ -56,7 +56,7 @@ const useBuy = (info: any, readData: any) => {
   }
 
   const onMax = () => {
-    onChangeInput({target:{value:maxAmount}})
+    onChangeInput({ target: { value: maxAmount } })
   }
 
   return {

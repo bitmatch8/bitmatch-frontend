@@ -1,6 +1,12 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect } from "react"
 
-import { useSelector, useDispatch, selectToast, ToastItem, toastSlice } from "@/lib/redux"
+import {
+  useSelector,
+  useDispatch,
+  selectToast,
+  ToastItem,
+  toastSlice,
+} from "@/lib/redux"
 import styled from "@emotion/styled"
 import Notice from "@/components/Notice"
 export default function ToastModals() {
@@ -8,9 +14,9 @@ export default function ToastModals() {
   return lists.length ? (
     <ToastContainerBox>
       <Fiext>
-      {lists.map((item, key) => (
-        <ToastItemDom item={item} key={key} />
-      ))}
+        {lists.map((item, key) => (
+          <ToastItemDom item={item} key={key} />
+        ))}
       </Fiext>
     </ToastContainerBox>
   ) : (
@@ -20,23 +26,25 @@ export default function ToastModals() {
 
 const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
   const dispatch = useDispatch()
-  useEffect(()=>{
-    const fun = ()=>{
-      dispatch(toastSlice.actions.removeToast(item.uniqueId || ''))
+  useEffect(() => {
+    const fun = () => {
+      dispatch(toastSlice.actions.removeToast(item.uniqueId || ""))
     }
-    window.addEventListener('click',fun)
-    return window.removeEventListener('click',fun)
-  },[])
+    window.addEventListener("click", fun)
+    return window.removeEventListener("click", fun)
+  }, [])
   return (
     <ToastItemBox>
-      <ToastItemContxtBox><Notice icon={item.icon} text={item.contxt}/></ToastItemContxtBox>
+      <ToastItemContxtBox>
+        <Notice icon={item.icon} text={item.contxt} />
+      </ToastItemContxtBox>
       <ToastItemFooterBox>
-        <ToastIner second={(item.endTime || 0) - Date.now() + 800}  />
+        <ToastIner second={(item.endTime || 0) - Date.now() + 800} />
       </ToastItemFooterBox>
     </ToastItemBox>
   )
 }
-const Fiext=styled.div`
+const Fiext = styled.div`
   position: fixed;
   top: 100px;
   transform: translateX(-100%);
@@ -63,12 +71,11 @@ const ToastItemContxtBox = styled.div`
   font-weight: 600;
   color: #ffffff;
   line-height: 32px;
-  flex:1;
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 15px;
   padding-bottom: 20px;
-  
 `
 const ToastItemHeadBox = styled.div``
 const ToastItemFooterBox = styled.div`
@@ -81,11 +88,11 @@ const ToastItemFooterBox = styled.div`
   right: 15px;
   bottom: 10px;
 `
-const ToastIner = styled.div<{second:number}>`
+const ToastIner = styled.div<{ second: number }>`
   height: 5px;
   background: linear-gradient(90deg, #d87600 0%, #f38f17 78%, #ffbf49 100%);
   border-radius: 12px;
-  animation: progress-animation ${({second})=>second/1000}s ease; /* 动画名称、时长、缓动函数和无限重复 */
+  animation: progress-animation ${({ second }) => second / 1000}s ease; /* 动画名称、时长、缓动函数和无限重复 */
   /* 进度条动画 */
   @keyframes progress-animation {
     100% {

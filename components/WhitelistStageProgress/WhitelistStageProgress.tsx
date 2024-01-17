@@ -6,7 +6,6 @@ const WhitelistStageProgress: React.FC<{ total: number; num: number }> = ({
   num,
 }) => {
   const ProgressVal = useMemo(
-
     () => {
       if(num >= total){
         return 100.00
