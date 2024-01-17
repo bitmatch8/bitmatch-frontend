@@ -41,9 +41,20 @@ export default function GenesisNFT() {
       return publicType
     }
   }, [whiteType, publicType])
+  const readPublic = async () => {
+    if (detail?.wid) {
+      const white_res = await fetchWhtielistInfoApi({
+        id: detail?.wid,
+        address,
+      })
 
-  const initWhtielist = async () => {
-    if(detail?.pubid){
+      if (white_res?.code === 0) {
+        setWhiteInfo(white_res.data)
+      }
+    }
+  }
+  const readWhtie = async () => {
+    if (detail?.pubid) {
       const public_res = await fetchWhtielistInfoApi({
         id: detail?.pubid,
         address,
@@ -52,17 +63,8 @@ export default function GenesisNFT() {
         setPublicInfo(public_res.data)
       }
     }
-    if(detail?.wid){
-      const white_res = await fetchWhtielistInfoApi({
-        id: detail?.wid,
-        address,
-      })
-  
-      if (white_res?.code === 0) {
-        setWhiteInfo(white_res.data)
-      }
-    }
   }
+  
   const initPage = async () => {
     const { data, code } = await fetchProjectInfoApi({ id, address:address ?address : undefined })
     if (code === 0) {
@@ -72,7 +74,8 @@ export default function GenesisNFT() {
   }
   useEffect(() => {
     if (detail) {
-      initWhtielist()
+      readWhtie()
+      readPublic()
     }
   }, [detail, address])
   useEffect(() => {
@@ -114,8 +117,7 @@ export default function GenesisNFT() {
         ProjectTabList={ProjectTabList}
         detail={detail}
         whiteInfo={whiteInfo}
-        publicInfo={publicInfo}
-      />
+        publicInfo={publicInfo} whiteRead={readWhtie} publicRead={readPublic}      />
       <Spaced size="150" />
       {/* <OrderHistory/> */}
     </Page>
