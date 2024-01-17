@@ -16,8 +16,8 @@ import styled from "@emotion/styled"
 import Image from "next/image"
 
 export const logosBySymbol: { [chain in Chains]: any } = {
-  [Chains.Atomicalmarket]: Atomicalmarket,
-  [Chains.MAGICEDEN]: MAGICEDEN,
+  [Chains.Atomicalmarket]: MAGICEDEN,
+  [Chains.MAGICEDEN]:Atomicalmarket ,
   [Chains.UNISAT]: UNISAT,
   [Chains.TRAC]: TRAC,
   [Chains.OKX]: OKX,

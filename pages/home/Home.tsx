@@ -40,8 +40,8 @@ const ChainLinks: React.FC = () => {
     <ChainLinksBox>
       <ChainIconItem chain={Chains.UNISAT} width={106} />
       <ChainIconItem chain={Chains.OKX} width={106} />
-      <ChainIconItem chain={Chains.Atomicalmarket} width={106} />
       <ChainIconItem chain={Chains.MAGICEDEN} width={106} />
+      <ChainIconItem chain={Chains.Atomicalmarket} width={106} />
       <ChainIconItem chain={Chains.TRAC} width={106} />
       {/* <ChainIconItem chain="ORDINALS" width={120} />
       <ChainIconItem chain="BINANCE" width={120} />
@@ -289,7 +289,9 @@ const ShowItemSliceBox = styled.div`
     }
   }
 `
-const ChainIconItemTitBox = styled.div``
+const ChainIconItemTitBox = styled.div`
+font-family: Arial, Arial;
+`
 const ChainIconItemBox = styled.div`
   cursor: pointer;
   width: 216px;
