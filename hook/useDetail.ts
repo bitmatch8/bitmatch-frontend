@@ -9,7 +9,6 @@ const useDetail = (id: any) => {
   const [detail, setDetail] = useState<any>(null)
   const [publicInfo, setPublicInfo] = useState(null)
   const [whiteInfo, setWhiteInfo] = useState(null)
-  const [singlePersonPurchased, setSinglePersonPurchased] = useState(null)
   const { address } = useSelector(selectWallter)
 
   const whiteType = useMemo(() => {
@@ -61,7 +60,6 @@ const useDetail = (id: any) => {
     })
     if (code === 0) {
       setDetail(data)
-      setSinglePersonPurchased(data?.singlePersonPurchased || 0)
     }
   }
   useEffect(() => {

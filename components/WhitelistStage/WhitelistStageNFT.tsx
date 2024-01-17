@@ -13,6 +13,7 @@ import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
 import { useDispatch, addToast } from "@/lib/redux"
 import Notice from "../Notice"
+import useBuy from "@/hook/useBuy"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -22,38 +23,17 @@ const WhitelistStageNFT: React.FC<{
   stage: any
   readData: any
 }> = ({ info, balance, title, detail, stage, readData }) => {
-  const dispatch = useDispatch()
-  const [value, setValue] = useState("")
-  const onChangeInput = (e: any) => {
-    let { value } = e.target
-    // const reg = /^-?\d*(\.\d*)?$/;
-    const reg = /^-?\d*?$/
-    if ((!isNaN(value) && reg.test(value)) || value === "") {
-      // if (value > Number(getDisplayBalance(pageobj.maxVal))) {
-      //   value = Number(getDisplayBalance(pageobj.maxVal))
-      // }
-      setValue(value)
-    }
-  }
+  const { value, onChangeInput, callbackSuccess, onMax } = useBuy(
+    info,
+    readData
+  )
   const price = useMemo(() => {
     return BigNumber.from(String(info.targetnumber))
   }, [info])
-
-  const callbackSuccess = () => {
-    setValue("")
-    dispatch(
-      addToast({
-        contxt: <Notice icon="success" text="Success" />,
-      })
-    )
-    setTimeout(() => {
-      readData()
-    }, 2000)
-  }
   const satoshis = useMemo(() => {
     return price.mul(BigNumber.from(value || 0)).toString()
   }, [price, value])
-  const onMax = () => {}
+
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>

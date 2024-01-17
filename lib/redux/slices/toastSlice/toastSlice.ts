@@ -1,3 +1,4 @@
+import { TipIconType } from '@/components/TipIcon/TipIcon';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { v4 } from 'uuid';
 
@@ -9,6 +10,7 @@ export type ToastItem={
   title?:any,
   contxt:any,
   href?:any
+  icon?:TipIconType
 }
 const initialState: ToastSliceState = {
   lists:[]

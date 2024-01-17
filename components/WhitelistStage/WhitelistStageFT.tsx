@@ -2,14 +2,13 @@ import { Spaced } from "@/components/Spaced"
 import TokenSymbol from "@/components/TokenSymbol"
 import { BigNumber } from "@ethersproject/bignumber"
 import styled from "@emotion/styled"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import Input from "@/components/Input"
 import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
-import { addToast, useDispatch } from "@/lib/redux"
-import Notice from "../Notice"
+import useBuy from "@/hook/useBuy"
 
 const WhitelistStageFT: React.FC<{
   detail: any
@@ -19,20 +18,7 @@ const WhitelistStageFT: React.FC<{
   stage: any
   readData: any
 }> = ({ info, balance, title, detail, stage, readData }) => {
-  console.log({ stage })
-  const dispatch = useDispatch()
-  const [value, setValue] = useState("")
-  const onChangeInput = (e: any) => {
-    let { value } = e.target
-    // const reg = /^-?\d*(\.\d*)?$/;
-    const reg = /^-?\d*?$/
-    if ((!isNaN(value) && reg.test(value)) || value === "") {
-      // if (value > Number(getDisplayBalance(pageobj.maxVal))) {
-      //   value = Number(getDisplayBalance(pageobj.maxVal))
-      // }
-      setValue(value)
-    }
-  }
+  const {value,onChangeInput,callbackSuccess,onMax}=useBuy(info,readData)
   const price = useMemo(
     () =>
       Number((Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)),
@@ -41,28 +27,9 @@ const WhitelistStageFT: React.FC<{
   const priceBig = useMemo(() => {
     return parseFixedAmount(String(price), 8)
   }, [info, price])
-
-  const callbackSuccess = () => {
-    setValue("")
-    dispatch(
-      addToast({
-        contxt: <Notice icon="success" text="success" />,
-      })
-    )
-    setTimeout(() => {
-      readData()
-    }, 2000)
-  }
   const satoshis = useMemo(() => {
     return priceBig.mul(BigNumber.from(value || 0)).toString()
-  }, [priceBig, value])
-  const onMax = () => {}
-  console.log({
-    info,
-    price: price.toString(),
-    satoshis: satoshis.toString(),
-    priceBig,
-  })
+  }, [priceBig, value]) 
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
