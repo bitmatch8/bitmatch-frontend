@@ -3,34 +3,21 @@
 import Button from "@/components/Button"
 import ArrowRightIcon from "@/components/Svg/ArrowRightIcon"
 import styled from "@emotion/styled"
-import BestIcon from "@/assets/img/best_1.png"
 import Image from "next/image"
 import Link from "next/link"
 import { Spaced } from "@/components/Spaced"
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 
 import {
-  luanchSlice,
   useSelector,
-  useDispatch,
   selectLuanch,
-  fetchDashboardAsync,
-  fetchProjectInfoSelectInfoAsync,
-  FilterTypeProps,
 } from "@/lib/redux"
 import ValueSkeleton from "@/components/ValueSkeleton"
 
 
 export default function ProjectLists() {
-  const dispatch = useDispatch()
   const {
-    dashboard,
-    pageNum,
-    pageSize,
-    total: totalNum,
     lists: projectList,
-    lists_status,
-    tabType,
   } = useSelector(selectLuanch)
   // console.log({projectList})
   const oneInfo = useMemo(()=>projectList?.find(itm=>itm.id === 1),[projectList])
@@ -163,12 +150,6 @@ const ProjectItemInfoContxtBox = styled.div`
 const ProjectListsBox = styled.div`
   /* margin-top: 100px; */
   /* margin-bottom: 150px; */
-`
-const ProjectItemTowImage = styled(Image)`
-  width: auto;
-  border-radius: 20px;
-  height: 300px;
-  border: 0;
 `
 const ProjectItemImage = styled(Image)`
   /* width: auto; */
