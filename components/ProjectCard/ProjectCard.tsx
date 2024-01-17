@@ -80,7 +80,7 @@ const ProjectCard: React.FC<{detail:any,buyType:any}> = ({detail,buyType}) => {
           {detail === null ? <ValueSkeleton width={498} height={270}/>:<ImgBox alt="" width={498} style={{borderRadius:20}} height={270} src={`data:image/jpeg;base64,${detail?.projecthead}`}/>}
         </ProjectContainerItemBox>
         <ProjectContainerItemBox>
-          {detail === null ? <ValueSkeleton height={100} width={622}/>: detail?.projectdescription}
+          {detail === null ? <ValueSkeleton height={100} width={622}/>: `${detail?.projectdescription}`}
         </ProjectContainerItemBox>
       </ProjectContainerBox>
     </ProjectCardBox>
@@ -94,6 +94,13 @@ const ProjectContainerItemBox = styled.div`
   font-weight: 300;
   color: #ffffff;
   line-height: 36px;
+  width: 560px;
+  height: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  /* -webkit-line-clamp: 4; */
+  -webkit-box-orient: vertical;
   p {
   }
 `

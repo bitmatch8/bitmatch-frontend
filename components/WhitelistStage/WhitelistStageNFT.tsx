@@ -66,7 +66,6 @@ const WhitelistStageNFT: React.FC<{
     return price.mul(BigNumber.from(value || 0)).toString()
   },[price,value])
 
-  console.log({price:price.toString(),satoshis:satoshis.toString()})
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>

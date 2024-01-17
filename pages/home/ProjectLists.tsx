@@ -32,7 +32,7 @@ export default function ProjectLists() {
     lists_status,
     tabType,
   } = useSelector(selectLuanch)
-  console.log({projectList})
+  // console.log({projectList})
   const oneInfo = useMemo(()=>projectList?.find(itm=>itm.id === 1),[projectList])
   const twoInfo =  useMemo(()=>projectList?.find(itm=>itm.id === 2),[projectList])
   const threeInfo =  useMemo(()=>projectList?.find(itm=>itm.id === 3),[projectList])

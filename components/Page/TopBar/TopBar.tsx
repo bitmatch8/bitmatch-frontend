@@ -34,7 +34,10 @@ export const TopBar = () => {
   const dispatch = useDispatch()
   return (
     <TopBarBox>
+      <LogoLink href={'/'}>
+
       <Logo />
+      </LogoLink>
       <MenusBox>
         {menusArr.map((link, key) => (
 
@@ -61,6 +64,9 @@ export const TopBar = () => {
 
 export default TopBar
 
+const LogoLink=styled(Link)`
+
+`
 const LinkItem = styled(Link)`
   color: #c2c5c8;
   text-decoration: none;
