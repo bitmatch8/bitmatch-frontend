@@ -67,6 +67,7 @@ export function baseDate(fmt: string, date: Date) {
       );
     }
   }
+  return `${fmt} UTC+${(new Date()).getHours() - (new Date()).getUTCHours()}`
   return fmt;
 }
 
@@ -95,6 +96,7 @@ export const foramtDateInfo = (item: any,type:DetailInfoType ) => {
     return null
   }
   const starttime = new Date(item.starttime)
+  
   if(type === DetailInfoType.public){
     return starttime.getTime() > Date.now()?BuyState.Public_NotStarted : starttime.getTime() < Date.now() ? BuyState.Public_InProgress : BuyState.Public_Ended 
   }
