@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import Button from "@/components/Button"
-import { hidehash } from "@/utils"
-import styled from "@emotion/styled"
-import Notice from "@/components/Notice"
-import QuitIcon from "@/assets/img/quit.png"
-import XIcon from "@/assets/img/x.png"
+import Button from "@/components/Button";
+import { hidehash } from "@/utils";
+import styled from "@emotion/styled";
+import Notice from "@/components/Notice";
+import QuitIcon from "@/assets/img/quit.png";
+import XIcon from "@/assets/img/x.png";
 import {
   wallterSlice,
   useSelector,
@@ -13,23 +13,23 @@ import {
   selectWallter,
   addToast,
   connectUnisat,
-} from "@/lib/redux"
-import React, { useState } from "react"
-import Image from "next/image"
-import useModal from "@/hook/useModal"
-import CloseIcon from "@/components/Svg/CloseIcon"
-import LogoUnisatIcon from "@/assets/icon/1@2x.png"
+} from "@/lib/redux";
+import React, { useState } from "react";
+import Image from "next/image";
+import useModal from "@/hook/useModal";
+import CloseIcon from "@/components/Svg/CloseIcon";
+import LogoUnisatIcon from "@/assets/icon/1@2x.png";
 
 const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
-  const [show, setShow] = useState(false)
-  const dispatch = useDispatch()
+  const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
   const onClickShow = () => {
-    setShow(!show)
-  }
+    setShow(!show);
+  };
   const onClickQuit = () => {
-    setShow(false)
-    dispatch(wallterSlice.actions.disconnect())
-  }
+    setShow(false);
+    dispatch(wallterSlice.actions.disconnect());
+  };
   return (
     <ContentSuccessBox>
       <ContentSuccessTopBox>
@@ -46,12 +46,12 @@ const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
         )}
       </ContentSuccessTopBox>
     </ContentSuccessBox>
-  )
-}
+  );
+};
 
 const ConnectButton = () => {
-  const dispatch = useDispatch()
-  const { unisatInstalled, address, connected } = useSelector(selectWallter)
+  const dispatch = useDispatch();
+  const { unisatInstalled, address, connected } = useSelector(selectWallter);
   if (!unisatInstalled) {
     return (
       <ConnectButtonBox
@@ -59,36 +59,38 @@ const ConnectButton = () => {
           dispatch(
             addToast({
               contxt: "UniSat Wallet not installed",
-              icon:'warning'
+              icon: "warning",
             })
           )
         }
-        variant="secondary">
+        variant="secondary"
+      >
         Connect Wallet
       </ConnectButtonBox>
-    )
+    );
   }
 
   return connected && address ? (
     <ConnectSuccess address={address} />
   ) : (
     <ConnectWallButton />
-  )
-}
+  );
+};
 
-export default ConnectButton
+export default ConnectButton;
 
 const ConnectWallButton: React.FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}
       connect={() => {
-        dispatch(connectUnisat())
-        onDismiss()
-      }}></ConnectModal>
-  )
+        dispatch(connectUnisat());
+        onDismiss();
+      }}
+    ></ConnectModal>
+  );
   return (
     <ConnectButtonBox
       variant="secondary"
@@ -97,8 +99,8 @@ const ConnectWallButton: React.FC = () => {
     >
       Connect Wallet
     </ConnectButtonBox>
-  )
-}
+  );
+};
 export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
   onDismiss,
   connect,
@@ -115,8 +117,8 @@ export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
         <ConnectTitle className="text">UniSat Wallet</ConnectTitle>
       </ConnectBox>
     </ConnectModalBox>
-  )
-}
+  );
+};
 
 const ConnectBox = styled.div`
   display: flex;
@@ -134,8 +136,10 @@ const ConnectBox = styled.div`
       border: 5px solid #f7931a;
     }
   }
-`
-const ConnectTitle = styled.div``
+`;
+const ConnectTitle = styled.div`
+  font-family: Montserrat, Montserrat-Medium;
+`;
 const LogoBox = styled.div`
   width: 200px;
   height: 200px;
@@ -145,7 +149,7 @@ const LogoBox = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-`
+`;
 const CloseButtonBox = styled.div`
   width: 36px;
   height: 36px;
@@ -158,7 +162,7 @@ const CloseButtonBox = styled.div`
       fill: #f7931a;
     }
   }
-`
+`;
 
 const ConnectModalBox = styled.div`
   width: 600px;
@@ -171,17 +175,17 @@ const ConnectModalBox = styled.div`
   align-items: center;
   justify-content: center;
   gap: 48px;
-`
+`;
 
 const ImgBox = styled(Image)`
   height: auto;
-`
+`;
 
 const ContentSuccessTopBox = styled.div`
   border: 3px solid #c2c5c8;
   border-radius: 16px;
   overflow: hidden;
-`
+`;
 const ContentSuccessLineBox = styled.div`
   cursor: pointer;
   height: 56px;
@@ -195,7 +199,7 @@ const ContentSuccessLineBox = styled.div`
   &:hover {
     background-color: #24272b;
   }
-`
+`;
 const ContentSuccessBox = styled.div`
   user-select: none;
   position: relative;
@@ -207,9 +211,9 @@ const ContentSuccessBox = styled.div`
   width: 220px;
   height: 56px;
   /* overflow: hidden; */
-`
+`;
 const ConnectButtonBox = styled(Button)`
   width: 220px;
   font-size: 20px;
   /* padding: 0 30px; */
-`
+`;
