@@ -1,63 +1,90 @@
 /* Components */
 
-import Button from "@/components/Button"
-import ArrowRightIcon from "@/components/Svg/ArrowRightIcon"
-import styled from "@emotion/styled"
-import Image from "next/image"
-import Link from "next/link"
-import { Spaced } from "@/components/Spaced"
-import { useMemo } from "react"
+import Button from "@/components/Button";
+import ArrowRightIcon from "@/components/Svg/ArrowRightIcon";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import Link from "next/link";
+import { Spaced } from "@/components/Spaced";
+import { useMemo } from "react";
 
-import {
-  useSelector,
-  selectLuanch,
-} from "@/lib/redux"
-import ValueSkeleton from "@/components/ValueSkeleton"
-
+import { useSelector, selectLuanch } from "@/lib/redux";
+import ValueSkeleton from "@/components/ValueSkeleton";
 
 export default function ProjectLists() {
-  const {
-    lists: projectList,
-  } = useSelector(selectLuanch)
+  const { lists: projectList } = useSelector(selectLuanch);
   // console.log({projectList})
-  const oneInfo = useMemo(()=>projectList?.find(itm=>itm.id === 1),[projectList])
-  const twoInfo =  useMemo(()=>projectList?.find(itm=>itm.id === 2),[projectList])
-  const threeInfo =  useMemo(()=>projectList?.find(itm=>itm.id === 3),[projectList])
+  const oneInfo = useMemo(
+    () => projectList?.find((itm) => itm.id === 1),
+    [projectList]
+  );
+  const twoInfo = useMemo(
+    () => projectList?.find((itm) => itm.id === 2),
+    [projectList]
+  );
+  const threeInfo = useMemo(
+    () => projectList?.find((itm) => itm.id === 3),
+    [projectList]
+  );
   return (
     <ProjectListsBox>
       <ProjectListsTitleBox>Project list</ProjectListsTitleBox>
-      <Spaced size="80"/>
+      <Spaced size="80" />
       <ProjectContainerBox>
         <ProjectItemBox>
           <ProjectItemImgBox>
-            {!oneInfo ? <ValueSkeleton width={720} height={390}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${oneInfo?.projecthead}`} height={390} width={720} />}
+            {!oneInfo ? (
+              <ValueSkeleton width={720} height={390} />
+            ) : (
+              <ProjectItemImage
+                alt=""
+                src={`data:image/jpeg;base64,${oneInfo?.projecthead}`}
+                height={390}
+                width={720}
+              />
+            )}
           </ProjectItemImgBox>
-          <ProjectItemInfoBox style={{display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
+          <ProjectItemInfoBox
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
             <div>
-              <ProjectItemInfoTitleBox>{!oneInfo ?<ValueSkeleton width={378} /> : oneInfo?.projectname}</ProjectItemInfoTitleBox>
-              <Spaced size="30"/>
-              <ProjectItemInfoContxtBox style={{width:412,height:185}}>
-              {!oneInfo ?<ValueSkeleton width={378} height={120} /> : oneInfo?.projectdescription} 
+              <ProjectItemInfoTitleBox>
+                {!oneInfo ? (
+                  <ValueSkeleton width={378} />
+                ) : (
+                  oneInfo?.projectname
+                )}
+              </ProjectItemInfoTitleBox>
+              <Spaced size="30" />
+              <ProjectItemInfoContxtBox style={{ width: 412 }}>
+                {!oneInfo ? (
+                  <ValueSkeleton width={378} height={120} />
+                ) : (
+                  oneInfo?.projectdescription
+                )}
               </ProjectItemInfoContxtBox>
             </div>
-            <ViewButton variant='secondary' to="/ft/1">View</ViewButton>
+            <ViewButton variant="secondary" to="/ft/1">
+              View
+            </ViewButton>
           </ProjectItemInfoBox>
         </ProjectItemBox>
-        <Spaced size="50"/>
-        {twoInfo && threeInfo ?<ProjectContainerTowBox>
+        <Spaced size="50" />
+        {/* {twoInfo && threeInfo ?<ProjectContainerTowBox>
         <ProjectItemTowBox>
           <ProjectItemImgBox>
-            {/* <ProjectItemTowImage alt="" src={BestIcon} /> */}
             {!twoInfo ? <ValueSkeleton width={552} height={300}/> :<ProjectItemImage alt=""  src={`data:image/jpeg;base64,${twoInfo?.projecthead}`} height={300} width={552} />}
           </ProjectItemImgBox>
           <ProjectItemInfoBox>
-            {/* <div> */}
               <ProjectItemInfoTitleBox>{!twoInfo ?<ValueSkeleton width={378} /> : twoInfo?.projectname}</ProjectItemInfoTitleBox>
               <ProjectItemInfoContxtBox style={{width:552,height:120}}>
               {!twoInfo ?<ValueSkeleton width={378} height={120} /> : twoInfo?.projectdescription} 
               </ProjectItemInfoContxtBox>
               <Spaced size="80"/>
-            {/* </div> */}
             <ViewButton variant='secondary' to="/ft/2">View</ViewButton>
           </ProjectItemInfoBox>
         </ProjectItemTowBox> 
@@ -75,25 +102,25 @@ export default function ProjectLists() {
             <ViewButton variant='secondary' to="/ft/3">View</ViewButton>
           </ProjectItemInfoBox>
         </ProjectItemTowBox>
-        </ProjectContainerTowBox>:''}
-        <Spaced size="90"/>
+        </ProjectContainerTowBox>:''} */}
+        <Spaced size="90" />
         <ProjectMoreBox href={"/lists"}>
           <span>View More</span>
           <ArrowRightIcon width={63} />
         </ProjectMoreBox>
       </ProjectContainerBox>
     </ProjectListsBox>
-  )
+  );
 }
 
-const ProjectContainerTowBox=styled.div`
+const ProjectContainerTowBox = styled.div`
   display: flex;
   gap: 40px;
-`
+`;
 const ViewButton = styled(Button)`
   width: 390px;
   height: 80px;
-`
+`;
 const ProjectListsTitleBox = styled.div`
   font-size: 80px;
   font-weight: 600;
@@ -111,7 +138,7 @@ const ProjectListsTitleBox = styled.div`
     left: 0;
     border-radius: 8px;
   }
-`
+`;
 const ProjectMoreBox = styled(Link)`
   cursor: pointer;
   text-decoration: none;
@@ -133,12 +160,12 @@ const ProjectMoreBox = styled(Link)`
       fill: #f8931a;
     }
   }
-`
+`;
 const ProjectItemInfoTitleBox = styled.div`
   font-size: 32px;
   font-weight: 600;
   color: #ffffff;
-`
+`;
 const ProjectItemInfoContxtBox = styled.div`
   font-size: 24px;
   font-weight: 300;
@@ -146,18 +173,23 @@ const ProjectItemInfoContxtBox = styled.div`
   line-height: 36px;
   /* margin-top: 30px; */
   overflow: hidden;
-`
+  height: calc(36px * 4);
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+`;
 const ProjectListsBox = styled.div`
   /* margin-top: 100px; */
   /* margin-bottom: 150px; */
-`
+`;
 const ProjectItemImage = styled(Image)`
   /* width: auto; */
   border-radius: 20px;
   /* height: 390px; */
   border: 0;
-`
-const ProjectItemImgBox = styled.div``
+`;
+const ProjectItemImgBox = styled.div``;
 const ProjectItemInfoBox = styled.div`
   /* flex: 1; */
   /* display: flex;
@@ -165,29 +197,29 @@ const ProjectItemInfoBox = styled.div`
   justify-content: center; */
   /* justify-content: space-between; */
   padding-bottom: 10px;
-`
-const ProjectItemTowBox=styled.div`
+`;
+const ProjectItemTowBox = styled.div`
   padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 40px;
-  background-color:#181B20;
+  background-color: #181b20;
   border-radius: 36px;
   text-align: center;
-`
+`;
 const ProjectItemBox = styled.div`
   padding: 40px 45px;
   display: flex;
   flex-direction: column;
   flex-direction: row;
   gap: 40px;
-  background-color:#181B20;
+  background-color: #181b20;
   border-radius: 36px;
-`
+`;
 const ProjectContainerBox = styled.div`
   /* margin-top: 98px; */
   /* border: 5px solid #f8931a;
   border-top: 48px solid #f8931a; */
   /* border-radius: 24px; */
   overflow: hidden;
-`
+`;
