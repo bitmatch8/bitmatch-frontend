@@ -9,6 +9,7 @@ import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
 import useBuy from "@/hook/useBuy"
+import { dateFormat } from "@/utils"
 
 const WhitelistStageFT: React.FC<{
   detail: any
@@ -63,7 +64,7 @@ const WhitelistStageFT: React.FC<{
           <WhitelistStageLine
             style={{ flex: 1, paddingLeft: 16 }}
             title="Launch Time">
-            {info?.starttime} ～ {info?.enttime}
+            {dateFormat(info?.starttime)} ～ {dateFormat(info?.enttime)}
           </WhitelistStageLine>
         </WhitelistStageLineBox>
       </WhitelistStageCardBox>
