@@ -54,6 +54,7 @@ const WhitelistStageButton: React.FC<{
         setButtonText(data === 0 ? "Not in whitelist" : "Buy")
       }
     } else {
+      setButtonText('Buy')
       setDisabled(false)
     }
   }
