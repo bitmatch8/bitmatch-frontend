@@ -1,15 +1,15 @@
 /* Components */
 
-import Button from "@/components/Button"
-import Page from "@/components/Page"
-import styled from "@emotion/styled"
-import { useEffect } from "react"
-import ListWaperItem from "../../components/ListItem"
-import ValueSkeleton from "@/components/ValueSkeleton"
-import { number_format } from "@/utils"
-import LoaderBox from "@/components/Loader/LoaderBox"
-import Pagination from "@/components/Pagination"
-import { Spaced } from "@/components/Spaced"
+import Button from "@/components/Button";
+import Page from "@/components/Page";
+import styled from "@emotion/styled";
+import { useEffect } from "react";
+import ListWaperItem from "../../components/ListItem";
+import ValueSkeleton from "@/components/ValueSkeleton";
+import { number_format } from "@/utils";
+import LoaderBox from "@/components/Loader/LoaderBox";
+import Pagination from "@/components/Pagination";
+import { Spaced } from "@/components/Spaced";
 
 import {
   luanchSlice,
@@ -19,13 +19,12 @@ import {
   fetchDashboardAsync,
   fetchProjectInfoSelectInfoAsync,
   FilterTypeProps,
-} from "@/lib/redux"
-
+} from "@/lib/redux";
 
 const HeadContainerItem: React.FC<{
-  title: string
-  value: any
-  unit?: any
+  title: string;
+  value: any;
+  unit?: any;
 }> = ({ value, title, unit = "" }) => {
   return (
     <HeadContainerItemBox>
@@ -38,24 +37,25 @@ const HeadContainerItem: React.FC<{
       </HeadContainerItemValBox>
       <HeadContainerItemTitBox>{title}</HeadContainerItemTitBox>
     </HeadContainerItemBox>
-  )
-}
+  );
+};
 const ListContainerTabsItem: React.FC<{
-  title: FilterTypeProps
-  checkoutd: boolean
-  onChange: (val: FilterTypeProps) => any
+  title: FilterTypeProps;
+  checkoutd: boolean;
+  onChange: (val: FilterTypeProps) => any;
 }> = ({ title, onChange, checkoutd }) => {
   return (
     <ListContainerTabsItemBox
       className={checkoutd ? "active" : ""}
-      onClick={() => onChange(title)}>
+      onClick={() => onChange(title)}
+    >
       {title}
     </ListContainerTabsItemBox>
-  )
-}
+  );
+};
 
 export default function IndexPage() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const {
     dashboard,
     pageNum,
@@ -64,22 +64,24 @@ export default function IndexPage() {
     lists: projectList,
     lists_status,
     tabType,
-  } = useSelector(selectLuanch)
+  } = useSelector(selectLuanch);
   const onClickTab = (tabType: FilterTypeProps) => {
-    dispatch(luanchSlice.actions.setTabs(tabType))
-    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum: 1, pageSize, tabType }))
-  }
+    dispatch(luanchSlice.actions.setTabs(tabType));
+    dispatch(
+      fetchProjectInfoSelectInfoAsync({ pageNum: 1, pageSize, tabType })
+    );
+  };
 
   const getLists = (pageNum: number = 1) => {
-    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum, pageSize, tabType }))
-  }
+    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum, pageSize, tabType }));
+  };
   const initDash = () => {
-    dispatch(fetchDashboardAsync())
-  }
+    dispatch(fetchDashboardAsync());
+  };
   useEffect(() => {
-    initDash()
-    onClickTab('ALL')
-  }, [])
+    initDash();
+    onClickTab("ALL");
+  }, []);
   return (
     <Page>
       <HeadContainerBox>
@@ -125,15 +127,23 @@ export default function IndexPage() {
           />
         </ListContainerTabsBox>
         <ListWaperBox loading={lists_status === "loading"}>
-          {projectList === null ? <ListWaperItem item={null} />:projectList.filter(itm=>!!itm.projecthead && !!itm.projectlogo).map((item, key) => (
-            <ListWaperItem item={item} key={key} />
-          ))}
+          {projectList === null ? (
+            <ListWaperItem item={null} />
+          ) : (
+            projectList
+              .filter((itm) => !!itm.projecthead && !!itm.projectlogo)
+              .map((item, key) => <ListWaperItem item={item} key={key} />)
+          )}
         </ListWaperBox>
       </ListContainerBox>
       <Spaced size="50" />
-      {totalNum > 10 ? <Pagination total={totalNum} onChange={getLists} page={pageNum} />:''}
+      {totalNum > 10 ? (
+        <Pagination total={totalNum} onChange={getLists} page={pageNum} />
+      ) : (
+        ""
+      )}
     </Page>
-  )
+  );
 }
 
 const ListWaperBox = styled(LoaderBox)`
@@ -141,7 +151,7 @@ const ListWaperBox = styled(LoaderBox)`
   display: flex;
   flex-direction: column;
   gap: 80px;
-`
+`;
 const ListContainerTabsItemBox = styled.div`
   position: relative;
   cursor: pointer;
@@ -163,7 +173,7 @@ const ListContainerTabsItemBox = styled.div`
       transform: translateX(-50%);
     }
   }
-`
+`;
 const ListContainerTabsBox = styled.div`
   color: #fff;
   font-size: 60px;
@@ -173,21 +183,21 @@ const ListContainerTabsBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
+`;
 const ListContainerBox = styled.div`
   margin: 140px auto 0;
-`
+`;
 const HeadContainerApplyButton = styled(Button)`
   width: 280px;
   height: 80px;
-`
+`;
 const HeadContainerApplyBox = styled.div`
   text-align: center;
   margin-top: 64px;
-`
+`;
 const HeadContainerBox = styled.div`
   margin-top: 145px;
-`
+`;
 const HeadContainerText = styled.div`
   font-size: 60px;
   line-height: 80px;
@@ -199,13 +209,13 @@ const HeadContainerText = styled.div`
   span {
     color: #f8931a;
   }
-`
+`;
 const HeadContainerBlockBox = styled.div`
   display: flex;
   justify-content: space-between;
   width: 960px;
   margin: 80px auto 0;
-`
+`;
 const HeadContainerItemBox = styled.div`
   text-align: center;
   width: 280px;
@@ -216,14 +226,15 @@ const HeadContainerItemBox = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-`
+`;
 const HeadContainerItemTitBox = styled.div`
   font-size: 16px;
   font-weight: 300;
   color: #6f6f76;
-`
+  font-family: Montserrat, Montserrat-Medium;
+`;
 const HeadContainerItemValBox = styled.div`
   font-size: 32px;
   font-weight: 600;
   color: #ffffff;
-`
+`;
