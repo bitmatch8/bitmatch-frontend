@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect } from "react";
 
 import {
   useSelector,
@@ -6,11 +6,11 @@ import {
   selectToast,
   ToastItem,
   toastSlice,
-} from "@/lib/redux"
-import styled from "@emotion/styled"
-import Notice from "@/components/Notice"
+} from "@/lib/redux";
+import styled from "@emotion/styled";
+import Notice from "@/components/Notice";
 export default function ToastModals() {
-  const { lists } = useSelector(selectToast)
+  const { lists } = useSelector(selectToast);
   return lists.length ? (
     <ToastContainerBox>
       <Fiext>
@@ -21,18 +21,18 @@ export default function ToastModals() {
     </ToastContainerBox>
   ) : (
     <></>
-  )
+  );
 }
 
 const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     const fun = () => {
-      dispatch(toastSlice.actions.removeToast(item.uniqueId || ""))
-    }
-    window.addEventListener("click", fun)
-    return window.removeEventListener("click", fun)
-  }, [])
+      dispatch(toastSlice.actions.removeToast(item.uniqueId || ""));
+    };
+    window.addEventListener("click", fun);
+    return window.removeEventListener("click", fun);
+  }, []);
   return (
     <ToastItemBox>
       <ToastItemContxtBox>
@@ -42,30 +42,31 @@ const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
         <ToastIner second={(item.endTime || 0) - Date.now() + 800} />
       </ToastItemFooterBox>
     </ToastItemBox>
-  )
-}
+  );
+};
 const Fiext = styled.div`
   position: fixed;
   top: 100px;
   transform: translateX(-100%);
   z-index: 100;
-`
+`;
 const ToastContainerBox = styled.div`
   position: absolute;
   right: 0px;
   top: 100px;
-`
+`;
 const ToastItemBox = styled.div`
   width: 430px;
-  height: 130px;
+  min-height: 130px;
   background: #24272b;
   border-radius: 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
   position: relative;
-`
+  padding-top: 10px;
+  padding-left: 24px;
+  padding-right: 24px;
+`;
 const ToastItemContxtBox = styled.div`
   font-size: 24px;
   font-weight: 600;
@@ -76,8 +77,8 @@ const ToastItemContxtBox = styled.div`
   align-items: center;
   gap: 15px;
   padding-bottom: 20px;
-`
-const ToastItemHeadBox = styled.div``
+`;
+const ToastItemHeadBox = styled.div``;
 const ToastItemFooterBox = styled.div`
   height: 5px;
   background: #181b20;
@@ -87,7 +88,7 @@ const ToastItemFooterBox = styled.div`
   left: 15px;
   right: 15px;
   bottom: 10px;
-`
+`;
 const ToastIner = styled.div<{ second: number }>`
   height: 5px;
   background: linear-gradient(90deg, #d87600 0%, #f38f17 78%, #ffbf49 100%);
@@ -105,4 +106,4 @@ const ToastIner = styled.div<{ second: number }>`
       width: 100%;
     }
   }
-`
+`;
