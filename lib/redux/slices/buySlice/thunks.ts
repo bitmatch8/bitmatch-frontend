@@ -44,6 +44,7 @@ export const buySubmitAsync = createAppAsyncThunk(
         }
         post_data.setStep('',index)
         const txHash = await unisat.sendBitcoin(post_data.fundaddr, post_data.amount).catch(console.log)
+        console.log({txHash})
         if(txHash){
           post_data.txHash =txHash 
           await submitOderListSave(post_data)
@@ -51,7 +52,7 @@ export const buySubmitAsync = createAppAsyncThunk(
       }
       params.callback('')
     }else{
-      const txHash = await unisat.sendBitcoin(params.fundaddr, params.amount).catch(console.log)
+      const txHash = await unisat.sendBitcoin(params.fundaddr, params.amount)
       params.txHash=txHash
       params.callback(txHash)
       await submitOderListSave(params)
