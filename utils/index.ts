@@ -40,7 +40,7 @@ const months = [
 const timeToEng = function (month: string) {
   return months[Number(month)];
 };
-const utcDiff = (new Date()).getHours() - (new Date()).getUTCHours()
+const utcDiff = (new Date()).getTimezoneOffset()/ 60 * -1
 
 
 export function baseDate(fmt: string, date: Date) {
