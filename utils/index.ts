@@ -16,9 +16,9 @@ export function dateFormat(date: string | number) {
     return;
   }
   try {
-    const dateline = new Date(date);
-    // dateline.setHours(-8)
-    return baseDate("m0-d0-y0 h0:i0:s0", dateline);
+    const dateline = toLocalTime(date);
+    const newtime = baseDate("m0-d0-y0 h0:i0:s0", dateline);
+    return newtime
   } catch (e) {
     return "—— ——";
   }
@@ -41,14 +41,16 @@ const timeToEng = function (month: string) {
   return months[Number(month)];
 };
 const utcDiff = (new Date()).getHours() - (new Date()).getUTCHours()
+
+
 export function baseDate(fmt: string, date: Date) {
   let ret;
-  const year = date.getUTCFullYear().toString();
-  const month = date.getUTCMonth().toString();
-  const day = date.getUTCDate().toString();
-  const minute = date.getUTCMinutes().toString();
-  const second = date.getUTCSeconds().toString();
-  const hour = date.getUTCHours().toString();
+  const year = date.getFullYear().toString();
+  const month = date.getMonth().toString();
+  const day = date.getDate().toString();
+  const minute = date.getMinutes().toString();
+  const second = date.getSeconds().toString();
+  const hour = date.getHours().toString();
   const opt: any = {
     y0: year, // 年
     //     "m+": (date.getMonth() + 1).toString(), // 月
@@ -92,6 +94,7 @@ export const objectToUrlParams=(obj:any)=>{
 export const toLocalTime = (date:any)=>{
   const localTime = new Date(date)
   localTime.setHours(utcDiff)
+  console.log({utcDiff})
   return localTime 
 }
 //1705153787492

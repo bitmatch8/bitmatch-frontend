@@ -175,7 +175,7 @@ const OrderHistoryItem: React.FC<{
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="time">
           <div className="title">Time</div>
-          <div> {dateFormat(item.createtime)}</div>
+          <div> {(item.createtime)}</div>
         </OrderHistoryItemBox>
       </OrderHistoryLineBox>
     </OrderHistoryLineDetailBox>
