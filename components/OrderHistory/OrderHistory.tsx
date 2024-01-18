@@ -109,18 +109,7 @@ const OrderHistory: React.FC<{address?:any,pid:any}> = ({address,pid}) => {
 export default OrderHistory
 
 const CopyItem:React.FC<{text:string,len?:number}>=({text,len=6})=>{
-  const [isCopy,setIsCopy]=useState(false)
-  // const StateComponents = [StateSucceeded, StateWaiting, StateCancelled][item.status]
-  let timeId: NodeJS.Timeout | null = null
-  const onCopy = (e:any) => {
-    e.stopPropagation()
-    setIsCopy(true)
-    timeId && clearTimeout(timeId)
-    timeId=setTimeout(() => {
-      setIsCopy(false)
-    }, 2000);
-  }
-  return <CopySvg>
+  return <CopySvg text={text}>
     {hidehash(text,len)}
   </CopySvg> 
 }

@@ -1,17 +1,18 @@
 import CopyIcon from "@/components/Svg/CopyIcon"
 import React, { useState } from "react"
 import SuccessIcon from "../Svg/SuccessIcon"
-
-const CopySvg: React.FC<{ size?: number; children?: any }> = ({
+import copy from 'copy-to-clipboard'
+const CopySvg: React.FC<{ size?: number; children?: any,text:any }> = ({
   size = 16,
   children,
+  text
 }) => {
   const [isCopy, setIsCopy] = useState(false)
-  // const StateComponents = [StateSucceeded, StateWaiting, StateCancelled][item.status]
   let timeId: NodeJS.Timeout | null = null
   const onCopy = (e: any) => {
     e.stopPropagation()
-    setIsCopy(true)
+    const didCopy = copy(text)
+    setIsCopy(didCopy)
     timeId && clearTimeout(timeId)
     timeId = setTimeout(() => {
       setIsCopy(false)
@@ -21,7 +22,7 @@ const CopySvg: React.FC<{ size?: number; children?: any }> = ({
     <div onClick={onCopy}>
       {children}
       {isCopy ? (
-        <SuccessIcon width={16} />
+        <SuccessIcon width={size} />
       ) : (
         <CopyIcon width={size} fill="#C2C5C8" />
       )}
