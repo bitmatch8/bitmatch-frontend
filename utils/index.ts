@@ -93,7 +93,7 @@ export const objectToUrlParams=(obj:any)=>{
 
 export const toLocalTime = (date:any)=>{
   const localTime = new Date(date)
-  localTime.setHours(utcDiff)
+  localTime.setMinutes((new Date()).getTimezoneOffset() * -1)
   return localTime 
 }
 //1705153787492
