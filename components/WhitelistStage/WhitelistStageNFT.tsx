@@ -12,6 +12,7 @@ import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
 import useBuy from "@/hook/useBuy"
+import { dateFormat } from "@/utils"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -59,8 +60,8 @@ const WhitelistStageNFT: React.FC<{
               <ValueSkeleton width={200} height={50} />
             ) : (
               <div>
-                <div>{info?.starttime}</div>
-                <div style={{ marginTop: 20 }}>{info?.enttime}</div>
+                <div>{dateFormat(info?.starttime)}</div>
+                <div style={{ marginTop: 20 }}>{dateFormat(info?.enttime)}</div>
               </div>
             )}
           </WhitelistStageLine>

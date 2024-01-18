@@ -6,9 +6,11 @@ import { Spaced } from "@/components/Spaced"
 import ProjectCard from "@/components/ProjectCard"
 import ProjectTabs from "@/components/ProjectTabs"
 import useDetail from "@/hook/useDetail"
+import OrderHistory from "@/components/OrderHistory"
 
 export default function GenesisNFT() {
   const {
+    address,
     detail,
     buyType,
     tabId,
@@ -33,7 +35,7 @@ export default function GenesisNFT() {
         publicRead={readPublic}
       />
       <Spaced size="150" />
-      {/* <OrderHistory/> */}
+      <OrderHistory address={address} pid={1}/>
     </Page>
   )
 }

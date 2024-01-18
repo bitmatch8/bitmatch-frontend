@@ -98,6 +98,7 @@ const useDetail = (id: any) => {
   }, [publicType, whiteType])
 
   return {
+    address,
     detail,
     buyType,
     tabId,

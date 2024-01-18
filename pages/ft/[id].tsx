@@ -8,11 +8,13 @@ import ProjectCard from "@/components/ProjectCard"
 import ProjectTabs from "@/components/ProjectTabs"
 import { useRouter } from "next/router"
 import useDetail from "@/hook/useDetail"
+import OrderHistory from "@/components/OrderHistory"
 export default function IndexPage() {
   const {
     query: { id },
   }: any = useRouter()
   const {
+    address,
     detail,
     buyType,
     tabId,
@@ -37,6 +39,7 @@ export default function IndexPage() {
         publicInfo={publicInfo}
       />
       <Spaced size="150" />
+     {address ? <OrderHistory address={address} pid={id}/> : ''} 
     </Page>
   )
 }

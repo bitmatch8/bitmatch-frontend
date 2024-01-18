@@ -16,7 +16,9 @@ export function dateFormat(date: string | number) {
     return;
   }
   try {
-    return baseDate("m0-d0-y0 h0:i0:s0", new Date(date));
+    const dateline = new Date(date);
+    // dateline.setHours(-8)
+    return baseDate("m0-d0-y0 h0:i0:s0", dateline);
   } catch (e) {
     return "—— ——";
   }
@@ -38,14 +40,15 @@ const months = [
 const timeToEng = function (month: string) {
   return months[Number(month)];
 };
+const utcDiff = (new Date()).getHours() - (new Date()).getUTCHours()
 export function baseDate(fmt: string, date: Date) {
   let ret;
-  const year = date.getFullYear().toString();
-  const month = date.getMonth().toString();
-  const day = date.getDate().toString();
-  const minute = date.getMinutes().toString();
-  const second = date.getSeconds().toString();
-  const hour = date.getHours().toString();
+  const year = date.getUTCFullYear().toString();
+  const month = date.getUTCMonth().toString();
+  const day = date.getUTCDate().toString();
+  const minute = date.getUTCMinutes().toString();
+  const second = date.getUTCSeconds().toString();
+  const hour = date.getUTCHours().toString();
   const opt: any = {
     y0: year, // 年
     //     "m+": (date.getMonth() + 1).toString(), // 月
@@ -65,7 +68,8 @@ export function baseDate(fmt: string, date: Date) {
       );
     }
   }
-  return fmt + " UTC";
+  return `${fmt} UTC${utcDiff >=0 ? '+':'-'}${utcDiff}`
+  return fmt;
 }
 
 
@@ -93,9 +97,11 @@ export const foramtDateInfo = (item: any,type:DetailInfoType ) => {
     return null
   }
   const starttime = new Date(item.starttime)
+  const localTime = new Date()
+  localTime.setHours(utcDiff) 
   if(type === DetailInfoType.public){
-    return starttime.getTime() > Date.now()?BuyState.Public_NotStarted : starttime.getTime() < Date.now() ? BuyState.Public_InProgress : BuyState.Public_Ended 
+    return starttime.getTime() > localTime.getTime()?BuyState.Public_NotStarted : starttime.getTime() < localTime.getTime() ? BuyState.Public_InProgress : BuyState.Public_Ended 
   }
-  return starttime.getTime() > Date.now()?BuyState.White_NotStarted : starttime.getTime() < Date.now() ? BuyState.White_InProgress : BuyState.White_Ended
+  return starttime.getTime() > localTime.getTime()?BuyState.White_NotStarted : starttime.getTime() < localTime.getTime() ? BuyState.White_InProgress : BuyState.White_Ended
   
 }
