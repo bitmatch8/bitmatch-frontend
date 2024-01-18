@@ -39,7 +39,7 @@ export default function IndexPage() {
         publicInfo={publicInfo}
       />
       <Spaced size="150" />
-     {address ? <OrderHistory address={address} pid={id}/> : ''} 
+     {address && id ? <OrderHistory address={address} pid={id}/> : ''} 
     </Page>
   )
 }

@@ -202,7 +202,7 @@ const OrderHistory: React.FC<{ address?: any; pid: any }> = ({
     return () => {
       timeId && clearTimeout(timeId)
     }
-  }, [page])
+  }, [page,pid])
   useEffect(() => {
     reload(1)
   }, [address, pid])
