@@ -1,10 +1,9 @@
-import styled from "@emotion/styled"
-import React from "react"
-import Logo from "@/components/Logo"
-import Image from "next/image"
-import PageContent from "../PageContent"
-import LinkIcons from "./LinkIcons"
-
+import styled from "@emotion/styled";
+import React from "react";
+import Logo from "@/components/Logo";
+import Image from "next/image";
+import PageContent from "../PageContent";
+import LinkIcons from "./LinkIcons";
 
 const Footer: React.FC = () => {
   return (
@@ -16,19 +15,20 @@ const Footer: React.FC = () => {
             Copyright © 2024 BitMatch. All Rights Reserved
           </div>
         </FooterLogoItem>
-        <LinkIcons/>
+        <LinkIcons />
       </FooterContainerBox>
     </FooterBox>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
 
 const FooterBox = styled.div`
   background-color: #0f1012;
   margin-top: 200px;
   min-width: 1240px;
-`
+  border-top: 5px solid rgba(247, 147, 26, 0.3);
+`;
 const FooterLogoItem = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,10 +39,10 @@ const FooterLogoItem = styled.div`
     color: #4f4f57;
     line-height: 16px;
   }
-`
+`;
 const FooterContainerBox = styled(PageContent)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 250px;
-`
+  height: 245px;
+`;
