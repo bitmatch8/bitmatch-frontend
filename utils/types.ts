@@ -15,3 +15,10 @@ export enum BuyState {
   Public_NotStarted = "Public_NotStarted",
   Public_InProgress = "Public_InProgress",
 }
+
+export enum OrderState{
+  PENDING="pending",
+  DISTRIBUTE="distribute",
+  COMPLETED="completed",
+  UNISATVERFY="unisatVerfy"
+}

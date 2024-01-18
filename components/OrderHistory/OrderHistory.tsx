@@ -1,32 +1,60 @@
 import Button from "@/components/Button"
 import { Spaced } from "@/components/Spaced"
-import CopyIcon from "@/components/Svg/CopyIcon"
 import DownIcon from "@/components/Svg/DownIcon"
 import TokenSymbol from "@/components/TokenSymbol"
 import styled from "@emotion/styled"
-import React, { CSSProperties, ReactNode, useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Pagination from "@/components/Pagination"
 import { fetchOrderCList } from "@/api/api"
 import ValueSkeleton from "../ValueSkeleton"
-import { dateFormat, hidehash } from "@/utils"
-import SuccessIcon from "../Svg/SuccessIcon"
+import { hidehash } from "@/utils"
 import CopySvg from "../CopySvg"
+import { OrderState } from "@/utils/types"
+import EmptyList from "./EmptyList"
 type ItemProps = {
   orderid: string
   projectname: string
-  type:string
+  type: string
   tokenname: string
-  stage:string
-  fromaddr:string
-  fundaddr:string
-  receivedAddr:string
-  transmitAddr:string
-  amount:string
-  createtime:string
-  updatetime:string
-  amountFloat:string
-  status: any
+  stage: string
+  fromaddr: string
+  fundaddr: string
+  receivedAddr: string
+  transmitAddr: string
+  amount: string
+  createtime: string
+  updatetime: string
+  amountFloat: string
+  status: OrderState
 }
+
+const StateWaiting: React.FC = () => {
+  return (
+    <>
+      <span className="waiting">Waiting for paymen</span>
+    </>
+  )
+}
+const StateCancelled: React.FC = () => {
+  return (
+    <>
+      <span className="cancelled">Cancelled</span>
+    </>
+  )
+}
+const StateSucceeded: React.FC = () => {
+  return (
+    <>
+      <div>
+        <span className="succeeded">Succeeded</span>
+      </div>
+      <div>
+        <ViewButton>View</ViewButton>
+      </div>
+    </>
+  )
+}
+
 const OrderHistoryHead: React.FC = () => {
   return (
     <OrderHistoryHeadBox>
@@ -55,75 +83,43 @@ const OrderHistoryHead: React.FC = () => {
   )
 }
 
-const EmptyLine:React.FC=()=>{
-  return <OrderHistoryLineDetailBox style={{justifyContent:'center',alignItems:'center',display:'flex'}}>
-    <ValueSkeleton width={1000}/>
-  </OrderHistoryLineDetailBox> 
-}
-const OrderHistory: React.FC<{address?:any,pid:any}> = ({address,pid}) => {
-  const [page, setPage] = useState(1)
-  const [total,setTotal]=useState(0)
-  const [pageSize,setPageSize]=useState(5)
-  const [index, setIndex] = useState<number | null>(null)
-  const [lists,setLists] = useState<ItemProps[] | null>(null)
-  const reload=async(pageNum:any)=>{
-    const {code,data:reponse}=await fetchOrderCList({
-      pageNum,
-      pageSize,
-      address,
-      pid
-    })
-    if(code === 0){
-      const {total,list}=reponse
-      setTotal(total)
-      setPage(pageNum)
-      setLists(list)
-    }
-  }
-  useEffect(()=>{
-    reload(1)
-  },[address,pid])
+const EmptyLine: React.FC = () => {
   return (
-    <>
-      <PageTitleBox>Order History</PageTitleBox>
-      <Spaced size="86" />
-      <OrderHistoryBox>
-        <OrderHistoryHead />
-        <Spaced size="35" />
-        <OrderContainerBox>
-          {lists === null ? [null,null,null].map(((_,key)=><EmptyLine key={key}/>)) : lists.map((item, key) => (
-            <OrderHistoryItem
-              key={key}
-              item={item}
-              show={index === key}
-              onClick={() => (index === key ? setIndex(null) : setIndex(key))}
-            />
-          ))}
-        </OrderContainerBox>
-        <Spaced size="36" />
-       {total > 5 ? <Pagination total={total} pageSize={pageSize} onChange={reload} page={page} /> : ''} 
-      </OrderHistoryBox>
-    </>
+    <OrderHistoryLineDetailBox
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+      }}>
+      <ValueSkeleton width={1000} />
+    </OrderHistoryLineDetailBox>
   )
 }
-export default OrderHistory
 
-const CopyItem:React.FC<{text:string,len?:number}>=({text,len=6})=>{
-  return <CopySvg text={text}>
-    {hidehash(text,len)}
-  </CopySvg> 
+const CopyItem: React.FC<{ text: string; len?: number }> = ({
+  text,
+  len = 6,
+}) => {
+  return <CopySvg text={text}>{hidehash(text, len)}</CopySvg>
+}
+
+const OrderStatus: { [state in OrderState]: any } = {
+  [OrderState.PENDING]: StateWaiting,
+  [OrderState.DISTRIBUTE]: StateWaiting,
+  [OrderState.COMPLETED]: StateSucceeded,
+  [OrderState.UNISATVERFY]: StateSucceeded,
 }
 const OrderHistoryItem: React.FC<{
   item: ItemProps
   onClick: any
   show: boolean
 }> = ({ item, show, onClick }) => {
-  
+  const StateComponents = OrderStatus[item.status]
   return (
     <OrderHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <OrderHistoryLineBox onClick={onClick}>
         <OrderHistoryItemBox className="order_id">
-          <CopyItem text={item.orderid} len={5}/>
+          <CopyItem text={item.orderid} len={5} />
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="project_name">
           {item.projectname}
@@ -132,20 +128,21 @@ const OrderHistoryItem: React.FC<{
           {item.stage}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="receive_address">
-          <CopyItem text={item.receivedAddr}/>
+          <CopyItem text={item.receivedAddr} />
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="amount">
           {item.amount.toLocaleString()}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="payment_amount">
           <div style={{ alignItems: "center" }}>
-            <TokenSymbol symbol={'BTC'} size={16} />
+            <TokenSymbol symbol={"BTC"} size={16} />
             {item.amountFloat}
           </div>
           <div style={{ marginTop: 4 }}>{item.tokenname}</div>
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="state">
           <StateItemBox>
+            {StateComponents ? <StateComponents /> : ""}
             {/* <StateComponents /> */}
           </StateItemBox>
           <StateItemIconBox>
@@ -156,20 +153,102 @@ const OrderHistoryItem: React.FC<{
       <OrderHistoryLineBox>
         <OrderHistoryItemBox className="order_id">
           <div className="title">From Address</div>
-          <div> {hidehash(item.fromaddr,6)}</div>
+          <div> {hidehash(item.fromaddr, 6)}</div>
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="project_name">
           <div className="title">To Address</div>
-          <div> {hidehash(item.receivedAddr,6)}</div>
+          <div> {hidehash(item.receivedAddr, 6)}</div>
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="time">
           <div className="title">Time</div>
-          <div> {(item.createtime)}</div>
+          <div> {item.createtime}</div>
         </OrderHistoryItemBox>
       </OrderHistoryLineBox>
     </OrderHistoryLineDetailBox>
   )
 }
+
+const OrderHistory: React.FC<{ address?: any; pid: any }> = ({
+  address,
+  pid,
+}) => {
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
+  const [pageSize, setPageSize] = useState(10)
+  const [index, setIndex] = useState<number | null>(null)
+  const [lists, setLists] = useState<ItemProps[] | null>(null)
+  const reload = async (pageNum: any) => {
+    const { code, data: reponse } = await fetchOrderCList({
+      pageNum,
+      pageSize,
+      address,
+      pid,
+    })
+    if (code === 0) {
+      const { total, list } = reponse
+      setTotal(total)
+      setPage(pageNum)
+      setLists(list)
+    }
+  }
+  let timeId: any = null
+  useEffect(() => {
+    if (timeId) {
+      clearTimeout(timeId)
+    }
+    timeId = setTimeout(() => {
+      reload(page)
+    }, 10000)
+    return () => {
+      timeId && clearTimeout(timeId)
+    }
+  }, [page])
+  useEffect(() => {
+    reload(1)
+  }, [address, pid])
+  return (
+    <>
+      <PageTitleBox>Order History</PageTitleBox>
+      <Spaced size="86" />
+      <OrderHistoryBox>
+        <OrderHistoryHead />
+        <Spaced size="35" />
+        <OrderContainerBox>
+          {lists === null
+            ? [null, null, null].map((_, key) => <EmptyLine key={key} />)
+            : lists.length === 0 ? <EmptyList/>:lists.map((item, key) => (
+                <OrderHistoryItem
+                  key={key}
+                  item={item}
+                  show={index === key}
+                  onClick={() =>
+                    index === key ? setIndex(null) : setIndex(key)
+                  }
+                />
+              ))}
+        </OrderContainerBox>
+        <Spaced size="36" />
+        {total > pageSize ? (
+          <Pagination
+            total={total}
+            pageSize={pageSize}
+            onChange={reload}
+            page={page}
+          />
+        ) : (
+          ""
+        )}
+      </OrderHistoryBox>
+    </>
+  )
+}
+export default OrderHistory
+const ViewButton = styled(Button)`
+  width: 66px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 14px;
+`
 const OrderHistoryLineDetailBox = styled.div`
   height: 80px;
   transition: all 0.2s ease-in-out;
@@ -261,6 +340,7 @@ const OrderHistoryItemBase = styled.div`
     height: 80px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     line-height: 20px;
   }
 `

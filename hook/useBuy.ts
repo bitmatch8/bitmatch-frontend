@@ -52,11 +52,14 @@ const useBuy = (info: any, readData: any) => {
     // )
     setTimeout(() => {
       readData()
-    }, 2000)
+    }, 5000)
   }
 
   const onMax = () => {
-    onChangeInput({ target: { value: maxAmount } })
+    // console.log({maxAmount})
+    if(maxAmount >0){
+      onChangeInput({ target: { value: maxAmount } })
+    }
   }
 
   return {
