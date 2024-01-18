@@ -40,6 +40,7 @@ const months = [
 const timeToEng = function (month: string) {
   return months[Number(month)];
 };
+const utcDiff = (new Date()).getHours() - (new Date()).getUTCHours()
 export function baseDate(fmt: string, date: Date) {
   let ret;
   const year = date.getUTCFullYear().toString();
@@ -67,7 +68,7 @@ export function baseDate(fmt: string, date: Date) {
       );
     }
   }
-  return `${fmt} UTC+${(new Date()).getHours() - (new Date()).getUTCHours()}`
+  return `${fmt} UTC${utcDiff >=0 ? '+':'-'}${utcDiff}`
   return fmt;
 }
 
@@ -96,10 +97,11 @@ export const foramtDateInfo = (item: any,type:DetailInfoType ) => {
     return null
   }
   const starttime = new Date(item.starttime)
-  
+  const localTime = new Date()
+  localTime.setHours(utcDiff) 
   if(type === DetailInfoType.public){
-    return starttime.getTime() > Date.now()?BuyState.Public_NotStarted : starttime.getTime() < Date.now() ? BuyState.Public_InProgress : BuyState.Public_Ended 
+    return starttime.getTime() > localTime.getTime()?BuyState.Public_NotStarted : starttime.getTime() < localTime.getTime() ? BuyState.Public_InProgress : BuyState.Public_Ended 
   }
-  return starttime.getTime() > Date.now()?BuyState.White_NotStarted : starttime.getTime() < Date.now() ? BuyState.White_InProgress : BuyState.White_Ended
+  return starttime.getTime() > localTime.getTime()?BuyState.White_NotStarted : starttime.getTime() < localTime.getTime() ? BuyState.White_InProgress : BuyState.White_Ended
   
 }

@@ -4,8 +4,9 @@ import CopyIcon from "@/components/Svg/CopyIcon"
 import DownIcon from "@/components/Svg/DownIcon"
 import TokenSymbol from "@/components/TokenSymbol"
 import styled from "@emotion/styled"
-import React, { CSSProperties, ReactNode, useMemo, useState } from "react"
+import React, { CSSProperties, ReactNode, useEffect, useMemo, useState } from "react"
 import Pagination from "@/components/Pagination"
+import { fetchOrderCList } from "@/api/api"
 type ItemProps = {
   order_id: string
   project_name: string
@@ -74,9 +75,19 @@ const OrderHistoryHead: React.FC = () => {
   )
 }
 
-const OrderHistory: React.FC = () => {
+const OrderHistory: React.FC<{address?:any,pid:any}> = ({address,pid}) => {
   const [page, setPage] = useState(1)
   const [index, setIndex] = useState<number | null>(null)
+  const reload=async(page:any)=>{
+    fetchOrderCList({
+      page,
+      address,
+      pid
+    })
+  }
+  useEffect(()=>{
+    reload(1)
+  },[address,pid])
   const lists: ItemProps[] = [
     {
       order_id: "240101000001",
