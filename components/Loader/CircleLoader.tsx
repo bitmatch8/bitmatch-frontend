@@ -15,7 +15,7 @@ const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
   height: ${({ size }) => size};
   width: ${({ size }) => size};
   path {
-    stroke: #ccc;
+    stroke: #6F6F76;
   }
 `
 

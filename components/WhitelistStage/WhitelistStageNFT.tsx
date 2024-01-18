@@ -7,7 +7,7 @@ import styled from "@emotion/styled"
 import { useMemo } from "react"
 import Input from "@/components/Input"
 import ValueSkeleton from "@/components/ValueSkeleton"
-import { formatUnitsAmount } from "@/utils/formatBalance"
+import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
@@ -26,11 +26,15 @@ const WhitelistStageNFT: React.FC<{
     readData
   )
   const price = useMemo(() => {
-    return BigNumber.from(String(info.targetnumber))
+    // console.log(parseFixedAmount(info.targetnumber,8))
+    
+    return parseFixedAmount(info.targetnumber,8)
+    // return BigNumber.from(String(info.targetnumber || 0))
   }, [info])
   const satoshis = useMemo(() => {
     return price.mul(BigNumber.from(value || 0)).toString()
   }, [price, value])
+
 
   return (
     <WhitelistStageBox>

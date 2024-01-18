@@ -44,12 +44,12 @@ const useBuy = (info: any, readData: any) => {
 
   const callbackSuccess = () => {
     setValue("")
-    dispatch(
-      addToast({
-        contxt: "success",
-        icon: "success",
-      })
-    )
+    // dispatch(
+    //   addToast({
+    //     contxt: "success",
+    //     icon: "success",
+    //   })
+    // )
     setTimeout(() => {
       readData()
     }, 2000)
