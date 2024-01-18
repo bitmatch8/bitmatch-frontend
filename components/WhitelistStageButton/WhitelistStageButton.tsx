@@ -14,24 +14,23 @@ import {
   selectBuy,
   addToast,
 } from "@/lib/redux"
-import { parseFixedAmount } from "@/utils/formatBalance"
-import Notice from "../Notice"
+import { ProjectType } from "@/utils/types"
 
 const WhitelistStageButton: React.FC<{
-  price:any,
+  price: any
   info: any
   detail: any
   callback: any
   satoshis: any
   buyAmount: any
   stage: any
-}> = ({ info, detail, callback, satoshis, buyAmount, stage,price }) => {
+}> = ({ info, detail, callback, satoshis, buyAmount, stage, price }) => {
   const dispatch = useDispatch()
   const { connected, address } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
   const [disabled, setDisabled] = useState(true)
-  const [buttonText,setButtonText]=useState('Buy')
-  const [toAddress,setToAddress]=useState('')
+  const [buttonText, setButtonText] = useState("Loading")
+  const [toAddress, setToAddress] = useState("")
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}
@@ -42,17 +41,17 @@ const WhitelistStageButton: React.FC<{
   )
   const isWhiteUser = async () => {
     //如果是白名单查询这里做判断是否禁用按钮
-    if(!address){
+    if (!address) {
       return
     }
     if (stage === "whitelist") {
-      const {code, data} = await fetchQueryByWhitelist({
+      const { code, data } = await fetchQueryByWhitelist({
         pid: detail.id,
         address,
       })
       if (code === 0) {
         setDisabled(data === 0)
-        setButtonText(data === 0 ? 'Not in whitelist' : 'Buy')
+        setButtonText(data === 0 ? "Not in whitelist" : "Buy")
       }
     } else {
       setDisabled(false)
@@ -60,44 +59,48 @@ const WhitelistStageButton: React.FC<{
   }
   //这里写收款地址逻辑。没写完，如果是白名单，查询用户是否在白名单
   const initAddress = async () => {
-
     const { code, data } = await fetchSelectFaddress({ pid: detail.id })
     if (code === 0) {
       setToAddress(data)
     }
   }
-  useEffect(() => {
-    isWhiteUser()
-    initAddress()
-  }, [detail, address,stage])
+
+  const setStep=(hash:string,num:number)=>{
+      setButtonText(`Buy(${num}/${buyAmount})`)
+  }
   const onCLickBuy = () => {
-    if(!buyAmount){
-      dispatch(addToast({
-        contxt: "Please enter the quantity",
-        icon:'warning'
-      })) 
-      return
-    }
-    if (status === "idle" && buyAmount && disabled === false && toAddress ) {
+    if (!buyAmount) {
       dispatch(
-        buySubmitAsync({
-          price:price.toString(),
-          projectname: detail.projectname,
-          type: detail.projecttype,
-          tokenname: detail.projecttokenname,
-          fromaddr: address,
-          fundaddr: toAddress,
-          stage,
-          receivedAddr: address,
-          amount: satoshis,
-          transmitAddr: '',
-          pid: detail.id,
-          buyAmount,
-          toAddress,
-          satoshis,
-          callback,
+        addToast({
+          contxt: "Please enter the quantity",
+          icon: "warning",
         })
       )
+      return
+    }
+    if (status === "idle" && buyAmount && disabled === false && toAddress) {
+      const params = {
+        price: price.toString(),
+        projectname: detail.projectname,
+        type: detail.projecttype,
+        tokenname: detail.projecttokenname,
+        fromaddr: address,
+        fundaddr: toAddress,
+        stage,
+        receivedAddr: address,
+        amount: satoshis,
+        transmitAddr: "",
+        pid: detail.id,
+        buyAmount,
+        toAddress,
+        satoshis,
+        callback:()=>{
+          setButtonText('Buy')
+          callback()
+        },
+        setStep
+      }
+      dispatch(buySubmitAsync(params))
     }
   }
   const endtime = new Date(info.enttime)
@@ -108,6 +111,11 @@ const WhitelistStageButton: React.FC<{
     [starttime]
   )
 
+  useEffect(() => {
+    isWhiteUser()
+    initAddress()
+  }, [detail, address, stage])
+ 
   if (!connected) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
@@ -118,7 +126,10 @@ const WhitelistStageButton: React.FC<{
   if (NotStarted) {
     return (
       <WhitelistStageButtonBox>
-        <TimeCountdown onComplete={callback} deadline={new Date(info.starttime)} />
+        <TimeCountdown
+          onComplete={callback}
+          deadline={new Date(info.starttime)}
+        />
       </WhitelistStageButtonBox>
     )
   } else if (endtime.getTime() < Date.now()) {
@@ -129,7 +140,7 @@ const WhitelistStageButton: React.FC<{
         disabled={status === "loading" || disabled}
         isLoading={status === "loading"}
         onClick={onCLickBuy}>
-          {buttonText}
+        {buttonText}
       </WhitelistStageButtonBox>
     )
   }

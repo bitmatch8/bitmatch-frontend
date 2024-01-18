@@ -11,7 +11,7 @@ export const logosBySymbol: { [symbol: string]: any } = {
 export const getTokenSymbol = (symbol: string) => {
   if (!logosBySymbol[symbol]) {
     // throw new Error(`Invalid RabbitLogo symbol: ${symbol}`);
-    return symbol
+    return null 
   }
   return logosBySymbol[symbol]
 }
@@ -20,7 +20,10 @@ const ChainIcons: React.FC<{ symbol: string; size?: number }> = ({
   size = 50,
 }) => {
   const icon = getTokenSymbol(symbol.toLocaleUpperCase())
-  return <ImgBox src={icon} alt={`${symbol} icon`} width={size} />
+  if(icon){
+    return <ImgBox src={icon} alt={`${symbol} icon`} width={size} />
+  }
+  return ''
 }
 
 export default ChainIcons

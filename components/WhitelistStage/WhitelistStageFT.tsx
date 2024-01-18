@@ -21,7 +21,7 @@ const WhitelistStageFT: React.FC<{
   const {value,onChangeInput,callbackSuccess,onMax}=useBuy(info,readData)
   const price = useMemo(
     () =>
-      Number((Number(info.targetnumber) / Number(info.tokennumber)).toFixed(8)),
+      Number((Number(info.targetnumber || 0) / Number(info.tokennumber || 0)).toFixed(8)),
     [info]
   )
   const priceBig = useMemo(() => {
