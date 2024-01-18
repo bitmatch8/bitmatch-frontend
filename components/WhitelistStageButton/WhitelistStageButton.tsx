@@ -65,16 +65,8 @@ const WhitelistStageButton: React.FC<{
     }
   }
 
-  const callbackFun=(hash:string,num:number)=>{
-    if(detail.projecttype === ProjectType.NFT){
+  const setStep=(hash:string,num:number)=>{
       setButtonText(`Buy(${num}/${buyAmount})`)
-      if(num === Number(buyAmount)){
-        setButtonText('Buy')
-        callback(hash) 
-      }
-    }else{
-      callback()
-    }
   }
   const onCLickBuy = () => {
     if (!buyAmount) {
@@ -102,7 +94,11 @@ const WhitelistStageButton: React.FC<{
         buyAmount,
         toAddress,
         satoshis,
-        callback:callbackFun,
+        callback:()=>{
+          setButtonText('Buy')
+          callback()
+        },
+        setStep
       }
       dispatch(buySubmitAsync(params))
     }

@@ -26,6 +26,7 @@ type BuySubmitProps={
   toAddress:any,
   satoshis:any,
   callback:any,
+  setStep:any,
   amount:any,
   txHash?:any
 }
@@ -41,15 +42,14 @@ export const buySubmitAsync = createAppAsyncThunk(
           amount:Number(params.amount)/Number(params.buyAmount),
           // amount:1000
         }
-        index ===1  &&  post_data.callback('',index)
+        post_data.setStep('',index)
         const txHash = await unisat.sendBitcoin(post_data.fundaddr, post_data.amount).catch(console.log)
-        post_data.callback('',index)
         if(txHash){
           post_data.txHash =txHash 
           await submitOderListSave(post_data)
-          console.log(post_data)
         }
       }
+      params.callback('')
     }else{
       const txHash = await unisat.sendBitcoin(params.fundaddr, params.amount).catch(console.log)
       params.txHash=txHash
