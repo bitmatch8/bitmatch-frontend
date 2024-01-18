@@ -15,6 +15,7 @@ import {
   addToast,
 } from "@/lib/redux"
 import { ProjectType } from "@/utils/types"
+import { toLocalTime } from "@/utils"
 
 const WhitelistStageButton: React.FC<{
   price: any
@@ -104,8 +105,8 @@ const WhitelistStageButton: React.FC<{
       dispatch(buySubmitAsync(params))
     }
   }
-  const endtime = new Date(info.enttime)
-  const starttime = new Date(info.starttime)
+  const endtime = toLocalTime(info.enttime)
+  const starttime = toLocalTime(info.starttime)
 
   const NotStarted = useMemo(
     () => starttime.getTime() > Date.now(),
@@ -129,7 +130,7 @@ const WhitelistStageButton: React.FC<{
       <WhitelistStageButtonBox>
         <TimeCountdown
           onComplete={callback}
-          deadline={new Date(info.starttime)}
+          deadline={toLocalTime(info.starttime)}
         />
       </WhitelistStageButtonBox>
     )

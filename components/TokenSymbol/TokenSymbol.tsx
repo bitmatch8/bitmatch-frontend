@@ -6,6 +6,7 @@ export const logosBySymbol: { [symbol: string]: any } = {
   "BIT": BitcoinIcon,
   "BITCOIN": BitcoinIcon,
   "BTC": BitcoinIcon,
+  "BitMatch OG":BitcoinIcon
 }
 
 export const getTokenSymbol = (symbol: string) => {

@@ -7,45 +7,25 @@ import styled from "@emotion/styled"
 import React, { CSSProperties, ReactNode, useEffect, useMemo, useState } from "react"
 import Pagination from "@/components/Pagination"
 import { fetchOrderCList } from "@/api/api"
+import ValueSkeleton from "../ValueSkeleton"
+import { dateFormat, hidehash } from "@/utils"
+import SuccessIcon from "../Svg/SuccessIcon"
+import CopySvg from "../CopySvg"
 type ItemProps = {
-  order_id: string
-  project_name: string
-  stage: string
-  receive_address: string
-  amount: string
-  unit: string
-  symbol: string
-  payment_amount: string
-  from_address: string
-  to_address: string
-  time: string
-  state: any
-}
-const StateWaiting: React.FC = () => {
-  return (
-    <>
-      <span className="waiting">Waiting for paymen</span>
-    </>
-  )
-}
-const StateCancelled: React.FC = () => {
-  return (
-    <>
-      <span className="cancelled">Cancelled</span>
-    </>
-  )
-}
-const StateSucceeded: React.FC = () => {
-  return (
-    <>
-      <div>
-        <span className="succeeded">Succeeded</span>
-      </div>
-      <div>
-        <ViewButton>View</ViewButton>
-      </div>
-    </>
-  )
+  orderid: string
+  projectname: string
+  type:string
+  tokenname: string
+  stage:string
+  fromaddr:string
+  fundaddr:string
+  receivedAddr:string
+  transmitAddr:string
+  amount:string
+  createtime:string
+  updatetime:string
+  amountFloat:string
+  status: any
 }
 const OrderHistoryHead: React.FC = () => {
   return (
@@ -75,77 +55,34 @@ const OrderHistoryHead: React.FC = () => {
   )
 }
 
+const EmptyLine:React.FC=()=>{
+  return <OrderHistoryLineDetailBox style={{justifyContent:'center',alignItems:'center',display:'flex'}}>
+    <ValueSkeleton width={1000}/>
+  </OrderHistoryLineDetailBox> 
+}
 const OrderHistory: React.FC<{address?:any,pid:any}> = ({address,pid}) => {
   const [page, setPage] = useState(1)
+  const [total,setTotal]=useState(0)
+  const [pageSize,setPageSize]=useState(5)
   const [index, setIndex] = useState<number | null>(null)
-  const reload=async(page:any)=>{
-    fetchOrderCList({
-      page,
+  const [lists,setLists] = useState<ItemProps[] | null>(null)
+  const reload=async(pageNum:any)=>{
+    const {code,data:reponse}=await fetchOrderCList({
+      pageNum,
+      pageSize,
       address,
       pid
     })
+    if(code === 0){
+      const {total,list}=reponse
+      setTotal(total)
+      setPage(pageNum)
+      setLists(list)
+    }
   }
   useEffect(()=>{
     reload(1)
   },[address,pid])
-  const lists: ItemProps[] = [
-    {
-      order_id: "240101000001",
-      project_name: "Bitcoin FrogsBitcoin Frogs",
-      stage: "Whitelist",
-      receive_address: "bc1pa…bcd789",
-      amount: "1",
-      unit: "Frog NFT",
-      symbol: "BITCOIN",
-      payment_amount: "0.23456789",
-      from_address: "bc1pa…bcd123",
-      to_address: "bc1pa…bcd456",
-      time: "Dec-30 09:00:00 AM UTC+8",
-      state: 0,
-    },
-    {
-      order_id: "240101000001",
-      project_name: "Bitcoin FrogsBitcoin Frogs",
-      stage: "Whitelist",
-      receive_address: "bc1pa…bcd789",
-      amount: "10,000,000",
-      unit: "$Frog",
-      symbol: "BITCOIN",
-      payment_amount: "0.23456789",
-      from_address: "bc1pa…bcd123",
-      to_address: "bc1pa…bcd456",
-      time: "Dec-30 09:00:00 AM UTC+8",
-      state: 1,
-    },
-    {
-      order_id: "240101000001",
-      project_name: "Bitcoin FrogsBitcoin Frogs",
-      stage: "Whitelist",
-      receive_address: "bc1pa…bcd789",
-      amount: "10,000,000",
-      unit: "$Frog",
-      symbol: "BITCOIN",
-      payment_amount: "0.23456789",
-      from_address: "bc1pa…bcd123",
-      to_address: "bc1pa…bcd456",
-      time: "Dec-30 09:00:00 AM UTC+8",
-      state: 2,
-    },
-    {
-      order_id: "240101000001",
-      project_name: "Bitcoin FrogsBitcoin Frogs",
-      stage: "Whitelist",
-      receive_address: "bc1pa…bcd789",
-      amount: "10,000,000",
-      unit: "$Frog",
-      symbol: "BITCOIN",
-      payment_amount: "0.23456789",
-      from_address: "bc1pa…bcd123",
-      to_address: "bc1pa…bcd456",
-      time: "Dec-30 09:00:00 AM UTC+8",
-      state: 1,
-    },
-  ]
   return (
     <>
       <PageTitleBox>Order History</PageTitleBox>
@@ -154,7 +91,7 @@ const OrderHistory: React.FC<{address?:any,pid:any}> = ({address,pid}) => {
         <OrderHistoryHead />
         <Spaced size="35" />
         <OrderContainerBox>
-          {lists.map((item, key) => (
+          {lists === null ? [null,null,null].map(((_,key)=><EmptyLine key={key}/>)) : lists.map((item, key) => (
             <OrderHistoryItem
               key={key}
               item={item}
@@ -164,55 +101,63 @@ const OrderHistory: React.FC<{address?:any,pid:any}> = ({address,pid}) => {
           ))}
         </OrderContainerBox>
         <Spaced size="36" />
-        <Pagination total={100} onChange={setPage} page={page} />
+       {total > 5 ? <Pagination total={total} pageSize={pageSize} onChange={reload} page={page} /> : ''} 
       </OrderHistoryBox>
     </>
   )
 }
 export default OrderHistory
 
+const CopyItem:React.FC<{text:string,len?:number}>=({text,len=6})=>{
+  const [isCopy,setIsCopy]=useState(false)
+  // const StateComponents = [StateSucceeded, StateWaiting, StateCancelled][item.status]
+  let timeId: NodeJS.Timeout | null = null
+  const onCopy = (e:any) => {
+    e.stopPropagation()
+    setIsCopy(true)
+    timeId && clearTimeout(timeId)
+    timeId=setTimeout(() => {
+      setIsCopy(false)
+    }, 2000);
+  }
+  return <CopySvg>
+    {hidehash(text,len)}
+  </CopySvg> 
+}
 const OrderHistoryItem: React.FC<{
   item: ItemProps
   onClick: any
   show: boolean
 }> = ({ item, show, onClick }) => {
-  const StateComponents = [StateSucceeded, StateWaiting, StateCancelled][
-    item.state
-  ]
-  const onCopy = (e:any) => {
-    e.stopPropagation()
-  }
+  
   return (
     <OrderHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <OrderHistoryLineBox onClick={onClick}>
         <OrderHistoryItemBox className="order_id">
-          {item.order_id}
+          <CopyItem text={item.orderid} len={5}/>
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="project_name">
-          {item.project_name}
+          {item.projectname}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="stage">
           {item.stage}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="receive_address">
-          <div onClick={onCopy}>
-            {item.receive_address}
-            <CopyIcon  width={16} fill="#C2C5C8" />
-          </div>
+          <CopyItem text={item.receivedAddr}/>
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="amount">
-          {item.amount}
+          {item.amount.toLocaleString()}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="payment_amount">
           <div style={{ alignItems: "center" }}>
-            <TokenSymbol symbol={item.symbol} size={16} />
-            {item.payment_amount}
+            <TokenSymbol symbol={'BTC'} size={16} />
+            {item.amountFloat}
           </div>
-          <div style={{ marginTop: 4 }}>{item.unit}</div>
+          <div style={{ marginTop: 4 }}>{item.tokenname}</div>
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="state">
           <StateItemBox>
-            <StateComponents />
+            {/* <StateComponents /> */}
           </StateItemBox>
           <StateItemIconBox>
             <DownIcon className="arrow" width={20} fill="#C2C5C8" />
@@ -222,15 +167,15 @@ const OrderHistoryItem: React.FC<{
       <OrderHistoryLineBox>
         <OrderHistoryItemBox className="order_id">
           <div className="title">From Address</div>
-          <div> {item.from_address}</div>
+          <div> {hidehash(item.fromaddr,6)}</div>
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="project_name">
           <div className="title">To Address</div>
-          <div> {item.to_address}</div>
+          <div> {hidehash(item.receivedAddr,6)}</div>
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="time">
           <div className="title">Time</div>
-          <div> {item.time}</div>
+          <div> {dateFormat(item.createtime)}</div>
         </OrderHistoryItemBox>
       </OrderHistoryLineBox>
     </OrderHistoryLineDetailBox>
@@ -259,12 +204,6 @@ const OrderHistoryLineDetailBox = styled.div`
   &:hover {
     border-color: #6f6f76;
   }
-`
-const ViewButton = styled(Button)`
-  width: 66px;
-  height: 24px;
-  border-radius: 6px;
-  font-size: 14px;
 `
 const OrderContainerBox = styled.div`
   display: flex;
@@ -379,6 +318,6 @@ const OrderHistoryItemBox = styled(OrderHistoryItemBase)`
   }
   & > div {
     display: flex;
-    gap: 5px;
+    gap: 2px;
   }
 `

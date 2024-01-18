@@ -68,7 +68,7 @@ export function baseDate(fmt: string, date: Date) {
       );
     }
   }
-  return `${fmt} UTC${utcDiff >=0 ? '+':'-'}${utcDiff}`
+  return `${fmt} UTC${utcDiff >=0 ? '+':''}${utcDiff}`
   return fmt;
 }
 
@@ -89,16 +89,19 @@ export const objectToUrlParams=(obj:any)=>{
 }
 
 
-
+export const toLocalTime = (date:any)=>{
+  const localTime = new Date(date)
+  localTime.setHours(utcDiff)
+  return localTime 
+}
 //1705153787492
 //1705388400000
 export const foramtDateInfo = (item: any,type:DetailInfoType ) => {
   if(!item){
     return null
   }
-  const starttime = new Date(item.starttime)
   const localTime = new Date()
-  localTime.setHours(utcDiff) 
+  const starttime = toLocalTime(item.starttime) 
   if(type === DetailInfoType.public){
     return starttime.getTime() > localTime.getTime()?BuyState.Public_NotStarted : starttime.getTime() < localTime.getTime() ? BuyState.Public_InProgress : BuyState.Public_Ended 
   }

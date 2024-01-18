@@ -47,6 +47,7 @@ export const TopBar = () => {
             onClick={() =>
           link.tip ? dispatch(
             addToast({
+              icon:'warning',
               contxt:link.tip,
             })
           ):''
