@@ -71,7 +71,6 @@ const WhitelistStageNFT: React.FC<{
             src={`data:image/jpeg;base64,${detail.projectnft}`}
             width={388}
             height={388}
-            style={{ borderRadius: 24 }}
           />
         </WhitelistStageItemBox>
       </WhitelistStageCardBox>
