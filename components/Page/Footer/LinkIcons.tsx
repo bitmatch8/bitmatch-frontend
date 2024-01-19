@@ -26,10 +26,10 @@ const LinkIcon: React.FC<{
 export default () => {
   return (
     <FooterLinksBox>
-      <LinkIcon icon="X" to="https://twitter.com/deindex_BTC" />
+      <LinkIcon icon="X" to="https://twitter.com/DeindexBTC" />
       {/* <LinkIcon icon="Github" to="#" /> */}
-      <LinkIcon icon="Telegram" to="https://t.me/deindexbtc" />
-      <LinkIcon icon="GitbookIcon" to="https://public-9.gitbook.io/deindex/" />
+      <LinkIcon icon="Telegram" to="https://t.me/DeindexBTC" />
+      <LinkIcon icon="GitbookIcon" to="https://docs.deindex.space" />
     </FooterLinksBox>
   );
 };
