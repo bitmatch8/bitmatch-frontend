@@ -102,8 +102,12 @@ export default function IndexPage() {
           <HeadContainerItem title="Total Users" value={dashboard.usersCount} />
         </HeadContainerBlockBox>
         <HeadContainerApplyBox>
-          <HeadContainerApplyButton onClick={() => {}}>
-            Apply to launch
+          <HeadContainerApplyButton
+            onClick={() => {
+              window.open("https://forms.gle/pDsZQy2cYeQEYuSf9", "_blank");
+            }}
+          >
+            Apply for launch
           </HeadContainerApplyButton>
         </HeadContainerApplyBox>
       </HeadContainerBox>
