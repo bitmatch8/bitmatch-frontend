@@ -1,28 +1,30 @@
 /* Components */
 
-import Button from "@/components/Button"
-import Page from "@/components/Page"
-import styled from "@emotion/styled"
-import BIcon from "@/assets/img/b.png"
-import Image from "next/image"
-import LImg from "@/assets/img/l_img.png"
-import RImg from "@/assets/img/r_img.png"
+import Button from "@/components/Button";
+import Page from "@/components/Page";
+import styled from "@emotion/styled";
+import BIcon from "@/assets/img/b.png";
+import Image from "next/image";
+import LImg from "@/assets/img/l_img.png";
+import RImg from "@/assets/img/r_img.png";
 
-import L2Img from "@/assets/img/l2_img.png"
-import R2Img from "@/assets/img/r2_img.png"
+import L2Img from "@/assets/img/l2_img.png";
+import R2Img from "@/assets/img/r2_img.png";
 
-import L0Img from "@/assets/img/l0_img.png"
-import R0Img from "@/assets/img/r0_img.png"
-import LinkIcons from "@/components/Page/Footer/LinkIcons"
-import ChainIcons from "@/components/ChainIcons"
-import DecentralizedindexImg from "@/assets/img/Decentralizedindex.png"
-import LaunchpadImg from "@/assets/img/Launchpad.png"
-import MarketplaceImg from "@/assets/img/Marketplace.png"
-import MarketplaceBgImg from "@/assets/img/Marketplace_bg.png"
+import L0Img from "@/assets/img/l0_img.png";
+import R0Img from "@/assets/img/r0_img.png";
+import LinkIcons from "@/components/Page/Footer/LinkIcons";
+import ChainIcons from "@/components/ChainIcons";
+import DecentralizedindexImg from "@/assets/img/Decentralizedindex.png";
+import LaunchpadImg from "@/assets/img/Launchpad.png";
+import MarketplaceImg from "@/assets/img/Marketplace.png";
+import MarketplaceBgImg from "@/assets/img/Marketplace_bg.png";
 
-import ProjectLists from "./ProjectLists"
-import { Spaced } from "@/components/Spaced"
-import { Chains } from "@/utils/Chains"
+import ProjectLists from "./ProjectLists";
+import { Spaced } from "@/components/Spaced";
+import { Chains } from "@/utils/Chains";
+
+import Link from "next/link";
 
 const ChainIconItem: React.FC<{ chain: Chains; width: number }> = ({
   chain,
@@ -33,8 +35,8 @@ const ChainIconItem: React.FC<{ chain: Chains; width: number }> = ({
       <ChainIcons chain={chain} size={width} />
       <ChainIconItemTitBox>{chain}</ChainIconItemTitBox>
     </ChainIconItemBox>
-  )
-}
+  );
+};
 const ChainLinks: React.FC = () => {
   return (
     <ChainLinksBox>
@@ -50,8 +52,8 @@ const ChainLinks: React.FC = () => {
       {/* <ChainIconItem chain="GATE.IO" width={120} />
       <ChainIconItem chain="UNISAT" width={94} /> */}
     </ChainLinksBox>
-  )
-}
+  );
+};
 const LaunchpadSlice: React.FC = () => {
   return (
     <ShowItemSliceBox>
@@ -66,11 +68,11 @@ const LaunchpadSlice: React.FC = () => {
           Launch the highest-quality projects to match the most suitable
           investments
         </ShowItemSliceContxtBox>
-        <Spaced size="260"/>
+        <Spaced size="260" />
       </ShowItemSliceItemBox>
     </ShowItemSliceBox>
-  )
-}
+  );
+};
 const MarketplaceSlice: React.FC = () => {
   return (
     <ShowItemSliceBox className="show_bg">
@@ -79,7 +81,7 @@ const MarketplaceSlice: React.FC = () => {
           Market<span>place</span>
         </ShowItemSliceTitleBox>
         <ShowItemSliceContxtBox>
-          Efficient and low-cost trading 
+          Efficient and low-cost trading
           <br />
           market
           <br />
@@ -92,8 +94,8 @@ const MarketplaceSlice: React.FC = () => {
         <ImgBox alt="" width={560} src={MarketplaceImg} />
       </ShowItemSliceItemBox>
     </ShowItemSliceBox>
-  )
-}
+  );
+};
 const DecentralizedIndex: React.FC = () => {
   return (
     <DecentralizedindexBox>
@@ -110,8 +112,8 @@ const DecentralizedIndex: React.FC = () => {
         </DecentralizedindexTextBox>
       </ShowItemSliceLineBox>
     </DecentralizedindexBox>
-  )
-}
+  );
+};
 export default function IndexPage() {
   return (
     <Page>
@@ -132,25 +134,25 @@ export default function IndexPage() {
             </HeadContainerUseUsDescBox>
             <LinkIcons />
           </HeadContainerUseUsLeftBox>
-          <HeadContainerUseUsButton to="/lists">
+          <HeadContainerUseUsButton href="/lists">
             Use Us
           </HeadContainerUseUsButton>
         </HeadContainerUseUsBox>
       </HeadContainerBox>
 
       <LaunchpadSlice />
-      <Spaced size="80"/>
+      <Spaced size="80" />
       <MarketplaceSlice />
-      <Spaced size="210"/>
+      <Spaced size="210" />
       <DecentralizedIndex />
-      <Spaced size="250"/>
+      <Spaced size="250" />
       <ProjectLists />
-      <Spaced size="250"/>
+      <Spaced size="250" />
       <PageTitleBox>Partners</PageTitleBox>
       <Spaced size="80" />
       <ChainLinks />
     </Page>
-  )
+  );
 }
 const PageTitleBox = styled.div`
   font-size: 80px;
@@ -168,7 +170,7 @@ const PageTitleBox = styled.div`
     left: 0;
     border-radius: 8px;
   }
-`
+`;
 const DecentralizedindexTitBox = styled.div`
   font-size: 80px;
   font-weight: 600;
@@ -178,7 +180,7 @@ const DecentralizedindexTitBox = styled.div`
     color: #fff;
     margin-left: 20px;
   }
-`
+`;
 const DecentralizedindexTextBox = styled.div`
   font-size: 36px;
   font-weight: 300;
@@ -206,19 +208,19 @@ const DecentralizedindexTextBox = styled.div`
     background-image: url(${R0Img.src});
     background-size: 12px 22px;
   }
-`
+`;
 const ShowItemSliceLineBox = styled.div`
   text-align: center;
   &.decentralizedindex {
     margin-top: 88px;
   }
-`
+`;
 const DecentralizedindexBox = styled.div`
   /* margin-top: 160px; */
   background-color: #f7931a;
   padding: 80px 65px 100px;
   border-radius: 36px;
-`
+`;
 const ShowItemSliceContxtBox = styled.div`
   font-size: 36px;
   font-weight: 300;
@@ -246,7 +248,7 @@ const ShowItemSliceContxtBox = styled.div`
     background-image: url(${R2Img.src});
     background-size: 12px 22px;
   }
-`
+`;
 const ShowItemSliceItemBox = styled.div`
   &.launchpad {
     margin-left: 71px;
@@ -257,7 +259,7 @@ const ShowItemSliceItemBox = styled.div`
   &.decentralizedindex {
     margin-left: 88px;
   }
-`
+`;
 const ShowItemSliceTitleBox = styled.div`
   max-width: 590px;
   font-size: 80px;
@@ -268,7 +270,7 @@ const ShowItemSliceTitleBox = styled.div`
   span {
     color: #f8931a;
   }
-`
+`;
 const ShowItemSliceBox = styled.div`
   display: flex;
   /* min-height: 900px; */
@@ -288,10 +290,10 @@ const ShowItemSliceBox = styled.div`
       background-size: 730px 730px;
     }
   }
-`
+`;
 const ChainIconItemTitBox = styled.div`
-font-family: Arial, Arial;
-`
+  font-family: Arial, Arial;
+`;
 const ChainIconItemBox = styled.div`
   cursor: pointer;
   width: 216px;
@@ -306,20 +308,20 @@ const ChainIconItemBox = styled.div`
   justify-content: center;
   gap: 17px;
 
-font-size: 24px;
-color: #4F4F57;
-line-height: 24px;
+  font-size: 24px;
+  color: #4f4f57;
+  line-height: 24px;
   &:hover {
     color: #fff;
     border-color: #f8931a;
   }
-`
+`;
 const ChainLinksBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   /* gap: 20px; */
   justify-content: space-between;
-`
+`;
 const HeadContainerUseUsDescBox = styled.div`
   font-size: 32px;
   font-weight: 500;
@@ -350,25 +352,36 @@ const HeadContainerUseUsDescBox = styled.div`
     background-image: url(${RImg.src});
     background-size: 12px 22px;
   }
-`
-const HeadContainerUseUsLeftBox = styled.div``
+`;
+const HeadContainerUseUsLeftBox = styled.div``;
 const ImgBox = styled(Image)`
   height: auto;
-`
-const HeadContainerUseUsButton = styled(Button)`
+`;
+const HeadContainerUseUsButton = styled(Link)`
   width: 240px;
   height: 80px;
-`
+  color: #c2c5c8;
+  text-decoration: none;
+  position: relative;
+  color: #fff;
+  background: #f7931a;
+  border-radius: 16px;
+  font-size: 24px;
+  font-family: Montserrat, Montserrat-Black;
+  color: #ffffff;
+  text-align: center;
+  line-height: 80px;
+`;
 const HeadContainerUseUsBox = styled.div`
   margin-top: 100px;
   margin-bottom: 166px;
   display: flex;
   justify-content: space-between;
   gap: 194px;
-`
+`;
 const HeadContainerBox = styled.div`
   margin: 145px auto 0px;
-`
+`;
 const HeadContainerText = styled.div`
   font-size: 100px;
   font-family: Arial Black;
@@ -388,4 +401,4 @@ const HeadContainerText = styled.div`
     margin-left: 10px;
     color: #f8931a;
   }
-`
+`;
