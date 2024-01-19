@@ -192,8 +192,10 @@ const ListContainerBox = styled.div`
   margin: 140px auto 0;
 `;
 const HeadContainerApplyButton = styled(Button)`
-  width: 280px;
+  width: 300px;
   height: 80px;
+  font-size: 22px;
+  font-family: Montserrat-Black;
 `;
 const HeadContainerApplyBox = styled.div`
   text-align: center;

@@ -10,3 +10,7 @@
   font-family: "Montserrat-Medium";
   src: url("/font/Montserrat-Medium.otf");
 }
+@font-face {
+  font-family: "Montserrat-Black";
+  src: url("/font/Montserrat-Black.otf");
+}

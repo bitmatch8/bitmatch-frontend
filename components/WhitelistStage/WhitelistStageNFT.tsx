@@ -72,7 +72,6 @@ const WhitelistStageNFT: React.FC<{
             width={388}
             height={388}
             style={{ borderRadius: 24 }}
-            // TODO: 圆角按照UI设计图改一下
           />
         </WhitelistStageItemBox>
       </WhitelistStageCardBox>
