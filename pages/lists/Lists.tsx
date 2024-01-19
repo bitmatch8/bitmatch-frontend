@@ -107,7 +107,7 @@ export default function IndexPage() {
               window.open("https://forms.gle/pDsZQy2cYeQEYuSf9", "_blank");
             }}
           >
-            Apply for launch
+            Applying for Launch
           </HeadContainerApplyButton>
         </HeadContainerApplyBox>
       </HeadContainerBox>
