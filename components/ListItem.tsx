@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import { ProjectItemType } from "@/lib/redux";
 import ValueSkeleton from "./ValueSkeleton";
-
+import Link from "next/link";
 const ListWaperItem: React.FC<{ item: ProjectItemType | null }> = ({
   item,
 }) => {
@@ -60,9 +60,7 @@ const ListWaperItem: React.FC<{ item: ProjectItemType | null }> = ({
         {item === null ? (
           <ValueSkeleton width={200} height={40} />
         ) : (
-          <ListWaperButtonBox to={`/ft/${item?.id}`} variant="secondary">
-            View
-          </ListWaperButtonBox>
+          <ListWaperButtonBox href={`/ft/${item?.id}`}>View</ListWaperButtonBox>
         )}
       </ListWaperItemLineBox>
     </ListWaperItemBox>
@@ -71,13 +69,24 @@ const ListWaperItem: React.FC<{ item: ProjectItemType | null }> = ({
 
 export default ListWaperItem;
 
-const ListWaperButtonBox = styled(Button)`
+const ListWaperButtonBox = styled(Link)`
+  display: inline-block;
   width: 416px;
   height: 48px;
   font-size: 18px;
-  font-family: Montserrat, Montserrat-Medium;
   border-radius: 12px;
   border: 2px solid #c2c5c8;
+  font-family: Montserrat, Montserrat-Medium;
+  color: #ffffff;
+  text-align: center;
+  line-height: 48px;
+  text-decoration: none;
+  position: relative;
+
+  &:hover {
+    background: #f7931a;
+    border: 2px solid #f7931a;
+  }
 `;
 const ListWaperItemUserDescBox = styled.div`
   font-size: 24px;
