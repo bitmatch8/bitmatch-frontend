@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import Logo from "@/components/Logo"
-import styled from "@emotion/styled"
+import Logo from "@/components/Logo";
+import styled from "@emotion/styled";
 /* Core */
-import Link from "next/link"
-import { usePathname,useRouter,useParams } from "next/navigation"
-import ToastModals from "@/context/ToastModals"
-import { useDispatch, addToast } from "@/lib/redux"
-import dynamic from "next/dynamic"
-const ConnectButton = dynamic(import('./ConnectButton'), { ssr: false })
+import Link from "next/link";
+import { usePathname, useRouter, useParams } from "next/navigation";
+import ToastModals from "@/context/ToastModals";
+import { useDispatch, addToast } from "@/lib/redux";
+import dynamic from "next/dynamic";
+const ConnectButton = dynamic(import("./ConnectButton"), { ssr: false });
 export const TopBar = () => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const menusArr = [
     {
@@ -18,56 +18,55 @@ export const TopBar = () => {
       path: "/",
     },
     {
-      title: "Launch list",
+      title: "Launchpad",
       path: "/lists",
     },
     {
       title: "Marketplace",
-      path:'',
+      path: "",
       tip: "Coming Soon",
     },
     {
       title: "Genesis NFT",
       path: "/genesis-nft",
     },
-  ]
-  const dispatch = useDispatch()
+  ];
+  const dispatch = useDispatch();
   return (
     <TopBarBox>
-      <LogoLink href={'/'}>
-
-      <Logo />
+      <LogoLink href={"/"}>
+        <Logo />
       </LogoLink>
       <MenusBox>
         {menusArr.map((link, key) => (
-
           <LinkItem
             key={key}
             className={pathname === link.path ? "active" : ""}
             onClick={() =>
-          link.tip ? dispatch(
-            addToast({
-              icon:'warning',
-              contxt:link.tip,
-            })
-          ):''
-        }
-            href={link.path}>
+              link.tip
+                ? dispatch(
+                    addToast({
+                      icon: "warning",
+                      contxt: link.tip,
+                    })
+                  )
+                : ""
+            }
+            href={link.path}
+          >
             {link.title}
           </LinkItem>
         ))}
       </MenusBox>
       <ConnectButton />
-      <ToastModals/>
+      <ToastModals />
     </TopBarBox>
-  )
-}
+  );
+};
 
-export default TopBar
+export default TopBar;
 
-const LogoLink=styled(Link)`
-
-`
+const LogoLink = styled(Link)``;
 const LinkItem = styled(Link)`
   color: #c2c5c8;
   text-decoration: none;
@@ -89,7 +88,7 @@ const LinkItem = styled(Link)`
       transform: translateX(-50%);
     }
   }
-`
+`;
 
 const MenusBox = styled.div`
   width: 638px;
@@ -103,7 +102,7 @@ const MenusBox = styled.div`
   border-radius: 20px;
   font-weight: 900;
   /* margin-left:100px ; */
-`
+`;
 
 const TopBarBox = styled.div`
   width: 1227px;
@@ -112,4 +111,4 @@ const TopBarBox = styled.div`
   justify-content: space-between;
   align-items: center;
   position: relative;
-`
+`;
