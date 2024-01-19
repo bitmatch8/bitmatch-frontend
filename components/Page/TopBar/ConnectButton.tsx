@@ -5,6 +5,7 @@ import { hidehash } from "@/utils";
 import styled from "@emotion/styled";
 import Notice from "@/components/Notice";
 import QuitIcon from "@/assets/img/quit.png";
+import QuitLightIcon from "@/assets/img/quit_light.png";
 import XIcon from "@/assets/img/x.png";
 import {
   wallterSlice,
@@ -38,8 +39,8 @@ const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
         </ContentSuccessLineBox>
         {show ? (
           <ContentSuccessLineBox onClick={onClickQuit}>
-            <ImgBox width={24} alt="" src={QuitIcon} />
-            <span>Disconnect</span>
+            <ImgBgBox />
+            <DisconnectTextBox>Disconnect</DisconnectTextBox>
           </ContentSuccessLineBox>
         ) : (
           ""
@@ -181,6 +182,14 @@ const ImgBox = styled(Image)`
   height: auto;
 `;
 
+const ImgBgBox = styled.span`
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url(${QuitIcon.src});
+  background-size: 24px 24px;
+`;
+
 const ContentSuccessTopBox = styled.div`
   border: 3px solid #c2c5c8;
   border-radius: 16px;
@@ -190,16 +199,29 @@ const ContentSuccessLineBox = styled.div`
   cursor: pointer;
   height: 56px;
   color: #fff;
-  width: 220px;
+  width: 214px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   gap: 12px;
+  border-radius: 12px;
+  &:nth-child(2) {
+    color: #c2c5c8;
+  }
+
   &:hover {
     background-color: #24272b;
+    color: #fff;
+  }
+  &:nth-child(2):hover {
+    span {
+      background-image: url(${QuitLightIcon.src});
+      background-size: 24px 24px;
+    }
   }
 `;
+const DisconnectTextBox = styled.div``;
 const ContentSuccessBox = styled.div`
   user-select: none;
   position: relative;
