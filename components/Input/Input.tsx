@@ -1,13 +1,13 @@
-import styled from "@emotion/styled"
-import Image from "next/image"
-import React from "react"
+import styled from "@emotion/styled";
+import Image from "next/image";
+import React from "react";
 
 const Input: React.FC<{
-  value: any
-  onChange: any
-  className?: any
-  placeholder?: string
-  onMax?: any
+  value: any;
+  onChange: any;
+  className?: any;
+  placeholder?: string;
+  onMax?: any;
 }> = ({ className, placeholder, value, onChange, onMax }) => {
   return (
     <InputBox>
@@ -19,8 +19,8 @@ const Input: React.FC<{
       />
       {onMax ? <span onClick={onMax}>MAX</span> : null}
     </InputBox>
-  )
-}
+  );
+};
 
 const InputInertBox = styled.input`
   padding: 30px 40px;
@@ -33,7 +33,8 @@ const InputInertBox = styled.input`
   line-height: 60px;
   border: none;
   flex: 1;
-`
+  height: 120px;
+`;
 const InputBox = styled.div`
   overflow: hidden;
   border-radius: 24px;
@@ -41,6 +42,8 @@ const InputBox = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
+  height: 120px;
+  box-sizing: border-box;
   span {
     cursor: pointer;
     user-select: none;
@@ -49,10 +52,10 @@ const InputBox = styled.div`
     color: #c2c5c8;
     line-height: 60px;
     margin-right: 30px;
-    &:hover{
-      color:#F7931A ;
+    &:hover {
+      color: #f7931a;
     }
   }
-`
+`;
 
-export default Input
+export default Input;
