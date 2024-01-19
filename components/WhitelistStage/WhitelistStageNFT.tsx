@@ -65,14 +65,14 @@ const WhitelistStageNFT: React.FC<{
             )}
           </WhitelistStageLine>
         </WhitelistStageItemBox>
-        <WhitelistStageItemBox>
+        <WhitelistStageItemImgBox>
           <ImgBox
             alt=""
             src={`data:image/jpeg;base64,${detail.projectnft}`}
             width={388}
             height={388}
           />
-        </WhitelistStageItemBox>
+        </WhitelistStageItemImgBox>
       </WhitelistStageCardBox>
       <Spaced size="40" />
       <WhitelistStageProgress
@@ -171,4 +171,11 @@ const WhitelistStageItemBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
+`;
+
+const WhitelistStageItemImgBox = styled.div`
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  justify-content: center;
 `;
