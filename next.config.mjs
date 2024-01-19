@@ -4,14 +4,17 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `http://101.251.211.205:8066/:path*`
-      },
-    ]
+  images:{
+    unoptimized:true
   }
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //       destination: `http://101.251.211.205:8066/:path*`
+  //     },
+  //   ]
+  // }
 }
 
 export default nextConfig
