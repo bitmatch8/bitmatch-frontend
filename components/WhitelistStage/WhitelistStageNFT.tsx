@@ -1,41 +1,40 @@
-import ImgBox from "@/components/ImgBox"
-import { Spaced } from "@/components/Spaced"
-import { BigNumber } from "@ethersproject/bignumber"
-import TokenSymbol from "@/components/TokenSymbol"
-import NFTSHOWImg from "@/assets/img/nft_show.png"
-import styled from "@emotion/styled"
-import { useMemo } from "react"
-import Input from "@/components/Input"
-import ValueSkeleton from "@/components/ValueSkeleton"
-import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
-import WhitelistStageButton from "@/components/WhitelistStageButton"
-import WhitelistStageProgress from "@/components/WhitelistStageProgress"
-import WhitelistStageLine from "@/components/WhitelistStageLine"
-import useBuy from "@/hook/useBuy"
-import { dateFormat } from "@/utils"
+import ImgBox from "@/components/ImgBox";
+import { Spaced } from "@/components/Spaced";
+import { BigNumber } from "@ethersproject/bignumber";
+import TokenSymbol from "@/components/TokenSymbol";
+import NFTSHOWImg from "@/assets/img/nft_show.png";
+import styled from "@emotion/styled";
+import { useEffect, useMemo } from "react";
+import Input from "@/components/Input";
+import ValueSkeleton from "@/components/ValueSkeleton";
+import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance";
+import WhitelistStageButton from "@/components/WhitelistStageButton";
+import WhitelistStageProgress from "@/components/WhitelistStageProgress";
+import WhitelistStageLine from "@/components/WhitelistStageLine";
+import useBuy from "@/hook/useBuy";
+import { dateFormat } from "@/utils";
 
 const WhitelistStageNFT: React.FC<{
-  detail: any
-  info: any
-  balance: any
-  title: string
-  stage: any
-  readData: any
+  detail: any;
+  info: any;
+  balance: any;
+  title: string;
+  stage: any;
+  readData: any;
 }> = ({ info, balance, title, detail, stage, readData }) => {
   const { value, onChangeInput, callbackSuccess, onMax } = useBuy(
     info,
     readData
-  )
+  );
   const price = useMemo(() => {
     // console.log(parseFixedAmount(info.targetnumber,8))
-    
-    return parseFixedAmount(info.targetnumber,8)
-    // return BigNumber.from(String(info.targetnumber || 0))
-  }, [info])
-  const satoshis = useMemo(() => {
-    return price.mul(BigNumber.from(value || 0)).toString()
-  }, [price, value])
 
+    return parseFixedAmount(info.targetnumber, 8);
+    // return BigNumber.from(String(info.targetnumber || 0))
+  }, [info]);
+  const satoshis = useMemo(() => {
+    return price.mul(BigNumber.from(value || 0)).toString();
+  }, [price, value]);
 
   return (
     <WhitelistStageBox>
@@ -67,7 +66,14 @@ const WhitelistStageNFT: React.FC<{
           </WhitelistStageLine>
         </WhitelistStageItemBox>
         <WhitelistStageItemBox>
-          <ImgBox alt="" src={NFTSHOWImg} width={388} />
+          <ImgBox
+            alt=""
+            src={`data:image/jpeg;base64,${detail.projectnft}`}
+            width={388}
+            height={388}
+            style={{ borderRadius: 24 }}
+            // TODO: 圆角按照UI设计图改一下
+          />
         </WhitelistStageItemBox>
       </WhitelistStageCardBox>
       <Spaced size="40" />
@@ -77,7 +83,8 @@ const WhitelistStageNFT: React.FC<{
       />
       <Spaced size="100" />
       <WhitelistStageLineBox
-        style={{ justifyContent: "space-between", gap: 0 }}>
+        style={{ justifyContent: "space-between", gap: 0 }}
+      >
         <WhitelistStageFooterItem>
           <WhitelistStageInputBox
             placeholder="0"
@@ -111,9 +118,9 @@ const WhitelistStageNFT: React.FC<{
       </WhitelistStageLineBox>
       <Spaced size="24" />
     </WhitelistStageBox>
-  )
-}
-export default WhitelistStageNFT
+  );
+};
+export default WhitelistStageNFT;
 
 const FooterTextLineBox = styled.div`
   font-size: 24px;
@@ -130,15 +137,15 @@ const FooterTextLineBox = styled.div`
   .g {
     color: #6f6f76;
   }
-`
-const WhitelistStageFooterItem = styled.div``
+`;
+const WhitelistStageFooterItem = styled.div``;
 const WhitelistStageInputBox = styled(Input)`
   width: 520px;
-`
+`;
 const WhitelistStageLineBox = styled.div`
   display: flex;
   gap: 60px;
-`
+`;
 const WhitelistStageCardBox = styled.div`
   padding: 40px;
   background: #24272b;
@@ -146,24 +153,24 @@ const WhitelistStageCardBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
-`
+`;
 const WhitelistStageTitleBox = styled.div`
   font-size: 60px;
   font-weight: 600;
   color: #ffffff;
   line-height: 60px;
   margin-bottom: 60px;
-`
+`;
 const WhitelistStageBox = styled.div`
   margin-top: 80px;
   /* height: 1059px; */
   background: #181b20;
   border-radius: 30px;
   padding: 60px 40px;
-`
+`;
 
 const WhitelistStageItemBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
-`
+`;
