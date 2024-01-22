@@ -213,7 +213,6 @@ const OrderHistory: React.FC<{ address?: any; pid: any }> = ({
       <Spaced size="80" />
       <OrderHistoryBox>
         <OrderHistoryHead />
-        <Spaced size="35" />
         <OrderContainerBox>
           {lists === null ? (
             [null, null, null].map((_, key) => <EmptyLine key={key} />)
@@ -259,6 +258,8 @@ const OrderHistoryLineDetailBox = styled.div`
   border-radius: 20px;
   border: 2px solid transparent;
   overflow: hidden;
+  font-family: Montserrat-Medium;
+  color: #c2c5c8;
   svg.arrow {
     transition: all 0.2s ease-in-out;
     transform: rotate(0deg);
@@ -274,6 +275,11 @@ const OrderHistoryLineDetailBox = styled.div`
   }
   &:hover {
     border-color: #6f6f76;
+    color: #fff;
+    font-family: Montserrat;
+    .title {
+      font-family: Montserrat-Medium;
+    }
   }
 `;
 const OrderContainerBox = styled.div`
@@ -301,12 +307,13 @@ const PageTitleBox = styled.div`
 const OrderHistoryBox = styled.div`
   background: #181b20;
   border-radius: 30px;
-  padding: 60px 40px;
+  padding: 0 24px 48px 24px;
 `;
 const OrderHistoryHeadBox = styled.div`
   display: flex;
   align-items: center;
   padding: 0 24px;
+  height: 114px;
   /* flex-wrap: wrap; */
   /* gap: 1px; */
 `;
@@ -378,9 +385,9 @@ const OrderHistoryHeadItemBox = styled(OrderHistoryItemBase)`
 `;
 const OrderHistoryItemBox = styled(OrderHistoryItemBase)`
   font-size: 16px;
-  font-weight: 500;
-  color: #c2c5c8;
+
   line-height: 20px;
+
   .title {
     font-size: 18px;
     font-weight: 500;
