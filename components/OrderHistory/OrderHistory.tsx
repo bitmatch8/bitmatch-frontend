@@ -24,6 +24,7 @@ type ItemProps = {
   amount: string;
   createtime: string;
   updatetime: string;
+  buyAmount:string
   amountFloat: string;
   status: OrderState;
 };
@@ -133,7 +134,7 @@ const OrderHistoryItem: React.FC<{
           <CopyItem text={item.receivedAddr} />
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="amount">
-          {item.amount.toLocaleString()}
+          {String(item.buyAmount).toLocaleString()}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="payment_amount">
           <div style={{ alignItems: "center" }}>

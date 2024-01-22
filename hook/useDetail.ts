@@ -30,7 +30,7 @@ const useDetail = (id: any) => {
     }
   }, [whiteType, publicType])
   const readPublic = async () => {
-    if (detail?.wid) {
+    if (detail?.pubid) {
       const public_res = await fetchWhtielistInfoApi({
         id: detail?.pubid,
         address,
@@ -43,7 +43,7 @@ const useDetail = (id: any) => {
     }
   }
   const readWhtie = async () => {
-    if (detail?.pubid) {
+    if (detail?.wid) {
       const white_res = await fetchWhtielistInfoApi({
         id: detail?.wid,
         address,
@@ -106,6 +106,7 @@ const useDetail = (id: any) => {
     return null
   }, [publicType, whiteType])
 
+  console.log({buyType,publicType,whiteType})
   return {
     load,
     address,
