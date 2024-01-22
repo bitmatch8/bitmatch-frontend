@@ -20,14 +20,11 @@ import Image from "next/image";
 //   () => import('./TokenomicsEcharts'),
 //   { ssr: false },
 // )
-const ProjectInformation: React.FC<{ id: any; show: boolean }> = ({
-  id,
-  show,
-}) => {
-  const [detail, setDetail] = useState<any>(null);
-  const initPage = async () => {
-    if (!id) {
-      return null;
+const ProjectInformation: React.FC<{id:any,show:boolean,title:string}> = ({id,show,title}) => {
+  const [detail,setDetail]=useState<any>(null)
+  const initPage=async()=>{
+    if(!id){
+      return null
     }
     const { code, data } = await fetchProjectDetailsApi(id);
     if (code === 0) {
@@ -39,8 +36,8 @@ const ProjectInformation: React.FC<{ id: any; show: boolean }> = ({
   }, [id]);
   return (
     <ProjectInformationBox>
-      <PageTitleBox>Bitcoin Frogs Information</PageTitleBox>
-      <PageSubTitleBox>About Bitcoin Frogs</PageSubTitleBox>
+      <PageTitleBox>{title}</PageTitleBox>
+      <PageSubTitleBox>About</PageSubTitleBox>
       <InfoContainerBox>
         <InfoContainerTitleBox>Introduction</InfoContainerTitleBox>
         <InfoContainerLineBox>
@@ -119,22 +116,23 @@ const TokenomicsEchartsBox = styled.div`
 const InfoContainerBox = styled.div`
   padding: 20px;
   margin-top: 40px;
-`;
-const InfoContainerLineBox = styled.div`
-  font-size: 24px;
-  font-weight: 300;
-  color: #c2c5c8;
-  line-height: 36px;
-  margin: 36px 0;
-  padding-bottom: 30px;
-  min-height: 300px;
-`;
-const InfoContainerTitleBox = styled.div`
-  font-size: 24px;
-  font-weight: 600;
-  color: #ffffff;
-  line-height: 24px;
-`;
+`
+const InfoContainerLineBox=styled.div`
+font-size: 24px;
+font-weight: 300;
+color: #C2C5C8;
+line-height: 36px;
+margin: 36px 0;
+padding-bottom: 30px;
+min-height: 100px;
+word-break: break-all;
+`
+const InfoContainerTitleBox=styled.div`
+font-size: 24px;
+font-weight: 600;
+color: #FFFFFF;
+line-height: 24px;
+`
 const ProjectInformationBox = styled.div`
   margin-top: 80px;
   background: #181b20;

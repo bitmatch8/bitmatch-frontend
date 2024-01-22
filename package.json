@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "NODE_ENV=production node server.js",
+    "export": "next build && next export"
   },
   "type": "module",
   "dependencies": {
@@ -29,6 +30,7 @@
     "react-dom": "18.2.0",
     "react-loading-skeleton": "^3.3.1",
     "react-redux": "8.1.0",
+    "sharp": "^0.33.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

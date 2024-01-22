@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
         <FooterLogoItem>
           <Logo />
           <div className="copyright">
-            Copyright © 2024 BitMatch. All Rights Reserved
+            Copyright © 2024 Deindex. All Rights Reserved
           </div>
         </FooterLogoItem>
         <LinkIcons />

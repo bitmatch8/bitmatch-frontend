@@ -12,7 +12,7 @@ const EmptyImgBox=styled(Image)`
 
 `
 const EmptyListBox = styled.div`
-  min-height: 600px;
+  min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
