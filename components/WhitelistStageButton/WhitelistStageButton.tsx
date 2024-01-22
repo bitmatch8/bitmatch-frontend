@@ -118,7 +118,7 @@ const WhitelistStageButton: React.FC<{
     initAddress()
   }, [detail, address, stage])
  
-  if (!connected) {
+  if (!address) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
         Connect Wallet

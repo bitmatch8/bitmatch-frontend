@@ -38,7 +38,7 @@ const StateWaiting: React.FC = () => {
 const StateCancelled: React.FC = () => {
   return (
     <>
-      <span className="cancelled">Cancelled</span>
+      <span className="cancelled">fail</span>
     </>
   );
 };
@@ -109,6 +109,7 @@ const OrderStatus: { [state in OrderState]: any } = {
   [OrderState.DISTRIBUTE]: StateWaiting,
   [OrderState.COMPLETED]: StateSucceeded,
   [OrderState.UNISATVERFY]: StateSucceeded,
+  [OrderState.FAIL]: StateCancelled
 };
 const OrderHistoryItem: React.FC<{
   item: ItemProps;
