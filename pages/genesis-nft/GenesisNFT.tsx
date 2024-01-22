@@ -1,12 +1,12 @@
 /* Components */
 
-import Page from "@/components/Page"
-import DetailTitle from "@/components/ProjectCard/DetailTitle"
-import { Spaced } from "@/components/Spaced"
-import ProjectCard from "@/components/ProjectCard"
-import ProjectTabs from "@/components/ProjectTabs"
-import useDetail from "@/hook/useDetail"
-import OrderHistory from "@/components/OrderHistory"
+import Page from "@/components/Page";
+import DetailTitle from "@/components/ProjectCard/DetailTitle";
+import { Spaced } from "@/components/Spaced";
+import ProjectCard from "@/components/ProjectCard";
+import ProjectTabs from "@/components/ProjectTabs";
+import useDetail from "@/hook/useDetail";
+import OrderHistory from "@/components/OrderHistory";
 
 export default function GenesisNFT() {
   const {
@@ -20,7 +20,7 @@ export default function GenesisNFT() {
     publicInfo,
     readWhtie,
     readPublic,
-  } = useDetail(1)
+  } = useDetail(1);
   return (
     <Page>
       <DetailTitle title={detail === null ? null : detail?.projectname} />
@@ -36,7 +36,7 @@ export default function GenesisNFT() {
         publicRead={readPublic}
       />} 
       <Spaced size="150" />
-      <OrderHistory address={address} pid={1}/>
+      <OrderHistory address={address} pid={1} />
     </Page>
-  )
+  );
 }

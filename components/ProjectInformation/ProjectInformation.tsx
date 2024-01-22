@@ -1,14 +1,21 @@
-import Button from "@/components/Button"
-import { Spaced } from "@/components/Spaced"
-import TokenSymbol from "@/components/TokenSymbol"
-import styled from "@emotion/styled"
-import { CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from "react"
-import echarts from 'echarts'
-import dynamic from 'next/dynamic'
-import TokenomicsEcharts from './TokenomicsEcharts'
-import { fetchProjectDetailsApi } from "@/api/api"
-import ValueSkeleton from "@/components/ValueSkeleton"
-import Image from "next/image"
+import Button from "@/components/Button";
+import { Spaced } from "@/components/Spaced";
+import TokenSymbol from "@/components/TokenSymbol";
+import styled from "@emotion/styled";
+import {
+  CSSProperties,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import echarts from "echarts";
+import dynamic from "next/dynamic";
+import TokenomicsEcharts from "./TokenomicsEcharts";
+import { fetchProjectDetailsApi } from "@/api/api";
+import ValueSkeleton from "@/components/ValueSkeleton";
+import Image from "next/image";
 // const TokenomicsEcharts = dynamic(
 //   () => import('./TokenomicsEcharts'),
 //   { ssr: false },
@@ -19,37 +26,55 @@ const ProjectInformation: React.FC<{id:any,show:boolean,title:string}> = ({id,sh
     if(!id){
       return null
     }
-    const {code,data} =await fetchProjectDetailsApi(id)
-    if(code === 0){
-      setDetail(data)
+    const { code, data } = await fetchProjectDetailsApi(id);
+    if (code === 0) {
+      setDetail(data);
     }
-  }
-  useEffect(()=>{
-    initPage()
-  },[id])
+  };
+  useEffect(() => {
+    initPage();
+  }, [id]);
   return (
     <ProjectInformationBox>
       <PageTitleBox>{title}</PageTitleBox>
       <PageSubTitleBox>About</PageSubTitleBox>
       <InfoContainerBox>
-        <InfoContainerTitleBox>
-        Introduction
-        </InfoContainerTitleBox>
+        <InfoContainerTitleBox>Introduction</InfoContainerTitleBox>
         <InfoContainerLineBox>
-          {detail === null ?  <ValueSkeleton width={300} height={38}/>:<div dangerouslySetInnerHTML={{__html:String(detail?.projectrelated).replaceAll("\n","<br/>")}}/>}
-        {/* 10,000 timeless frog collectibles stored on the Bitcoin Blockchain.
+          {detail === null ? (
+            <ValueSkeleton width={300} height={38} />
+          ) : (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: String(detail?.projectrelated).replaceAll(
+                  "\n",
+                  "<br/>"
+                ),
+              }}
+            />
+          )}
+          {/* 10,000 timeless frog collectibles stored on the Bitcoin Blockchain.
         <br /><br />
 These are 10,000 pure digital collectibles that will remain on Bitcoin forever. No more will ever be created.
 <br /><br />
 Rarities of all traits within each layer are equal, allowing subjective appreciation of aesthetics and satoshi-based rarities to emerge. */}
         </InfoContainerLineBox>
 
-        <InfoContainerTitleBox>
-        Advantages
-        </InfoContainerTitleBox>
+        <InfoContainerTitleBox>Advantages</InfoContainerTitleBox>
         <InfoContainerLineBox>
-        {detail === null ?  <ValueSkeleton width={300} height={38}/>:<div dangerouslySetInnerHTML={{__html:String(detail?.projectfeatures).replaceAll("\n","<br/>")}}/>}
-        {/* 1. 10,000 timeless frog collectibles stored on the Bitcoin Blockchain.
+          {detail === null ? (
+            <ValueSkeleton width={300} height={38} />
+          ) : (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: String(detail?.projectfeatures).replaceAll(
+                  "\n",
+                  "<br/>"
+                ),
+              }}
+            />
+          )}
+          {/* 1. 10,000 timeless frog collectibles stored on the Bitcoin Blockchain.
 <br /><br />
 2. These are 10,000 pure digital collectibles that will remain on Bitcoin forever. No more will ever be created.
 <br /><br />
@@ -58,28 +83,37 @@ Rarities of all traits within each layer are equal, allowing subjective apprecia
 4. based rarities to emerge. */}
         </InfoContainerLineBox>
       </InfoContainerBox>
-     {show? <>
-      <PageSubTitleBox>Tokenomics</PageSubTitleBox>
-      <TokenomicsEchartsBox>
-      <TokenomicsImgBox alt="" width={1120} height={639} src={`data:image/jpeg;base64,${detail?.tokenomics}`}/>
-      </TokenomicsEchartsBox>
-     </>:''}
+      {show ? (
+        <>
+          <PageSubTitleBox>Tokenomics</PageSubTitleBox>
+          <TokenomicsEchartsBox>
+            <TokenomicsImgBox
+              alt=""
+              width={1120}
+              height={639}
+              src={`data:image/jpeg;base64,${detail?.tokenomics}`}
+            />
+          </TokenomicsEchartsBox>
+        </>
+      ) : (
+        ""
+      )}
     </ProjectInformationBox>
-  )
-}
-export default ProjectInformation
+  );
+};
+export default ProjectInformation;
 
-const TokenomicsImgBox=styled(Image)`
-border-radius: 20px;
-`
-const TokenomicsEchartsBox=styled.div`
+const TokenomicsImgBox = styled(Image)`
+  border-radius: 20px;
+`;
+const TokenomicsEchartsBox = styled.div`
   width: 1120px;
   /* height: 693px; */
   border-radius: 30px;
-  margin: 40px auto;
+  margin: 78px auto 0;
   /* background-color: #fff; */
-`
-const InfoContainerBox=styled.div`
+`;
+const InfoContainerBox = styled.div`
   padding: 20px;
   margin-top: 40px;
 `
@@ -104,14 +138,14 @@ const ProjectInformationBox = styled.div`
   background: #181b20;
   border-radius: 30px;
   padding: 60px 40px;
-`
+`;
 const PageTitleBox = styled.div`
   font-size: 60px;
   font-weight: 600;
   color: #ffffff;
   line-height: 60px;
   margin-bottom: 60px;
-`
+`;
 const PageSubTitleBox = styled.div`
   font-size: 32px;
   font-weight: 600;
@@ -130,4 +164,4 @@ const PageSubTitleBox = styled.div`
     border-radius: 3px;
     /* transform: translateX(-50%); */
   }
-`
+`;
