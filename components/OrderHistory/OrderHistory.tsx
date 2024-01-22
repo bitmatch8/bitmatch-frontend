@@ -210,7 +210,7 @@ const OrderHistory: React.FC<{ address?: any; pid: any }> = ({
   return (
     <>
       <PageTitleBox>Order History</PageTitleBox>
-      <Spaced size="80" />
+      <Spaced size="86" />
       <OrderHistoryBox>
         <OrderHistoryHead />
         <OrderContainerBox>
