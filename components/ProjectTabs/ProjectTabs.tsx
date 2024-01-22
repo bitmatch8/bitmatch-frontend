@@ -59,7 +59,7 @@ const ProjectTabs: React.FC<{
             <WhitelistStage
               readData={whiteRead}
               stage="whitelist"
-              title="Bitcoin Frogs Whitelist Stage"
+              title={detail?.projectname}
               balance={balance}
               detail={detail}
               info={whiteInfo}
@@ -69,7 +69,7 @@ const ProjectTabs: React.FC<{
             <WhitelistStage
               readData={publicRead}
               stage="public"
-              title="Bitcoin Frogs Public Stage"
+              title={detail?.projectname}
               balance={balance}
               detail={detail}
               info={publicInfo}
@@ -77,6 +77,7 @@ const ProjectTabs: React.FC<{
           ) : null}
           {tId === DetailInfoType.info ? (
             <ProjectInformation
+            title={detail?.projectname}
               show={detail.projecttype === ProjectType.FT}
               id={detail?.pdid}
             />

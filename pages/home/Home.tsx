@@ -380,7 +380,7 @@ const HeadContainerUseUsBox = styled.div`
   gap: 194px;
 `;
 const HeadContainerBox = styled.div`
-  margin: 145px auto 0px;
+  margin: 112px auto 0px;
 `;
 const HeadContainerText = styled.div`
   font-size: 100px;

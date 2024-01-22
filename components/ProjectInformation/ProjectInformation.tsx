@@ -13,7 +13,7 @@ import Image from "next/image"
 //   () => import('./TokenomicsEcharts'),
 //   { ssr: false },
 // )
-const ProjectInformation: React.FC<{id:any,show:boolean}> = ({id,show}) => {
+const ProjectInformation: React.FC<{id:any,show:boolean,title:string}> = ({id,show,title}) => {
   const [detail,setDetail]=useState<any>(null)
   const initPage=async()=>{
     if(!id){
@@ -29,8 +29,8 @@ const ProjectInformation: React.FC<{id:any,show:boolean}> = ({id,show}) => {
   },[id])
   return (
     <ProjectInformationBox>
-      <PageTitleBox>Bitcoin Frogs Information</PageTitleBox>
-      <PageSubTitleBox>About Bitcoin Frogs</PageSubTitleBox>
+      <PageTitleBox>{title}</PageTitleBox>
+      <PageSubTitleBox>About</PageSubTitleBox>
       <InfoContainerBox>
         <InfoContainerTitleBox>
         Introduction
@@ -90,7 +90,8 @@ color: #C2C5C8;
 line-height: 36px;
 margin: 36px 0;
 padding-bottom: 30px;
-min-height: 300px;
+min-height: 100px;
+word-break: break-all;
 `
 const InfoContainerTitleBox=styled.div`
 font-size: 24px;

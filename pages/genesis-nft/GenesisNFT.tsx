@@ -23,7 +23,7 @@ export default function GenesisNFT() {
   return (
     <Page>
       <DetailTitle title={detail === null ? null : detail?.projectname} />
-      <Spaced size="80" />
+      <Spaced size="60" />
       <ProjectCard detail={detail} buyType={buyType} />
       <ProjectTabs
         tabId={tabId}

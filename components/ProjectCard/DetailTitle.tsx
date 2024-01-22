@@ -11,8 +11,8 @@ const DetailTitle:React.FC<{title:string}>=({title})=>{
 	const { back } = useRouter()
 	return <HeadContainerBox>
         <HeadBackButtonBox onClick={back}>
-          {title === null ? <ValueSkeleton width={800} height={100}/> : <>
-          <ArrowLeftIcon width={100} fill="#DBDBDB" />
+          {title === null ? <ValueSkeleton width={800} height={40}/> : <>
+          <ArrowLeftIcon width={63} fill="#DBDBDB" />
           <span>{title}</span>
           </>} 
         </HeadBackButtonBox>
@@ -22,11 +22,11 @@ export default DetailTitle
 const HeadBackButtonBox = styled(Button)`
   background-color: transparent;
   width: auto;
-  font-size: 60px;
+  font-size: 40px;
   font-weight: 600;
-  min-height: 100px;
+  min-height: 40px;
   color: #dbdbdb;
-  line-height: 100px;
+  line-height: 40px;
   &:hover {
     color: #f8931a;
     svg {
@@ -37,5 +37,5 @@ const HeadBackButtonBox = styled(Button)`
   gap: 36px;
 `
 const HeadContainerBox = styled.div`
-  margin: 145px auto 0px;
+  margin: 112px auto 0px;
 `

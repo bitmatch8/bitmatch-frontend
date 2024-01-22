@@ -143,13 +143,9 @@ const ProjectCard: React.FC<{ detail: any; buyType: BuyState | null }> = ({
             />
           )}
         </ProjectContainerItemBox>
-        <ProjectContainerItemBox>
-          {detail === null ? (
-            <ValueSkeleton height={100} width={622} />
-          ) : (
-            `${detail?.projectdescription}`
-          )}
-        </ProjectContainerItemBox>
+        {detail === null ? <ProjectContainerItemBox>
+          <ValueSkeleton height={100} width={622} />
+        </ProjectContainerItemBox>:<ProjectContainerItemBox style={{height:268}} dangerouslySetInnerHTML={{__html:String(detail?.projectdescription).replaceAll("\n","<br/>")}}/>}
       </ProjectContainerBox>
     </ProjectCardBox>
   );
@@ -166,9 +162,32 @@ const ProjectContainerItemBox = styled.div`
   height: 282px;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 8;
-  -webkit-box-orient: vertical;
+  /* display: -webkit-box; */
+  /* -webkit-line-clamp: 8; */
+  /* -webkit-box-orient: vertical; */
+  overflow-y: auto;
+
+  /* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px; /* 宽度 */
+  background-color: rgba(255,255,255,.6);
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  background-color: rgba(255,255,255,.3);
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100,100,100,.8);
+}
+
+/* 滚动条滑块悬停 */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
   p {
   }
 `;
