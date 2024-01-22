@@ -10,17 +10,17 @@ const useDetail = (id: any) => {
   const [publicInfo, setPublicInfo] = useState(null)
   const [whiteInfo, setWhiteInfo] = useState(null)
   const { address } = useSelector(selectWallter)
-
+  const [load,setLoad]=useState(true)
   const whiteType = useMemo(() => {
     return foramtDateInfo(whiteInfo, DetailInfoType.white)
   }, [whiteInfo])
 
   const publicType = useMemo(() => {
-    return foramtDateInfo(whiteInfo, DetailInfoType.public)
+    return foramtDateInfo(publicInfo, DetailInfoType.public)
   }, [publicInfo])
 
   const buyType = useMemo(() => {
-    if (whiteType === null && whiteType === null) return null
+    if (publicType === null && whiteType === null) return null
     if (whiteType && whiteType !== BuyState.White_Ended) {
       return whiteType
     } else if (!publicType) {
@@ -31,24 +31,25 @@ const useDetail = (id: any) => {
   }, [whiteType, publicType])
   const readPublic = async () => {
     if (detail?.wid) {
-      const white_res = await fetchWhtielistInfoApi({
-        id: detail?.wid,
+      const public_res = await fetchWhtielistInfoApi({
+        id: detail?.pubid,
         address,
       })
 
-      if (white_res?.code === 0) {
-        setWhiteInfo(white_res.data)
+      if (public_res?.code === 0) {
+        
+        setPublicInfo(public_res.data)
       }
     }
   }
   const readWhtie = async () => {
     if (detail?.pubid) {
-      const public_res = await fetchWhtielistInfoApi({
-        id: detail?.pubid,
+      const white_res = await fetchWhtielistInfoApi({
+        id: detail?.wid,
         address,
       })
-      if (public_res?.code === 0) {
-        setPublicInfo(public_res.data)
+      if (white_res?.code === 0) {
+        setWhiteInfo(white_res.data)
       }
     }
   }
@@ -62,11 +63,15 @@ const useDetail = (id: any) => {
       setDetail(data)
     }
   }
-  useEffect(() => {
+  const reloadPage=async()=>{
     if (detail) {
-      readWhtie()
-      readPublic()
+      await readWhtie()
+      await readPublic()
+      setLoad(false)
     }
+  }
+  useEffect(() => {
+    reloadPage() 
   }, [detail, address])
   useEffect(() => {
     initPage()
@@ -93,11 +98,16 @@ const useDetail = (id: any) => {
         return DetailInfoType.white
       }
       return DetailInfoType.public
+    }else if(whiteType){
+      return DetailInfoType.white
+    }else if(publicType){
+      return DetailInfoType.public
     }
-    return DetailInfoType.white
+    return null
   }, [publicType, whiteType])
 
   return {
+    load,
     address,
     detail,
     buyType,

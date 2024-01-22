@@ -162,6 +162,7 @@ const ProjectContainerItemBox = styled.div`
   height: 282px;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-right: 20px;
   /* display: -webkit-box; */
   /* -webkit-line-clamp: 8; */
   /* -webkit-box-orient: vertical; */

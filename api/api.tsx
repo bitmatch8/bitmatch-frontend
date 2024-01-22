@@ -10,6 +10,7 @@ export const fetchProjectInfoSelectInfoApi = (params: any) => {
 }
 export const fetchProjectInfoApi = (params: any) => {
   const query_params = objectToUrlParams(params)
+  console.log({query_params})
   return Ajax.get(`/projectInfo/launchById?${query_params}`)
 }
 export const fetchWhtielistInfoApi = (params: any) => {

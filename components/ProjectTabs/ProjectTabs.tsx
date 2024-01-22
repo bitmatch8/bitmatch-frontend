@@ -33,6 +33,7 @@ const ProjectTabs: React.FC<{
     String(detail?.projecttype) === ProjectType.NFT
       ? WhitelistStageNFT
       : WhitelistStageFT
+
   return (
     <>
       <ProjectTabsBox>
@@ -49,7 +50,7 @@ const ProjectTabs: React.FC<{
           ))
         )}
       </ProjectTabsBox>
-      {whiteInfo === null ? (
+      {whiteInfo === null && publicInfo === null ? (
         <EmptyStageBox>
           <ValueSkeleton width={500} height={50} />
         </EmptyStageBox>

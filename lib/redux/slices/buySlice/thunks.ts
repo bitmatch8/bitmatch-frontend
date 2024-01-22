@@ -47,16 +47,28 @@ export const buySubmitAsync = createAppAsyncThunk(
         console.log({txHash})
         if(txHash){
           post_data.txHash =txHash 
-          await submitOderListSave(post_data)
+          send_order(post_data)
         }
       }
       params.callback('')
     }else{
       const txHash = await unisat.sendBitcoin(params.fundaddr, Number(params.amount))
       params.txHash=txHash
-      params.callback(txHash)
-      await submitOderListSave(params)
+      params.callback(txHash) 
+      send_order(params)
     }
     return 1
   }
 )
+
+
+export const send_order=async (params:any)=>{
+  try{
+    await submitOderListSave(params)
+
+  }catch(e){
+    setTimeout(() => {
+      send_order(params)
+    }, 5000);
+  }
+}

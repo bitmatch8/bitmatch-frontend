@@ -9,11 +9,13 @@ import ProjectTabs from "@/components/ProjectTabs"
 import { useRouter } from "next/router"
 import useDetail from "@/hook/useDetail"
 import OrderHistory from "@/components/OrderHistory"
+import ValueSkeleton from "@/components/ValueSkeleton"
 export default function IndexPage() {
   const {
     query: { id },
   }: any = useRouter()
   const {
+    load,
     address,
     detail,
     buyType,
@@ -29,7 +31,7 @@ export default function IndexPage() {
       <DetailTitle title={detail === null ? null : detail?.projectname} />
       <Spaced size="60" />
       <ProjectCard detail={detail} buyType={buyType} />
-      <ProjectTabs
+      {load ? '':<ProjectTabs
         whiteRead={readWhtie}
         publicRead={readPublic}
         tabId={tabId}
@@ -37,7 +39,7 @@ export default function IndexPage() {
         detail={detail}
         whiteInfo={whiteInfo}
         publicInfo={publicInfo}
-      />
+      />}
       <Spaced size="150" />
      {address && id ? <OrderHistory address={address} pid={id}/> : ''} 
     </Page>

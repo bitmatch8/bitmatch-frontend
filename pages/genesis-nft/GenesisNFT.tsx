@@ -10,6 +10,7 @@ import OrderHistory from "@/components/OrderHistory"
 
 export default function GenesisNFT() {
   const {
+    load,
     address,
     detail,
     buyType,
@@ -25,7 +26,7 @@ export default function GenesisNFT() {
       <DetailTitle title={detail === null ? null : detail?.projectname} />
       <Spaced size="60" />
       <ProjectCard detail={detail} buyType={buyType} />
-      <ProjectTabs
+     {load ? '':<ProjectTabs
         tabId={tabId}
         ProjectTabList={ProjectTabList}
         detail={detail}
@@ -33,7 +34,7 @@ export default function GenesisNFT() {
         publicInfo={publicInfo}
         whiteRead={readWhtie}
         publicRead={readPublic}
-      />
+      />} 
       <Spaced size="150" />
       <OrderHistory address={address} pid={1}/>
     </Page>
