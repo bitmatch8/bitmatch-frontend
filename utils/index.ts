@@ -103,10 +103,12 @@ export const foramtDateInfo = (item: any,type:DetailInfoType ) => {
     return null
   }
   const localTime = new Date()
-  const starttime = toLocalTime(item.starttime) 
-  if(type === DetailInfoType.public){
-    return starttime.getTime() > localTime.getTime()?BuyState.Public_NotStarted : starttime.getTime() < localTime.getTime() ? BuyState.Public_InProgress : BuyState.Public_Ended 
-  }
-  return starttime.getTime() > localTime.getTime()?BuyState.White_NotStarted : starttime.getTime() < localTime.getTime() ? BuyState.White_InProgress : BuyState.White_Ended
-  
+  // const starttime = toLocalTime(item.starttime)
+  const endtime = toLocalTime(item.enttime)
+
+  const arr = type === DetailInfoType.public ? [BuyState.Public_Ended,BuyState.Public_NotStarted,BuyState.Public_InProgress] :[BuyState.White_Ended,BuyState.White_NotStarted,BuyState.White_InProgress]
+
+  const index = endtime.getTime() < localTime.getTime() ? 0 : (endtime.getTime() > localTime.getTime() ? 2 : 1)
+
+  return arr[index]
 }
