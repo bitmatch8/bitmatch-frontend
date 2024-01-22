@@ -1,47 +1,47 @@
-import Button from "@/components/Button"
-import { Spaced } from "@/components/Spaced"
-import DownIcon from "@/components/Svg/DownIcon"
-import TokenSymbol from "@/components/TokenSymbol"
-import styled from "@emotion/styled"
-import React, { useEffect, useState } from "react"
-import Pagination from "@/components/Pagination"
-import { fetchOrderCList } from "@/api/api"
-import ValueSkeleton from "../ValueSkeleton"
-import { hidehash } from "@/utils"
-import CopySvg from "../CopySvg"
-import { OrderState } from "@/utils/types"
-import EmptyList from "./EmptyList"
+import Button from "@/components/Button";
+import { Spaced } from "@/components/Spaced";
+import DownIcon from "@/components/Svg/DownIcon";
+import TokenSymbol from "@/components/TokenSymbol";
+import styled from "@emotion/styled";
+import React, { useEffect, useState } from "react";
+import Pagination from "@/components/Pagination";
+import { fetchOrderCList } from "@/api/api";
+import ValueSkeleton from "../ValueSkeleton";
+import { hidehash } from "@/utils";
+import CopySvg from "../CopySvg";
+import { OrderState } from "@/utils/types";
+import EmptyList from "./EmptyList";
 type ItemProps = {
-  orderid: string
-  projectname: string
-  type: string
-  tokenname: string
-  stage: string
-  fromaddr: string
-  fundaddr: string
-  receivedAddr: string
-  transmitAddr: string
-  amount: string
-  createtime: string
-  updatetime: string
-  amountFloat: string
-  status: OrderState
-}
+  orderid: string;
+  projectname: string;
+  type: string;
+  tokenname: string;
+  stage: string;
+  fromaddr: string;
+  fundaddr: string;
+  receivedAddr: string;
+  transmitAddr: string;
+  amount: string;
+  createtime: string;
+  updatetime: string;
+  amountFloat: string;
+  status: OrderState;
+};
 
 const StateWaiting: React.FC = () => {
   return (
     <>
       <span className="waiting">Waiting for paymen</span>
     </>
-  )
-}
+  );
+};
 const StateCancelled: React.FC = () => {
   return (
     <>
       <span className="cancelled">Cancelled</span>
     </>
-  )
-}
+  );
+};
 const StateSucceeded: React.FC = () => {
   return (
     <>
@@ -52,8 +52,8 @@ const StateSucceeded: React.FC = () => {
         <ViewButton>View</ViewButton>
       </div>
     </>
-  )
-}
+  );
+};
 
 const OrderHistoryHead: React.FC = () => {
   return (
@@ -80,8 +80,8 @@ const OrderHistoryHead: React.FC = () => {
         <span>State</span>
       </OrderHistoryHeadItemBox>
     </OrderHistoryHeadBox>
-  )
-}
+  );
+};
 
 const EmptyLine: React.FC = () => {
   return (
@@ -90,31 +90,32 @@ const EmptyLine: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         display: "flex",
-      }}>
+      }}
+    >
       <ValueSkeleton width={1000} />
     </OrderHistoryLineDetailBox>
-  )
-}
+  );
+};
 
 const CopyItem: React.FC<{ text: string; len?: number }> = ({
   text,
   len = 6,
 }) => {
-  return <CopySvg text={text}>{hidehash(text, len)}</CopySvg>
-}
+  return <CopySvg text={text}>{hidehash(text, len)}</CopySvg>;
+};
 
 const OrderStatus: { [state in OrderState]: any } = {
   [OrderState.PENDING]: StateWaiting,
   [OrderState.DISTRIBUTE]: StateWaiting,
   [OrderState.COMPLETED]: StateSucceeded,
   [OrderState.UNISATVERFY]: StateSucceeded,
-}
+};
 const OrderHistoryItem: React.FC<{
-  item: ItemProps
-  onClick: any
-  show: boolean
+  item: ItemProps;
+  onClick: any;
+  show: boolean;
 }> = ({ item, show, onClick }) => {
-  const StateComponents = OrderStatus[item.status]
+  const StateComponents = OrderStatus[item.status];
   return (
     <OrderHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <OrderHistoryLineBox onClick={onClick}>
@@ -165,67 +166,69 @@ const OrderHistoryItem: React.FC<{
         </OrderHistoryItemBox>
       </OrderHistoryLineBox>
     </OrderHistoryLineDetailBox>
-  )
-}
+  );
+};
 
 const OrderHistory: React.FC<{ address?: any; pid: any }> = ({
   address,
   pid,
 }) => {
-  const [page, setPage] = useState(1)
-  const [total, setTotal] = useState(0)
-  const [pageSize, setPageSize] = useState(10)
-  const [index, setIndex] = useState<number | null>(null)
-  const [lists, setLists] = useState<ItemProps[] | null>(null)
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [index, setIndex] = useState<number | null>(null);
+  const [lists, setLists] = useState<ItemProps[] | null>(null);
   const reload = async (pageNum: any) => {
     const { code, data: reponse } = await fetchOrderCList({
       pageNum,
       pageSize,
       address,
       pid,
-    })
+    });
     if (code === 0) {
-      const { total, list } = reponse
-      setTotal(total)
-      setPage(pageNum)
-      setLists(list)
+      const { total, list } = reponse;
+      setTotal(total);
+      setPage(pageNum);
+      setLists(list);
     }
-  }
-  let timeId: any = null
+  };
+  let timeId: any = null;
   useEffect(() => {
     if (timeId) {
-      clearTimeout(timeId)
+      clearTimeout(timeId);
     }
     timeId = setTimeout(() => {
-      reload(page)
-    }, 10000)
+      reload(page);
+    }, 10000);
     return () => {
-      timeId && clearTimeout(timeId)
-    }
-  }, [page,pid])
+      timeId && clearTimeout(timeId);
+    };
+  }, [page, pid]);
   useEffect(() => {
-    reload(1)
-  }, [address, pid])
+    reload(1);
+  }, [address, pid]);
   return (
     <>
       <PageTitleBox>Order History</PageTitleBox>
-      <Spaced size="86" />
+      <Spaced size="80" />
       <OrderHistoryBox>
         <OrderHistoryHead />
         <Spaced size="35" />
         <OrderContainerBox>
-          {lists === null
-            ? [null, null, null].map((_, key) => <EmptyLine key={key} />)
-            : lists.length === 0 ? <EmptyList/>:lists.map((item, key) => (
-                <OrderHistoryItem
-                  key={key}
-                  item={item}
-                  show={index === key}
-                  onClick={() =>
-                    index === key ? setIndex(null) : setIndex(key)
-                  }
-                />
-              ))}
+          {lists === null ? (
+            [null, null, null].map((_, key) => <EmptyLine key={key} />)
+          ) : lists.length === 0 ? (
+            <EmptyList />
+          ) : (
+            lists.map((item, key) => (
+              <OrderHistoryItem
+                key={key}
+                item={item}
+                show={index === key}
+                onClick={() => (index === key ? setIndex(null) : setIndex(key))}
+              />
+            ))
+          )}
         </OrderContainerBox>
         <Spaced size="36" />
         {total > pageSize ? (
@@ -240,15 +243,15 @@ const OrderHistory: React.FC<{ address?: any; pid: any }> = ({
         )}
       </OrderHistoryBox>
     </>
-  )
-}
-export default OrderHistory
+  );
+};
+export default OrderHistory;
 const ViewButton = styled(Button)`
   width: 66px;
   height: 24px;
   border-radius: 6px;
   font-size: 14px;
-`
+`;
 const OrderHistoryLineDetailBox = styled.div`
   height: 80px;
   transition: all 0.2s ease-in-out;
@@ -272,12 +275,12 @@ const OrderHistoryLineDetailBox = styled.div`
   &:hover {
     border-color: #6f6f76;
   }
-`
+`;
 const OrderContainerBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-`
+`;
 const PageTitleBox = styled.div`
   font-size: 60px;
   font-weight: 600;
@@ -290,23 +293,23 @@ const PageTitleBox = styled.div`
     width: 120px;
     height: 6px;
     background-color: #f7931a;
-    bottom: -0px;
+    bottom: -6px;
     left: 0;
     border-radius: 3px;
   }
-`
+`;
 const OrderHistoryBox = styled.div`
   background: #181b20;
   border-radius: 30px;
   padding: 60px 40px;
-`
+`;
 const OrderHistoryHeadBox = styled.div`
   display: flex;
   align-items: center;
   padding: 0 24px;
   /* flex-wrap: wrap; */
   /* gap: 1px; */
-`
+`;
 const OrderHistoryLineBox = styled(OrderHistoryHeadBox)`
   height: 80px;
   cursor: pointer;
@@ -315,7 +318,7 @@ const OrderHistoryLineBox = styled(OrderHistoryHeadBox)`
       fill: #f7931a;
     }
   }
-`
+`;
 const OrderHistoryItemBase = styled.div`
   &.order_id {
     width: 165px;
@@ -343,7 +346,7 @@ const OrderHistoryItemBase = styled.div`
     align-items: center;
     line-height: 20px;
   }
-`
+`;
 const StateItemBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -358,11 +361,11 @@ const StateItemBox = styled.div`
   .cancelled {
     color: #c70000;
   }
-`
+`;
 const StateItemIconBox = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 const OrderHistoryHeadItemBox = styled(OrderHistoryItemBase)`
   font-size: 18px;
   font-weight: 600;
@@ -372,7 +375,7 @@ const OrderHistoryHeadItemBox = styled(OrderHistoryItemBase)`
     max-width: 120px;
     display: block;
   }
-`
+`;
 const OrderHistoryItemBox = styled(OrderHistoryItemBase)`
   font-size: 16px;
   font-weight: 500;
@@ -389,4 +392,4 @@ const OrderHistoryItemBox = styled(OrderHistoryItemBase)`
     display: flex;
     gap: 2px;
   }
-`
+`;
