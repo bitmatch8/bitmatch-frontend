@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
 import { fetchOrderCList } from "@/api/api";
 import ValueSkeleton from "../ValueSkeleton";
-import { hidehash } from "@/utils";
+import { dateFormat, hidehash } from "@/utils";
 import CopySvg from "../CopySvg";
 import { OrderState } from "@/utils/types";
 import EmptyList from "./EmptyList";
@@ -164,7 +164,7 @@ const OrderHistoryItem: React.FC<{
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="time">
           <div className="title">Time</div>
-          <div> {item.createtime}</div>
+          <div> {dateFormat(item.createtime)}</div>
         </OrderHistoryItemBox>
       </OrderHistoryLineBox>
     </OrderHistoryLineDetailBox>
