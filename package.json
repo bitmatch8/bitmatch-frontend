@@ -3,8 +3,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
-    "export": "next build && next export"
+    "start": "NODE_ENV=production node server.js"
   },
   "type": "module",
   "dependencies": {
