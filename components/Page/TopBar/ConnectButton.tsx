@@ -59,7 +59,9 @@ const ConnectButton = () => {
   const { unisatInstalled, address, connected } = useSelector(selectWallter)
   if (!unisatInstalled) {
     return (
-      <ConnectButtonBox
+      <UserToolsBox>
+        <div/>
+<ConnectButtonBox
         onClick={() =>
           dispatch(
             addToast({
@@ -71,6 +73,8 @@ const ConnectButton = () => {
         variant="secondary">
         Connect Wallet
       </ConnectButtonBox>
+      </UserToolsBox>
+      
     )
   }
 
@@ -95,13 +99,17 @@ const ConnectWallButton: React.FC = () => {
       }}></ConnectModal>
   )
   return (
-    <ConnectButtonBox
+    <UserToolsBox>
+      <div/>
+<ConnectButtonBox
       variant="secondary"
       onClick={onConnect}
       // onClick={() => dispatch(connectUnisat())}
     >
       Connect Wallet
     </ConnectButtonBox>
+    </UserToolsBox>
+    
   )
 }
 export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
@@ -137,10 +145,11 @@ const HistoryButtonBox = styled(Link)`
 const UserToolsBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 32px;
+  /* gap: 32px; */
   cursor: pointer;
   user-select: none;
-
+  width:305px ;
+  justify-content: space-between;
 `
 
 const ConnectBox = styled.div`
@@ -259,5 +268,6 @@ const ContentSuccessBox = styled.div`
 const ConnectButtonBox = styled(Button)`
   width: 200px;
   font-size: 20px;
+  margin-right: ;
   /* padding: 0 30px; */
 `
