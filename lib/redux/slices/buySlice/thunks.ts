@@ -63,12 +63,11 @@ export const buySubmitAsync = createAppAsyncThunk(
 
 
 export const send_order=async (params:any)=>{
-  try{
+  // try{
     await submitOderListSave(params)
-
-  }catch(e){
-    setTimeout(() => {
-      send_order(params)
-    }, 5000);
-  }
+  // }catch(e){
+  //   setTimeout(() => {
+  //     send_order(params)
+  //   }, 5000);
+  // }
 }
