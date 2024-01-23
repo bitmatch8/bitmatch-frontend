@@ -21,18 +21,18 @@ const TimeCountdown: React.FC<ProgressCountdownProps> = ({
     const h = String(hours);
     const m = String(minutes);
     const s = String(seconds);
-    if (Number(d) > 0) {
+    // if (Number(d) > 0) {
       return (
         <StyledCountdown>
-          {d.padStart(2, "0")}D {h.padStart(2, "0")}H {m.padStart(2, "0")}S
+          {d.padStart(2, "0")}D {h.padStart(2, "0")}H {m.padStart(2, "0")}M {s.padStart(2, "0")}S
         </StyledCountdown>
       );
-    }
-    return (
-      <StyledCountdown>
-        {h.padStart(2, "0")}H {m.padStart(2, "0")}M {s.padStart(2, "0")}S
-      </StyledCountdown>
-    );
+    // }
+    // return (
+    //   <StyledCountdown>
+    //     {h.padStart(2, "0")}H {m.padStart(2, "0")}M {s.padStart(2, "0")}S
+    //   </StyledCountdown>
+    // );
   };
   return (
     <StyledCardContentInner>
