@@ -25,7 +25,8 @@ const WhitelistStageButton: React.FC<{
   satoshis: any
   buyAmount: any
   stage: any
-}> = ({ info, detail, callback, satoshis, buyAmount, stage, price }) => {
+  reload:any
+}> = ({ info, detail, callback, satoshis, buyAmount, stage, price,reload }) => {
   const dispatch = useDispatch()
   const { connected, address } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
@@ -70,7 +71,18 @@ const WhitelistStageButton: React.FC<{
   const setStep=(hash:string,num:number)=>{
       setButtonText(`Buy(${num}/${buyAmount})`)
   }
-  const onCLickBuy = () => {
+
+  
+  // const minAmount = useMemo(() => {
+  //   return mposa
+  // }, [mposa])
+  // const maxAmount = useMemo(() => {
+  //   const maxNum = hposa - singlePersonPurchased
+  //   return maxNum > availableAmount ? availableAmount : maxNum
+  // }, [hposa, singlePersonPurchased, availableAmount])
+
+
+  const onCLickBuy = async () => {
     if (!buyAmount) {
       dispatch(
         addToast({
@@ -80,30 +92,43 @@ const WhitelistStageButton: React.FC<{
       )
       return
     }
-    if (status === "idle" && buyAmount && disabled === false && toAddress) {
-      const params = {
-        price: price.toString(),
-        projectname: detail.projectname,
-        type: detail.projecttype,
-        tokenname: detail.projecttokenname,
-        fromaddr: address,
-        fundaddr: toAddress,
-        stage,
-        receivedAddr: address,
-        amount: satoshis,
-        transmitAddr: "",
-        pid: detail.id,
-        buyAmount,
-        toAddress,
-        satoshis,
-        callback:()=>{
-          setButtonText('Buy')
-          callback()
-        },
-        setStep
+    setDisabled(true)
+    const res_data = await reload()
+    setDisabled(false)
+    if(res_data){
+      const availableAmount = (res_data?.tokennumber || 0) - (res_data?.totalPersonPurchased || 0)
+      if(!availableAmount){
+        dispatch(addToast({
+          contxt:'Maximum purchase limit exceeded'
+        }))
+        return
       }
-      dispatch(buySubmitAsync(params))
+      if (status === "idle" && buyAmount && disabled === false && toAddress) {
+        const params = {
+          price: price.toString(),
+          projectname: detail.projectname,
+          type: detail.projecttype,
+          tokenname: detail.projecttokenname,
+          fromaddr: address,
+          fundaddr: toAddress,
+          stage,
+          receivedAddr: address,
+          amount: satoshis,
+          transmitAddr: "",
+          pid: detail.id,
+          buyAmount,
+          toAddress,
+          satoshis,
+          callback:()=>{
+            setButtonText('Buy')
+            callback()
+          },
+          setStep
+        }
+        dispatch(buySubmitAsync(params))
+      }
     }
+    
   }
   const endtime = toLocalTime(info.enttime)
   const starttime = toLocalTime(info.starttime)

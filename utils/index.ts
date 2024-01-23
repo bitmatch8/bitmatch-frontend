@@ -11,13 +11,12 @@ export const newDateFormat=(date:any)=>{
 export function hidehash(str:string, len = 4) {
   return str ? `${str.slice(0, len)}....${str.slice(-len-1)}` : ""
 }
-export function dateFormat(date: string | number) {
+export function dateFormat(date: string | number,utc?:boolean) {
   if (!date) {
     return;
   }
   try {
-    const dateline = toLocalTime(date);
-    console.log({dateline})
+    const dateline = utc ? new Date(date): toLocalTime(date);
     const newtime = baseDate("m0-d0-y0 h0:i0:s0", dateline);
     return newtime
   } catch (e) {

@@ -64,6 +64,8 @@ const useBuy = (info: any, readData: any) => {
 
   return {
     value,
+    mposa,
+    hposa, 
     onChangeInput,
     callbackSuccess,
     onMax,

@@ -37,8 +37,8 @@ const useDetail = (id: any) => {
       })
 
       if (public_res?.code === 0) {
-        
         setPublicInfo(public_res.data)
+        return public_res.data
       }
     }
   }
@@ -50,6 +50,7 @@ const useDetail = (id: any) => {
       })
       if (white_res?.code === 0) {
         setWhiteInfo(white_res.data)
+        return white_res
       }
     }
   }
@@ -106,7 +107,6 @@ const useDetail = (id: any) => {
     return null
   }, [publicType, whiteType])
 
-  console.log({buyType,publicType,whiteType})
   return {
     load,
     address,

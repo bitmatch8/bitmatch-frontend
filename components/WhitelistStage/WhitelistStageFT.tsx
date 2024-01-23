@@ -106,6 +106,7 @@ const WhitelistStageFT: React.FC<{
             buyAmount={value}
             satoshis={satoshis}
             stage={stage}
+            reload={readData}
             callback={callbackSuccess}
           />
           <FooterTextLineBox>

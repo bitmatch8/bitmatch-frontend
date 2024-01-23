@@ -164,7 +164,7 @@ const OrderHistoryItem: React.FC<{
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="time">
           <div className="title">Time</div>
-          <div> {dateFormat(item.createtime)}</div>
+          <div> {dateFormat(item.createtime,true)}</div>
         </OrderHistoryItemBox>
       </OrderHistoryLineBox>
     </OrderHistoryLineDetailBox>
@@ -181,7 +181,9 @@ const OrderHistory: React.FC<{ address?: any; pid?: any,title?:any }> = ({
   const [pageSize, setPageSize] = useState(10);
   const [index, setIndex] = useState<number | null>(null);
   const [lists, setLists] = useState<ItemProps[] | null>(null);
+  let timeId: any = null;
   const reload = async (pageNum: any) => {
+    clearTime()
     const { code, data: reponse } = await fetchOrderCList({
       pageNum,
       pageSize,
@@ -195,11 +197,13 @@ const OrderHistory: React.FC<{ address?: any; pid?: any,title?:any }> = ({
       setLists(list);
     }
   };
-  let timeId: any = null;
+ const clearTime=()=>{
+  if (timeId) {
+    clearTimeout(timeId);
+  }
+ }
   useEffect(() => {
-    if (timeId) {
-      clearTimeout(timeId);
-    }
+    clearTime()
     timeId = setTimeout(() => {
       reload(page);
     }, 10000);

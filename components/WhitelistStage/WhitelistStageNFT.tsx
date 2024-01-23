@@ -104,6 +104,7 @@ const WhitelistStageNFT: React.FC<{
             satoshis={satoshis}
             buyAmount={value}
             stage={stage}
+            reload={readData}
             callback={callbackSuccess}
           />
           <FooterTextLineBox>
