@@ -83,6 +83,9 @@ const WhitelistStageButton: React.FC<{
 
 
   const onCLickBuy = async () => {
+    setDisabled(true)
+    const res_data = await reload()
+    setDisabled(false)
     if (!buyAmount) {
       dispatch(
         addToast({
@@ -92,9 +95,6 @@ const WhitelistStageButton: React.FC<{
       )
       return
     }
-    setDisabled(true)
-    const res_data = await reload()
-    setDisabled(false)
     if(res_data){
       const availableAmount = (res_data?.tokennumber || 0) - (res_data?.totalPersonPurchased || 0)
       if(!availableAmount){
@@ -161,6 +161,8 @@ const WhitelistStageButton: React.FC<{
     )
   } else if (endtime.getTime() < Date.now()) {
     return <WhitelistStageButtonBox disabled>Ended</WhitelistStageButtonBox>
+  }else if(Number(info?.totalPersonPurchased) >= Number(info?.tokennumber)){
+return <WhitelistStageButtonBox disabled>Sold out</WhitelistStageButtonBox>
   } else if (starttime.getTime() < Date.now()) {
     return (
       <WhitelistStageButtonBox
