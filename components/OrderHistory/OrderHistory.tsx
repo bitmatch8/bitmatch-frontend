@@ -187,7 +187,7 @@ const OrderHistory: React.FC<{ address?: any; pid?: any,title?:any }> = ({
     const { code, data: reponse } = await fetchOrderCList({
       pageNum,
       pageSize,
-      address,
+      fromAddr:address,
       pid,
     });
     if (code === 0) {
