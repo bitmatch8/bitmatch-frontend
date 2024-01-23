@@ -171,7 +171,8 @@ const OrderHistoryItem: React.FC<{
   );
 };
 
-const OrderHistory: React.FC<{ address?: any; pid: any }> = ({
+const OrderHistory: React.FC<{ address?: any; pid?: any,title?:any }> = ({
+  title,
   address,
   pid,
 }) => {
@@ -211,8 +212,10 @@ const OrderHistory: React.FC<{ address?: any; pid: any }> = ({
   }, [address, pid]);
   return (
     <>
+     {title ? title : <>
       <PageTitleBox>Order History</PageTitleBox>
       <Spaced size="86" />
+     </>} 
       <OrderHistoryBox>
         <OrderHistoryHead />
         <OrderContainerBox>

@@ -41,7 +41,7 @@ export default () => {
       <LinkIcon icon="X" to="https://twitter.com/DeindexBTC" />
       {/* <LinkIcon icon="Github" to="#" /> */}
       <LinkIcon icon="Telegram" to="https://t.me/DeindexBTC" />
-      <LinkIcon icon="GitbookIcon" to="#" />
+      <LinkIcon icon="GitbookIcon" to="https://docs.deindex.space/" />
     </FooterLinksBox>
   );
 };

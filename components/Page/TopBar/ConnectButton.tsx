@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import Button from "@/components/Button";
-import { hidehash } from "@/utils";
-import styled from "@emotion/styled";
-import Notice from "@/components/Notice";
-import QuitIcon from "@/assets/img/quit.png";
-import QuitLightIcon from "@/assets/img/quit_light.png";
-import XIcon from "@/assets/img/x.png";
+import Button from "@/components/Button"
+import { hidehash } from "@/utils"
+import styled from "@emotion/styled"
+import Notice from "@/components/Notice"
+import QuitIcon from "@/assets/img/quit.png"
+import QuitLightIcon from "@/assets/img/quit_light.png"
+import XIcon from "@/assets/img/x.png"
 import {
   wallterSlice,
   useSelector,
@@ -14,45 +14,49 @@ import {
   selectWallter,
   addToast,
   connectUnisat,
-} from "@/lib/redux";
-import React, { useState } from "react";
-import Image from "next/image";
-import useModal from "@/hook/useModal";
-import CloseIcon from "@/components/Svg/CloseIcon";
-import LogoUnisatIcon from "@/assets/icon/1@2x.png";
+} from "@/lib/redux"
+import React, { useState } from "react"
+import Image from "next/image"
+import useModal from "@/hook/useModal"
+import CloseIcon from "@/components/Svg/CloseIcon"
+import LogoUnisatIcon from "@/assets/icon/1@2x.png"
+import Link from "next/link"
 
 const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
-  const [show, setShow] = useState(false);
-  const dispatch = useDispatch();
+  const [show, setShow] = useState(false)
+  const dispatch = useDispatch()
   const onClickShow = () => {
-    setShow(!show);
-  };
+    setShow(!show)
+  }
   const onClickQuit = () => {
-    setShow(false);
-    dispatch(wallterSlice.actions.disconnect());
-  };
+    setShow(false)
+    dispatch(wallterSlice.actions.disconnect())
+  }
   return (
-    <ContentSuccessBox>
-      <ContentSuccessTopBox>
-        <ContentSuccessLineBox onClick={onClickShow}>
-          {hidehash(address)}
-        </ContentSuccessLineBox>
-        {show ? (
-          <ContentSuccessLineBox onClick={onClickQuit}>
-            <ImgBgBox />
-            <DisconnectTextBox>Disconnect</DisconnectTextBox>
+    <UserToolsBox>
+      <HistoryButtonBox href={'/history'}>Histroy</HistoryButtonBox>
+      <ContentSuccessBox>
+        <ContentSuccessTopBox>
+          <ContentSuccessLineBox onClick={onClickShow}>
+            {hidehash(address)}
           </ContentSuccessLineBox>
-        ) : (
-          ""
-        )}
-      </ContentSuccessTopBox>
-    </ContentSuccessBox>
-  );
-};
+          {show ? (
+            <ContentSuccessLineBox onClick={onClickQuit}>
+              <ImgBgBox />
+              <DisconnectTextBox>Disconnect</DisconnectTextBox>
+            </ContentSuccessLineBox>
+          ) : (
+            ""
+          )}
+        </ContentSuccessTopBox>
+      </ContentSuccessBox>
+    </UserToolsBox>
+  )
+}
 
 const ConnectButton = () => {
-  const dispatch = useDispatch();
-  const { unisatInstalled, address, connected } = useSelector(selectWallter);
+  const dispatch = useDispatch()
+  const { unisatInstalled, address, connected } = useSelector(selectWallter)
   if (!unisatInstalled) {
     return (
       <ConnectButtonBox
@@ -64,34 +68,32 @@ const ConnectButton = () => {
             })
           )
         }
-        variant="secondary"
-      >
+        variant="secondary">
         Connect Wallet
       </ConnectButtonBox>
-    );
+    )
   }
 
   return connected && address ? (
     <ConnectSuccess address={address} />
   ) : (
     <ConnectWallButton />
-  );
-};
+  )
+}
 
-export default ConnectButton;
+export default ConnectButton
 
 const ConnectWallButton: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}
       connect={() => {
-        dispatch(connectUnisat());
-        onDismiss();
-      }}
-    ></ConnectModal>
-  );
+        dispatch(connectUnisat())
+        onDismiss()
+      }}></ConnectModal>
+  )
   return (
     <ConnectButtonBox
       variant="secondary"
@@ -100,8 +102,8 @@ const ConnectWallButton: React.FC = () => {
     >
       Connect Wallet
     </ConnectButtonBox>
-  );
-};
+  )
+}
 export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
   onDismiss,
   connect,
@@ -118,8 +120,28 @@ export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
         <ConnectTitle className="text">UniSat Wallet</ConnectTitle>
       </ConnectBox>
     </ConnectModalBox>
-  );
-};
+  )
+}
+
+const HistoryButtonBox = styled(Link)`
+  font-size: 20px;
+  font-family: Montserrat, Montserrat;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 20px;
+  text-decoration: none;
+  &:hover {
+    color: #f7931a;
+  }
+`
+const UserToolsBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  cursor: pointer;
+  user-select: none;
+
+`
 
 const ConnectBox = styled.div`
   display: flex;
@@ -137,10 +159,10 @@ const ConnectBox = styled.div`
       border: 5px solid #f7931a;
     }
   }
-`;
+`
 const ConnectTitle = styled.div`
   font-family: Montserrat, Montserrat-Medium;
-`;
+`
 const LogoBox = styled.div`
   width: 200px;
   height: 200px;
@@ -150,7 +172,7 @@ const LogoBox = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-`;
+`
 const CloseButtonBox = styled.div`
   width: 36px;
   height: 36px;
@@ -163,7 +185,7 @@ const CloseButtonBox = styled.div`
       fill: #f7931a;
     }
   }
-`;
+`
 
 const ConnectModalBox = styled.div`
   width: 600px;
@@ -176,11 +198,11 @@ const ConnectModalBox = styled.div`
   align-items: center;
   justify-content: center;
   gap: 48px;
-`;
+`
 
 const ImgBox = styled(Image)`
   height: auto;
-`;
+`
 
 const ImgBgBox = styled.span`
   display: inline-block;
@@ -188,18 +210,18 @@ const ImgBgBox = styled.span`
   height: 24px;
   background-image: url(${QuitIcon.src});
   background-size: 24px 24px;
-`;
+`
 
 const ContentSuccessTopBox = styled.div`
   border: 3px solid #c2c5c8;
   border-radius: 16px;
   overflow: hidden;
-`;
+`
 const ContentSuccessLineBox = styled.div`
   cursor: pointer;
   height: 56px;
   color: #fff;
-  width: 214px;
+  width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -220,8 +242,8 @@ const ContentSuccessLineBox = styled.div`
       background-size: 24px 24px;
     }
   }
-`;
-const DisconnectTextBox = styled.div``;
+`
+const DisconnectTextBox = styled.div``
 const ContentSuccessBox = styled.div`
   user-select: none;
   position: relative;
@@ -230,12 +252,12 @@ const ContentSuccessBox = styled.div`
   font-weight: 900;
   letter-spacing: 0.03em;
   color: #fff;
-  width: 220px;
+  width: 200px;
   height: 56px;
   /* overflow: hidden; */
-`;
+`
 const ConnectButtonBox = styled(Button)`
-  width: 220px;
+  width: 200px;
   font-size: 20px;
   /* padding: 0 30px; */
-`;
+`

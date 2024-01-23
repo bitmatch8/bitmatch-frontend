@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 const Logo: React.FC = () => {
   return <div>
-    <LogoBox alt='deindex' src={DeindexImg} height={45}/>
+    <LogoBox alt='deindex' src={DeindexImg} height={36}/>
   </div>
   // return (
   //  <LogoText>

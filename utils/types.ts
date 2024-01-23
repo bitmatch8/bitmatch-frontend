@@ -20,6 +20,6 @@ export enum OrderState{
   PENDING="pending",
   DISTRIBUTE="distribute",
   COMPLETED="completed",
-  UNISATVERFY="unisatVerfy",
+  UNISATVERFY="unisatVerify",
   FAIL="fail"
 }
