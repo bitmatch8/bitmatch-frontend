@@ -32,7 +32,7 @@ type ItemProps = {
 const StateWaiting: React.FC = () => {
   return (
     <>
-      <span className="waiting">Waiting for paymen</span>
+      <span className="waiting">Pending</span>
     </>
   );
 };

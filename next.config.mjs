@@ -14,7 +14,8 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `http://101.251.211.205:8066/:path*`
+        destination: `http://101.251.211.205:8066/:path*`,
+        // destination: prod? `http://192.168.1.75:58066/:path*` : `http://101.251.211.205:8066/:path*`
       },
     ]
   }
