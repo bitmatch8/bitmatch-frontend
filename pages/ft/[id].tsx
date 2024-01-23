@@ -31,7 +31,10 @@ export default function IndexPage() {
       <DetailTitle title={detail === null ? null : detail?.projectname} />
       <Spaced size="60" />
       <ProjectCard detail={detail} buyType={buyType} />
-      {load ? '':<ProjectTabs
+      {load ? <>
+      <Spaced size="150"/>
+        <ValueSkeleton width={1240} height={300}/>
+      </>:<ProjectTabs
         whiteRead={readWhtie}
         publicRead={readPublic}
         tabId={tabId}
