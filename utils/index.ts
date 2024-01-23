@@ -17,6 +17,7 @@ export function dateFormat(date: string | number) {
   }
   try {
     const dateline = toLocalTime(date);
+    console.log({dateline})
     const newtime = baseDate("m0-d0-y0 h0:i0:s0", dateline);
     return newtime
   } catch (e) {
@@ -93,7 +94,8 @@ export const objectToUrlParams=(obj:any)=>{
 
 export const toLocalTime = (date:any)=>{
   const localTime = new Date(date)
-  localTime.setMinutes((new Date()).getTimezoneOffset() * -1)
+  // console.log((new Date()).getTimezoneOffset() * -1 + localTime.getMinutes())
+  localTime.setMinutes((new Date()).getTimezoneOffset() * -1 + localTime.getMinutes())
   return localTime 
 }
 //1705153787492
