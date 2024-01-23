@@ -39,7 +39,7 @@ const StateWaiting: React.FC = () => {
 const StateCancelled: React.FC = () => {
   return (
     <>
-      <span className="cancelled">fail</span>
+      <span className="cancelled">Fail</span>
     </>
   );
 };

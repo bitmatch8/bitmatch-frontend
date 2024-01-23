@@ -27,6 +27,7 @@ export const wallterSlice = createSlice({
     },
     disconnect:(state)=>{
       state.connected=false
+      state.address = null
     },
     setUnisatInstalled:(state,action: PayloadAction<{unisatInstalled:boolean}>)=>{
       state.unisatInstalled = action.payload.unisatInstalled
