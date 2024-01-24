@@ -54,7 +54,6 @@ const useDetail = (id: any) => {
       }
     }
   }
-
   const initPage = async () => {
     const { data, code } = await fetchProjectInfoApi({
       id,
