@@ -115,3 +115,9 @@ export const foramtDateInfo = (item: any,type:DetailInfoType ) => {
 
   return arr[index]
 }
+
+
+
+export const sleep=(ms: number)=> {
+  return new Promise((resolve) => setTimeout(resolve, ms * 1000))
+}

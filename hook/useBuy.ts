@@ -33,8 +33,6 @@ const useBuy = (info: any, readData: any) => {
     if ((!isNaN(value) && reg.test(value)) || value === "") {
       if (value === "") {
         value = ""
-      } else if (Number(value) < Number(minAmount)) {
-        value = minAmount
       } else if (Number(value) > Number(maxAmount)) {
         value = maxAmount
       }
@@ -66,6 +64,7 @@ const useBuy = (info: any, readData: any) => {
     value,
     mposa,
     hposa, 
+    minAmount,
     onChangeInput,
     callbackSuccess,
     onMax,

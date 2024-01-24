@@ -50,7 +50,7 @@ const useDetail = (id: any) => {
       })
       if (white_res?.code === 0) {
         setWhiteInfo(white_res.data)
-        return white_res
+        return white_res.data
       }
     }
   }

@@ -25,8 +25,17 @@ const WhitelistStageButton: React.FC<{
   satoshis: any
   buyAmount: any
   stage: any
-  reload:any
-}> = ({ info, detail, callback, satoshis, buyAmount, stage, price,reload }) => {
+  reload: any
+}> = ({
+  info,
+  detail,
+  callback,
+  satoshis,
+  buyAmount,
+  stage,
+  price,
+  reload,
+}) => {
   const dispatch = useDispatch()
   const { connected, address } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
@@ -56,23 +65,25 @@ const WhitelistStageButton: React.FC<{
         setButtonText(data === 0 ? "Not in whitelist" : "Buy")
       }
     } else {
-      setButtonText('Buy')
+      setButtonText("Buy")
       setDisabled(false)
     }
   }
   //这里写收款地址逻辑。没写完，如果是白名单，查询用户是否在白名单
   const initAddress = async () => {
-    const { code, data } = await fetchSelectFaddress({ pid: detail.id })
-    if (code === 0) {
-      setToAddress(data)
+    if (detail) {
+      const { code, data } = await fetchSelectFaddress({ pid: detail.id })
+      if (code === 0) {
+        setToAddress(data)
+      }
     }
   }
 
-  const setStep=(hash:string,num:number)=>{
-      setButtonText(`Buy(${num}/${buyAmount})`)
+  const setStep = (hash: string, num: number) => {
+    setButtonText(`Buy(${num}/${buyAmount})`)
   }
 
-  
+  const minAmount = useMemo(() => info.mposa, [info])
   // const minAmount = useMemo(() => {
   //   return mposa
   // }, [mposa])
@@ -81,29 +92,27 @@ const WhitelistStageButton: React.FC<{
   //   return maxNum > availableAmount ? availableAmount : maxNum
   // }, [hposa, singlePersonPurchased, availableAmount])
 
-
   const onCLickBuy = async () => {
-    setDisabled(true)
-    const res_data = await reload()
-    setDisabled(false)
-    if (!buyAmount) {
+    if (minAmount > buyAmount) {
       dispatch(
         addToast({
-          contxt: "Please enter the quantity",
+          contxt: "Below minimum limit",
           icon: "warning",
         })
       )
       return
     }
-    if(res_data){
-      const availableAmount = (res_data?.tokennumber || 0) - (res_data?.totalPersonPurchased || 0)
-      if(!availableAmount){
-        dispatch(addToast({
-          contxt:'Maximum purchase limit exceeded'
-        }))
-        return
-      }
-      if (status === "idle" && buyAmount && disabled === false && toAddress) {
+    // if (!buyAmount) {
+    //   dispatch(
+    //     addToast({
+    //       contxt: "Please enter the quantity",
+    //       icon: "warning",
+    //     })
+    //   )
+    //   return
+    // }
+
+    if (status === "idle" && buyAmount && disabled === false && toAddress) {
         const params = {
           price: price.toString(),
           projectname: detail.projectname,
@@ -119,16 +128,15 @@ const WhitelistStageButton: React.FC<{
           buyAmount,
           toAddress,
           satoshis,
-          callback:()=>{
-            setButtonText('Buy')
+          reload,
+          callback: () => {
+            setButtonText("Buy")
             callback()
           },
-          setStep
+          setStep,
         }
         dispatch(buySubmitAsync(params))
       }
-    }
-    
   }
   const endtime = toLocalTime(info.enttime)
   const starttime = toLocalTime(info.starttime)
@@ -142,7 +150,7 @@ const WhitelistStageButton: React.FC<{
     isWhiteUser()
     initAddress()
   }, [detail, address, stage])
- 
+
   if (!address) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
@@ -161,8 +169,8 @@ const WhitelistStageButton: React.FC<{
     )
   } else if (endtime.getTime() < Date.now()) {
     return <WhitelistStageButtonBox disabled>Ended</WhitelistStageButtonBox>
-  }else if(Number(info?.totalPersonPurchased) >= Number(info?.tokennumber)){
-return <WhitelistStageButtonBox disabled>Sold out</WhitelistStageButtonBox>
+  } else if (Number(info?.totalPersonPurchased) >= Number(info?.tokennumber)) {
+    return <WhitelistStageButtonBox disabled>Sold out</WhitelistStageButtonBox>
   } else if (starttime.getTime() < Date.now()) {
     return (
       <WhitelistStageButtonBox

@@ -18,6 +18,7 @@ const WhitelistStageFT: React.FC<{
   title: string;
   stage: any;
   readData: any;
+  minAmount:any;
 }> = ({ info, balance, title, detail, stage, readData }) => {
   const { value, onChangeInput, callbackSuccess, onMax } = useBuy(
     info,
@@ -82,9 +83,7 @@ const WhitelistStageFT: React.FC<{
         num={info?.totalPersonPurchased || 0}
       />
       <Spaced size="100" />
-      <WhitelistStageLineBox
-        style={{ justifyContent: "space-between", gap: 0 }}
-      >
+      <WhitelistStageLineBox style={{ justifyContent: "space-between", gap: 0 }}>
         <WhitelistStageFooterItem>
           <WhitelistStageInputBox
             placeholder="0"
