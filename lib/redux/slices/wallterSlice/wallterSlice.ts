@@ -23,7 +23,13 @@ export const wallterSlice = createSlice({
       state.address=action.payload.address
     },
     setNetwork:(state,action: PayloadAction<{network:NetworkType}>)=>{
-      state.network = action.payload.network 
+      console.log(action.payload.network === process.env.NEXT_PUBLIC_NETWORK,action.payload.network ,process.env.NEXT_PUBLIC_NETWORK)
+      if(action.payload.network === process.env.NEXT_PUBLIC_NETWORK){
+        state.network = action.payload.network 
+      }else{
+        state.address = null
+        state.connected=false
+      }
     },
     disconnect:(state)=>{
       state.connected=false
@@ -51,7 +57,6 @@ export const wallterSlice = createSlice({
       .addCase(connectUnisat.fulfilled, (state, action) => {
         state.status = 'idle'
         state.connected = !!action.payload.address 
-        console.log({action:action.payload})
         state.address = action.payload.address
       })
   },

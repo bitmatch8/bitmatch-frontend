@@ -84,59 +84,42 @@ const WhitelistStageButton: React.FC<{
   }
 
   const minAmount = useMemo(() => info.mposa, [info])
-  // const minAmount = useMemo(() => {
-  //   return mposa
-  // }, [mposa])
-  // const maxAmount = useMemo(() => {
-  //   const maxNum = hposa - singlePersonPurchased
-  //   return maxNum > availableAmount ? availableAmount : maxNum
-  // }, [hposa, singlePersonPurchased, availableAmount])
 
   const onCLickBuy = async () => {
-    if (minAmount > buyAmount) {
-      dispatch(
-        addToast({
-          contxt: "Below minimum limit",
-          icon: "warning",
-        })
-      )
-      return
-    }
-    // if (!buyAmount) {
-    //   dispatch(
-    //     addToast({
-    //       contxt: "Please enter the quantity",
-    //       icon: "warning",
-    //     })
-    //   )
-    //   return
-    // }
-
     if (status === "idle" && buyAmount && disabled === false && toAddress) {
-        const params = {
-          price: price.toString(),
-          projectname: detail.projectname,
-          type: detail.projecttype,
-          tokenname: detail.projecttokenname,
-          fromaddr: address,
-          fundaddr: toAddress,
-          stage,
-          receivedAddr: address,
-          amount: satoshis,
-          transmitAddr: "",
-          pid: detail.id,
-          buyAmount,
-          toAddress,
-          satoshis,
-          reload,
-          callback: () => {
-            setButtonText("Buy")
-            callback()
-          },
-          setStep,
-        }
-        dispatch(buySubmitAsync(params))
+      if (minAmount > buyAmount) {
+        dispatch(
+          addToast({
+            contxt: "Below minimum limit",
+            icon: "warning",
+          })
+        )
+        return
       }
+      const params = {
+        price: price.toString(),
+        projectname: detail.projectname,
+        type: detail.projecttype,
+        tokenname: detail.projecttokenname,
+        fromaddr: address,
+        fundaddr: toAddress,
+        stage,
+        receivedAddr: address,
+        amount: satoshis,
+        transmitAddr: "",
+        pid: detail.id,
+        buyAmount,
+        toAddress,
+        satoshis,
+        reload,
+        callback: () => {
+          setButtonText("Buy")
+          callback()
+        },
+        setStep,
+      }
+      dispatch(buySubmitAsync(params))
+    }
   }
   const endtime = toLocalTime(info.enttime)
   const starttime = toLocalTime(info.starttime)
