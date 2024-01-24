@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "development":"NODE_ENV=development && next build",
     "start": "NODE_ENV=production node server.js"
   },
   "type": "module",
