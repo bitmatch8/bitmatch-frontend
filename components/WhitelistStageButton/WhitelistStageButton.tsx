@@ -79,6 +79,17 @@ const WhitelistStageButton: React.FC<{
     }
   }
 
+  useEffect(()=>{
+    if(info?.enttime){
+      const outtime =Date.now()-toLocalTime(info.starttime).getTime()
+      if(outtime > 0){
+        setTimeout(() => {
+          reload()
+        }, outtime + 1000);
+      }
+    }
+    console.log({info})
+  },[info])
   const setStep = (hash: string, num: number) => {
     setButtonText(`Buy(${num}/${buyAmount})`)
   }
