@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-const prod = process.env.NODE_ENV === 'production';
 
 const nextConfig = {
   reactStrictMode: true,
@@ -14,8 +13,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `http://101.251.211.205:8066/:path*`,
-        // destination: prod? `http://192.168.1.75:58066/:path*` : `http://101.251.211.205:8066/:path*`
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
       },
     ]
   }

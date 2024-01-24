@@ -47,26 +47,26 @@ export const buySubmitAsync = createAppAsyncThunk(
       return
     }
     const unisat = useUnisat()
-    const buyAmount = Number(params.buyAmount)
-    if (params.type === ProjectType.NFT && buyAmount > 1) {
-      for (let index = 1; index <= buyAmount; index++) {
-        const post_data = {
-          ...params,
-          buyAmount: 1,
-          amount: Number(params.amount) / Number(params.buyAmount),
-          // amount:1000
-        }
-        post_data.setStep("", index)
-        const txHash = await unisat.sendBitcoin(post_data.fundaddr, post_data.amount) .catch(console.log)
-        console.log({txHash})
-        if (txHash) {
-          post_data.txHash = txHash
-          send_order(post_data)
-        }
-        await sleep(2)
-      }
-      params.callback("")
-    } else {
+    // const buyAmount = Number(params.buyAmount)
+    // if (params.type === ProjectType.NFT && buyAmount > 1) {
+    //   for (let index = 1; index <= buyAmount; index++) {
+    //     const post_data = {
+    //       ...params,
+    //       buyAmount: 1,
+    //       amount: Number(params.amount) / Number(params.buyAmount),
+    //       // amount:1000
+    //     }
+    //     post_data.setStep("", index)
+    //     const txHash = await unisat.sendBitcoin(post_data.fundaddr, post_data.amount) .catch(console.log)
+    //     console.log({txHash})
+    //     if (txHash) {
+    //       post_data.txHash = txHash
+    //       send_order(post_data)
+    //     }
+    //     await sleep(2)
+    //   }
+    //   params.callback("")
+    // } else {
       const txHash = await unisat.sendBitcoin(
         params.fundaddr,
         Number(params.amount)
@@ -74,8 +74,8 @@ export const buySubmitAsync = createAppAsyncThunk(
       params.txHash = txHash
       params.callback(txHash)
       send_order(params)
-    }
-    return 1
+    // }
+    // return 1
   }
 )
 
