@@ -6,7 +6,6 @@ Using Docker
 docker build -t deindex:v1 .
 ```
 
-
 ## run
 
 ```
