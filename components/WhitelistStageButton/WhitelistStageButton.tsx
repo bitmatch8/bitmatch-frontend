@@ -37,7 +37,7 @@ const WhitelistStageButton: React.FC<{
   reload,
 }) => {
   const dispatch = useDispatch()
-  const { connected, address } = useSelector(selectWallter)
+  const { connected, address,network } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
   const [disabled, setDisabled] = useState(true)
   const [buttonText, setButtonText] = useState("Loading")
@@ -134,6 +134,13 @@ const WhitelistStageButton: React.FC<{
     initAddress()
   }, [detail, address, stage])
 
+  if(network && network !== process.env.NEXT_PUBLIC_NETWORK){
+      return (
+        <WhitelistStageButtonBox onClick={onConnect}>
+          Switch Network
+        </WhitelistStageButtonBox>
+      )
+  }
   if (!address) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>

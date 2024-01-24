@@ -54,7 +54,6 @@ const useBuy = (info: any, readData: any) => {
   }
 
   const onMax = () => {
-    // console.log({maxAmount})
     if(maxAmount >0){
       onChangeInput({ target: { value: maxAmount } })
     }

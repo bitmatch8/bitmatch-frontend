@@ -55,6 +55,9 @@ export default function WallterContext() {
     unisat.getAccounts().then(([address]: string[]) => {
       dispatch(wallterSlice.actions.setAddress({address}))
     })
+    unisat.getNetwork().then((network:string)=>{
+      dispatch(wallterSlice.actions.setNetwork({network}))
+    })
 
     unisat.on("accountsChanged", handleAccountsChanged)
     unisat.on("networkChanged", handleNetworkChanged)

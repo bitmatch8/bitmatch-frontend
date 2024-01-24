@@ -45,7 +45,6 @@ const Pagination: React.FC<{ page: number; total: number; onChange?: any; pageSi
     const endPage = _endPage < totalPage ? _endPage:totalPage
     const arr = []
 
-    // console.log({startPage,endPage,})
     if(totalPage <= 1){
       return []
     }

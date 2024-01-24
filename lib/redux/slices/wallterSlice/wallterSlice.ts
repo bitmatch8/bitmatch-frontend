@@ -23,13 +23,8 @@ export const wallterSlice = createSlice({
       state.address=action.payload.address
     },
     setNetwork:(state,action: PayloadAction<{network:NetworkType}>)=>{
-      console.log(action.payload.network === process.env.NEXT_PUBLIC_NETWORK,action.payload.network ,process.env.NEXT_PUBLIC_NETWORK)
-      if(action.payload.network === process.env.NEXT_PUBLIC_NETWORK){
+      
         state.network = action.payload.network 
-      }else{
-        state.address = null
-        state.connected=false
-      }
     },
     disconnect:(state)=>{
       state.connected=false
@@ -40,6 +35,7 @@ export const wallterSlice = createSlice({
     },
     setAddress:(state,action: PayloadAction<{address:string}>)=>{
       state.address = action.payload.address
+      
       state.connected = true
     },
     setPublicKey:(state,action: PayloadAction<{publicKey:string}>)=>{
@@ -55,6 +51,7 @@ export const wallterSlice = createSlice({
         state.status = 'loading'
       })
       .addCase(connectUnisat.fulfilled, (state, action) => {
+        
         state.status = 'idle'
         state.connected = !!action.payload.address 
         state.address = action.payload.address

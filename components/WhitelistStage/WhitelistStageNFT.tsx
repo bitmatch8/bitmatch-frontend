@@ -27,7 +27,6 @@ const WhitelistStageNFT: React.FC<{
     readData
   );
   const price = useMemo(() => {
-    // console.log(parseFixedAmount(info.targetnumber,8))
 
     return parseFixedAmount(info.targetnumber, 8);
     // return BigNumber.from(String(info.targetnumber || 0))

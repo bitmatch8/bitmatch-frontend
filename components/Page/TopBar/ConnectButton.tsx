@@ -34,7 +34,7 @@ const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
   }
   return (
     <UserToolsBox>
-      <HistoryButtonBox href={'/history'}>Histroy</HistoryButtonBox>
+      <HistoryButtonBox href={"/history"}>Histroy</HistoryButtonBox>
       <ContentSuccessBox>
         <ContentSuccessTopBox>
           <ContentSuccessLineBox onClick={onClickShow}>
@@ -56,40 +56,8 @@ const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
 
 const ConnectButton = () => {
   const dispatch = useDispatch()
-  const { unisatInstalled, address, connected } = useSelector(selectWallter)
-  if (!unisatInstalled) {
-    return (
-      <UserToolsBox>
-        <div/>
-<ConnectButtonBox
-        onClick={() =>
-          dispatch(
-            addToast({
-              contxt: "UniSat Wallet not installed",
-              icon: "warning",
-            })
-          )
-        }
-        variant="secondary">
-        Connect Wallet
-      </ConnectButtonBox>
-      </UserToolsBox>
-      
-    )
-  }
-
-  return connected && address ? (
-    <ConnectSuccess address={address} />
-  ) : (
-    <ConnectWallButton />
-  )
-}
-
-export default ConnectButton
-
-const ConnectWallButton: React.FC = () => {
-  const dispatch = useDispatch()
-
+  const { unisatInstalled, address, connected, network } =
+    useSelector(selectWallter)
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}
@@ -98,18 +66,53 @@ const ConnectWallButton: React.FC = () => {
         onDismiss()
       }}></ConnectModal>
   )
+  if (!unisatInstalled) {
+    return (
+      <UserToolsBox>
+        <div />
+        <ConnectButtonBox
+          onClick={() =>
+            dispatch(
+              addToast({
+                contxt: "UniSat Wallet not installed",
+                icon: "warning",
+              })
+            )
+          }
+          variant="secondary">
+          Connect Wallet
+        </ConnectButtonBox>
+      </UserToolsBox>
+    )
+  }
+  if (network && network !== process.env.NEXT_PUBLIC_NETWORK) {
+    return (
+      <ConnectButtonBox onClick={onConnect}>Switch Network</ConnectButtonBox>
+    )
+  }
+  return connected && address ? (
+    <ConnectSuccess address={address} />
+  ) : (
+    <ConnectWallButton onConnect={onConnect} />
+  )
+}
+
+export default ConnectButton
+
+const ConnectWallButton: React.FC<{ onConnect: any }> = ({ onConnect }) => {
+  const dispatch = useDispatch()
+
   return (
     <UserToolsBox>
-      <div/>
-<ConnectButtonBox
-      variant="secondary"
-      onClick={onConnect}
-      // onClick={() => dispatch(connectUnisat())}
-    >
-      Connect Wallet
-    </ConnectButtonBox>
+      <div />
+      <ConnectButtonBox
+        variant="secondary"
+        onClick={onConnect}
+        // onClick={() => dispatch(connectUnisat())}
+      >
+        Connect Wallet
+      </ConnectButtonBox>
     </UserToolsBox>
-    
   )
 }
 export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
@@ -148,7 +151,7 @@ const UserToolsBox = styled.div`
   /* gap: 32px; */
   cursor: pointer;
   user-select: none;
-  width:305px ;
+  width: 305px;
   justify-content: space-between;
 `
 

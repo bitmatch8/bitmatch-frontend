@@ -103,7 +103,6 @@ const TokenomicsEcharts: React.FC = () => {
 
   useEffect(() => {
     // Update chart
-    console.log({option})
     if (chartRef.current !== null && option) {
       const chart = getInstanceByDom(chartRef.current);
       chart?.setOption(option, settings);
