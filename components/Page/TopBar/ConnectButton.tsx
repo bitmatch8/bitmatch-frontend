@@ -85,6 +85,7 @@ const ConnectButton = () => {
       </UserToolsBox>
     )
   }
+  
   if (network && network !== process.env.NEXT_PUBLIC_NETWORK) {
     return (
       <ConnectButtonBox onClick={onConnect}>Switch Network</ConnectButtonBox>

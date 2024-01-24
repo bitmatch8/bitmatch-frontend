@@ -52,9 +52,11 @@ export const wallterSlice = createSlice({
       })
       .addCase(connectUnisat.fulfilled, (state, action) => {
         
+        console.log({action:action.payload})
         state.status = 'idle'
         state.connected = !!action.payload.address 
         state.address = action.payload.address
+        state.network = action.payload.network
       })
   },
 })

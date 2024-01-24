@@ -15,16 +15,16 @@ export const connectUnisat = createAppAsyncThunk(
     const {network} = selectWallter(getState())
     if (network === process.env.NEXT_PUBLIC_NETWORK) {
       const [address] = await unisat.requestAccounts()
-      return {address}
+      return {address,network}
     } else {
       const network = await unisat.switchNetwork(process.env.NEXT_PUBLIC_NETWORK)
       if(network === process.env.NEXT_PUBLIC_NETWORK){
         const [address] = await unisat.requestAccounts()
-        return {address}
+        return {address,network}
       }
     }
     
-    return {address:''}
+    return {address:'',network}
 
     // handleAccountsChanged(result);
     // const [address] = await unisat.getAccounts()
