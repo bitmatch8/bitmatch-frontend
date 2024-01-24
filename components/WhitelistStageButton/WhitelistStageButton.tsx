@@ -88,7 +88,6 @@ const WhitelistStageButton: React.FC<{
         }, outtime + 1000);
       }
     }
-    console.log({info})
   },[info])
   const setStep = (hash: string, num: number) => {
     setButtonText(`Buy(${num}/${buyAmount})`)
