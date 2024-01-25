@@ -24,7 +24,6 @@ type BuySubmitProps = {
   toAddress: any
   satoshis: any
   callback: any
-  setStep: any
   amount: any
   txHash?: any
   reload: any
@@ -40,7 +39,6 @@ export const buySubmitAsync = createAppAsyncThunk(
     const res_data = await params.reload()
 
     const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
-    console.log({availableAmount},(Number(res_data?.tokennumber) || 0), (Number(res_data?.totalPersonPurchased) || 0))
     if (availableAmount) {
       dispatch(
         addToast({

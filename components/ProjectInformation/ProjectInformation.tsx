@@ -1,39 +1,14 @@
-import Button from "@/components/Button";
-import { Spaced } from "@/components/Spaced";
-import TokenSymbol from "@/components/TokenSymbol";
 import styled from "@emotion/styled";
-import {
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import echarts from "echarts";
-import dynamic from "next/dynamic";
-import TokenomicsEcharts from "./TokenomicsEcharts";
 import { fetchProjectDetailsApi } from "@/api/api";
 import ValueSkeleton from "@/components/ValueSkeleton";
 import Image from "next/image";
+import useSwr from "@/hook/useSwr";
 // const TokenomicsEcharts = dynamic(
 //   () => import('./TokenomicsEcharts'),
 //   { ssr: false },
 // )
 const ProjectInformation: React.FC<{id:any,show:boolean,title:string}> = ({id,show,title}) => {
-  const [detail,setDetail]=useState<any>(null)
-  const initPage=async()=>{
-    if(!id){
-      return null
-    }
-    const { code, data } = await fetchProjectDetailsApi(id);
-    if (code === 0) {
-      setDetail(data);
-    }
-  };
-  useEffect(() => {
-    initPage();
-  }, [id]);
+  const detail = useSwr(id,fetchProjectDetailsApi,{})
   return (
     <ProjectInformationBox>
       <PageTitleBox>{title}</PageTitleBox>
@@ -53,11 +28,6 @@ const ProjectInformation: React.FC<{id:any,show:boolean,title:string}> = ({id,sh
               }}
             />
           )}
-          {/* 10,000 timeless frog collectibles stored on the Bitcoin Blockchain.
-        <br /><br />
-These are 10,000 pure digital collectibles that will remain on Bitcoin forever. No more will ever be created.
-<br /><br />
-Rarities of all traits within each layer are equal, allowing subjective appreciation of aesthetics and satoshi-based rarities to emerge. */}
         </InfoContainerLineBox>
 
         <InfoContainerTitleBox>Advantages</InfoContainerTitleBox>
@@ -74,13 +44,6 @@ Rarities of all traits within each layer are equal, allowing subjective apprecia
               }}
             />
           )}
-          {/* 1. 10,000 timeless frog collectibles stored on the Bitcoin Blockchain.
-<br /><br />
-2. These are 10,000 pure digital collectibles that will remain on Bitcoin forever. No more will ever be created.
-<br /><br />
-3. Rarities of all traits within each layer are equal, allowing subjective appreciation of aesthetics and satoshi-
-<br /><br />
-4. based rarities to emerge. */}
         </InfoContainerLineBox>
       </InfoContainerBox>
       {show ? (

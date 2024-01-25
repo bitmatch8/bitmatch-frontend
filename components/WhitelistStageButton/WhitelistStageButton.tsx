@@ -40,15 +40,25 @@ const WhitelistStageButton: React.FC<{
   const dispatch = useDispatch()
   const { connected, address,network } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
-  const [disabled, setDisabled] = useState(true)
-  const [buttonText, setButtonText] = useState("Loading")
-  const [toAddress, setToAddress] = useState("")
   const isWhite = useSwr({
     pid: detail.id,
     address,
   },stage === "whitelist" ? fetchQueryByWhitelist : null,{})
 
-  
+
+  const toAddress = useSwr({ pid: detail.id },fetchSelectFaddress,{})
+  const disabled = useMemo(()=>{
+    return stage === 'whitelist' && (isWhite === 0 || isWhite === null)
+  },[isWhite])
+
+  const buttonText = useMemo(()=>{
+   if(stage === 'whitelist' && isWhite === 0){
+    return "Not in whitelist"
+   }else if(stage === 'whitelist' && isWhite === null){
+    return 'Loading'
+   }
+   return 'Buy'
+  },[isWhite])
 
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
@@ -58,48 +68,6 @@ const WhitelistStageButton: React.FC<{
         onDismiss()
       }}></ConnectModal>
   )
-  const isWhiteUser = async () => {
-    //如果是白名单查询这里做判断是否禁用按钮
-    if (!address) {
-      return
-    }
-    if (stage === "whitelist") {
-      const { code, data } = await fetchQueryByWhitelist({
-        pid: detail.id,
-        address,
-      })
-      if (code === 0) {
-        setDisabled(data === 0)
-        setButtonText(data === 0 ? "Not in whitelist" : "Buy")
-      }
-    } else {
-      setButtonText("Buy")
-      setDisabled(false)
-    }
-  }
-  //这里写收款地址逻辑。没写完，如果是白名单，查询用户是否在白名单
-  const initAddress = async () => {
-    if (detail) {
-      const { code, data } = await fetchSelectFaddress({ pid: detail.id })
-      if (code === 0) {
-        setToAddress(data)
-      }
-    }
-  }
-
-  useEffect(()=>{
-    if(info?.enttime){
-      const outtime =Date.now()-toLocalTime(info.starttime).getTime()
-      if(outtime > 0){
-        setTimeout(() => {
-          reload()
-        }, outtime + 1000);
-      }
-    }
-  },[info])
-  const setStep = (hash: string, num: number) => {
-    setButtonText(`Buy(${num}/${buyAmount})`)
-  }
 
   const minAmount = useMemo(() => info.mposa, [info])
 
@@ -130,11 +98,7 @@ const WhitelistStageButton: React.FC<{
         toAddress,
         satoshis,
         reload,
-        callback: () => {
-          setButtonText("Buy")
-          callback()
-        },
-        setStep,
+        callback,
       }
       dispatch(buySubmitAsync(params))
     }
@@ -147,10 +111,6 @@ const WhitelistStageButton: React.FC<{
     [starttime]
   )
 
-  useEffect(() => {
-    isWhiteUser()
-    initAddress()
-  }, [detail, address, stage])
 
   if(network && network !== process.env.NEXT_PUBLIC_NETWORK){
       return (
