@@ -18,10 +18,10 @@ const WhitelistStageFT: React.FC<{
   title: string;
   stage: any;
   readData: any;
-}> = ({ info, balance, title, detail, stage, readData }) => {
-  const { value, onChangeInput, callbackSuccess, onMax } = useBuy(
+}> = ({ info, balance, title, detail, stage, readData, }) => {
+  const { value,inputLoad, onChangeInput, callbackSuccess, onMax ,isWhiteInfo,mposa,hposa,maxAmount} = useBuy(
     info,
-    readData
+    readData,detail,stage
   );
   const price = useMemo(
     () =>
@@ -61,10 +61,10 @@ const WhitelistStageFT: React.FC<{
         </WhitelistStageLineBox>
         <WhitelistStageLineBox>
           <WhitelistStageLine title="Minimum Limit">
-            {info?.mposa} {detail?.projecttokenname}
+            {mposa} {detail?.projecttokenname}
           </WhitelistStageLine>
           <WhitelistStageLine title="Maximum Limit">
-            {info?.hposa} {detail?.projecttokenname}
+            {hposa} {detail?.projecttokenname}
           </WhitelistStageLine>
         </WhitelistStageLineBox>
         <WhitelistStageLineBox>
@@ -86,6 +86,7 @@ const WhitelistStageFT: React.FC<{
         <WhitelistStageFooterItem>
           <WhitelistStageInputBox
             placeholder="0"
+            disabled={maxAmount<=0 || inputLoad}
             value={value}
             onChange={onChangeInput}
             onMax={onMax}
@@ -98,6 +99,9 @@ const WhitelistStageFT: React.FC<{
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
           <WhitelistStageButton
+          hposa={hposa}
+          mposa={mposa}
+          isWhiteInfo={isWhiteInfo}
             price={priceBig}
             detail={detail}
             info={info}

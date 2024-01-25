@@ -3,7 +3,7 @@ import { selectWallter } from "@/lib/redux"
 import { foramtDateInfo } from "@/utils"
 import refreshConfig from "@/utils/config"
 import { BuyState, DetailInfoType } from "@/utils/types"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import { useSelector } from "react-redux"
 import useSwr from "./useSwr"
 
@@ -72,10 +72,10 @@ const useDetail = (id: any) => {
     }
     return null
   }, [publicType, whiteType])
-  
+
   const load = useMemo(()=>{
     return !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
-  },[detail,tabId])
+  },[detail,tabId,publicInfo,whiteInfo])
  
   const readWhtie=()=>{
    return publicInfo 

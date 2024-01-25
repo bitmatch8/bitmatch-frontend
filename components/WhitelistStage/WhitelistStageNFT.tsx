@@ -23,9 +23,9 @@ const WhitelistStageNFT: React.FC<{
   stage: any;
   readData: any;
 }> = ({ info, balance, title, detail, stage, readData }) => {
-  const { value, onChangeInput, callbackSuccess, onMax,maxAmount } = useBuy(
+  const { value,inputLoad, onChangeInput, callbackSuccess, onMax,maxAmount,isWhiteInfo,mposa,hposa } = useBuy(
     info,
-    readData
+    readData,detail,stage
   );
   const price = useMemo(() => {
     return parseFixedAmount(info.targetnumber, 8);
@@ -48,10 +48,10 @@ const WhitelistStageNFT: React.FC<{
             <span>{info?.targetnumber}</span>
           </WhitelistStageLine>
           <WhitelistStageLine title="Minimum Limit">
-            {info?.mposa}
+            {mposa}
           </WhitelistStageLine>
           <WhitelistStageLine title="Maximum Limit">
-            {info?.hposa}
+            {hposa}
           </WhitelistStageLine>
           <WhitelistStageLine title="Launch Time">
             {info === null ? (
@@ -86,7 +86,7 @@ const WhitelistStageNFT: React.FC<{
           <WhitelistStageInputBox
             placeholder="0"
             value={value}
-            disabled={maxAmount<=0}
+            disabled={maxAmount<=0 || inputLoad}
             onMax={onMax}
             onChange={onChangeInput}
           />
@@ -98,6 +98,9 @@ const WhitelistStageNFT: React.FC<{
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
           <WhitelistStageButton
+          mposa={mposa}
+          hposa={hposa}
+          isWhiteInfo={isWhiteInfo}
             price={price}
             detail={detail}
             info={info}

@@ -27,6 +27,9 @@ const WhitelistStageButton: React.FC<{
   buyAmount: any
   stage: any
   reload: any
+  isWhiteInfo: any
+  mposa: any
+  hposa: any
 }> = ({
   info,
   detail,
@@ -36,29 +39,32 @@ const WhitelistStageButton: React.FC<{
   stage,
   price,
   reload,
+  isWhiteInfo,
+  hposa,
+  mposa,
 }) => {
   const dispatch = useDispatch()
-  const { connected, address,network } = useSelector(selectWallter)
+  const { address, network } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
-  const isWhite = useSwr({
-    pid: detail.id,
-    address,
-  },stage === "whitelist" ? fetchQueryByWhitelist : null,{})
+  const toAddress = useSwr({ pid: detail.id }, fetchSelectFaddress, {})
+  const disabled = useMemo(() => {
+    if (toAddress === null) {
+      return true
+    }
+    return stage === "whitelist" && (isWhiteInfo === null || isWhiteInfo === 0)
+  }, [isWhiteInfo,stage,toAddress])
 
-
-  const toAddress = useSwr({ pid: detail.id },fetchSelectFaddress,{})
-  const disabled = useMemo(()=>{
-    return stage === 'whitelist' && (isWhite === 0 || isWhite === null)
-  },[isWhite])
-
-  const buttonText = useMemo(()=>{
-   if(stage === 'whitelist' && isWhite === 0){
-    return "Not in whitelist"
-   }else if(stage === 'whitelist' && isWhite === null){
-    return 'Loading'
-   }
-   return 'Buy'
-  },[isWhite])
+  const buttonText = useMemo(() => {
+    if (stage === "whitelist" && isWhiteInfo === 0) {
+      return "Not in whitelist"
+    } else if (
+      (stage === "whitelist" && isWhiteInfo === null) ||
+      toAddress === null
+    ) {
+      return "Loading"
+    }
+    return "Buy"
+  }, [isWhiteInfo, toAddress])
 
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
@@ -68,16 +74,21 @@ const WhitelistStageButton: React.FC<{
         onDismiss()
       }}></ConnectModal>
   )
-
-  const minAmount = useMemo(() => info.mposa, [info])
-
   const onCLickBuy = async () => {
     if (status === "idle" && buyAmount && disabled === false && toAddress) {
-      if (Number(minAmount) >Number(buyAmount) ) {
+      if (Number(mposa) > Number(buyAmount)) {
         dispatch(
           addToast({
             contxt: "Below minimum limit",
             icon: "warning",
+          })
+        )
+        return
+      }
+      if (Number(hposa) < Number(buyAmount)) {
+        dispatch(
+          addToast({
+            contxt: "Maximum purchase limit exceeded",
           })
         )
         return
@@ -105,19 +116,16 @@ const WhitelistStageButton: React.FC<{
   }
   const endtime = toLocalTime(info.enttime)
   const starttime = toLocalTime(info.starttime)
-
   const NotStarted = useMemo(
     () => starttime.getTime() > Date.now(),
     [starttime]
   )
-
-
-  if(network && network !== process.env.NEXT_PUBLIC_NETWORK){
-      return (
-        <WhitelistStageButtonBox onClick={onConnect}>
-          Switch Network
-        </WhitelistStageButtonBox>
-      )
+  if (network && network !== process.env.NEXT_PUBLIC_NETWORK) {
+    return (
+      <WhitelistStageButtonBox onClick={onConnect}>
+        Switch Network
+      </WhitelistStageButtonBox>
+    )
   }
   if (!address) {
     return (
