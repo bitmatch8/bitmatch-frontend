@@ -35,6 +35,11 @@ type BuySubmitProps = {
 export const buySubmitAsync = createAppAsyncThunk(
   "buy/submit",
   async (params: BuySubmitProps, { dispatch }) => {
+    const uniqueId = dispatch(addToast({
+      second:0,
+      icon:'warning',
+      contxt:'panding...'
+    }))
     const res_data = await params.reload()
 
     const availableAmount = (res_data?.tokennumber || 0) <= (res_data?.totalPersonPurchased || 0)
@@ -46,6 +51,7 @@ export const buySubmitAsync = createAppAsyncThunk(
       )
       return
     }
+
     const unisat = useUnisat()
     // const buyAmount = Number(params.buyAmount)
     // if (params.type === ProjectType.NFT && buyAmount > 1) {
@@ -73,18 +79,22 @@ export const buySubmitAsync = createAppAsyncThunk(
       )
       params.txHash = txHash
       params.callback(txHash)
-      send_order(params)
+      send_order(params,uniqueId,dispatch)
     // }
     // return 1
   }
 )
 
-export const send_order = async (params: any) => {
+export const send_order = async (params: any,uniqueId:any,dispatch:any) => {
   try {
     await submitOderListSave(params)
+    dispatch(addToast({
+      icon:'success',
+      contxt:'Success!'
+    }))
   } catch (e) {
     setTimeout(() => {
-      send_order(params)
+      send_order(params,uniqueId,dispatch)
     }, 5000)
   }
 }

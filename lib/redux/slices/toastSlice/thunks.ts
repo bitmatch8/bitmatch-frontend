@@ -13,10 +13,14 @@ export const addToast =
       toastSlice.actions.addToast({
         uniqueId: uniqueId,
         second,
+        noTime:toast.second === 0,
         ...toast,
       })
     )
-    setTimeout(() => {
-      dispatch(toastSlice.actions.removeToast(uniqueId))
-    }, second)
+    if(toast.second !== 0){
+      setTimeout(() => {
+        dispatch(toastSlice.actions.removeToast(uniqueId))
+      }, second)
+    }
+    return uniqueId
   }

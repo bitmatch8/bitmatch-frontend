@@ -11,6 +11,7 @@ export type ToastItem={
   contxt:any,
   href?:any
   icon?:TipIconType
+  noTime?:boolean
 }
 const initialState: ToastSliceState = {
   lists:[]
