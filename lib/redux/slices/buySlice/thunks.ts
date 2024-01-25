@@ -1,5 +1,5 @@
 /* Instruments */
-import { addToast, type FilterTypeProps } from "@/lib/redux"
+import { addToast, toastSlice, type FilterTypeProps } from "@/lib/redux"
 import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
 import { fetchProjectInfoSelectInfoApi, submitOderListSave } from "@/api/api"
 import useUnisat from "@/hook/useUnisat"
@@ -38,8 +38,8 @@ export const buySubmitAsync = createAppAsyncThunk(
     const uniqueId = dispatch(addToast({
       second:0,
       icon:'warning',
-      contxt:'panding...'
-    }))
+      contxt:'pending...'
+    })) as any
     const res_data = await params.reload()
 
     const availableAmount = (res_data?.tokennumber || 0) <= (res_data?.totalPersonPurchased || 0)
@@ -73,6 +73,7 @@ export const buySubmitAsync = createAppAsyncThunk(
     //   }
     //   params.callback("")
     // } else {
+     try{
       const txHash = await unisat.sendBitcoin(
         params.fundaddr,
         Number(params.amount)
@@ -80,6 +81,9 @@ export const buySubmitAsync = createAppAsyncThunk(
       params.txHash = txHash
       params.callback(txHash)
       send_order(params,uniqueId,dispatch)
+     } catch(e){
+      dispatch(toastSlice.actions.removeToast(uniqueId))
+     }
     // }
     // return 1
   }

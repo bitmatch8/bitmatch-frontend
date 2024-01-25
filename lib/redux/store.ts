@@ -13,7 +13,7 @@ import { middleware } from './middleware'
 export const reduxStore = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(middleware)
+    return getDefaultMiddleware().concat(process.env.NODE_ENV==='development'?middleware:[])
   },
 })
 export const useDispatch = () => useReduxDispatch<ReduxDispatch>()

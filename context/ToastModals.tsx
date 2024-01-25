@@ -11,7 +11,6 @@ import styled from "@emotion/styled";
 import Notice from "@/components/Notice";
 export default function ToastModals() {
   const { lists } = useSelector(selectToast);
-  console.log({lists})
   return lists.length ? (
     <ToastContainerBox>
       <Fiext>
