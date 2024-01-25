@@ -3,7 +3,7 @@
 import Button from "@/components/Button";
 import Page from "@/components/Page";
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { useMemo, useState } from "react";
 import ListWaperItem from "../../components/ListItem";
 import ValueSkeleton from "@/components/ValueSkeleton";
 import { number_format } from "@/utils";
@@ -12,14 +12,11 @@ import Pagination from "@/components/Pagination";
 import { Spaced } from "@/components/Spaced";
 
 import {
-  luanchSlice,
-  useSelector,
   useDispatch,
-  selectLuanch,
-  fetchDashboardAsync,
-  fetchProjectInfoSelectInfoAsync,
-  FilterTypeProps,
 } from "@/lib/redux";
+import useSwr from "@/hook/useSwr";
+import refreshConfig from "@/utils/config";
+import { fetchDashboardApi, fetchProjectInfoSelectInfoApi } from "@/api/api";
 
 const HeadContainerItem: React.FC<{
   title: string;
@@ -40,9 +37,9 @@ const HeadContainerItem: React.FC<{
   );
 };
 const ListContainerTabsItem: React.FC<{
-  title: FilterTypeProps;
+  title: any;
   checkoutd: boolean;
-  onChange: (val: FilterTypeProps) => any;
+  onChange: (val: any) => any;
 }> = ({ title, onChange, checkoutd }) => {
   return (
     <ListContainerTabsItemBox
@@ -56,32 +53,43 @@ const ListContainerTabsItem: React.FC<{
 
 export default function IndexPage() {
   const dispatch = useDispatch();
-  const {
-    dashboard,
-    pageNum,
-    pageSize,
-    total: totalNum,
-    lists: projectList,
-    lists_status,
-    tabType,
-  } = useSelector(selectLuanch);
-  const onClickTab = (tabType: FilterTypeProps) => {
-    dispatch(luanchSlice.actions.setTabs(tabType));
-    dispatch(
-      fetchProjectInfoSelectInfoAsync({ pageNum: 1, pageSize, tabType })
-    );
+  const [tabType,setTabType] = useState('ALL')
+  // const {
+  //   // pageNum,
+  //   // total: totalNum,
+  //   // lists: projectList,
+  //   // lists_status,
+  //   tabType,
+  // } = useSelector(selectLuanch);
+  const pageSize = 10
+  const onClickTab = (tabType: any) => {
+    setTabType(tabType)
+    // dispatch(luanchSlice.actions.setTabs(tabType));
   };
 
-  const getLists = (pageNum: number = 1) => {
-    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum, pageSize, tabType }));
-  };
-  const initDash = () => {
-    dispatch(fetchDashboardAsync());
-  };
-  useEffect(() => {
-    initDash();
-    onClickTab("ALL");
-  }, []);
+  const pageNum = 1
+  const projecttype = tabType === "ALL" ? undefined : tabType === "FT" ? 1 : 2
+  const result_lists = useSwr({pageNum,pageSize,projecttype},fetchProjectInfoSelectInfoApi,{ refreshInterval: refreshConfig.detail_refreshInterval })
+
+  const projectList:any[] = useMemo(()=>{
+    if(result_lists === null){
+      return null
+    }
+    return result_lists.list
+  },[result_lists])
+
+  const totalNum = useMemo(()=>result_lists?.total || 0,[result_lists])
+  const dashboard = useSwr({},fetchDashboardApi,{ refreshInterval: refreshConfig.detail_refreshInterval })
+  // const getLists = (pageNum: number = 1) => {
+  //   dispatch(fetchProjectInfoSelectInfoAsync({ pageNum, pageSize, tabType }));
+  // };
+  // const initDash = () => {
+  //   dispatch(fetchDashboardAsync());
+  // };
+  // useEffect(() => {
+  //   initDash();
+  //   onClickTab("ALL");
+  // }, []);
   return (
     <Page>
       <HeadContainerBox>
@@ -92,14 +100,14 @@ export default function IndexPage() {
         <HeadContainerBlockBox>
           <HeadContainerItem
             title="Total Projects"
-            value={dashboard.projectCount}
+            value={dashboard === null ? null:dashboard.projectCount}
           />
           <HeadContainerItem
             unit={"$"}
             title="Total Liquidity Rais"
-            value={dashboard.raisedCount}
+            value={dashboard === null ? null:dashboard.raisedCount}
           />
-          <HeadContainerItem title="Total Users" value={dashboard.usersCount} />
+          <HeadContainerItem title="Total Users" value={dashboard === null ? null:dashboard.usersCount} />
         </HeadContainerBlockBox>
         <HeadContainerApplyBox>
           <HeadContainerApplyButton
@@ -130,7 +138,7 @@ export default function IndexPage() {
             title="NFT"
           />
         </ListContainerTabsBox>
-        <ListWaperBox loading={lists_status === "loading"}>
+        <ListWaperBox loading={projectList === null}>
           {projectList === null ? (
             <ListWaperItem item={null} />
           ) : (
@@ -142,7 +150,7 @@ export default function IndexPage() {
       </ListContainerBox>
       <Spaced size="50" />
       {totalNum > 10 ? (
-        <Pagination total={totalNum} onChange={getLists} page={pageNum} />
+        <Pagination total={totalNum} onChange={()=>{}} page={pageNum} />
       ) : (
         ""
       )}

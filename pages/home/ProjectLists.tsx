@@ -8,11 +8,21 @@ import Link from "next/link";
 import { Spaced } from "@/components/Spaced";
 import { useMemo } from "react";
 
-import { useSelector, selectLuanch } from "@/lib/redux";
 import ValueSkeleton from "@/components/ValueSkeleton";
+import { fetchProjectInfoSelectInfoApi } from "@/api/api";
+import refreshConfig from "@/utils/config";
+import useSwr from "@/hook/useSwr";
 
 export default function ProjectLists() {
-  const { lists: projectList } = useSelector(selectLuanch);
+  const result_lists = useSwr({pageNum:1,pageSize:10},fetchProjectInfoSelectInfoApi,{ refreshInterval: refreshConfig.detail_refreshInterval })
+
+  const projectList:any[] = useMemo(()=>{
+    if(result_lists === null){
+      return null
+    }
+    return result_lists.list
+  },[result_lists])
+  // const { lists: projectList } = useSelector(selectLuanch);
   // console.log({projectList})
   const oneInfo = useMemo(
     () => projectList?.find((itm) => itm.id === 1),

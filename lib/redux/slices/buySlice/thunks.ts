@@ -1,11 +1,8 @@
 /* Instruments */
-import { addToast, toastSlice, type FilterTypeProps } from "@/lib/redux"
+import { addToast, toastSlice } from "@/lib/redux"
 import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
-import { fetchProjectInfoSelectInfoApi, submitOderListSave } from "@/api/api"
+import { submitOderListSave } from "@/api/api"
 import useUnisat from "@/hook/useUnisat"
-import { formatFixedNumber, parseFixedAmount } from "@/utils/formatBalance"
-import { BuyState, ProjectType } from "@/utils/types"
-import { sleep } from "@/utils"
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async

@@ -1,16 +1,30 @@
 import { fetchProjectInfoApi, fetchWhtielistInfoApi } from "@/api/api"
 import { selectWallter } from "@/lib/redux"
 import { foramtDateInfo } from "@/utils"
+import refreshConfig from "@/utils/config"
 import { BuyState, DetailInfoType } from "@/utils/types"
 import { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
+import useSwr from "./useSwr"
 
 const useDetail = (id: any) => {
-  const [detail, setDetail] = useState<any>(null)
-  const [publicInfo, setPublicInfo] = useState(null)
-  const [whiteInfo, setWhiteInfo] = useState(null)
   const { address } = useSelector(selectWallter)
-  const [load,setLoad]=useState(true)
+  
+  const detail = useSwr({
+    id,
+    address: address ? address : undefined,
+  },id ? fetchProjectInfoApi : null ,{ refreshInterval: refreshConfig.detail_refreshInterval })
+
+  const publicInfo = useSwr({
+    id: detail?.pubid,
+    address,
+  },detail?.pubid ? fetchWhtielistInfoApi:null,{ refreshInterval: refreshConfig.publicInfo_refreshInterval })
+
+  const whiteInfo = useSwr({
+    id: detail?.wid,
+    address,
+  }, detail?.wid ? fetchWhtielistInfoApi : null,{ refreshInterval: refreshConfig.whiteInfo_refreshInterval })
+
   const whiteType = useMemo(() => {
     return foramtDateInfo(whiteInfo, DetailInfoType.white)
   }, [whiteInfo])
@@ -29,53 +43,6 @@ const useDetail = (id: any) => {
       return publicType
     }
   }, [whiteType, publicType])
-  const readPublic = async () => {
-    if (detail?.pubid) {
-      const public_res = await fetchWhtielistInfoApi({
-        id: detail?.pubid,
-        address,
-      })
-
-      if (public_res?.code === 0) {
-        setPublicInfo(public_res.data)
-        return public_res.data
-      }
-    }
-  }
-  const readWhtie = async () => {
-    if (detail?.wid) {
-      const white_res = await fetchWhtielistInfoApi({
-        id: detail?.wid,
-        address,
-      })
-      if (white_res?.code === 0) {
-        setWhiteInfo(white_res.data)
-        return white_res.data
-      }
-    }
-  }
-  const initPage = async () => {
-    const { data, code } = await fetchProjectInfoApi({
-      id,
-      address: address ? address : undefined,
-    })
-    if (code === 0) {
-      setDetail(data)
-    }
-  }
-  const reloadPage=async()=>{
-    if (detail) {
-      await readWhtie()
-      await readPublic()
-      setLoad(false)
-    }
-  }
-  useEffect(() => {
-    reloadPage() 
-  }, [detail, address])
-  useEffect(() => {
-    initPage()
-  }, [id, address])
 
   const ProjectTabList = useMemo(() => {
     if (!whiteInfo && !publicInfo) {
@@ -105,7 +72,12 @@ const useDetail = (id: any) => {
     }
     return null
   }, [publicType, whiteType])
-
+  const load = useMemo(()=>{
+    return !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
+  },[detail,tabId])
+ 
+  const readWhtie=()=>{}
+  const readPublic=()=>{}
   return {
     load,
     address,

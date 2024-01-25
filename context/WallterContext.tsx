@@ -6,10 +6,6 @@ import {
   useSelector,
   useDispatch,
   selectWallter,
-  selectLuanch,
-  FilterTypeProps,
-  luanchSlice,
-  fetchProjectInfoSelectInfoAsync,
 } from '@/lib/redux'
 import useUnisat from "@/hook/useUnisat"
 
@@ -68,27 +64,13 @@ export default function WallterContext() {
     }
   }
 
-  const {
-    pageSize,
-    tabType,
-  } = useSelector(selectLuanch)
-  const onClickTab = (tabType: FilterTypeProps) => {
-    dispatch(luanchSlice.actions.setTabs(tabType))
-    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum: 1, pageSize, tabType }))
-  }
 
   useEffect(()=>{
     if(address){
       getBasicInfo() 
     }
   },[address])
-  const getLists = (pageNum: number = 1) => {
-    dispatch(fetchProjectInfoSelectInfoAsync({ pageNum:1, pageSize:100, tabType }))
-  }
-  useEffect(() => {
-    getLists()
-    onClickTab('ALL')
-  }, [])
+ 
   useEffect(() => {
     checkUnisat().then()
   }, [])

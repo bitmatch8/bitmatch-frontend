@@ -13,6 +13,7 @@ import WhitelistStageProgress from "@/components/WhitelistStageProgress";
 import WhitelistStageLine from "@/components/WhitelistStageLine";
 import useBuy from "@/hook/useBuy";
 import { dateFormat } from "@/utils";
+import { DetailInfoType } from "@/utils/types";
 
 const WhitelistStageNFT: React.FC<{
   detail: any;
@@ -27,7 +28,6 @@ const WhitelistStageNFT: React.FC<{
     readData
   );
   const price = useMemo(() => {
-
     return parseFixedAmount(info.targetnumber, 8);
     // return BigNumber.from(String(info.targetnumber || 0))
   }, [info]);
@@ -40,7 +40,7 @@ const WhitelistStageNFT: React.FC<{
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
       <WhitelistStageCardBox style={{ flexDirection: "row", gap: 60 }}>
         <WhitelistStageItemBox style={{ flex: 1 }}>
-          <WhitelistStageLine title="Whitelist Amount">
+          <WhitelistStageLine title={DetailInfoType.public === String(info.type) ? 'Total Supply':'Whitelist Amount'}>
             {info?.tokennumber}
           </WhitelistStageLine>
           <WhitelistStageLine title="Price">
