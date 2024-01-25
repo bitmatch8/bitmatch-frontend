@@ -16,6 +16,7 @@ import {
 } from "@/lib/redux"
 import { ProjectType } from "@/utils/types"
 import { toLocalTime } from "@/utils"
+import useSwr from "@/hook/useSwr"
 
 const WhitelistStageButton: React.FC<{
   price: any
@@ -42,6 +43,13 @@ const WhitelistStageButton: React.FC<{
   const [disabled, setDisabled] = useState(true)
   const [buttonText, setButtonText] = useState("Loading")
   const [toAddress, setToAddress] = useState("")
+  const isWhite = useSwr({
+    pid: detail.id,
+    address,
+  },stage === "whitelist" ? fetchQueryByWhitelist : null,{})
+
+  
+
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}

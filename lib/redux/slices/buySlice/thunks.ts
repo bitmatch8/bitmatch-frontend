@@ -39,7 +39,8 @@ export const buySubmitAsync = createAppAsyncThunk(
     })) as any
     const res_data = await params.reload()
 
-    const availableAmount = (res_data?.tokennumber || 0) <= (res_data?.totalPersonPurchased || 0)
+    const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
+    console.log({availableAmount},(Number(res_data?.tokennumber) || 0), (Number(res_data?.totalPersonPurchased) || 0))
     if (availableAmount) {
       dispatch(
         addToast({

@@ -76,8 +76,12 @@ const useDetail = (id: any) => {
     return !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
   },[detail,tabId])
  
-  const readWhtie=()=>{}
-  const readPublic=()=>{}
+  const readWhtie=()=>{
+   return publicInfo 
+  }
+  const readPublic=()=>{
+    return whiteInfo
+  }
   return {
     load,
     address,
