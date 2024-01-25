@@ -3,10 +3,9 @@
 import Button from "@/components/Button";
 import styled from "@emotion/styled";
 import Image from "next/image";
-import { ProjectItemType } from "@/lib/redux";
 import ValueSkeleton from "./ValueSkeleton";
 import Link from "next/link";
-const ListWaperItem: React.FC<{ item: ProjectItemType | null }> = ({
+const ListWaperItem: React.FC<{ item: any | null }> = ({
   item,
 }) => {
   return (
