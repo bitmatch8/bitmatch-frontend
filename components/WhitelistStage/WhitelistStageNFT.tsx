@@ -23,7 +23,7 @@ const WhitelistStageNFT: React.FC<{
   stage: any;
   readData: any;
 }> = ({ info, balance, title, detail, stage, readData }) => {
-  const { value, onChangeInput, callbackSuccess, onMax } = useBuy(
+  const { value, onChangeInput, callbackSuccess, onMax,maxAmount } = useBuy(
     info,
     readData
   );
@@ -86,6 +86,7 @@ const WhitelistStageNFT: React.FC<{
           <WhitelistStageInputBox
             placeholder="0"
             value={value}
+            disabled={maxAmount<=0}
             onMax={onMax}
             onChange={onChangeInput}
           />

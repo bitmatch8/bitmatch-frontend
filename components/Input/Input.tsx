@@ -8,10 +8,12 @@ const Input: React.FC<{
   className?: any;
   placeholder?: string;
   onMax?: any;
-}> = ({ className, placeholder, value, onChange, onMax }) => {
+  disabled?:boolean
+}> = ({ className, placeholder, value, onChange, onMax,disabled }) => {
   return (
     <InputBox>
       <InputInertBox
+      disabled={disabled}
         onChange={onChange}
         value={value}
         placeholder={placeholder}

@@ -97,7 +97,8 @@ const WhitelistStageButton: React.FC<{
 
   const onCLickBuy = async () => {
     if (status === "idle" && buyAmount && disabled === false && toAddress) {
-      if (minAmount > buyAmount) {
+      console.log(minAmount > buyAmount,minAmount , buyAmount)
+      if (Number(minAmount) >Number(buyAmount) ) {
         dispatch(
           addToast({
             contxt: "Below minimum limit",

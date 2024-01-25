@@ -29,7 +29,7 @@ type props = {
 const useHistory = (arg: props):{list:HistoryItemProps[],total:any} => {
   const { data, isLoading, error } = useSWR(arg, fetchOrderCList,{ refreshInterval: refreshConfig.history_refreshInterval })
   const result = useMemo(() => {
-    if (error || isLoading === true) {
+    if (error || isLoading === true || !data) {
       return { list: null,total:0 }
     }
     const { data: reponse, code } = data
