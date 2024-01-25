@@ -6,9 +6,9 @@ export default {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => res.json()).catch(console.log)
+    }).then((res) => res.json())
   },
   get: async (url: string) => {
-    return await fetch(`/api${url}`).then((res) => res.json()).catch(console.log)
+    return await fetch(`/api${url}`).then((res) => res.json())
   },
 }
