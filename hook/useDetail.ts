@@ -72,6 +72,7 @@ const useDetail = (id: any) => {
     }
     return null
   }, [publicType, whiteType])
+  
   const load = useMemo(()=>{
     return !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
   },[detail,tabId])

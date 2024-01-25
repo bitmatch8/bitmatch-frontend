@@ -36,17 +36,18 @@ export const buySubmitAsync = createAppAsyncThunk(
       icon:'warning',
       contxt:'pending...'
     })) as any
-    const res_data = await params.reload()
+    // const res_data = await params.reload()
 
-    const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
-    if (availableAmount) {
-      dispatch(
-        addToast({
-          contxt: "Maximum purchase limit exceeded",
-        })
-      )
-      return
-    }
+    // const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
+    // console.log(res_data)
+    // if (availableAmount) {
+    //   dispatch(
+    //     addToast({
+    //       contxt: "Maximum purchase limit exceeded",
+    //     })
+    //   )
+    //   return
+    // }
 
     const unisat = useUnisat()
     // const buyAmount = Number(params.buyAmount)
