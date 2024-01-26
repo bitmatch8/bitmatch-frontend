@@ -20,6 +20,7 @@ export const Detail: React.FC<{id:any}> = ({id}) => {
     readWhtie,
     readPublic,
   } = useDetail(id)
+  // { refreshInterval: refreshConfig.history_refreshInterval }
   return (
     <>
      <DetailTitle title={detail === null ? null : detail?.projectname} />

@@ -1,4 +1,4 @@
-import { addToast, toastSlice } from "@/lib/redux"
+import { addToast, buySlice, toastSlice } from "@/lib/redux"
 import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
 import { submitOderListSave } from "@/api/api"
 import useUnisat from "@/hook/useUnisat"
@@ -27,8 +27,8 @@ export const buySubmitAsync = createAppAsyncThunk(
   "buy/submit",
   async (params: BuySubmitProps, { dispatch }) => {
     
-    const res_data = await params.reload()
-    console.log({res_data})
+    // const res_data = await params.reload()
+    // console.log({res_data})
 
     // const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
     // console.log(res_data)
@@ -51,6 +51,7 @@ export const buySubmitAsync = createAppAsyncThunk(
 export const send_order = async (params: any,dispatch:any) => {
   try {
     await submitOderListSave(params)
+    dispatch(buySlice.actions.setRefresh({num:1000}))
     dispatch(
       addToast({
         // second: 0,
@@ -58,6 +59,10 @@ export const send_order = async (params: any,dispatch:any) => {
         contxt: "Pending...",
       })
     )
+    setTimeout(() => {
+      dispatch(buySlice.actions.setRefresh({num:0}))
+ 
+    }, 5000);
   } catch (e) {
     setTimeout(() => {
       send_order(params, dispatch)

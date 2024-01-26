@@ -1,5 +1,5 @@
 import { fetchProjectInfoApi, fetchWhtielistInfoApi } from "@/api/api"
-import { selectWallter } from "@/lib/redux"
+import { selectBuy, selectWallter } from "@/lib/redux"
 import { foramtDateInfo } from "@/utils"
 import refreshConfig from "@/utils/config"
 import { BuyState, DetailInfoType } from "@/utils/types"
@@ -9,8 +9,7 @@ import useSwr from "./useSwr"
 
 const useDetail = (id: any) => {
   const { address } = useSelector(selectWallter)
-  // const [t1,setT1]=useState(0)
-  // const [t2,setT2]=useState(0)
+  
   const {result:detail} = useSwr({
       id,
       address: address ? address : undefined,

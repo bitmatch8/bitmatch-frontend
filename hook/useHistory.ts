@@ -26,8 +26,8 @@ type props = {
   pageSize: any
   pid: any
 }
-const useHistory = (arg: props):{list:HistoryItemProps[],total:any} => {
-  const { data, isLoading, error } = useSWR(arg, fetchOrderCList,{ refreshInterval: refreshConfig.history_refreshInterval })
+const useHistory = (arg: props,opt:any={}):{list:HistoryItemProps[],total:any} => {
+  const { data, isLoading, error } = useSWR(arg, fetchOrderCList,opt)
   const result = useMemo(() => {
     if (error || isLoading === true || !data) {
       return { list: null,total:0 }

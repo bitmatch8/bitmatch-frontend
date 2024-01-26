@@ -13,6 +13,7 @@ import { OrderState } from "@/utils/types"
 import EmptyList from "./EmptyList"
 import useSWR from "swr"
 import useHistory, { HistoryItemProps } from "@/hook/useHistory"
+import { selectBuy, useSelector } from "@/lib/redux"
 
 
 const StateWaiting: React.FC = () => {
@@ -130,7 +131,7 @@ const OrderHistoryItem: React.FC<{
           {item.projectname}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="stage">
-          {item.stage}
+          {item.stage === 'public' ? 'Public' : 'Whitelist'}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="receive_address">
           <CopyItem text={item.receivedAddr} />
@@ -143,7 +144,7 @@ const OrderHistoryItem: React.FC<{
             <TokenSymbol symbol={"BTC"} size={16} />
             {item.amountFloat}
           </div>
-          <div style={{ marginTop: 4 }}>{item.tokenname}</div>
+          {/* <div style={{ marginTop: 4 }}>{item.tokenname}</div> */}
         </OrderHistoryItemBox>
         <OrderHistoryItemBox className="state">
           <StateItemBox>
@@ -181,13 +182,15 @@ const OrderHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
   const [page, setPage] = useState(1)
   const pageSize = 10
   const [index, setIndex] = useState<number | null>(null)
-  const {list:lists,total} = useHistory({
+  const { refresh_opt } = useSelector(selectBuy)
+
+  const { list: lists, total } = useHistory({
     pageNum: page,
     fromAddr: address,
     pid,
-    pageSize,
-  })
-  const reload=(page:any)=>{
+    pageSize
+  }, { refreshInterval: refresh_opt })
+  const reload = (page: any) => {
     setPage(page)
   }
   return (
