@@ -13,8 +13,9 @@ import { OrderState } from "@/utils/types"
 import EmptyList from "./EmptyList"
 import useSWR from "swr"
 import useHistory, { HistoryItemProps } from "@/hook/useHistory"
-import { selectBuy, useSelector } from "@/lib/redux"
-
+import { buySlice, selectBuy, useSelector } from "@/lib/redux"
+import RefreshIcon from "../Svg/RefreshIcon"
+import { addToast, useDispatch } from "@/lib/redux";
 
 const StateWaiting: React.FC = () => {
   return (
@@ -58,7 +59,29 @@ const StateSucceeded: React.FC = () => {
     </>
   )
 }
-
+const RefreshButton: React.FC = () => {
+  const [click, setClick] = useState(false)
+  const dispatch=useDispatch()
+  const onClick=()=>{
+    if(click){
+      return
+    }
+    dispatch(addToast({
+      icon:'success',
+      contxt:'Refresh successful'
+    }))
+    dispatch(buySlice.actions.setRefresh({num:1000}))
+    setTimeout(() => {
+     
+    dispatch(buySlice.actions.setRefresh({num:0})) 
+    }, 2000);
+    setClick(true)
+    setTimeout(() => {
+      setClick(false)
+    }, 15000);
+  }
+  return <IconSvg width={20} fill={click ? '#ccc':'#fff'} onClick={onClick} className={click ? 'rotate':''} />
+}
 const OrderHistoryHead: React.FC = () => {
   return (
     <OrderHistoryHeadBox>
@@ -82,11 +105,20 @@ const OrderHistoryHead: React.FC = () => {
       </OrderHistoryHeadItemBox>
       <OrderHistoryHeadItemBox className="state">
         <span>State</span>
+        <RefreshButton />
+        {/* <RefreshIcon width={30} fill="#ffffff" /> */}
       </OrderHistoryHeadItemBox>
     </OrderHistoryHeadBox>
   )
 }
 
+const IconSvg = styled(RefreshIcon)`
+  transition: all 1s ease-in-out;
+  cursor: pointer;
+  &.rotate {
+    transform: rotate(360deg);
+  }
+`
 const EmptyLine: React.FC = () => {
   return (
     <OrderHistoryLineDetailBox
@@ -106,6 +138,7 @@ const CopyItem: React.FC<{ text: string; len?: number }> = ({
 }) => {
   return <CopySvg text={text}>{hidehash(text, len)}</CopySvg>
 }
+
 
 const OrderStatus: { [state in OrderState]: any } = {
   [OrderState.PENDING]: StateWaiting,
@@ -370,6 +403,7 @@ const OrderHistoryHeadItemBox = styled(OrderHistoryItemBase)`
   font-weight: 600;
   color: #6f6f76;
   line-height: 22px;
+  user-select: none;
   span {
     max-width: 120px;
     display: block;
