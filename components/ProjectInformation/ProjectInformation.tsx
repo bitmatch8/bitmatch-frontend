@@ -46,7 +46,7 @@ const ProjectInformation: React.FC<{id:any,show:boolean,title:string}> = ({id,sh
           )}
         </InfoContainerLineBox>
       </InfoContainerBox>
-      {show ? (
+      {show && detail?.tokenomics ? (
         <>
           <PageSubTitleBox>Tokenomics</PageSubTitleBox>
           <TokenomicsEchartsBox>

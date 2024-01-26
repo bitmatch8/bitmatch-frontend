@@ -13,10 +13,15 @@ const isWhiteInfo = useSwr({
 },address && stage === "whitelist" ? fetchQueryByWhitelist : null,{})
 
   //单地址最低份额
-  const mposa = useMemo(() => info.mposa, [info])
+  const mposa = useMemo(() => {
+    if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
+      return isWhiteInfo?.share
+    }
+    return info.mposa
+  }, [info])
   //单地址最高份额
   const hposa = useMemo(() => {
-    if(isWhiteInfo && isWhiteInfo?.share){
+    if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
       return isWhiteInfo?.share
     }
     return info.hposa
@@ -34,7 +39,7 @@ const isWhiteInfo = useSwr({
     return mposa
   }, [mposa])
   const maxAmount = useMemo(() => {
-    if(isWhiteInfo && isWhiteInfo?.share){
+    if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
       return isWhiteInfo?.share 
     }
     const maxNum = hposa - singlePersonPurchased
@@ -56,7 +61,7 @@ const isWhiteInfo = useSwr({
     }
   }
   const showValue=useMemo(()=>{
-    if(isWhiteInfo && isWhiteInfo?.share){
+    if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
       return isWhiteInfo?.share
     }
     return value
