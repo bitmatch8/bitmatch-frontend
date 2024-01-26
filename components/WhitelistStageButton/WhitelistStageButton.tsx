@@ -145,7 +145,7 @@ const WhitelistStageButton: React.FC<{
     )
   } else if (endtime.getTime() < Date.now()) {
     return <WhitelistStageButtonBox disabled>Ended</WhitelistStageButtonBox>
-  } else if (Number(info?.totalPersonPurchased) >= Number(info?.tokennumber)) {
+  } else if (Number(info?.totalPersonPurchased) >= Number(hposa)) {
     return <WhitelistStageButtonBox disabled>Sold out</WhitelistStageButtonBox>
   } else if (starttime.getTime() < Date.now()) {
     return (
