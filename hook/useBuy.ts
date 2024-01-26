@@ -62,10 +62,13 @@ const isWhiteInfo = useSwr({
   }
   const showValue=useMemo(()=>{
     if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
+      if(Number(info?.totalPersonPurchased) >= Number(hposa)){
+        return ''
+      }
       return isWhiteInfo?.share
     }
     return value
-  },[value,isWhiteInfo])
+  },[value,isWhiteInfo,info,hposa])
 
   const callbackSuccess = () => {
     setValue("")
