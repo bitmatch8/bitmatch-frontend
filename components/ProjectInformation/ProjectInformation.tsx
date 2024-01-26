@@ -8,7 +8,7 @@ import useSwr from "@/hook/useSwr";
 //   { ssr: false },
 // )
 const ProjectInformation: React.FC<{id:any,show:boolean,title:string}> = ({id,show,title}) => {
-  const detail = useSwr(id,fetchProjectDetailsApi,{})
+  const {result:detail} = useSwr(id,fetchProjectDetailsApi,{})
   return (
     <ProjectInformationBox>
       <PageTitleBox>{title}</PageTitleBox>

@@ -7,12 +7,12 @@ const useBuy = (info: any, readData: any,detail:any,stage:any) => {
   const dispatch = useDispatch()
   const [value, setValue] = useState("")
   const { connected, address,network } = useSelector(selectWallter)
-const isWhiteInfo = useSwr({
+const {result:isWhiteInfo} = useSwr({
   pid: detail.id,
   address,
 },address && stage === "whitelist" ? fetchQueryByWhitelist : null,{})
 
-console.log({isWhiteInfo})
+// console.log({isWhiteInfo})
   //单地址最低份额
   const mposa = useMemo(() => {
     if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
@@ -63,7 +63,7 @@ console.log({isWhiteInfo})
   }
   const showValue=useMemo(()=>{
     if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
-      if(Number(info?.totalPersonPurchased) >= Number(hposa)){
+      if(Number(info?.singlePersonPurchased) >= Number(hposa)){
         return ''
       }
       return isWhiteInfo?.share

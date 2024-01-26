@@ -27,7 +27,8 @@ export const buySubmitAsync = createAppAsyncThunk(
   "buy/submit",
   async (params: BuySubmitProps, { dispatch }) => {
     
-    // const res_data = await params.reload()
+    const res_data = await params.reload()
+    console.log({res_data})
 
     // const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
     // console.log(res_data)
@@ -54,7 +55,7 @@ export const send_order = async (params: any,dispatch:any) => {
       addToast({
         // second: 0,
         icon: "warning",
-        contxt: "pending...",
+        contxt: "Pending...",
       })
     )
   } catch (e) {

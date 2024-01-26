@@ -46,7 +46,7 @@ const WhitelistStageButton: React.FC<{
   const dispatch = useDispatch()
   const { address, network } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
-  const toAddress = useSwr({ pid: detail.id }, fetchSelectFaddress, {})
+  const {result:toAddress} = useSwr({ pid: detail.id }, fetchSelectFaddress, {})
   const disabled = useMemo(() => {
     if (toAddress === null) {
       return true

@@ -9,27 +9,25 @@ import useSwr from "./useSwr"
 
 const useDetail = (id: any) => {
   const { address } = useSelector(selectWallter)
-  const [t1,setT1]=useState(0)
-  const [t2,setT2]=useState(0)
-  const detail = useSwr({
+  // const [t1,setT1]=useState(0)
+  // const [t2,setT2]=useState(0)
+  const {result:detail} = useSwr({
       id,
       address: address ? address : undefined,
     },id ? fetchProjectInfoApi : null,{ refreshInterval: refreshConfig.detail_refreshInterval }
   )
 
-  const publicInfo = useSwr({
+  const {result:publicInfo,mutate:publicMutate} = useSwr({
       id: detail?.pubid,
       address,
-      t1,
     },
     detail?.pubid ? fetchWhtielistInfoApi : null,
     { refreshInterval: refreshConfig.publicInfo_refreshInterval }
   )
 
-  const whiteInfo = useSwr({
+  const {result:whiteInfo,mutate:whiteMutate} = useSwr({
       id: detail?.wid,
       address,
-      t2
     },detail?.wid ? fetchWhtielistInfoApi : null,
     { refreshInterval: refreshConfig.whiteInfo_refreshInterval }
   )
@@ -87,12 +85,24 @@ const useDetail = (id: any) => {
     
   }, [detail, tabId, publicInfo, whiteInfo])
 
-  const readWhtie = () => {
-    setT2(t2+1)
-    return publicInfo
+  const readWhtie = async () => {
+    const {code,data} = await fetchWhtielistInfoApi({
+      id: detail?.wid,
+      address,
+    })
+    // if(code === 0){
+    //   whiteMutate(data)
+    // }
+    return data 
   }
-  const readPublic = () => {
-    setT1(t1+1)
+  const readPublic = async () => {
+    const {data,code}=await fetchWhtielistInfoApi({
+      id: detail?.pubid,
+      address,
+    })
+    // if(code === 0){
+    //   publicMutate(data)
+    // }
     return whiteInfo
   }
   return {

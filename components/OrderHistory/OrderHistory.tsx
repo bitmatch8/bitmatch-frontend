@@ -22,6 +22,22 @@ const StateWaiting: React.FC = () => {
     </>
   )
 }
+
+const StateDistributing: React.FC = () => {
+  return (
+    <>
+      <span className="waiting">Distributing</span>
+    </>
+  )
+}
+
+const StateCompleted: React.FC = () => {
+  return (
+    <>
+      <span className="waiting">Verifying</span>
+    </>
+  )
+}
 const StateCancelled: React.FC = () => {
   return (
     <>
@@ -92,8 +108,8 @@ const CopyItem: React.FC<{ text: string; len?: number }> = ({
 
 const OrderStatus: { [state in OrderState]: any } = {
   [OrderState.PENDING]: StateWaiting,
-  [OrderState.DISTRIBUTE]: StateWaiting,
-  [OrderState.COMPLETED]: StateSucceeded,
+  [OrderState.DISTRIBUTE]: StateDistributing,
+  [OrderState.COMPLETED]: StateCompleted,
   [OrderState.UNISATVERFY]: StateSucceeded,
   [OrderState.FAIL]: StateCancelled,
   [OrderState.FAILED]: StateCancelled
@@ -144,10 +160,10 @@ const OrderHistoryItem: React.FC<{
           <div className="title">From Address</div>
           <div> {hidehash(item.fromaddr, 6)}</div>
         </OrderHistoryItemBox>
-        <OrderHistoryItemBox className="project_name">
+        {/* <OrderHistoryItemBox className="project_name">
           <div className="title">To Address</div>
           <div> {hidehash(item.fundaddr, 6)}</div>
-        </OrderHistoryItemBox>
+        </OrderHistoryItemBox> */}
         <OrderHistoryItemBox className="time">
           <div className="title">Time</div>
           <div> {dateFormat(item.createtime, true)}</div>
