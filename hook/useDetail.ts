@@ -11,13 +11,10 @@ const useDetail = (id: any) => {
   const { address } = useSelector(selectWallter)
   const [t1,setT1]=useState(0)
   const [t2,setT2]=useState(0)
-  const detail = useSwr(
-    {
+  const detail = useSwr({
       id,
       address: address ? address : undefined,
-    },
-    id ? fetchProjectInfoApi : null,
-    { refreshInterval: refreshConfig.detail_refreshInterval }
+    },id ? fetchProjectInfoApi : null,{ refreshInterval: refreshConfig.detail_refreshInterval }
   )
 
   const publicInfo = useSwr({
@@ -86,9 +83,8 @@ const useDetail = (id: any) => {
   }, [publicType, whiteType])
 
   const load = useMemo(() => {
-    return (
-      !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
-    )
+    return !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
+    
   }, [detail, tabId, publicInfo, whiteInfo])
 
   const readWhtie = () => {
