@@ -127,6 +127,7 @@ const WhitelistStageButton: React.FC<{
       </WhitelistStageButtonBox>
     )
   }
+  // console.log(Number(info?.singlePersonPurchased) , Number(hposa) , info?.tokennumber <= info?.totalPersonPurchased)
   if (!address) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
@@ -145,7 +146,7 @@ const WhitelistStageButton: React.FC<{
     )
   } else if (endtime.getTime() < Date.now()) {
     return <WhitelistStageButtonBox disabled>Ended</WhitelistStageButtonBox>
-  } else if (Number(info?.totalPersonPurchased) >= Number(hposa) || info?.tokennumber <= info?.totalPersonPurchased) {
+  } else if (Number(info?.singlePersonPurchased) >= Number(hposa) || info?.tokennumber <= info?.totalPersonPurchased) {
     return <WhitelistStageButtonBox disabled>Sold out</WhitelistStageButtonBox>
   } else if (starttime.getTime() < Date.now()) {
     return (

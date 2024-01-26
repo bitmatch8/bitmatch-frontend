@@ -53,9 +53,12 @@ const ListWaperItem: React.FC<{ item: any | null }> = ({
               </div>
             </ListWaperItemUserNameBox>
           </ListWaperItemUserLineBox>
-          <ListWaperItemUserDescBox>
-            {item?.projectdescription}
-          </ListWaperItemUserDescBox>
+          <ListWaperItemUserDescBox dangerouslySetInnerHTML={{
+                __html: item?.projectdescription ? String(item?.projectdescription).replaceAll(
+                  "\n",
+                  "<br/>"
+                ) : '',
+              }}/>
         </div>
         {item === null ? (
           <ValueSkeleton width={200} height={40} />

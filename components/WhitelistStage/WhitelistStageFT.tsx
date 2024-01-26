@@ -46,7 +46,7 @@ const WhitelistStageFT: React.FC<{
           <WhitelistStageLine title="Token Name">
             {detail?.projecttokenname}
           </WhitelistStageLine>
-          <WhitelistStageLine title="Total Shares">
+          <WhitelistStageLine title="Total Supply">
             {info?.tokennumber} {detail?.projecttokenname}
           </WhitelistStageLine>
         </WhitelistStageLineBox>

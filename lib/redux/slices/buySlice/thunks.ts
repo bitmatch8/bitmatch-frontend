@@ -26,13 +26,7 @@ type BuySubmitProps = {
 export const buySubmitAsync = createAppAsyncThunk(
   "buy/submit",
   async (params: BuySubmitProps, { dispatch }) => {
-    const uniqueId = dispatch(
-      addToast({
-        second: 0,
-        icon: "warning",
-        contxt: "pending...",
-      })
-    ) as any
+    
     // const res_data = await params.reload()
 
     // const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
@@ -46,25 +40,26 @@ export const buySubmitAsync = createAppAsyncThunk(
       )
       params.txHash = txHash
       params.callback(txHash)
-      send_order(params, uniqueId, dispatch)
+      send_order(params,dispatch)
     } catch (e) {
-      dispatch(toastSlice.actions.removeToast(uniqueId))
+      // dispatch(toastSlice.actions.removeToast(uniqueId))
     }
   }
 )
 
-export const send_order = async (params: any, uniqueId: any, dispatch: any) => {
+export const send_order = async (params: any,dispatch:any) => {
   try {
     await submitOderListSave(params)
     dispatch(
       addToast({
-        icon: "success",
-        contxt: "Success!",
+        // second: 0,
+        icon: "warning",
+        contxt: "pending...",
       })
     )
   } catch (e) {
     setTimeout(() => {
-      send_order(params, uniqueId, dispatch)
+      send_order(params, dispatch)
     }, 5000)
   }
 }
