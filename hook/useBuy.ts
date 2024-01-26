@@ -19,7 +19,7 @@ const {result:isWhiteInfo} = useSwr({
       return isWhiteInfo?.share
     }
     return info.mposa
-  }, [info])
+  }, [info,isWhiteInfo])
   //单地址最高份额
   const hposa = useMemo(() => {
     if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
