@@ -21,5 +21,6 @@ export enum OrderState{
   DISTRIBUTE="distribute",
   COMPLETED="completed",
   UNISATVERFY="unisatVerify",
-  FAIL="failed"
+  FAIL="fail",
+  FAILED="failed"
 }

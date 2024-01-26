@@ -40,7 +40,8 @@ const WhitelistStageNFT: React.FC<{
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
       <WhitelistStageCardBox style={{ flexDirection: "row", gap: 60 }}>
         <WhitelistStageItemBox style={{ flex: 1 }}>
-          <WhitelistStageLine title={DetailInfoType.public === String(info.type) ? 'Total Supply':'Whitelist Amount'}>
+          {/* <WhitelistStageLine title={DetailInfoType.public === String(info.type) ? 'Total Supply':'Whitelist Amount'}> */}
+          <WhitelistStageLine title="Total Supply">
             {info?.tokennumber}
           </WhitelistStageLine>
           <WhitelistStageLine title="Price">

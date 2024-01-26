@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import ValueSkeleton from "./ValueSkeleton";
 import Link from "next/link";
+import { ProjectType } from "@/utils/types";
 const ListWaperItem: React.FC<{ item: any | null }> = ({
   item,
 }) => {
@@ -59,7 +60,7 @@ const ListWaperItem: React.FC<{ item: any | null }> = ({
         {item === null ? (
           <ValueSkeleton width={200} height={40} />
         ) : (
-          <ListWaperButtonBox href={`/ft/${item?.id}`}>View</ListWaperButtonBox>
+          <ListWaperButtonBox href={`/${item.projecttype === ProjectType.FT ? 'ft':'nft'}/${item?.id}`}>View</ListWaperButtonBox>
         )}
       </ListWaperItemLineBox>
     </ListWaperItemBox>
