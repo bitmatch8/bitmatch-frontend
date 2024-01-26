@@ -10,7 +10,10 @@ const useSwr = (arg:any,api:any,opt:any):any => {
     const {code,data:reponse} = data
     if(code === 0){
       return reponse
+    }else if(code === 1010){
+      return 0
     }
+    
   },[data,isLoading,error])
   return result
 }

@@ -12,6 +12,7 @@ const isWhiteInfo = useSwr({
   address,
 },address && stage === "whitelist" ? fetchQueryByWhitelist : null,{})
 
+console.log({isWhiteInfo})
   //单地址最低份额
   const mposa = useMemo(() => {
     if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
