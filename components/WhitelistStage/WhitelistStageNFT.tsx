@@ -40,6 +40,9 @@ const WhitelistStageNFT: React.FC<{
   },[])
   const price = useMemo(() => {
     if(stage === 'whitelist'){
+      if(process.env.NODE_ENV==='development'){
+       return parseFixedAmount((Number(((1 + 1) * 550 * 1.1)/100000000).toFixed(8)) ,8) 
+      }
       return parseFixedAmount((Number(((fees + 1) * 550 * 1.1)/100000000).toFixed(8)) ,8)
     }
     return parseFixedAmount(info.targetnumber || 0, 8);
@@ -50,7 +53,7 @@ const WhitelistStageNFT: React.FC<{
   // console.log({price},price?.toString())
   const satoshis = useMemo(() => {
     return price.mul(BigNumber.from(value || 0)).toString();
-  }, [price, value]);
+  }, [price, value])
 
   
   return (

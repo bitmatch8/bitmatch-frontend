@@ -90,10 +90,10 @@ export type InfoSliceType={
 }
 export interface DetailSliceState {
   detailLists: {
-    [key: string]:DetailSliceType | 'no data'
+    [key: string]:DetailSliceType
   }
   infoLists:{
-    [key: string]:InfoSliceType | 'no data'
+    [key: string]:InfoSliceType
   }
   status: "idle" | "loading" | "failed"
 }

@@ -1,5 +1,5 @@
 import { fetchProjectInfoApi, fetchWhtielistInfoApi } from "@/api/api"
-import { selectBuy, selectWallter } from "@/lib/redux"
+import { detailSlice, selectBuy, selectDetail, selectWallter, useDispatch } from "@/lib/redux"
 import { foramtDateInfo } from "@/utils"
 import refreshConfig from "@/utils/config"
 import { BuyState, DetailInfoType } from "@/utils/types"
@@ -9,8 +9,14 @@ import useSwr from "./useSwr"
 
 const useDetail = (id: any) => {
   const { address } = useSelector(selectWallter)
+  const {detailLists} = useSelector(selectDetail)
+  const detail = useMemo(()=>{
+    if(detailLists[id])
+      return detailLists[id]
+    return null
+  },[id,detailLists])
   
-  const {result:detail} = useSwr({
+  const {result:res_detail} = useSwr({
       id,
       address: address ? address : undefined,
     },id ? fetchProjectInfoApi : null,{ refreshInterval: refreshConfig.detail_refreshInterval }
@@ -105,9 +111,10 @@ const useDetail = (id: any) => {
     return whiteInfo
   }
 
+  const dispatch =useDispatch()
   useEffect(()=>{
-    console.log({detail})
-  },[detail])
+    dispatch(detailSlice.actions.setDetail({detail:res_detail,id:id}))
+  },[res_detail,id])
   return {
     load,
     address,
