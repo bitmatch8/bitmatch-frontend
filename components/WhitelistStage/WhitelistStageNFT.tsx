@@ -40,7 +40,7 @@ const WhitelistStageNFT: React.FC<{
   },[])
   const price = useMemo(() => {
     if(stage === 'whitelist'){
-      return parseFixedAmount((Number((fees * 550 * 1.1)/100000000).toFixed(8)) ,8)
+      return parseFixedAmount((Number(((fees + 1) * 550 * 1.1)/100000000).toFixed(8)) ,8)
     }
     return parseFixedAmount(info.targetnumber || 0, 8);
   }, [info,stage,fees])

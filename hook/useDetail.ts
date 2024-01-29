@@ -105,9 +105,9 @@ const useDetail = (id: any) => {
     return whiteInfo
   }
 
-  // useEffect(()=>{
-  //   console.log({detail})
-  // },[detail])
+  useEffect(()=>{
+    console.log({detail})
+  },[detail])
   return {
     load,
     address,

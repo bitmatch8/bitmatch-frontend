@@ -30,7 +30,7 @@ const WhitelistStageFT: React.FC<{
   const price = useMemo(
     () =>{
       if(stage === 'whitelist'){
-        return (Number((fees * 550 * 1.1)/100000000).toFixed(8))
+        return (Number(((fees + 1) * 550 * 1.1)/100000000).toFixed(8))
       }
       return Number(
         (
