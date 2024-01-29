@@ -45,9 +45,7 @@ setFees(1)
     initFees()
   },[])
   const price = useMemo(() => {
-    if(stage === 'whitelist'){
-      return parseFixedAmount((Number(((fees + 1) * 550 * 1.1)/100000000).toFixed(8)) ,8)
-    }
+   
     return parseFixedAmount(info.targetnumber || 0, 8);
   }, [info,stage,fees])
   console.log({
@@ -55,6 +53,9 @@ setFees(1)
   })
   // console.log({price},price?.toString())
   const satoshis = useMemo(() => {
+    if(stage === 'whitelist'){
+      return ((fees + 1) * 550 * 1.1).toFixed(0)
+    }
     return price.mul(BigNumber.from(value || 0)).toString();
   }, [price, value])
 
