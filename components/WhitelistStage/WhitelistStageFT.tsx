@@ -43,13 +43,13 @@ const WhitelistStageFT: React.FC<{
       dd:Number(((fees + 1) * 550 * 1.1)).toFixed(0)
     })
   const initFees=async()=>{
-    console.log(process.env.ENV_BIT)
-    if(process.env.ENV_BIT==='development'){
+    // console.log(process.env.ENV_BIT)
+    // if(process.env.ENV_BIT==='development'){
       setFees(1)
-    }else{
-      const fees = await fetchFeesApi()
-      setFees(fees?.fastestFee || 0)
-    }
+    // }else{
+    //   const fees = await fetchFeesApi()
+    //   setFees(fees?.fastestFee || 0)
+    // }
   }
   useEffect(()=>{
     initFees()

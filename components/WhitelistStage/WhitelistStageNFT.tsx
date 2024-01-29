@@ -32,13 +32,13 @@ const WhitelistStageNFT: React.FC<{
     readData,detail,stage
   );
   const initFees=async()=>{
-    console.log(process.env.ENV_BIT)
-    if(process.env.ENV_BIT ==='development'){
+    // console.log(process.env.ENV_BIT)
+    // if(process.env.ENV_BIT ==='development'){
 setFees(1)
-    }else{
-      const fees = await fetchFeesApi()
-      setFees(fees?.fastestFee || 0)
-    }
+    // }else{
+    //   const fees = await fetchFeesApi()
+    //   setFees(fees?.fastestFee || 0)
+    // }
     
   }
   useEffect(()=>{
