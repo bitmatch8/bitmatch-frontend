@@ -30,9 +30,6 @@ const WhitelistStageFT: React.FC<{
   const price = useMemo(
     () =>{
       if(stage === 'whitelist'){
-        if(process.env.NODE_ENV==='development'){
-          return (Number(((1 + 1) * 550 * 1.1)/100000000).toFixed(8)) 
-        }
         return (Number(((fees + 1) * 550 * 1.1)/100000000).toFixed(8))
       }
       return Number(
@@ -47,8 +44,12 @@ const WhitelistStageFT: React.FC<{
       dd:Number(((fees + 1) * 550 * 1.1)).toFixed(0)
     })
   const initFees=async()=>{
-    const fees = await fetchFeesApi()
-    setFees(fees?.fastestFee || 0)
+    if(process.env.NODE_ENV==='development'){
+      setFees(1)
+    }else{
+      const fees = await fetchFeesApi()
+      setFees(fees?.fastestFee || 0)
+    }
   }
   useEffect(()=>{
     initFees()
