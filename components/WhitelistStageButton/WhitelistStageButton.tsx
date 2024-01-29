@@ -46,22 +46,37 @@ const WhitelistStageButton: React.FC<{
   const dispatch = useDispatch()
   const { address, network } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
-  const {result:toAddress} = useSwr({ pid: detail.id }, fetchSelectFaddress, {})
+  const { result: toAddress } = useSwr(
+    { pid: detail.id },
+    fetchSelectFaddress,
+    {}
+  )
   const disabled = useMemo(() => {
     if (toAddress === null) {
       return true
     }
     return stage === "whitelist" && (isWhiteInfo === null || isWhiteInfo === 0)
-  }, [isWhiteInfo,stage,toAddress])
+  }, [isWhiteInfo, stage, toAddress])
 
   const buttonText = useMemo(() => {
-    if (stage === "whitelist" && isWhiteInfo === 0) {
-      return "Not in whitelist"
-    } else if (
-      (stage === "whitelist" && isWhiteInfo === null) ||
-      toAddress === null
-    ) {
-      return "Loading"
+    // if (stage === "whitelist" && isWhiteInfo === 0) {
+    //   return "Not in whitelist"
+    // } else if (
+    //   (stage === "whitelist" && isWhiteInfo === null) ||
+    //   toAddress === null
+    // ) {
+    //   return "Loading"
+    // }
+    if (stage === "whitelist") {
+      if (isWhiteInfo === 0) {
+        return "Not in whitelist"
+      } else if (
+        (stage === "whitelist" && isWhiteInfo === null) ||
+        toAddress === null
+      ) {
+        return "Loading"
+      }
+      return 'Claim'
     }
     return "Buy"
   }, [isWhiteInfo, toAddress])
@@ -146,7 +161,12 @@ const WhitelistStageButton: React.FC<{
     )
   } else if (endtime.getTime() < Date.now()) {
     return <WhitelistStageButtonBox disabled>Ended</WhitelistStageButtonBox>
-  } else if (Number(info?.singlePersonPurchased) >= Number(hposa) || info?.tokennumber <= info?.totalPersonPurchased) {
+  } else if (stage === "whitelist" && Number(info?.singlePersonPurchased) >= Number(hposa)) {
+    return <WhitelistStageButtonBox disabled>Claimed</WhitelistStageButtonBox>
+  } else if (
+    Number(info?.singlePersonPurchased) >= Number(hposa) ||
+    info?.tokennumber <= info?.totalPersonPurchased
+  ) {
     return <WhitelistStageButtonBox disabled>Sold out</WhitelistStageButtonBox>
   } else if (starttime.getTime() < Date.now()) {
     return (
