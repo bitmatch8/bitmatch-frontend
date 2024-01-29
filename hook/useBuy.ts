@@ -3,30 +3,35 @@ import { useMemo, useState } from "react"
 import useSwr from "./useSwr"
 import { fetchQueryByWhitelist } from "@/api/api"
 
-const useBuy = (info: any, readData: any,detail:any,stage:any) => {
+const useBuy = (info: any, readData: any, detail: any, stage: any) => {
   const dispatch = useDispatch()
   const [value, setValue] = useState("")
-  const { connected, address,network } = useSelector(selectWallter)
-const {result:isWhiteInfo} = useSwr({
-  pid: detail.id,
-  address,
-},address && stage === "whitelist" ? fetchQueryByWhitelist : null,{})
-
-// console.log({isWhiteInfo})
+  const { connected, address, network } = useSelector(selectWallter)
+  const { result: isWhiteInfo } = useSwr(
+    {
+      pid: detail.id,
+      address,
+    },
+    address && stage === "whitelist" ? fetchQueryByWhitelist : null,
+    {}
+  )  
+  
+  //是否限额
+  const isLimit = useMemo(()=>isWhiteInfo && isWhiteInfo?.share && stage === "whitelist",[isWhiteInfo,stage])
   //单地址最低份额
   const mposa = useMemo(() => {
-    if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
+    if (isLimit) {
       return isWhiteInfo?.share
     }
     return info.mposa
-  }, [info,isWhiteInfo])
+  }, [info, isWhiteInfo])
   //单地址最高份额
   const hposa = useMemo(() => {
-    if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
+    if (isLimit) {
       return isWhiteInfo?.share
     }
     return info.hposa
-  }, [info,isWhiteInfo])
+  }, [info, isWhiteInfo])
   //用户已购买份额
   const singlePersonPurchased = useMemo(
     () => info.singlePersonPurchased,
@@ -40,13 +45,13 @@ const {result:isWhiteInfo} = useSwr({
     return mposa
   }, [mposa])
   const maxAmount = useMemo(() => {
-    if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
-      return isWhiteInfo?.share 
+    if (isLimit) {
+      return isWhiteInfo?.share
     }
     const maxNum = hposa - singlePersonPurchased
-    
+
     return maxNum > availableAmount ? availableAmount : maxNum
-  }, [hposa, singlePersonPurchased, availableAmount,isWhiteInfo])
+  }, [hposa, singlePersonPurchased, availableAmount, isWhiteInfo])
 
   const onChangeInput = (e: any) => {
     let { value } = e.target
@@ -61,15 +66,15 @@ const {result:isWhiteInfo} = useSwr({
       setValue(value)
     }
   }
-  const showValue=useMemo(()=>{
-    if(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"){
-      if(Number(info?.singlePersonPurchased) >= Number(hposa)){
-        return ''
+  const showValue = useMemo(() => {
+    if (isLimit) {
+      if (Number(info?.singlePersonPurchased) >= Number(hposa)) {
+        return ""
       }
       return isWhiteInfo?.share
     }
     return value
-  },[value,isWhiteInfo,info,hposa])
+  }, [value, isWhiteInfo, info, hposa])
 
   const callbackSuccess = () => {
     setValue("")
@@ -78,29 +83,29 @@ const {result:isWhiteInfo} = useSwr({
     }, 5000)
   }
 
-  const inputLoad=useMemo(()=>{
-    if(stage === "whitelist" && isWhiteInfo === null){
+  const inputLoad = useMemo(() => {
+    if (stage === "whitelist" && isWhiteInfo === null) {
       return true
-    }else if(stage === "whitelist" && (isWhiteInfo === 0 || isWhiteInfo?.share)){
+    } else if (stage === "whitelist" && (isWhiteInfo === 0 || isWhiteInfo?.share)
+    ) {
       return true
     }
-    return false 
-  },[stage,isWhiteInfo])
-
+    return false
+  }, [stage, isWhiteInfo])
 
   const onMax = () => {
-    if(maxAmount >0 && inputLoad === false){
+    if (maxAmount > 0 && inputLoad === false) {
       onChangeInput({ target: { value: maxAmount } })
     }
   }
- 
 
   return {
+    isLimit,
     inputLoad,
     isWhiteInfo,
-    value:showValue,
+    value: showValue,
     mposa,
-    hposa, 
+    hposa,
     minAmount,
     maxAmount,
     onChangeInput,

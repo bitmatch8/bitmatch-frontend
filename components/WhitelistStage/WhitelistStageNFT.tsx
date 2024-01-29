@@ -27,7 +27,7 @@ const WhitelistStageNFT: React.FC<{
   readData: any;
 }> = ({ info, balance, title, detail, stage, readData }) => {
   const [fees,setFees]=useState(0)
-  const { value,inputLoad, onChangeInput, callbackSuccess, onMax,maxAmount,isWhiteInfo,mposa,hposa } = useBuy(
+  const { value,inputLoad, onChangeInput, callbackSuccess, onMax,maxAmount,isWhiteInfo,isLimit,mposa,hposa } = useBuy(
     info,
     readData,detail,stage
   );
@@ -124,6 +124,7 @@ setFees(1)
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
           <WhitelistStageButton
+          isLimit={isLimit}
           mposa={mposa}
           hposa={hposa}
           isWhiteInfo={isWhiteInfo}

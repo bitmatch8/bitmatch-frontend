@@ -27,6 +27,7 @@ const WhitelistStageButton: React.FC<{
   buyAmount: any
   stage: any
   reload: any
+  isLimit:boolean
   isWhiteInfo: any
   mposa: any
   hposa: any
@@ -39,6 +40,7 @@ const WhitelistStageButton: React.FC<{
   stage,
   price,
   reload,
+  isLimit,
   isWhiteInfo,
   hposa,
   mposa,
@@ -59,26 +61,12 @@ const WhitelistStageButton: React.FC<{
   }, [isWhiteInfo, stage, toAddress])
 
   const buttonText = useMemo(() => {
-    // if (stage === "whitelist" && isWhiteInfo === 0) {
-    //   return "Not in whitelist"
-    // } else if (
-    //   (stage === "whitelist" && isWhiteInfo === null) ||
-    //   toAddress === null
-    // ) {
-    //   return "Loading"
-    // }
-    if (stage === "whitelist") {
-      if (isWhiteInfo === 0) {
-        return "Not in whitelist"
-      } else if (
-        (stage === "whitelist" && isWhiteInfo === null) ||
-        toAddress === null
-      ) {
-        return "Loading"
-      }
-      return 'Claim'
+    if (isWhiteInfo === 0) {
+      return "Not in whitelist"
+    } else if ((stage === "whitelist" && isWhiteInfo === null) || toAddress === null) {
+      return "Loading"
     }
-    return "Buy"
+    return isLimit ? 'Buy':'Claim'
   }, [isWhiteInfo, toAddress])
 
   const [onConnect, onDismiss] = useModal(
@@ -135,6 +123,8 @@ const WhitelistStageButton: React.FC<{
     () => starttime.getTime() > Date.now(),
     [starttime]
   )
+  const isSoldOut=useMemo(()=>Number(info?.singlePersonPurchased) >= Number(hposa || 0) || Number(info?.tokennumber || 0) <= Number(info?.totalPersonPurchased || 0),[info,hposa])
+  const isClaimed=useMemo(()=>isLimit && Number(info?.singlePersonPurchased) >= Number(hposa),[hposa,info])
   if (network && network !== process.env.NEXT_PUBLIC_NETWORK) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
@@ -142,7 +132,6 @@ const WhitelistStageButton: React.FC<{
       </WhitelistStageButtonBox>
     )
   }
-  // console.log(Number(info?.singlePersonPurchased) , Number(hposa) , info?.tokennumber , info?.totalPersonPurchased)
   if (!address) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
@@ -161,12 +150,9 @@ const WhitelistStageButton: React.FC<{
     )
   } else if (endtime.getTime() < Date.now()) {
     return <WhitelistStageButtonBox disabled>Ended</WhitelistStageButtonBox>
-  } else if (stage === "whitelist" && Number(info?.singlePersonPurchased) >= Number(hposa)) {
+  } else if (isClaimed) {
     return <WhitelistStageButtonBox disabled>Claimed</WhitelistStageButtonBox>
-  } else if (
-    Number(info?.singlePersonPurchased) >= Number(hposa) ||
-    info?.tokennumber <= info?.totalPersonPurchased
-  ) {
+  } else if (isSoldOut) {
     return <WhitelistStageButtonBox disabled>Sold out</WhitelistStageButtonBox>
   } else if (starttime.getTime() < Date.now()) {
     return (

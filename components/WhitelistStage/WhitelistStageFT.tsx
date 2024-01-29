@@ -22,7 +22,7 @@ const WhitelistStageFT: React.FC<{
 }> = ({ info, balance, title, detail, stage, readData, }) => {
   const [fees,setFees]=useState(0)
 
-  const { value,inputLoad, onChangeInput, callbackSuccess, onMax ,isWhiteInfo,mposa,hposa,maxAmount} = useBuy(
+  const { value,inputLoad, onChangeInput, callbackSuccess, onMax ,isWhiteInfo,isLimit,mposa,hposa,maxAmount} = useBuy(
     info,
     readData,detail,stage
   );
@@ -126,6 +126,7 @@ const WhitelistStageFT: React.FC<{
           <WhitelistStageButton
           hposa={hposa}
           mposa={mposa}
+          isLimit={isLimit}
           isWhiteInfo={isWhiteInfo}
             price={priceBig}
             detail={detail}
