@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import ValueSkeleton from "@/components/ValueSkeleton";
 
-const DetailTitle: React.FC<{ title: string }> = ({ title }) => {
+const DetailTitle: React.FC<{ title: any }> = ({ title }) => {
   const { back } = useRouter();
   return (
     <HeadContainerBox>
