@@ -32,6 +32,7 @@ const WhitelistStageNFT: React.FC<{
     readData,detail,stage
   );
   const initFees=async()=>{
+    console.log(process.env.NODE_ENV)
     if(process.env.NODE_ENV==='development'){
 setFees(1)
     }else{
