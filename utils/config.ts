@@ -1,5 +1,5 @@
 const refreshConfig ={
-	detail_refreshInterval:15000,
+	detail_refreshInterval:600000,
 	publicInfo_refreshInterval:15000,
 	whiteInfo_refreshInterval:15000,
 	history_refreshInterval:30000,

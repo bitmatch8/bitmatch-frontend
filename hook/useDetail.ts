@@ -1,5 +1,5 @@
 import { fetchProjectInfoApi, fetchWhtielistInfoApi } from "@/api/api"
-import { detailSlice, selectBuy, selectDetail, selectWallter, useDispatch } from "@/lib/redux"
+import { buySlice, detailSlice, selectBuy, selectDetail, selectWallter, useDispatch } from "@/lib/redux"
 import { foramtDateInfo } from "@/utils"
 import refreshConfig from "@/utils/config"
 import { BuyState, DetailInfoType } from "@/utils/types"
@@ -9,6 +9,8 @@ import useSwr from "./useSwr"
 
 const useDetail = (id: any) => {
   const { address } = useSelector(selectWallter)
+
+  const { tabType:tabId } = useSelector(selectBuy)
   const {detailLists,infoLists} = useSelector(selectDetail)
   const detail = useMemo(()=>{
     return detailLists[id] || null
@@ -17,7 +19,7 @@ const useDetail = (id: any) => {
   const {result:res_detail} = useSwr({
       id,
       address: address ? address : undefined,
-    },id ? fetchProjectInfoApi : null,{ refreshInterval: refreshConfig.detail_refreshInterval }
+    },id ? fetchProjectInfoApi : null,{ }
   )
 
   const pub_info_key=useMemo(()=>{
@@ -36,14 +38,14 @@ const useDetail = (id: any) => {
       id: detail?.pubid,
       address,
     },
-    detail?.pubid ? fetchWhtielistInfoApi : null,
+    detail?.pubid && (!publicInfo || tabId === DetailInfoType.public)? fetchWhtielistInfoApi : null,
     { refreshInterval: refreshConfig.publicInfo_refreshInterval }
   )
 
   const {result:res_whiteInfo,mutate:whiteMutate} = useSwr({
       id: detail?.wid,
       address,
-    },detail?.wid ? fetchWhtielistInfoApi : null,
+    },detail?.wid && (!whiteInfo || tabId === DetailInfoType.white) ? fetchWhtielistInfoApi : null,
     { refreshInterval: refreshConfig.whiteInfo_refreshInterval }
   )
 
@@ -81,20 +83,28 @@ const useDetail = (id: any) => {
     return arr
   }, [whiteInfo, publicInfo])
 
-  const tabId = useMemo(() => {
+  const initTabId = () => {
     if (whiteType === BuyState.White_Ended && publicType) {
       if (publicType === BuyState.Public_Ended) {
+        dispatch(buySlice.actions.setTabType({type:DetailInfoType.white}))
         return DetailInfoType.white
       }
+      dispatch(buySlice.actions.setTabType({type:DetailInfoType.public}))
       return DetailInfoType.public
     } else if (whiteType) {
+      dispatch(buySlice.actions.setTabType({type:DetailInfoType.white}))
       return DetailInfoType.white
     } else if (publicType) {
+      dispatch(buySlice.actions.setTabType({type:DetailInfoType.public}))
       return DetailInfoType.public
     }
+    dispatch(buySlice.actions.setTabType({type:null})) 
     return null
-  }, [publicType, whiteType])
+  }
 
+  useEffect(()=>{
+    initTabId() 
+  },[publicType, whiteType])
   const load = useMemo(() => {
     return !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
     

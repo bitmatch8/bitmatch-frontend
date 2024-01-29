@@ -69,7 +69,7 @@ export default function IndexPage() {
 
   const pageNum = 1
   const projecttype = tabType === "ALL" ? undefined : tabType === "FT" ? 1 : 2
-  const {result:result_lists} = useSwr({pageNum,pageSize,projecttype},fetchProjectInfoSelectInfoApi,{ refreshInterval: refreshConfig.detail_refreshInterval })
+  const {result:result_lists} = useSwr({pageNum,pageSize,projecttype},fetchProjectInfoSelectInfoApi,{ })
 
   const projectList:any[] = useMemo(()=>{
     if(result_lists === null){
@@ -79,7 +79,7 @@ export default function IndexPage() {
   },[result_lists])
 
   const totalNum = useMemo(()=>result_lists?.total || 0,[result_lists])
-  const {result:dashboard} = useSwr({},fetchDashboardApi,{ refreshInterval: refreshConfig.detail_refreshInterval })
+  const {result:dashboard} = useSwr({},fetchDashboardApi,{  })
   // const getLists = (pageNum: number = 1) => {
   //   dispatch(fetchProjectInfoSelectInfoAsync({ pageNum, pageSize, tabType }));
   // };

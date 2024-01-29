@@ -1,7 +1,7 @@
 import styled from "@emotion/styled"
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
-import { selectWallter } from "@/lib/redux"
+import { buySlice, selectBuy, selectWallter, useDispatch } from "@/lib/redux"
 import EmptyStageBox from "../EmptyStageBox"
 import ValueSkeleton from "../ValueSkeleton"
 import WhitelistStageNFT from "../WhitelistStage/WhitelistStageNFT"
@@ -26,9 +26,12 @@ const ProjectTabs: React.FC<{
   whiteRead,
   publicRead,
 }) => {
-  const [tId, setTabId] = useState<string>(tabId)
+  // const [tId, setTabId] = useState<string>(tabId)
+  const { tabType:tId } = useSelector(selectBuy)
+  const dispatch = useDispatch()
   const { balance } = useSelector(selectWallter)
-  const onClickTabItem = (id: string) => setTabId(id)
+  const onClickTabItem = (type: string) => dispatch(buySlice.actions.setTabType({type})) 
+  
   const WhitelistStage =
     String(detail?.projecttype) === ProjectType.NFT
       ? WhitelistStageNFT

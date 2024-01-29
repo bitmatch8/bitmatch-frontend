@@ -4,6 +4,7 @@ import { buySubmitAsync } from './thunks';
 
 const initialState: BuySliceState = {
   status: 'idle',
+  tabType:null,
   refresh_opt:0,
 }
 
@@ -13,7 +14,10 @@ export const buySlice = createSlice({
   reducers: {
     setRefresh:(state,action: PayloadAction<{num:number}>)=>{
       state.refresh_opt=action.payload.num
-    }
+    },
+    setTabType:(state,action: PayloadAction<{type:any}>)=>{
+      state.tabType=action.payload.type
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -29,6 +33,7 @@ export const buySlice = createSlice({
 })
 
 export interface BuySliceState {
+  tabType:any,
   refresh_opt:number,
   status: 'idle' | 'loading' | 'failed'
 }

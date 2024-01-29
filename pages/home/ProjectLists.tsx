@@ -14,7 +14,7 @@ import refreshConfig from "@/utils/config";
 import useSwr from "@/hook/useSwr";
 
 export default function ProjectLists() {
-  const {result:result_lists,} = useSwr({pageNum:1,pageSize:10},fetchProjectInfoSelectInfoApi,{ refreshInterval: refreshConfig.detail_refreshInterval })
+  const {result:result_lists,} = useSwr({pageNum:1,pageSize:10},fetchProjectInfoSelectInfoApi,{ })
 
   const projectList:any[] = useMemo(()=>{
     if(result_lists === null){
