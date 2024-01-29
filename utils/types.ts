@@ -3,6 +3,7 @@ export enum DetailInfoType {
   public = "2",
   info = "3",
 }
+
 export enum ProjectType {
   FT = "1",
   NFT = "2",

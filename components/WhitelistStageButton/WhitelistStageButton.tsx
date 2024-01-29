@@ -61,7 +61,7 @@ const WhitelistStageButton: React.FC<{
   }, [isWhiteInfo, stage, toAddress])
 
   const buttonText = useMemo(() => {
-    if (isWhiteInfo === 0) {
+    if (isWhiteInfo === 0 && stage === 'whitelist') {
       return "Not in whitelist"
     } else if ((stage === "whitelist" && isWhiteInfo === null) || toAddress === null) {
       return "Loading"

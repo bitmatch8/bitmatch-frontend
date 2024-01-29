@@ -45,7 +45,6 @@ setFees(1)
     initFees()
   },[])
   const price = useMemo(() => {
-   
     return parseFixedAmount(info.targetnumber || 0, 8);
   }, [info,stage,fees])
   // console.log({
