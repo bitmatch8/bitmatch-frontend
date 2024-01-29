@@ -66,7 +66,7 @@ const WhitelistStageButton: React.FC<{
     } else if ((stage === "whitelist" && isWhiteInfo === null) || toAddress === null) {
       return "Loading"
     }
-    return isLimit ? 'Buy':'Claim'
+    return !isLimit ? 'Buy':'Claim'
   }, [isWhiteInfo, toAddress])
 
   const [onConnect, onDismiss] = useModal(
@@ -125,6 +125,7 @@ const WhitelistStageButton: React.FC<{
   )
   const isSoldOut=useMemo(()=>Number(info?.singlePersonPurchased) >= Number(hposa || 0) || Number(info?.tokennumber || 0) <= Number(info?.totalPersonPurchased || 0),[info,hposa])
   const isClaimed=useMemo(()=>isLimit && Number(info?.singlePersonPurchased) >= Number(hposa),[hposa,info])
+  // console.log(isLimit , Number(info?.singlePersonPurchased) , Number(hposa))
   if (network && network !== process.env.NEXT_PUBLIC_NETWORK) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>

@@ -17,21 +17,22 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
   )  
   
   //是否限额
-  const isLimit = useMemo(()=>isWhiteInfo && isWhiteInfo?.share && stage === "whitelist",[isWhiteInfo,stage])
+  const isLimit = useMemo(()=>(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"),[isWhiteInfo,stage])
+  // console.log({isLimit},isWhiteInfo , isWhiteInfo?.share , stage === "whitelist")
   //单地址最低份额
   const mposa = useMemo(() => {
     if (isLimit) {
       return isWhiteInfo?.share
     }
     return info.mposa
-  }, [info, isWhiteInfo])
+  }, [info, isWhiteInfo,isLimit])
   //单地址最高份额
   const hposa = useMemo(() => {
     if (isLimit) {
       return isWhiteInfo?.share
     }
     return info.hposa
-  }, [info, isWhiteInfo])
+  }, [info, isWhiteInfo,isLimit])
   //用户已购买份额
   const singlePersonPurchased = useMemo(
     () => info.singlePersonPurchased,
@@ -51,7 +52,7 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
     const maxNum = hposa - singlePersonPurchased
 
     return maxNum > availableAmount ? availableAmount : maxNum
-  }, [hposa, singlePersonPurchased, availableAmount, isWhiteInfo])
+  }, [hposa, singlePersonPurchased, availableAmount, isWhiteInfo,isLimit])
 
   const onChangeInput = (e: any) => {
     let { value } = e.target
@@ -74,7 +75,7 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
       return isWhiteInfo?.share
     }
     return value
-  }, [value, isWhiteInfo, info, hposa])
+  }, [value, isWhiteInfo, info, hposa,isLimit])
 
   const callbackSuccess = () => {
     setValue("")

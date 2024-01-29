@@ -58,7 +58,7 @@ const WhitelistStageFT: React.FC<{
     return parseFixedAmount(String(price), 8);
   }, [info, price]);
   const satoshis = useMemo(() => {
-    if(stage === 'whitelist'){
+    if(isLimit){
       return ((fees + 1) * 550 * 1.1).toFixed(0)
     }
     return priceBig.mul(BigNumber.from(value || 0)).toString();

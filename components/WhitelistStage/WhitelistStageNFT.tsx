@@ -53,7 +53,7 @@ setFees(1)
   })
   // console.log({price},price?.toString())
   const satoshis = useMemo(() => {
-    if(stage === 'whitelist'){
+    if(isLimit){
       return ((fees + 1) * 550 * 1.1).toFixed(0)
     }
     return price.mul(BigNumber.from(value || 0)).toString();
