@@ -44,7 +44,9 @@ const WhitelistStageNFT: React.FC<{
     }
     return parseFixedAmount(info.targetnumber || 0, 8);
   }, [info,stage,fees])
-
+  console.log({
+    fees,
+  })
   // console.log({price},price?.toString())
   const satoshis = useMemo(() => {
     return price.mul(BigNumber.from(value || 0)).toString();

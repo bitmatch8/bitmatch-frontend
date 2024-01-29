@@ -39,6 +39,9 @@ const WhitelistStageFT: React.FC<{
       )
     },[info,fees]);
   
+    console.log({
+      fees,
+    })
   const initFees=async()=>{
     const fees = await fetchFeesApi()
     setFees(fees?.fastestFee || 0)
