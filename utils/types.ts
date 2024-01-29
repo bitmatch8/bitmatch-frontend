@@ -7,6 +7,10 @@ export enum ProjectType {
   FT = "1",
   NFT = "2",
 }
+export enum InfoType{
+  white = 1,
+  public = 2
+}
 export enum BuyState {
   White_Ended = "White_Ended",
   White_NotStarted = "White_NotStarted",

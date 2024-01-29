@@ -2,7 +2,7 @@ import { Spaced } from "@/components/Spaced";
 import TokenSymbol from "@/components/TokenSymbol";
 import { BigNumber } from "@ethersproject/bignumber";
 import styled from "@emotion/styled";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Input from "@/components/Input";
 import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance";
 import WhitelistStageButton from "@/components/WhitelistStageButton";
@@ -10,6 +10,7 @@ import WhitelistStageProgress from "@/components/WhitelistStageProgress";
 import WhitelistStageLine from "@/components/WhitelistStageLine";
 import useBuy from "@/hook/useBuy";
 import { dateFormat } from "@/utils";
+import { fetchFeesApi } from "@/api/api";
 
 const WhitelistStageFT: React.FC<{
   detail: any;
@@ -19,19 +20,32 @@ const WhitelistStageFT: React.FC<{
   stage: any;
   readData: any;
 }> = ({ info, balance, title, detail, stage, readData, }) => {
+  const [fees,setFees]=useState(0)
+
   const { value,inputLoad, onChangeInput, callbackSuccess, onMax ,isWhiteInfo,mposa,hposa,maxAmount} = useBuy(
     info,
     readData,detail,stage
   );
+
   const price = useMemo(
-    () =>
-      Number(
+    () =>{
+      if(stage === 'whitelist'){
+        return (Number((fees * 550 * 1.1)/100000000).toFixed(8))
+      }
+      return Number(
         (
           Number(info.targetnumber || 0) / Number(info.tokennumber || 0)
         ).toFixed(8)
-      ),
-    [info]
-  );
+      )
+    },[info,fees]);
+  
+  const initFees=async()=>{
+    const fees = await fetchFeesApi()
+    setFees(fees?.fastestFee || 0)
+  }
+  useEffect(()=>{
+    initFees()
+  },[])
   const priceBig = useMemo(() => {
     return parseFixedAmount(String(price), 8);
   }, [info, price]);

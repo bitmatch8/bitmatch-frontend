@@ -3,7 +3,7 @@ import { selectBuy, selectWallter } from "@/lib/redux"
 import { foramtDateInfo } from "@/utils"
 import refreshConfig from "@/utils/config"
 import { BuyState, DetailInfoType } from "@/utils/types"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import useSwr from "./useSwr"
 
@@ -104,6 +104,10 @@ const useDetail = (id: any) => {
     // }
     return whiteInfo
   }
+
+  // useEffect(()=>{
+  //   console.log({detail})
+  // },[detail])
   return {
     load,
     address,

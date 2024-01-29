@@ -127,7 +127,7 @@ const WhitelistStageButton: React.FC<{
       </WhitelistStageButtonBox>
     )
   }
-  // console.log(Number(info?.singlePersonPurchased) , Number(hposa) , info?.tokennumber <= info?.totalPersonPurchased)
+  // console.log(Number(info?.singlePersonPurchased) , Number(hposa) , info?.tokennumber , info?.totalPersonPurchased)
   if (!address) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
