@@ -11,12 +11,12 @@ export const detailSlice = createSlice({
   name: "detail",
   initialState,
   reducers: {
-    setDetail: (state, action: PayloadAction<{ detail: DetailSliceType,id:number }>) => {
+    setDetail: (state, action: PayloadAction<{ detail: DetailSliceType,id:any }>) => {
       const detail = action.payload.detail
       const id = action.payload.id
        state.detailLists[id]=detail
     },
-    setInfo: (state, action: PayloadAction<{ info: InfoSliceType,type_key:string }>) => {
+    setInfo: (state, action: PayloadAction<{ info: InfoSliceType,type_key:any }>) => {
       const info = action.payload.info
       const type_key = action.payload.type_key
       // const type_key = `${info.pid}_${info.type}`

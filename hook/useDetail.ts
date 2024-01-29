@@ -9,11 +9,9 @@ import useSwr from "./useSwr"
 
 const useDetail = (id: any) => {
   const { address } = useSelector(selectWallter)
-  const {detailLists} = useSelector(selectDetail)
+  const {detailLists,infoLists} = useSelector(selectDetail)
   const detail = useMemo(()=>{
-    if(detailLists[id])
-      return detailLists[id]
-    return null
+    return detailLists[id] || null
   },[id,detailLists])
   
   const {result:res_detail} = useSwr({
@@ -22,7 +20,19 @@ const useDetail = (id: any) => {
     },id ? fetchProjectInfoApi : null,{ refreshInterval: refreshConfig.detail_refreshInterval }
   )
 
-  const {result:publicInfo,mutate:publicMutate} = useSwr({
+  const pub_info_key=useMemo(()=>{
+    return detail === null || !detail?.pubid ? null  :`${detail.id}_${detail?.pubid}`
+  },[detail?.pubid])
+  const whi_info_key=useMemo(()=>{
+    return detail === null || !detail?.wid ? null:`${detail.id}_${detail?.wid}` 
+  },[detail?.wid])
+  const publicInfo=useMemo(()=>{
+    return pub_info_key === null || detail === null || !infoLists[pub_info_key]  ?  null : infoLists[pub_info_key]
+  },[id,infoLists])
+  const whiteInfo=useMemo(()=>{
+    return whi_info_key === null || detail === null || !infoLists[whi_info_key]  ?  null : infoLists[whi_info_key]
+  },[id,infoLists])
+  const {result:res_publicInfo,mutate:publicMutate} = useSwr({
       id: detail?.pubid,
       address,
     },
@@ -30,7 +40,7 @@ const useDetail = (id: any) => {
     { refreshInterval: refreshConfig.publicInfo_refreshInterval }
   )
 
-  const {result:whiteInfo,mutate:whiteMutate} = useSwr({
+  const {result:res_whiteInfo,mutate:whiteMutate} = useSwr({
       id: detail?.wid,
       address,
     },detail?.wid ? fetchWhtielistInfoApi : null,
@@ -95,9 +105,10 @@ const useDetail = (id: any) => {
       id: detail?.wid,
       address,
     })
-    // if(code === 0){
-    //   whiteMutate(data)
-    // }
+    if(code === 0){
+      dispatch(detailSlice.actions.setInfo({info:data,type_key:whi_info_key})) 
+      // whiteMutate(data)
+    }
     return data 
   }
   const readPublic = async () => {
@@ -105,13 +116,22 @@ const useDetail = (id: any) => {
       id: detail?.pubid,
       address,
     })
-    // if(code === 0){
-    //   publicMutate(data)
-    // }
+    if(code === 0){
+      dispatch(detailSlice.actions.setInfo({info:data,type_key:pub_info_key})) 
+      // publicMutate(data)
+    }
     return whiteInfo
   }
 
+  
   const dispatch =useDispatch()
+  
+  useEffect(()=>{
+    dispatch(detailSlice.actions.setInfo({info:res_whiteInfo,type_key:whi_info_key})) 
+  },[res_whiteInfo,whi_info_key])
+  useEffect(()=>{
+    dispatch(detailSlice.actions.setInfo({info:res_publicInfo,type_key:pub_info_key})) 
+  },[res_publicInfo,pub_info_key])
   useEffect(()=>{
     dispatch(detailSlice.actions.setDetail({detail:res_detail,id:id}))
   },[res_detail,id])

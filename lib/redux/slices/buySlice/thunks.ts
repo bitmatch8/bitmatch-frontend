@@ -51,7 +51,6 @@ export const buySubmitAsync = createAppAsyncThunk(
 export const send_order = async (params: any,dispatch:any) => {
   try {
     await submitOderListSave(params)
-    dispatch(buySlice.actions.setRefresh({num:1000}))
     dispatch(
       addToast({
         // second: 0,
@@ -59,10 +58,9 @@ export const send_order = async (params: any,dispatch:any) => {
         contxt: "Pending...",
       })
     )
-    setTimeout(() => {
-      dispatch(buySlice.actions.setRefresh({num:0}))
- 
-    }, 5000);
+    setTimeout(async () => {
+      await params.reload()
+    }, 1000);
   } catch (e) {
     setTimeout(() => {
       send_order(params, dispatch)
