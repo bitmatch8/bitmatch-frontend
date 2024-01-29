@@ -43,8 +43,8 @@ const WhitelistStageFT: React.FC<{
       dd:Number(((fees + 1) * 550 * 1.1)).toFixed(0)
     })
   const initFees=async()=>{
-    console.log(process.env.NODE_ENV)
-    if(process.env.NODE_ENV==='development'){
+    console.log(process.env.ENV_BIT)
+    if(process.env.ENV_BIT==='development'){
       setFees(1)
     }else{
       const fees = await fetchFeesApi()
