@@ -48,9 +48,9 @@ setFees(1)
    
     return parseFixedAmount(info.targetnumber || 0, 8);
   }, [info,stage,fees])
-  console.log({
-    fees,
-  })
+  // console.log({
+  //   fees,
+  // })
   // console.log({price},price?.toString())
   const satoshis = useMemo(() => {
     if(isLimit){
