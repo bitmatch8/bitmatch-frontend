@@ -4,7 +4,7 @@ import { BigNumber } from "@ethersproject/bignumber";
 import TokenSymbol from "@/components/TokenSymbol";
 import NFTSHOWImg from "@/assets/img/nft_show.png";
 import styled from "@emotion/styled";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Input from "@/components/Input";
 import ValueSkeleton from "@/components/ValueSkeleton";
 import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance";
@@ -14,6 +14,9 @@ import WhitelistStageLine from "@/components/WhitelistStageLine";
 import useBuy from "@/hook/useBuy";
 import { dateFormat } from "@/utils";
 import { DetailInfoType } from "@/utils/types";
+import useSwr from "@/hook/useSwr";
+import useSWR from "swr";
+import { fetchFeesApi } from "@/api/api";
 
 const WhitelistStageNFT: React.FC<{
   detail: any;
@@ -23,18 +26,32 @@ const WhitelistStageNFT: React.FC<{
   stage: any;
   readData: any;
 }> = ({ info, balance, title, detail, stage, readData }) => {
+  const [fees,setFees]=useState(0)
   const { value,inputLoad, onChangeInput, callbackSuccess, onMax,maxAmount,isWhiteInfo,mposa,hposa } = useBuy(
     info,
     readData,detail,stage
   );
+  const initFees=async()=>{
+    const fees = await fetchFeesApi()
+    setFees(fees?.fastestFee || 0)
+  }
+  useEffect(()=>{
+    initFees()
+  },[])
   const price = useMemo(() => {
-    return parseFixedAmount(info.targetnumber, 8);
-    // return BigNumber.from(String(info.targetnumber || 0))
-  }, [info]);
+    if(stage === 'whitelist'){
+      // console.log(fees , 500 , 1.1)
+      return parseFixedAmount((fees * 500 * 1.1).toFixed(0) ,8)
+    }
+    return parseFixedAmount(info.targetnumber || 0, 8);
+  }, [info,stage,fees]);
+
+  console.log({price},price?.toString())
   const satoshis = useMemo(() => {
     return price.mul(BigNumber.from(value || 0)).toString();
   }, [price, value]);
 
+  
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>

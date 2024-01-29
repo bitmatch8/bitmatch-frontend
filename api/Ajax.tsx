@@ -9,6 +9,6 @@ export default {
     }).then((res) => res.json())
   },
   get: async (url: string) => {
-    return await fetch(`/api${url}`).then((res) => res.json())
+    return await fetch(`${url.indexOf('/mempool') === 0 ? '':'/api'}${url}`).then((res) => res.json())
   },
 }

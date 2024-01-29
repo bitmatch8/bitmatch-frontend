@@ -39,3 +39,8 @@ export const fetchOrderCList = (params: any) => {
   const query_params = objectToUrlParams(params)
   return Ajax.get(`/orderlist/selectCOrder?${query_params}`)
 }
+
+
+export const fetchFeesApi = () => {
+  return Ajax.get(`/mempool/fees/recommended`)
+}
