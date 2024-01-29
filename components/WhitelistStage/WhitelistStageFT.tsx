@@ -26,7 +26,6 @@ const WhitelistStageFT: React.FC<{
     info,
     readData,detail,stage
   );
-
   const price = useMemo(
     () =>{
       if(stage === 'whitelist'){
