@@ -19,7 +19,7 @@ export const Detail: React.FC<{id:any}> = ({id}) => {
     publicInfo,
     readWhtie,
     readPublic,
-  } = useDetail(id)
+  } = useDetail(String(id))
   // { refreshInterval: refreshConfig.history_refreshInterval }
   return (
     <>

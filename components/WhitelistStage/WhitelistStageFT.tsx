@@ -100,7 +100,7 @@ const WhitelistStageFT: React.FC<{
           <WhitelistStageLine
             style={{ flex: 1, paddingLeft: 16 }}
             title="Launch Time">
-            {dateFormat(info?.starttime)} ～ {dateFormat(info?.enttime)}
+            {dateFormat(info?.starttime) || 'TBA'} ～ {dateFormat(info?.enttime) || 'TBA'}
           </WhitelistStageLine>
         </WhitelistStageLineBox>
       </WhitelistStageCardBox>

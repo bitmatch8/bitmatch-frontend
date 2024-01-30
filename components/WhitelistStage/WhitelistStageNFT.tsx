@@ -84,9 +84,10 @@ const WhitelistStageNFT: React.FC<{
             {info === null ? (
               <ValueSkeleton width={200} height={50} />
             ) : (
-              <div>
-                <div>{dateFormat(info?.starttime)}</div>
-                <div style={{ marginTop: 20 }}>{dateFormat(info?.enttime)}</div>
+              <div style={{textAlign:'right'}}>
+                <div>{dateFormat(info?.starttime) || 'TBA'}</div>
+                <div>～</div>
+                <div>{dateFormat(info?.enttime) || 'TBA'}</div>
               </div>
             )}
           </WhitelistStageLine>
