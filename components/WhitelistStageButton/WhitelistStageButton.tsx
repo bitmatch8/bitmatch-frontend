@@ -45,7 +45,7 @@ const WhitelistStageButton: React.FC<{
   mposa,
 }) => {
   const dispatch = useDispatch()
-  const { address, network } = useSelector(selectWallter)
+  const { address, network,wallterType } = useSelector(selectWallter)
   const { status } = useSelector(selectBuy)
   const { result: toAddress } = useSwr(
     { pid: detail.id },
@@ -125,7 +125,7 @@ const WhitelistStageButton: React.FC<{
   const isSoldOut=useMemo(()=>Number(info?.singlePersonPurchased) >= Number(hposa || 0) || Number(info?.tokennumber || 0) <= Number(info?.totalPersonPurchased || 0),[info,hposa])
   const isClaimed=useMemo(()=>isLimit && Number(info?.singlePersonPurchased) >= Number(hposa),[hposa,info])
   // console.log(isLimit , Number(info?.singlePersonPurchased) , Number(hposa))
-  if (network && network !== process.env.NEXT_PUBLIC_NETWORK) {
+  if (network && network !== process.env.NEXT_PUBLIC_NETWORK && wallterType !== 'okx') {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
         Switch Network

@@ -1,4 +1,4 @@
-import { addToast, buySlice, toastSlice } from "@/lib/redux"
+import { addToast, buySlice, selectWallter, toastSlice } from "@/lib/redux"
 import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
 import { submitOderListSave } from "@/api/api"
 import useWallter from "@/hook/useWallter"
@@ -25,15 +25,17 @@ type BuySubmitProps = {
 
 export const buySubmitAsync = createAppAsyncThunk(
   "buy/submit",
-  async (params: BuySubmitProps, { dispatch }) => {
+  async (params: BuySubmitProps, { dispatch,getState }) => {
     
+        const { wallterType } = selectWallter(getState())
+
     // const res_data = await params.reload()
     // console.log({res_data})
 
     // const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
     // console.log(res_data)
 
-    const {wallter} = useWallter()
+    const {wallter} = useWallter(wallterType)
     try {
       const txHash = await wallter.sendBitcoin(
         params.fundaddr,
@@ -43,6 +45,7 @@ export const buySubmitAsync = createAppAsyncThunk(
       params.callback(txHash)
       send_order(params,dispatch)
     } catch (e) {
+      console.log(e)
       // dispatch(toastSlice.actions.removeToast(uniqueId))
     }
   }
