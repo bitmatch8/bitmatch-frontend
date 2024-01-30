@@ -1,3 +1,4 @@
+/** @type {import('next').NextConfig} */
 import ImgBox from "@/components/ImgBox"
 import { Spaced } from "@/components/Spaced"
 import { BigNumber } from "@ethersproject/bignumber"

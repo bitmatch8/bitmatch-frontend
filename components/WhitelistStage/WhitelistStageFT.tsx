@@ -1,3 +1,4 @@
+/** @type {import('next').NextConfig} */
 import { Spaced } from "@/components/Spaced"
 import TokenSymbol from "@/components/TokenSymbol"
 import { BigNumber } from "@ethersproject/bignumber"
