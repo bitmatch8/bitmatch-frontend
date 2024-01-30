@@ -42,7 +42,6 @@ const WhitelistStageFT: React.FC<{
     )
   }, [info, fees])
   const initFees = async () => {
-    console.log(process.env.ENV_BIT)
     if (process.env.ENV_BIT === "development") {
       setFees(1)
     } else {
@@ -53,6 +52,10 @@ const WhitelistStageFT: React.FC<{
   useEffect(() => {
     initFees()
   }, [])
+  console.log({
+    fees,
+    ss:process.env.ENV_BIT ==='development'
+  })
   const priceBig = useMemo(() => {
     return parseFixedAmount(String(price), 8)
   }, [info, price])

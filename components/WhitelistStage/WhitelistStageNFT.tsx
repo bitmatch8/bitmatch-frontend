@@ -49,6 +49,7 @@ setFees(1)
   }, [info,stage,fees])
   console.log({
     fees,
+    ss:process.env.ENV_BIT ==='development'
   })
   const satoshis = useMemo(() => {
     if(isLimit){
