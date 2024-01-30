@@ -40,8 +40,8 @@ const WhitelistStageNFT: React.FC<{
     mposa,
     hposa,
   } = useBuy(info, readData, detail, stage)
-  console.log({NEXT_TEST:process.env.NEXT_TEST},process.env.NEXT_PUBLIC_API_URL)
-  const isTest=useMemo(()=>process.env.NEXT_TEST === "test",[process.env])
+  console.log({NEXT_PUBLIC_TEST:process.env.NEXT_PUBLIC_TEST},process.env.NEXT_PUBLIC_API_URL)
+  const isTest=useMemo(()=>process.env.NEXT_PUBLIC_TEST === "test",[process.env])
   const initFees = async () => {
     // if (isTest) {
       setFees(1)
