@@ -42,6 +42,7 @@ const WhitelistStageFT: React.FC<{
     )
   }, [info, fees])
 
+  console.log({ENV_BIT:process.env.ENV_BIT})
   const isTest=useMemo(()=>process.env.ENV_BIT === "development",[process.env])
   const initFees = async () => {
     console.log({isTest})

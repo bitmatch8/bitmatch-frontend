@@ -16,7 +16,6 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
     {}
   )
   
-  console.log({stage})
   //是否限额
   const isLimit = useMemo(()=>(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"),[isWhiteInfo,stage])
   // console.log({isLimit},isWhiteInfo , isWhiteInfo?.share , stage === "whitelist")
