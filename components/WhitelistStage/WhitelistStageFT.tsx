@@ -43,7 +43,7 @@ const WhitelistStageFT: React.FC<{
     )
   }, [info, fees])
 
-  console.log({NEXT_TEST:process.env.NEXT_TEST})
+  console.log({NEXT_TEST:process.env.NEXT_TEST},process.env.NEXT_PUBLIC_API_URL)
   const isTest=useMemo(()=>process.env.NEXT_TEST === "test",[process.env])
   const initFees = async () => {
     console.log({isTest})
