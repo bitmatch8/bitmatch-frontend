@@ -42,16 +42,16 @@ const WhitelistStageFT: React.FC<{
     )
   }, [info, fees])
 
-  console.log({ENV_BIT:process.env.ENV_BIT})
-  const isTest=useMemo(()=>process.env.ENV_BIT === "test",[process.env])
+  console.log({NEXT_TEST:process.env.NEXT_TEST})
+  const isTest=useMemo(()=>process.env.NEXT_TEST === "test",[process.env])
   const initFees = async () => {
     console.log({isTest})
-    if (isTest) {
+    // if (isTest) {
       setFees(1)
-    } else {
-      const fees = await fetchFeesApi()
-      setFees(fees?.fastestFee || 0)
-    }
+    // } else {
+    //   const fees = await fetchFeesApi()
+    //   setFees(fees?.fastestFee || 0)
+    // }
   }
   useEffect(() => {
     initFees()

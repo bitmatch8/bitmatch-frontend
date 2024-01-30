@@ -39,15 +39,15 @@ const WhitelistStageNFT: React.FC<{
     mposa,
     hposa,
   } = useBuy(info, readData, detail, stage)
-  console.log({ENV_BIT:process.env.ENV_BIT})
-  const isTest=useMemo(()=>process.env.ENV_BIT === "test",[process.env])
+  console.log({NEXT_TEST:process.env.NEXT_TEST})
+  const isTest=useMemo(()=>process.env.NEXT_TEST === "test",[process.env])
   const initFees = async () => {
-    if (isTest) {
+    // if (isTest) {
       setFees(1)
-    } else {
-      const fees = await fetchFeesApi()
-      setFees(fees?.fastestFee || 0)
-    }
+    // } else {
+    //   const fees = await fetchFeesApi()
+    //   setFees(fees?.fastestFee || 0)
+    // }
   }
   useEffect(() => {
     initFees()
@@ -65,7 +65,6 @@ const WhitelistStageNFT: React.FC<{
     }
     return price.mul(BigNumber.from(value || 0)).toString()
   }, [price, value, fees, isLimit])
-  console.log({ ss: process.env.NODE_ENV })
 
   return (
     <WhitelistStageBox>
