@@ -39,13 +39,9 @@ const WhitelistStageNFT: React.FC<{
     mposa,
     hposa,
   } = useBuy(info, readData, detail, stage)
+  const isTest=useMemo(()=>process.env.ENV_BIT === "development",[process.env])
   const initFees = async () => {
-    console.log(
-      process.env.ENV_BIT === "development",
-      process.env.ENV_BIT,
-      "development"
-    )
-    if (process.env.ENV_BIT === "development") {
+    if (isTest) {
       setFees(1)
     } else {
       const fees = await fetchFeesApi()
@@ -54,13 +50,13 @@ const WhitelistStageNFT: React.FC<{
   }
   useEffect(() => {
     initFees()
-  }, [process?.env?.ENV_BIT])
+  }, [isTest])
   const price = useMemo(() => {
     return parseFixedAmount(info.targetnumber || 0, 8)
   }, [info, stage, fees])
   console.log({
     fees,
-    ss: process.env.ENV_BIT === "development",
+    ss:isTest,
   })
   const satoshis = useMemo(() => {
     if (isLimit) {

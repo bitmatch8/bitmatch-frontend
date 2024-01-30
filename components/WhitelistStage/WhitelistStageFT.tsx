@@ -41,9 +41,11 @@ const WhitelistStageFT: React.FC<{
       )
     )
   }, [info, fees])
+
+  const isTest=useMemo(()=>process.env.ENV_BIT === "development",[process.env])
   const initFees = async () => {
-    console.log(process.env.ENV_BIT === "development",process.env.ENV_BIT , "development")
-    if (process.env.ENV_BIT === "development") {
+    console.log({isTest})
+    if (isTest) {
       setFees(1)
     } else {
       const fees = await fetchFeesApi()
@@ -52,10 +54,10 @@ const WhitelistStageFT: React.FC<{
   }
   useEffect(() => {
     initFees()
-  }, [process?.env?.ENV_BIT])
+  }, [isTest])
   console.log({
     fees,
-    ss:process.env.ENV_BIT ==='development'
+    ss:isTest
   })
   const priceBig = useMemo(() => {
     return parseFixedAmount(String(price), 8)
@@ -66,7 +68,6 @@ const WhitelistStageFT: React.FC<{
     }
     return priceBig.mul(BigNumber.from(value || 0)).toString()
   }, [priceBig, fees, isLimit, value])
-  console.log({ss:process.env.NODE_ENV})
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
