@@ -40,15 +40,14 @@ const WhitelistStageNFT: React.FC<{
     mposa,
     hposa,
   } = useBuy(info, readData, detail, stage)
-  console.log({NEXT_PUBLIC_TEST:process.env.NEXT_PUBLIC_TEST},process.env.NEXT_PUBLIC_API_URL)
   const isTest=useMemo(()=>process.env.NEXT_PUBLIC_TEST === "test",[process.env])
   const initFees = async () => {
-    // if (isTest) {
+    if (isTest) {
       setFees(1)
-    // } else {
-    //   const fees = await fetchFeesApi()
-    //   setFees(fees?.fastestFee || 0)
-    // }
+    } else {
+      const fees = await fetchFeesApi()
+      setFees(fees?.fastestFee || 0)
+    }
   }
   useEffect(() => {
     initFees()
@@ -57,8 +56,7 @@ const WhitelistStageNFT: React.FC<{
     return parseFixedAmount(info.targetnumber || 0, 8)
   }, [info, stage, fees])
   console.log({
-    fees,
-    ss:isTest,
+    fees
   })
   const satoshis = useMemo(() => {
     if (isLimit) {

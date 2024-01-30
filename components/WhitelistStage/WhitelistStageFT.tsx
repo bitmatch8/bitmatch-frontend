@@ -43,23 +43,20 @@ const WhitelistStageFT: React.FC<{
     )
   }, [info, fees])
 
-  console.log({NEXT_PUBLIC_TEST:process.env.NEXT_PUBLIC_TEST},process.env.NEXT_PUBLIC_API_URL)
   const isTest=useMemo(()=>process.env.NEXT_PUBLIC_TEST === "test",[process.env])
   const initFees = async () => {
-    console.log({isTest})
-    // if (isTest) {
+    if (isTest) {
       setFees(1)
-    // } else {
-    //   const fees = await fetchFeesApi()
-    //   setFees(fees?.fastestFee || 0)
-    // }
+    } else {
+      const fees = await fetchFeesApi()
+      setFees(fees?.fastestFee || 0)
+    }
   }
   useEffect(() => {
     initFees()
   }, [isTest])
   console.log({
-    fees,
-    ss:isTest
+    fees
   })
   const priceBig = useMemo(() => {
     return parseFixedAmount(String(price), 8)
