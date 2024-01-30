@@ -42,6 +42,7 @@ const WhitelistStageFT: React.FC<{
     )
   }, [info, fees])
   const initFees = async () => {
+    console.log(process.env.ENV_BIT === "development",process.env.ENV_BIT , "development")
     if (process.env.ENV_BIT === "development") {
       setFees(1)
     } else {
