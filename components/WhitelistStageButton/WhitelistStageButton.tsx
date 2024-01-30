@@ -1,10 +1,10 @@
 import Button from "@/components/Button"
 import styled from "@emotion/styled"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import TimeCountdown from "@/components/TimeCountdown"
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton"
 import useModal from "@/hook/useModal"
-import { fetchQueryByWhitelist, fetchSelectFaddress } from "@/api/api"
+import { fetchSelectFaddress } from "@/api/api"
 import {
   useSelector,
   useDispatch,
@@ -14,7 +14,6 @@ import {
   selectBuy,
   addToast,
 } from "@/lib/redux"
-import { ProjectType } from "@/utils/types"
 import { toLocalTime } from "@/utils"
 import useSwr from "@/hook/useSwr"
 

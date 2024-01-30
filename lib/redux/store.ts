@@ -6,16 +6,41 @@ import {
   type TypedUseSelectorHook,
 } from 'react-redux'
 
+import { persistStore, persistReducer } from "redux-persist";
+
+import storage from "redux-persist/lib/storage";
+
 /* Instruments */
 import { reducer } from './rootReducer'
 import { middleware } from './middleware'
 
+
+// 持久化配置
+const persistConfig = {
+  key: "root",
+  storage,
+};
+const persistedReducer = persistReducer(persistConfig, reducer);
+
+
 export const reduxStore = configureStore({
-  reducer,
-  middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(process.env.NODE_ENV==='development'?middleware:[])
-  },
-})
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+export const persistor = persistStore(reduxStore);
+// export const reduxStore = configureStore({
+//   persistedReducer,
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       // serializableCheck: false,
+//     }),
+//   // middleware: (getDefaultMiddleware) => {
+//   //   return getDefaultMiddleware().concat(process.env.NODE_ENV==='development'?middleware:[])
+//   // },
+// })
 export const useDispatch = () => useReduxDispatch<ReduxDispatch>()
 export const useSelector: TypedUseSelectorHook<ReduxState> = useReduxSelector
 

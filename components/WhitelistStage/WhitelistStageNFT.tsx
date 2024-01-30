@@ -55,9 +55,6 @@ const WhitelistStageNFT: React.FC<{
   const price = useMemo(() => {
     return parseFixedAmount(info.targetnumber || 0, 8)
   }, [info, stage, fees])
-  console.log({
-    fees
-  })
   const satoshis = useMemo(() => {
     if (isLimit) {
       return ((fees + 1) * 550 * 1.1).toFixed(0)

@@ -14,17 +14,20 @@ import {
   selectWallter,
   addToast,
   connectUnisat,
+  WallterType,
 } from "@/lib/redux"
 import React, { useState } from "react"
 import Image from "next/image"
 import useModal from "@/hook/useModal"
 import CloseIcon from "@/components/Svg/CloseIcon"
-import LogoUnisatIcon from "@/assets/icon/1@2x.png"
+
 import Link from "next/link"
+import WallterSymbol from "@/components/WallterSymbol"
 
 const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
   const [show, setShow] = useState(false)
   const dispatch = useDispatch()
+  const { wallterType } = useSelector(selectWallter)
   const onClickShow = () => {
     setShow(!show)
   }
@@ -38,7 +41,7 @@ const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
       <ContentSuccessBox>
         <ContentSuccessTopBox>
           <ContentSuccessLineBox onClick={onClickShow}>
-            {hidehash(address)}
+          <WallterSymbol size={20} symbol={String(wallterType || '').toLocaleUpperCase()}/>  {hidehash(address)} 
           </ContentSuccessLineBox>
           {show ? (
             <ContentSuccessLineBox onClick={onClickQuit}>
@@ -61,11 +64,12 @@ const ConnectButton = () => {
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}
-      connect={() => {
-        dispatch(connectUnisat())
+      connect={(type: WallterType) => {
+        dispatch(connectUnisat(type))
         onDismiss()
       }}></ConnectModal>
   )
+  console.log({network})
   if (!unisatInstalled) {
     return (
       <UserToolsBox>
@@ -124,12 +128,14 @@ export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
       <CloseButtonBox onClick={onDismiss}>
         <CloseIcon fill="#C2C5C8" width={36} />
       </CloseButtonBox>
-      <ConnectBox>
-        <LogoBox className="button" onClick={connect}>
-          <ImgBox alt="" src={LogoUnisatIcon} width={77} />
-        </LogoBox>
+      <ConnectLineBox onClick={() => connect("unisat")}>
+        <WallterSymbol size={60} symbol={"UNISAT"} />
         <ConnectTitle className="text">UniSat Wallet</ConnectTitle>
-      </ConnectBox>
+      </ConnectLineBox>
+      <ConnectLineBox onClick={() => connect("okx")}>
+        <WallterSymbol size={60} symbol={"OKX"} />
+        <ConnectTitle className="text">OKX Wallet</ConnectTitle>
+      </ConnectLineBox>
     </ConnectModalBox>
   )
 }
@@ -155,24 +161,32 @@ const UserToolsBox = styled.div`
   justify-content: space-between;
 `
 
-const ConnectBox = styled.div`
+const ConnectLineBox = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  /* justify-content: center; */
+  /* flex-direction: column; */
+  padding-left: 30px;
   gap: 48px;
   font-size: 24px;
   font-weight: 500;
   color: #c2c5c8;
   line-height: 24px;
+  border: 2px solid #6f6f76;
+  width: 500px;
+  height: 100px;
+  border-radius: 16px;
+  cursor: pointer;
   &:hover {
     color: #ffffff;
+    border-color: #f7931a;
     .button {
       border: 5px solid #f7931a;
     }
   }
 `
 const ConnectTitle = styled.div`
+  font-size: 24px;
   font-family: Montserrat, Montserrat-Medium;
 `
 const LogoBox = styled.div`
@@ -209,7 +223,8 @@ const ConnectModalBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 48px;
+  flex-direction: column;
+  gap: 32px;
 `
 
 const ImgBox = styled(Image)`
@@ -231,7 +246,7 @@ const ContentSuccessTopBox = styled.div`
 `
 const ContentSuccessLineBox = styled.div`
   cursor: pointer;
-  height: 56px;
+  height: 52px;
   color: #fff;
   width: 200px;
   display: flex;
@@ -271,6 +286,5 @@ const ContentSuccessBox = styled.div`
 const ConnectButtonBox = styled(Button)`
   width: 200px;
   font-size: 20px;
-  margin-right: ;
   /* padding: 0 30px; */
 `

@@ -1,5 +1,5 @@
 /* Instruments */
-import useUnisat from "@/hook/useUnisat"
+import useWallter from "@/hook/useWallter"
 import { selectWallter, type ReduxThunkAction } from "@/lib/redux"
 import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
 
@@ -11,15 +11,15 @@ import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
 export const fetchDetailThunk = createAppAsyncThunk(
   "wallter/connectUnisat",
   async (_,{getState}) => {
-    const unisat = useUnisat()
+    const {wallter} = useWallter()
     const {network} = selectWallter(getState())
     if (network === process.env.NEXT_PUBLIC_NETWORK) {
-      const [address] = await unisat.requestAccounts()
+      const [address] = await wallter.requestAccounts()
       return {address,network}
     } else {
-      const network = await unisat.switchNetwork(process.env.NEXT_PUBLIC_NETWORK)
+      const network = await wallter.switchNetwork(process.env.NEXT_PUBLIC_NETWORK)
       if(network === process.env.NEXT_PUBLIC_NETWORK){
-        const [address] = await unisat.requestAccounts()
+        const [address] = await wallter.requestAccounts()
         return {address,network}
       }
     }

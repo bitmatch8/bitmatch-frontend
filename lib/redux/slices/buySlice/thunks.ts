@@ -1,7 +1,7 @@
 import { addToast, buySlice, toastSlice } from "@/lib/redux"
 import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
 import { submitOderListSave } from "@/api/api"
-import useUnisat from "@/hook/useUnisat"
+import useWallter from "@/hook/useWallter"
 
 type BuySubmitProps = {
   projectname: string
@@ -33,9 +33,9 @@ export const buySubmitAsync = createAppAsyncThunk(
     // const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
     // console.log(res_data)
 
-    const unisat = useUnisat()
+    const {wallter} = useWallter()
     try {
-      const txHash = await unisat.sendBitcoin(
+      const txHash = await wallter.sendBitcoin(
         params.fundaddr,
         Number(params.amount)
       )

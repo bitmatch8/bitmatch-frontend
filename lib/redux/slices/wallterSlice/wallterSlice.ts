@@ -7,12 +7,13 @@ const initialState: WallterSliceState = {
     unconfirmed: 0,
     total: 0
   },
-  publicKey:'',
+  publicKey: '',
   address: null,
   connected: false,
   network: 'livenet',
-  status:'idle',
-  unisatInstalled:false
+  status: 'idle',
+  unisatInstalled: false,
+  wallterType: undefined
 }
 
 export const wallterSlice = createSlice({
@@ -23,7 +24,6 @@ export const wallterSlice = createSlice({
       state.address=action.payload.address
     },
     setNetwork:(state,action: PayloadAction<{network:NetworkType}>)=>{
-      
         state.network = action.payload.network 
     },
     disconnect:(state)=>{
@@ -35,7 +35,6 @@ export const wallterSlice = createSlice({
     },
     setAddress:(state,action: PayloadAction<{address:string}>)=>{
       state.address = action.payload.address
-      
       state.connected = true
     },
     setPublicKey:(state,action: PayloadAction<{publicKey:string}>)=>{
@@ -47,13 +46,13 @@ export const wallterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(connectUnisat.pending, (state) => {
+      .addCase(connectUnisat.pending, (state,action) => {
+        state.wallterType = action.meta.arg
         state.status = 'loading'
       })
       .addCase(connectUnisat.fulfilled, (state, action) => {
-        
-        console.log({action:action.payload})
         state.status = 'idle'
+        state.wallterType = action.payload.type
         state.connected = !!action.payload.address 
         state.address = action.payload.address
         state.network = action.payload.network
@@ -61,6 +60,7 @@ export const wallterSlice = createSlice({
   },
 })
 
+export type WallterType = 'unsat' | 'okx' |  undefined
 type NetworkType = string 
 export interface WallterSliceState {
   balance: {
@@ -70,6 +70,7 @@ export interface WallterSliceState {
   },
   publicKey:string,
   unisatInstalled:boolean
+  wallterType:WallterType
   status: 'idle' | 'loading' | 'failed'
   address:string | null,
   connected:boolean,

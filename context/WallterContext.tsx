@@ -7,13 +7,13 @@ import {
   useDispatch,
   selectWallter,
 } from '@/lib/redux'
-import useUnisat from "@/hook/useUnisat"
+import useWallter from "@/hook/useWallter"
 
 export default function WallterContext() {
   const dispatch = useDispatch()
-  const { address } = useSelector(selectWallter)
+  const { address,wallterType } = useSelector(selectWallter)
+  const {wallter,isInstalled} = useWallter(wallterType);
   const handleAccountsChanged = (_accounts: string[]) => {
-
     if (_accounts.length > 0) {
       dispatch(wallterSlice.actions.setAddress({address:_accounts[0]}))
       getBasicInfo()
@@ -22,57 +22,51 @@ export default function WallterContext() {
     }
   }
   const getBasicInfo = async () => {
-    const unisat = useUnisat();
-    const [address] = await unisat.getAccounts();
-    dispatch(wallterSlice.actions.setAddress({address}))
-    const publicKey = await unisat.getPublicKey();
-    dispatch(wallterSlice.actions.setPublicKey({publicKey}))
-    const balance = await unisat.getBalance();
+   
+    console.log(wallter)
+    // const [address] = await wallter.getAccounts();
+    // dispatch(wallterSlice.actions.setAddress({address}))
+    // const publicKey = await wallter.getPublicKey();
+    // dispatch(wallterSlice.actions.setPublicKey({publicKey}))
+    const balance = await wallter.getBalance();
     dispatch(wallterSlice.actions.setBalance({balance}))
-    const network = await unisat.getNetwork();
+    const network = await wallter.getNetwork();
+    console.log({network})
     dispatch(wallterSlice.actions.setNetwork({network}))
-  };
+  }
   const handleNetworkChanged = (network: string) => {
     dispatch(wallterSlice.actions.setNetwork({network}))
     getBasicInfo()
-  };
+  }
   async function checkUnisat() {
-    let unisat = useUnisat()
-   
-    for (let i = 1; i < 10 && !unisat; i += 1) {
-      await new Promise((resolve) => setTimeout(resolve, 100 * i))
-      unisat = useUnisat()
-    }
-    const unisatInstalled = !!unisat
+    // let {wallter,isInstalled} = useWallter()
+    const unisatInstalled = await isInstalled()
     dispatch(wallterSlice.actions.setUnisatInstalled({unisatInstalled}))
     if(!unisatInstalled){
       return 
     } 
-    unisat.getAccounts().then(([address]: string[]) => {
-      dispatch(wallterSlice.actions.setAddress({address}))
-    })
-    unisat.getNetwork().then((network:string)=>{
-      dispatch(wallterSlice.actions.setNetwork({network}))
-    })
-
-    unisat.on("accountsChanged", handleAccountsChanged)
-    unisat.on("networkChanged", handleNetworkChanged)
-
+    // wallter.getAccounts().then(([address]: string[]) => {
+    //   dispatch(wallterSlice.actions.setAddress({address}))
+    // })
+    // wallter.getNetwork().then((network:string)=>{
+    //   dispatch(wallterSlice.actions.setNetwork({network}))
+    // })
+    wallter.on("accountsChanged", handleAccountsChanged)
+    wallter.on("networkChanged", handleNetworkChanged)
     return () => {
-      unisat.removeListener("accountsChanged", handleAccountsChanged)
-      unisat.removeListener("networkChanged", handleNetworkChanged)
+      wallter.removeListener("accountsChanged", handleAccountsChanged)
+      wallter.removeListener("networkChanged", handleNetworkChanged)
     }
   }
-
 
   useEffect(()=>{
     if(address){
       getBasicInfo() 
     }
-  },[address])
+  },[address,wallter])
  
   useEffect(() => {
     checkUnisat().then()
-  }, [])
+  }, [wallter])
   return <></>
 }

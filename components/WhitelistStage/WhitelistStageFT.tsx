@@ -55,9 +55,6 @@ const WhitelistStageFT: React.FC<{
   useEffect(() => {
     initFees()
   }, [isTest])
-  console.log({
-    fees
-  })
   const priceBig = useMemo(() => {
     return parseFixedAmount(String(price), 8)
   }, [info, price])
