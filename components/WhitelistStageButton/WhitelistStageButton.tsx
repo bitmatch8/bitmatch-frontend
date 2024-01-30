@@ -117,7 +117,7 @@ const WhitelistStageButton: React.FC<{
       dispatch(buySubmitAsync(params))
     }
   }
-  const endtime = toLocalTime(info.enttime)
+  const endtime = toLocalTime(info?.enttime)
   const starttime = toLocalTime(info.starttime)
   const NotStarted = useMemo(
     () => starttime.getTime() > Date.now(),

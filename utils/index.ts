@@ -92,6 +92,9 @@ export const objectToUrlParams=(obj:any)=>{
 
 
 export const toLocalTime = (date:any)=>{
+  if(!date){
+    return new Date()
+  }
   const localTime = new Date(date)
   // console.log((new Date()).getTimezoneOffset() * -1 + localTime.getMinutes())
   localTime.setMinutes((new Date()).getTimezoneOffset() * -1 + localTime.getMinutes())
@@ -105,8 +108,8 @@ export const foramtDateInfo = (item: any,type:DetailInfoType ) => {
   }
   const localTime = new Date()
   // const starttime = toLocalTime(item.starttime)
-  const endtime = toLocalTime(item.enttime)
-  const starttime = toLocalTime(item.starttime)
+  const endtime = toLocalTime(item?.enttime)
+  const starttime = toLocalTime(item?.starttime)
   
   const arr = type === DetailInfoType.public ? [BuyState.Public_Ended,BuyState.Public_NotStarted,BuyState.Public_InProgress] :[BuyState.White_Ended,BuyState.White_NotStarted,BuyState.White_InProgress]
 
