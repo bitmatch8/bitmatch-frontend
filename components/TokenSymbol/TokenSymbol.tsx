@@ -20,7 +20,7 @@ const ChainIcons: React.FC<{ symbol: string; size?: number }> = ({
   symbol,
   size = 50,
 }) => {
-  const icon = getTokenSymbol(symbol.toLocaleUpperCase())
+  const icon = getTokenSymbol(symbol?.toLocaleUpperCase())
   if(icon){
     return <ImgBox src={icon} alt={`${symbol} icon`} width={size} />
   }
