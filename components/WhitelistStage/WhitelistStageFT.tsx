@@ -1,60 +1,68 @@
-import { Spaced } from "@/components/Spaced";
-import TokenSymbol from "@/components/TokenSymbol";
-import { BigNumber } from "@ethersproject/bignumber";
-import styled from "@emotion/styled";
-import { useEffect, useMemo, useState } from "react";
-import Input from "@/components/Input";
-import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance";
-import WhitelistStageButton from "@/components/WhitelistStageButton";
-import WhitelistStageProgress from "@/components/WhitelistStageProgress";
-import WhitelistStageLine from "@/components/WhitelistStageLine";
-import useBuy from "@/hook/useBuy";
-import { dateFormat } from "@/utils";
-import { fetchFeesApi } from "@/api/api";
+import { Spaced } from "@/components/Spaced"
+import TokenSymbol from "@/components/TokenSymbol"
+import { BigNumber } from "@ethersproject/bignumber"
+import styled from "@emotion/styled"
+import { useEffect, useMemo, useState } from "react"
+import Input from "@/components/Input"
+import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
+import WhitelistStageButton from "@/components/WhitelistStageButton"
+import WhitelistStageProgress from "@/components/WhitelistStageProgress"
+import WhitelistStageLine from "@/components/WhitelistStageLine"
+import useBuy from "@/hook/useBuy"
+import { dateFormat } from "@/utils"
+import { fetchFeesApi } from "@/api/api"
 
 const WhitelistStageFT: React.FC<{
-  detail: any;
-  info: any;
-  balance: any;
-  title: string;
-  stage: any;
-  readData: any;
-}> = ({ info, balance, title, detail, stage, readData, }) => {
-  const [fees,setFees]=useState(0)
+  detail: any
+  info: any
+  balance: any
+  title: string
+  stage: any
+  readData: any
+}> = ({ info, balance, title, detail, stage, readData }) => {
+  const [fees, setFees] = useState(0)
 
-  const { value,inputLoad, onChangeInput, callbackSuccess, onMax ,isWhiteInfo,isLimit,mposa,hposa,maxAmount} = useBuy(
-    info,
-    readData,detail,stage
-  );
-  const price = useMemo(
-    () =>{
-      return Number(
-        (
-          Number(info.targetnumber || 0) / Number(info.tokennumber || 0)
-        ).toFixed(8)
+  const {
+    value,
+    inputLoad,
+    onChangeInput,
+    callbackSuccess,
+    onMax,
+    isWhiteInfo,
+    isLimit,
+    mposa,
+    hposa,
+    maxAmount,
+  } = useBuy(info, readData, detail, stage)
+  const price = useMemo(() => {
+    return Number(
+      (Number(info.targetnumber || 0) / Number(info.tokennumber || 0)).toFixed(
+        8
       )
-    },[info,fees]);
-  const initFees=async()=>{
-    // console.log(process.env.ENV_BIT)
-    // if(process.env.ENV_BIT==='development'){
+    )
+  }, [info, fees])
+  const initFees = async () => {
+    console.log(process.env.ENV_BIT)
+    if (process.env.ENV_BIT === "development") {
       setFees(1)
-    // }else{
-    //   const fees = await fetchFeesApi()
-    //   setFees(fees?.fastestFee || 0)
-    // }
+    } else {
+      const fees = await fetchFeesApi()
+      setFees(fees?.fastestFee || 0)
+    }
   }
-  useEffect(()=>{
+  useEffect(() => {
     initFees()
-  },[])
+  }, [])
   const priceBig = useMemo(() => {
-    return parseFixedAmount(String(price), 8);
-  }, [info, price]);
+    return parseFixedAmount(String(price), 8)
+  }, [info, price])
   const satoshis = useMemo(() => {
-    if(isLimit){
+    if (isLimit) {
       return ((fees + 1) * 550 * 1.1).toFixed(0)
     }
-    return priceBig.mul(BigNumber.from(value || 0)).toString();
-  }, [priceBig, value]);
+    return priceBig.mul(BigNumber.from(value || 0)).toString()
+  }, [priceBig, fees, isLimit, value])
+  console.log({ss:process.env.NODE_ENV})
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
@@ -87,8 +95,7 @@ const WhitelistStageFT: React.FC<{
         <WhitelistStageLineBox>
           <WhitelistStageLine
             style={{ flex: 1, paddingLeft: 16 }}
-            title="Launch Time"
-          >
+            title="Launch Time">
             {dateFormat(info?.starttime)} ～ {dateFormat(info?.enttime)}
           </WhitelistStageLine>
         </WhitelistStageLineBox>
@@ -99,11 +106,12 @@ const WhitelistStageFT: React.FC<{
         num={info?.totalPersonPurchased || 0}
       />
       <Spaced size="100" />
-      <WhitelistStageLineBox style={{ justifyContent: "space-between", gap: 0 }}>
+      <WhitelistStageLineBox
+        style={{ justifyContent: "space-between", gap: 0 }}>
         <WhitelistStageFooterItem>
           <WhitelistStageInputBox
             placeholder="0"
-            disabled={maxAmount<=0 || inputLoad}
+            disabled={maxAmount <= 0 || inputLoad}
             value={value}
             onChange={onChangeInput}
             onMax={onMax}
@@ -116,10 +124,10 @@ const WhitelistStageFT: React.FC<{
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
           <WhitelistStageButton
-          hposa={hposa}
-          mposa={mposa}
-          isLimit={isLimit}
-          isWhiteInfo={isWhiteInfo}
+            hposa={hposa}
+            mposa={mposa}
+            isLimit={isLimit}
+            isWhiteInfo={isWhiteInfo}
             price={priceBig}
             detail={detail}
             info={info}
@@ -139,9 +147,9 @@ const WhitelistStageFT: React.FC<{
       </WhitelistStageLineBox>
       <Spaced size="24" />
     </WhitelistStageBox>
-  );
-};
-export default WhitelistStageFT;
+  )
+}
+export default WhitelistStageFT
 
 const FooterTextLineBox = styled.div`
   font-size: 24px;
@@ -158,15 +166,15 @@ const FooterTextLineBox = styled.div`
   span {
     color: #f7931a;
   }
-`;
-const WhitelistStageFooterItem = styled.div``;
+`
+const WhitelistStageFooterItem = styled.div``
 const WhitelistStageInputBox = styled(Input)`
   width: 520px;
-`;
+`
 const WhitelistStageLineBox = styled.div`
   display: flex;
   gap: 60px;
-`;
+`
 const WhitelistStageCardBox = styled.div`
   padding: 40px;
   background: #24272b;
@@ -174,24 +182,24 @@ const WhitelistStageCardBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
-`;
+`
 const WhitelistStageTitleBox = styled.div`
   font-size: 60px;
   font-weight: 600;
   color: #ffffff;
   line-height: 60px;
   margin-bottom: 60px;
-`;
+`
 const WhitelistStageBox = styled.div`
   margin-top: 80px;
   /* height: 1059px; */
   background: #181b20;
   border-radius: 30px;
   padding: 60px 40px;
-`;
+`
 
 const WhitelistStageItemBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
-`;
+`

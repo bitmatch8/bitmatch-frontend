@@ -32,13 +32,13 @@ const WhitelistStageNFT: React.FC<{
     readData,detail,stage
   );
   const initFees=async()=>{
-    // console.log(process.env.ENV_BIT)
-    // if(process.env.ENV_BIT ==='development'){
+    console.log(process.env.ENV_BIT)
+    if(process.env.ENV_BIT ==='development'){
 setFees(1)
-    // }else{
-    //   const fees = await fetchFeesApi()
-    //   setFees(fees?.fastestFee || 0)
-    // }
+    }else{
+      const fees = await fetchFeesApi()
+      setFees(fees?.fastestFee || 0)
+    }
     
   }
   useEffect(()=>{
@@ -47,17 +47,16 @@ setFees(1)
   const price = useMemo(() => {
     return parseFixedAmount(info.targetnumber || 0, 8);
   }, [info,stage,fees])
-  // console.log({
-  //   fees,
-  // })
-  // console.log({price},price?.toString())
+  console.log({
+    fees,
+  })
   const satoshis = useMemo(() => {
     if(isLimit){
       return ((fees + 1) * 550 * 1.1).toFixed(0)
     }
     return price.mul(BigNumber.from(value || 0)).toString();
-  }, [price, value])
-
+  }, [price, value,fees,isLimit])
+  console.log({ss:process.env.NODE_ENV})
   
   return (
     <WhitelistStageBox>
