@@ -40,7 +40,7 @@ const WhitelistStageNFT: React.FC<{
     hposa,
   } = useBuy(info, readData, detail, stage)
   console.log({ENV_BIT:process.env.ENV_BIT})
-  const isTest=useMemo(()=>process.env.ENV_BIT === "development",[process.env])
+  const isTest=useMemo(()=>process.env.ENV_BIT === "test",[process.env])
   const initFees = async () => {
     if (isTest) {
       setFees(1)
