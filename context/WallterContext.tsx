@@ -12,7 +12,7 @@ import useWallter from "@/hook/useWallter"
 export default function WallterContext() {
   const dispatch = useDispatch()
   const { address,wallterType } = useSelector(selectWallter)
-  const {wallter,isInstalled} = useWallter(wallterType);
+  const {wallter,installed} = useWallter(wallterType);
   const handleAccountsChanged = (_accounts: string[]) => {
     if (_accounts.length > 0) {
       dispatch(wallterSlice.actions.setAddress({address:_accounts[0]}))
@@ -40,9 +40,9 @@ export default function WallterContext() {
   }
   async function checkUnisat() {
     // let {wallter,isInstalled} = useWallter()
-    const unisatInstalled = await isInstalled()
-    dispatch(wallterSlice.actions.setUnisatInstalled({unisatInstalled}))
-    if(!unisatInstalled){
+    // const unisatInstalled = await isInstalled()
+    // dispatch(wallterSlice.actions.setUnisatInstalled({unisatInstalled}))
+    if(!installed){
       return 
     } 
     // wallter.getAccounts().then(([address]: string[]) => {

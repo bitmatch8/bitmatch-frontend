@@ -11,8 +11,13 @@ import { createAppAsyncThunk } from "@/lib/redux/createAppAsyncThunk"
 export const connectUnisat = createAppAsyncThunk(
   "wallter/connectUnisat",
   async (type: WallterType, { getState }) => {
+   try{
+    console.log({type})
     const { wallter } = useWallter(type)
-    const { network } = selectWallter(getState())
+    console.log({wallter})
+    const network = await wallter.getNetwork();
+
+    console.log({network})
     if (network === process.env.NEXT_PUBLIC_NETWORK) {
       const [address] = await wallter.requestAccounts()
       console.log({ address })
@@ -26,6 +31,10 @@ export const connectUnisat = createAppAsyncThunk(
         return { address, network, type }
       }
     }
-    return { address: "", network, type }
+    return { address: "", network:'', type }
+   }catch(e){
+    console.log(e)
+    return {address:'',network:'',type}
+   }
   }
 )
