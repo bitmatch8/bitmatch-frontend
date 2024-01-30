@@ -114,7 +114,7 @@ const ProjectCard: React.FC<{ detail: any; buyType: BuyState | null }> = ({
               )}
             </div>
             <div>
-              {detail?.projecttokenname.trim() ? (
+              {detail?.projecttokenname?.trim() ? (
                 <span>{detail?.projecttokenname}</span>
               ) : (
                 ""
