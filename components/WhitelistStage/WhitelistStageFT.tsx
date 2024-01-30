@@ -52,7 +52,7 @@ const WhitelistStageFT: React.FC<{
   }
   useEffect(() => {
     initFees()
-  }, [])
+  }, [process?.env?.ENV_BIT])
   console.log({
     fees,
     ss:process.env.ENV_BIT ==='development'

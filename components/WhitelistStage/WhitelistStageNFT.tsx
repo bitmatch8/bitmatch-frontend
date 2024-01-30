@@ -1,64 +1,75 @@
-import ImgBox from "@/components/ImgBox";
-import { Spaced } from "@/components/Spaced";
-import { BigNumber } from "@ethersproject/bignumber";
-import TokenSymbol from "@/components/TokenSymbol";
-import NFTSHOWImg from "@/assets/img/nft_show.png";
-import styled from "@emotion/styled";
-import { useEffect, useMemo, useState } from "react";
-import Input from "@/components/Input";
-import ValueSkeleton from "@/components/ValueSkeleton";
-import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance";
-import WhitelistStageButton from "@/components/WhitelistStageButton";
-import WhitelistStageProgress from "@/components/WhitelistStageProgress";
-import WhitelistStageLine from "@/components/WhitelistStageLine";
-import useBuy from "@/hook/useBuy";
-import { dateFormat } from "@/utils";
-import { DetailInfoType } from "@/utils/types";
-import useSwr from "@/hook/useSwr";
-import useSWR from "swr";
-import { fetchFeesApi } from "@/api/api";
+import ImgBox from "@/components/ImgBox"
+import { Spaced } from "@/components/Spaced"
+import { BigNumber } from "@ethersproject/bignumber"
+import TokenSymbol from "@/components/TokenSymbol"
+import NFTSHOWImg from "@/assets/img/nft_show.png"
+import styled from "@emotion/styled"
+import { useEffect, useMemo, useState } from "react"
+import Input from "@/components/Input"
+import ValueSkeleton from "@/components/ValueSkeleton"
+import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
+import WhitelistStageButton from "@/components/WhitelistStageButton"
+import WhitelistStageProgress from "@/components/WhitelistStageProgress"
+import WhitelistStageLine from "@/components/WhitelistStageLine"
+import useBuy from "@/hook/useBuy"
+import { dateFormat } from "@/utils"
+import { DetailInfoType } from "@/utils/types"
+import useSwr from "@/hook/useSwr"
+import useSWR from "swr"
+import { fetchFeesApi } from "@/api/api"
 
 const WhitelistStageNFT: React.FC<{
-  detail: any;
-  info: any;
-  balance: any;
-  title: string;
-  stage: any;
-  readData: any;
+  detail: any
+  info: any
+  balance: any
+  title: string
+  stage: any
+  readData: any
 }> = ({ info, balance, title, detail, stage, readData }) => {
-  const [fees,setFees]=useState(0)
-  const { value,inputLoad, onChangeInput, callbackSuccess, onMax,maxAmount,isWhiteInfo,isLimit,mposa,hposa } = useBuy(
-    info,
-    readData,detail,stage
-  );
-  const initFees=async()=>{
-    console.log(process.env.ENV_BIT === "development",process.env.ENV_BIT , "development")
-    if(process.env.ENV_BIT ==='development'){
-setFees(1)
-    }else{
+  const [fees, setFees] = useState(0)
+  const {
+    value,
+    inputLoad,
+    onChangeInput,
+    callbackSuccess,
+    onMax,
+    maxAmount,
+    isWhiteInfo,
+    isLimit,
+    mposa,
+    hposa,
+  } = useBuy(info, readData, detail, stage)
+  const initFees = async () => {
+    console.log(
+      process.env.ENV_BIT === "development",
+      process.env.ENV_BIT,
+      "development"
+    )
+    if (process.env.ENV_BIT === "development") {
+      setFees(1)
+    } else {
       const fees = await fetchFeesApi()
       setFees(fees?.fastestFee || 0)
     }
-    
   }
-  useEffect(()=>{
+  useEffect(() => {
     initFees()
-  },[])
+  }, [process?.env?.ENV_BIT])
   const price = useMemo(() => {
-    return parseFixedAmount(info.targetnumber || 0, 8);
-  }, [info,stage,fees])
+    return parseFixedAmount(info.targetnumber || 0, 8)
+  }, [info, stage, fees])
   console.log({
     fees,
-    ss:process.env.ENV_BIT ==='development'
+    ss: process.env.ENV_BIT === "development",
   })
   const satoshis = useMemo(() => {
-    if(isLimit){
+    if (isLimit) {
       return ((fees + 1) * 550 * 1.1).toFixed(0)
     }
-    return price.mul(BigNumber.from(value || 0)).toString();
-  }, [price, value,fees,isLimit])
-  console.log({ss:process.env.NODE_ENV})
-  
+    return price.mul(BigNumber.from(value || 0)).toString()
+  }, [price, value, fees, isLimit])
+  console.log({ ss: process.env.NODE_ENV })
+
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
@@ -72,12 +83,8 @@ setFees(1)
             <TokenSymbol size={22} symbol={info?.projectcurrency} />
             <span>{info?.targetnumber}</span>
           </WhitelistStageLine>
-          <WhitelistStageLine title="Minimum Limit">
-            {mposa}
-          </WhitelistStageLine>
-          <WhitelistStageLine title="Maximum Limit">
-            {hposa}
-          </WhitelistStageLine>
+          <WhitelistStageLine title="Minimum Limit">{mposa}</WhitelistStageLine>
+          <WhitelistStageLine title="Maximum Limit">{hposa}</WhitelistStageLine>
           <WhitelistStageLine title="Launch Time">
             {info === null ? (
               <ValueSkeleton width={200} height={50} />
@@ -105,13 +112,12 @@ setFees(1)
       />
       <Spaced size="100" />
       <WhitelistStageLineBox
-        style={{ justifyContent: "space-between", gap: 0 }}
-      >
+        style={{ justifyContent: "space-between", gap: 0 }}>
         <WhitelistStageFooterItem>
           <WhitelistStageInputBox
             placeholder="0"
             value={value}
-            disabled={maxAmount<=0 || inputLoad}
+            disabled={maxAmount <= 0 || inputLoad}
             onMax={onMax}
             onChange={onChangeInput}
           />
@@ -123,10 +129,10 @@ setFees(1)
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
           <WhitelistStageButton
-          isLimit={isLimit}
-          mposa={mposa}
-          hposa={hposa}
-          isWhiteInfo={isWhiteInfo}
+            isLimit={isLimit}
+            mposa={mposa}
+            hposa={hposa}
+            isWhiteInfo={isWhiteInfo}
             price={price}
             detail={detail}
             info={info}
@@ -146,9 +152,9 @@ setFees(1)
       </WhitelistStageLineBox>
       <Spaced size="24" />
     </WhitelistStageBox>
-  );
-};
-export default WhitelistStageNFT;
+  )
+}
+export default WhitelistStageNFT
 
 const FooterTextLineBox = styled.div`
   font-size: 24px;
@@ -165,15 +171,15 @@ const FooterTextLineBox = styled.div`
   .g {
     color: #6f6f76;
   }
-`;
-const WhitelistStageFooterItem = styled.div``;
+`
+const WhitelistStageFooterItem = styled.div``
 const WhitelistStageInputBox = styled(Input)`
   width: 520px;
-`;
+`
 const WhitelistStageLineBox = styled.div`
   display: flex;
   gap: 60px;
-`;
+`
 const WhitelistStageCardBox = styled.div`
   padding: 40px;
   background: #24272b;
@@ -181,31 +187,31 @@ const WhitelistStageCardBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
-`;
+`
 const WhitelistStageTitleBox = styled.div`
   font-size: 60px;
   font-weight: 600;
   color: #ffffff;
   line-height: 60px;
   margin-bottom: 60px;
-`;
+`
 const WhitelistStageBox = styled.div`
   margin-top: 80px;
   /* height: 1059px; */
   background: #181b20;
   border-radius: 30px;
   padding: 60px 40px;
-`;
+`
 
 const WhitelistStageItemBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
-`;
+`
 
 const WhitelistStageItemImgBox = styled.div`
   display: flex;
   gap: 50px;
   align-items: center;
   justify-content: center;
-`;
+`
