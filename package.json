@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next",
+    "dev:view":"cp .env.preview .env.local && next dev",
     "build": "next build",
     "start": "node server.js",
     "build:dev": "cp .env.development .env.local && yarn build",
