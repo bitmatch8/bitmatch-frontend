@@ -1,8 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next",
-    "dev:view":"cp .env.preview .env.local && next dev",
+    "dev": "cp .env.development.sample .env.local && next dev",
+    "dev:view":"cp .env.preview.sample .env.local && next dev",
     "build": "next build",
     "start": "node server.js",
     "build:dev": "cp .env.development .env.local && yarn build",
