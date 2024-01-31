@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react"
 
 export default (type:any) => {
   const unisatwallet = (window as any).unisat
-  const okxwallet = (window as any).okxwallet
+  const okxwallet = (window as any)?.okxwallet?.bitcoin
   const OKX = {
     name: "OKX",
     wallter: okxwallet,
@@ -23,10 +23,12 @@ export default (type:any) => {
   //     wallter.name.toLocaleLowerCase() === type
   //   }) || UNISAT
   // },[window,wallters])
+  const wallter = wallters.find(wallter=>{
+    return wallter.name.toLocaleLowerCase() === type
+  })
+  console.log({wallter})
   return {
-    wallter:wallters.find(wallter=>{
-      wallter.name.toLocaleLowerCase() === type
-    }) || UNISAT,
+    ...wallter,
     wallters
   }
 }
