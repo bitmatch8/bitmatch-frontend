@@ -23,6 +23,8 @@ import CloseIcon from "@/components/Svg/CloseIcon"
 
 import Link from "next/link"
 import WallterSymbol from "@/components/WallterSymbol"
+import useOKX from "@/hook/useOKX"
+import useUnisat from "@/hook/useUnisat"
 
 const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
   const [show, setShow] = useState(false)
@@ -59,7 +61,8 @@ const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
 
 const ConnectButton = () => {
   const dispatch = useDispatch()
-  const { unisatInstalled, address, connected, network } = useSelector(selectWallter)
+  const { address, connected, network } =
+    useSelector(selectWallter)
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}
@@ -68,6 +71,7 @@ const ConnectButton = () => {
         onDismiss()
       }}></ConnectModal>
   )
+  // console.log({network})
   // if (!unisatInstalled) {
   //   return (
   //     <UserToolsBox>
@@ -121,19 +125,19 @@ export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
   onDismiss,
   connect,
 }) => {
+  const wallters = [useOKX(),useUnisat()].sort((a,b)=>a.installed === true ? -1: 0)
   return (
     <ConnectModalBox>
       <CloseButtonBox onClick={onDismiss}>
         <CloseIcon fill="#C2C5C8" width={36} />
       </CloseButtonBox>
-      <ConnectLineBox onClick={() => connect("unisat")}>
-        <WallterSymbol size={60} symbol={"UNISAT"} />
-        <ConnectTitle className="text">UniSat Wallet</ConnectTitle>
-      </ConnectLineBox>
-      <ConnectLineBox onClick={() => connect("okx")}>
-        <WallterSymbol size={60} symbol={"OKX"} />
-        <ConnectTitle className="text">OKX Wallet</ConnectTitle>
-      </ConnectLineBox>
+     {[wallters.map((item,key)=>{
+      return <ConnectLineBox className={`${item.installed ? '':'not_install'}`} key={key} onClick={() => item.installed ? connect(`${item.name}`.toLocaleLowerCase()) : ''}>
+      <WallterSymbol size={60} symbol={`${item.name}`.toLocaleUpperCase()} />
+      <ConnectTitle className="test" ><span>{item.name} Wallet</span><span className="tip">{item.installed ? '':'Not installed'}</span></ConnectTitle>
+    </ConnectLineBox>
+     })]} 
+      
     </ConnectModalBox>
   )
 }
@@ -162,10 +166,8 @@ const UserToolsBox = styled.div`
 const ConnectLineBox = styled.div`
   display: flex;
   align-items: center;
-  /* justify-content: center; */
-  /* flex-direction: column; */
-  padding-left: 30px;
-  gap: 48px;
+  padding:0 30px;
+  gap: 20px;
   font-size: 24px;
   font-weight: 500;
   color: #c2c5c8;
@@ -175,17 +177,28 @@ const ConnectLineBox = styled.div`
   height: 100px;
   border-radius: 16px;
   cursor: pointer;
+  user-select: none;
   &:hover {
     color: #ffffff;
     border-color: #f7931a;
-    .button {
-      border: 5px solid #f7931a;
+  }
+  &.not_install{
+    font-size: 18px;
+    border-color: #6f6f76;
+    
+    &:hover{
+      color: #c2c5c8;
+      border-color: #6f6f76;
     }
   }
+  
 `
 const ConnectTitle = styled.div`
-  font-size: 24px;
   font-family: Montserrat, Montserrat-Medium;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex:1;
 `
 const LogoBox = styled.div`
   width: 200px;
