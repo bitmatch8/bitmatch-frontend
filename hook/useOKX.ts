@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react"
+import useSWR from "swr"
 
 export default () => {
-  let okxwallet = (window as any).okxwallet
+  let {data:okxwallet} = useSWR({window},({window})=>(window as any).okxwallet) 
   const name='OKX'
   
+  console.log({okxwallet})
   return {
     name,
-    wallter:process.env.NEXT_PUBLIC_TEST === "test" ? okxwallet?.bitcoin:okxwallet?.bitcoin,
+    wallter:okxwallet?.bitcoin,
     installed:!!okxwallet,
   }
 }
