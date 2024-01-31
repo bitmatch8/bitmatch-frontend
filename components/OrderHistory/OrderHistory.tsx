@@ -17,7 +17,7 @@ import { buySlice, selectBuy, useSelector } from "@/lib/redux"
 import RefreshIcon from "../Svg/RefreshIcon"
 import { addToast, useDispatch } from "@/lib/redux";
 
-const StateWaiting: React.FC = () => {
+const StatePending: React.FC = () => {
   return (
     <>
       <span className="waiting">Pending</span>
@@ -140,20 +140,27 @@ const CopyItem: React.FC<{ text: string; len?: number }> = ({
 }
 
 
-const OrderStatus: { [state in OrderState]: any } = {
-  [OrderState.PENDING]: StateWaiting,
-  [OrderState.DISTRIBUTE]: StateDistributing,
-  [OrderState.COMPLETED]: StateCompleted,
-  [OrderState.UNISATVERFY]: StateSucceeded,
-  [OrderState.FAIL]: StateCancelled,
-  [OrderState.FAILED]: StateCancelled
+const OrderStatus: { [name:string]: any } = {
+  [`${OrderState.PENDING}_FT`]: StatePending,
+  [`${OrderState.DISTRIBUTE}_FT`]: StateDistributing,
+  [`${OrderState.COMPLETED}_FT`]: StateCompleted,
+  [`${OrderState.UNISATVERFY}_FT`]: StateSucceeded,
+  [`${OrderState.FAIL}_FT`]: StateCancelled,
+  [`${OrderState.FAILED}_FT`]: StateCancelled,
+
+  [`${OrderState.PENDING}_NFT`]: StatePending,
+  [`${OrderState.DISTRIBUTE}_NFT`]: StateDistributing,
+  [`${OrderState.COMPLETED}_NFT`]: StateSucceeded,
+  [`${OrderState.UNISATVERFY}_NFT`]: StateSucceeded,
+  [`${OrderState.FAIL}_NFT`]: StateCancelled,
+  [`${OrderState.FAILED}_NFT`]: StateCancelled
 }
 const OrderHistoryItem: React.FC<{
   item: HistoryItemProps
   onClick: any
   show: boolean
 }> = ({ item, show, onClick }) => {
-  const StateComponents = OrderStatus[item.status]
+  const StateComponents = OrderStatus[`${item.status}_${item.type}`]
   return (
     <OrderHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <OrderHistoryLineBox onClick={onClick}>

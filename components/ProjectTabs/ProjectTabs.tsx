@@ -1,5 +1,5 @@
 import styled from "@emotion/styled"
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { buySlice, selectBuy, selectWallter, useDispatch } from "@/lib/redux"
 import EmptyStageBox from "../EmptyStageBox"
@@ -8,6 +8,7 @@ import WhitelistStageNFT from "../WhitelistStage/WhitelistStageNFT"
 import WhitelistStageFT from "../WhitelistStage/WhitelistStageFT"
 import ProjectInformation from "../ProjectInformation"
 import { DetailInfoType, ProjectType } from "@/utils/types"
+import { useRouter } from "next/router"
 
 const ProjectTabs: React.FC<{
   ProjectTabList: any
@@ -26,11 +27,17 @@ const ProjectTabs: React.FC<{
   whiteRead,
   publicRead,
 }) => {
-  // const [tId, setTabId] = useState<string>(tabId)
-  const { tabType:tId } = useSelector(selectBuy)
   const dispatch = useDispatch()
+  const {replace,asPath} = useRouter()
   const { balance } = useSelector(selectWallter)
-  const onClickTabItem = (type: string) => dispatch(buySlice.actions.setTabType({type})) 
+  const tId = useMemo(()=>{
+    const has = asPath.split('#')[1]
+    return has ?? tabId
+  },[asPath,tabId]) 
+  const onClickTabItem = (type: string) =>{
+    replace(`#${type}`)
+    dispatch(buySlice.actions.setTabType({type}))
+  }
   
   const WhitelistStage =
     String(detail?.projecttype) === ProjectType.NFT

@@ -1,7 +1,7 @@
 export enum DetailInfoType {
-  white = "1",
-  public = "2",
-  info = "3",
+  white = "whitelist",
+  public = "public",
+  info = "info",
 }
 
 export enum ProjectType {
