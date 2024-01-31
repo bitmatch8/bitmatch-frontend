@@ -3,7 +3,9 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build:dev": "cp .env.development .env.local && yarn build",
+    "build:view": "cp .env.preview .env.local && yarn build"
   },
   "type": "module",
   "dependencies": {
