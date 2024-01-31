@@ -23,8 +23,7 @@ import CloseIcon from "@/components/Svg/CloseIcon"
 
 import Link from "next/link"
 import WallterSymbol from "@/components/WallterSymbol"
-import useOKX from "@/hook/useOKX"
-import useUnisat from "@/hook/useUnisat"
+import useWallter from "@/hook/useWallter"
 
 const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
   const [show, setShow] = useState(false)
@@ -125,7 +124,7 @@ export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
   onDismiss,
   connect,
 }) => {
-  const wallters = [useOKX(),useUnisat()].sort((a,b)=>a.installed === true ? -1: 0)
+  const {wallters} = useWallter('')
   return (
     <ConnectModalBox>
       <CloseButtonBox onClick={onDismiss}>

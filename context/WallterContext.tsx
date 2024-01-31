@@ -14,7 +14,8 @@ import refreshConfig from "@/utils/config"
 export default function WallterContext() {
   const dispatch = useDispatch()
   const { address,wallterType } = useSelector(selectWallter)
-  const {wallter,installed} = useWallter(wallterType);
+  const {wallter:{wallter,installed}} = useWallter(wallterType);
+  // const {wallter,installed} = handleWallter(wallterType)
   // const balance = null
   const {result:balance} = useSwr(address,async()=>{
     const data =await wallter.getBalance()

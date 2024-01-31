@@ -1,39 +1,32 @@
-import useUnisat from "./useUnisat"
-import useOKX from "./useOKX"
 import { WallterType } from "@/lib/redux"
-import useSWR from "swr"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 
-export default (type: WallterType) => {
-  // let {data:unisatSwr} = useSWR({window},({window})=>(window as any).unisat)
-  // let {data:okxwallet} = useSWR({window},({window})=>(window as any).okxwallet)
-
-  const unisatSwr = (window as any).unisat
+export default (type:any) => {
+  const unisatwallet = (window as any).unisat
   const okxwallet = (window as any).okxwallet
-  // const okx = useMemo(() => {
-  //   return {
-  //     name: "OKX",
-  //     wallter: okxwallet,
-  //     installed: !!okxwallet,
-  //   }
-  // }, [okxwallet])
-  // const unisat = useMemo(() => {
-  //   return {
-  //     name: "UniSat",
-  //     wallter: unisatSwr,
-  //     installed: !!unisatSwr,
-  //   }
-  // }, [unisatSwr])
-  // let unisat = useUnisat()
-  // let okx = useOKX()
-  console.log({okxwallet},!!okxwallet)
-  return type === "okx" ? {
+  const OKX = {
     name: "OKX",
     wallter: okxwallet,
     installed: !!okxwallet,
-  } : {
+  }
+  const UNISAT = {
     name: "UniSat",
-    wallter: unisatSwr,
-    installed: !!unisatSwr,
+    wallter: unisatwallet,
+    installed: !!unisatwallet,
+  }
+  const wallters = [
+    OKX,
+    UNISAT
+  ].sort((a,b)=>a.installed === true ? -1: 0)
+  // const handleWallter=useCallback((type: WallterType)=>{
+  //   return wallters.find(wallter=>{
+  //     wallter.name.toLocaleLowerCase() === type
+  //   }) || UNISAT
+  // },[window,wallters])
+  return {
+    wallter:wallters.find(wallter=>{
+      wallter.name.toLocaleLowerCase() === type
+    }) || UNISAT,
+    wallters
   }
 }

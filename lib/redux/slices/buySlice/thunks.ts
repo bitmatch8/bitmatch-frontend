@@ -35,7 +35,7 @@ export const buySubmitAsync = createAppAsyncThunk(
     // const availableAmount = (Number(res_data?.tokennumber) || 0) <= (Number(res_data?.totalPersonPurchased) || 0)
     // console.log(res_data)
 
-    const {wallter} = useWallter(wallterType)
+    const {wallter:{wallter}} = useWallter(wallterType)
     try {
       const txHash = await wallter.sendBitcoin(
         params.fundaddr,
