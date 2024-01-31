@@ -68,30 +68,30 @@ const ConnectButton = () => {
         onDismiss()
       }}></ConnectModal>
   )
-  if (!unisatInstalled) {
-    return (
-      <UserToolsBox>
-        <div />
-        <ConnectButtonBox
-          onClick={() =>
-            dispatch(
-              addToast({
-                contxt: "UniSat Wallet not installed",
-                icon: "warning",
-              })
-            )
-          }
-          variant="secondary">
-          Connect Wallet
-        </ConnectButtonBox>
-      </UserToolsBox>
-    )
-  }
-  if (network && network !== process.env.NEXT_PUBLIC_NETWORK) {
-    return (
-      <ConnectButtonBox onClick={onConnect}>Switch Network</ConnectButtonBox>
-    )
-  }
+  // if (!unisatInstalled) {
+  //   return (
+  //     <UserToolsBox>
+  //       <div />
+  //       <ConnectButtonBox
+  //         onClick={() =>
+  //           dispatch(
+  //             addToast({
+  //               contxt: "UniSat Wallet not installed",
+  //               icon: "warning",
+  //             })
+  //           )
+  //         }
+  //         variant="secondary">
+  //         Connect Wallet
+  //       </ConnectButtonBox>
+  //     </UserToolsBox>
+  //   )
+  // }
+  // if (network && network !== process.env.NEXT_PUBLIC_NETWORK) {
+  //   return (
+  //     <ConnectButtonBox onClick={onConnect}>Switch Network</ConnectButtonBox>
+  //   )
+  // }
   return connected && address ? (
     <ConnectSuccess address={address} />
   ) : (
