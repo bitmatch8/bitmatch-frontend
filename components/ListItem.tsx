@@ -9,6 +9,7 @@ import { ProjectType } from "@/utils/types";
 const ListWaperItem: React.FC<{ item: any | null }> = ({
   item,
 }) => {
+  // console.log({whitelistStage:item?.whitelistStage})
   return (
     <ListWaperItemBox>
       <ListWaperItemPicBox>

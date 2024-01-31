@@ -1,27 +1,23 @@
 /* Components */
 
-import Button from "@/components/Button";
-import Page from "@/components/Page";
-import styled from "@emotion/styled";
-import { useMemo, useState } from "react";
-import ListWaperItem from "../../components/ListItem";
-import ValueSkeleton from "@/components/ValueSkeleton";
-import { number_format } from "@/utils";
-import LoaderBox from "@/components/Loader/LoaderBox";
-import Pagination from "@/components/Pagination";
-import { Spaced } from "@/components/Spaced";
-
-import {
-  useDispatch,
-} from "@/lib/redux";
-import useSwr from "@/hook/useSwr";
-import refreshConfig from "@/utils/config";
-import { fetchDashboardApi, fetchProjectInfoSelectInfoApi } from "@/api/api";
+import Button from "@/components/Button"
+import Page from "@/components/Page"
+import styled from "@emotion/styled"
+import { useMemo, useState } from "react"
+import ListWaperItem from "../../components/ListItem"
+import ValueSkeleton from "@/components/ValueSkeleton"
+import { number_format } from "@/utils"
+import LoaderBox from "@/components/Loader/LoaderBox"
+import Pagination from "@/components/Pagination"
+import { Spaced } from "@/components/Spaced"
+import useSwr from "@/hook/useSwr"
+import { fetchDashboardApi, fetchProjectInfoSelectInfoApi } from "@/api/api"
+import { useRouter } from "next/router"
 
 const HeadContainerItem: React.FC<{
-  title: string;
-  value: any;
-  unit?: any;
+  title: string
+  value: any
+  unit?: any
 }> = ({ value, title, unit = "" }) => {
   return (
     <HeadContainerItemBox>
@@ -34,62 +30,47 @@ const HeadContainerItem: React.FC<{
       </HeadContainerItemValBox>
       <HeadContainerItemTitBox>{title}</HeadContainerItemTitBox>
     </HeadContainerItemBox>
-  );
-};
+  )
+}
 const ListContainerTabsItem: React.FC<{
-  title: any;
-  checkoutd: boolean;
-  onChange: (val: any) => any;
+  title: any
+  checkoutd: boolean
+  onChange: (val: any) => any
 }> = ({ title, onChange, checkoutd }) => {
   return (
     <ListContainerTabsItemBox
       className={checkoutd ? "active" : ""}
-      onClick={() => onChange(title)}
-    >
+      onClick={() => onChange(title)}>
       {title}
     </ListContainerTabsItemBox>
-  );
-};
+  )
+}
 
 export default function IndexPage() {
-  const dispatch = useDispatch();
-  const [tabType,setTabType] = useState('ALL')
-  // const {
-  //   // pageNum,
-  //   // total: totalNum,
-  //   // lists: projectList,
-  //   // lists_status,
-  //   tabType,
-  // } = useSelector(selectLuanch);
+  const [pageNum, setPageNum] = useState(1)
   const pageSize = 10
-  const onClickTab = (tabType: any) => {
-    setTabType(tabType)
-    // dispatch(luanchSlice.actions.setTabs(tabType));
-  };
-
-  const pageNum = 1
+  const { replace, asPath } = useRouter()
+  const tabType = useMemo(() => {
+    const has = asPath.split("#")[1]
+    return has ?? "ALL"
+  }, [asPath])
+  const onClickTabItem = (type: string) => {
+    replace(`#${type}`)
+  }
   const projecttype = tabType === "ALL" ? undefined : tabType === "FT" ? 1 : 2
-  const {result:result_lists} = useSwr({pageNum,pageSize,projecttype},fetchProjectInfoSelectInfoApi,{ })
-
-  const projectList:any[] = useMemo(()=>{
-    if(result_lists === null){
+  const { result: result_lists } = useSwr(
+    { pageNum, pageSize, projecttype },
+    fetchProjectInfoSelectInfoApi,
+    {}
+  )
+  const projectList: any[] = useMemo(() => {
+    if (result_lists === null) {
       return null
     }
     return result_lists.list
-  },[result_lists])
-
-  const totalNum = useMemo(()=>result_lists?.total || 0,[result_lists])
-  const {result:dashboard} = useSwr({},fetchDashboardApi,{  })
-  // const getLists = (pageNum: number = 1) => {
-  //   dispatch(fetchProjectInfoSelectInfoAsync({ pageNum, pageSize, tabType }));
-  // };
-  // const initDash = () => {
-  //   dispatch(fetchDashboardAsync());
-  // };
-  // useEffect(() => {
-  //   initDash();
-  //   onClickTab("ALL");
-  // }, []);
+  }, [result_lists])
+  const totalNum = useMemo(() => result_lists?.total || 0, [result_lists])
+  const { result: dashboard } = useSwr({}, fetchDashboardApi, {})
   return (
     <Page>
       <HeadContainerBox>
@@ -100,21 +81,22 @@ export default function IndexPage() {
         <HeadContainerBlockBox>
           <HeadContainerItem
             title="Total Projects"
-            value={dashboard === null ? null:dashboard.projectCount}
+            value={dashboard === null ? null : dashboard.projectCount}
           />
           <HeadContainerItem
             unit={"$"}
             title="Total Liquidity Rais"
-            value={dashboard === null ? null:dashboard.raisedCount}
+            value={dashboard === null ? null : dashboard.raisedCount}
           />
-          <HeadContainerItem title="Total Users" value={dashboard === null ? null:dashboard.usersCount} />
+          <HeadContainerItem
+            title="Total Users"
+            value={dashboard === null ? null : dashboard.usersCount}
+          />
         </HeadContainerBlockBox>
         <HeadContainerApplyBox>
           <HeadContainerApplyButton
-            onClick={() => {
-              window.open("https://forms.gle/pDsZQy2cYeQEYuSf9", "_blank");
-            }}
-          >
+            target="_blank"
+            to="https://forms.gle/pDsZQy2cYeQEYuSf9">
             Applying for Launch
           </HeadContainerApplyButton>
         </HeadContainerApplyBox>
@@ -123,17 +105,17 @@ export default function IndexPage() {
       <ListContainerBox>
         <ListContainerTabsBox>
           <ListContainerTabsItem
-            onChange={onClickTab}
+            onChange={onClickTabItem}
             checkoutd={tabType === "ALL"}
             title="ALL"
           />
           <ListContainerTabsItem
-            onChange={onClickTab}
+            onChange={onClickTabItem}
             checkoutd={tabType === "FT"}
             title="FT"
           />
           <ListContainerTabsItem
-            onChange={onClickTab}
+            onChange={onClickTabItem}
             checkoutd={tabType === "NFT"}
             title="NFT"
           />
@@ -150,12 +132,12 @@ export default function IndexPage() {
       </ListContainerBox>
       <Spaced size="50" />
       {totalNum > 10 ? (
-        <Pagination total={totalNum} onChange={()=>{}} page={pageNum} />
+        <Pagination total={totalNum} onChange={setPageNum} page={pageNum} />
       ) : (
         ""
       )}
     </Page>
-  );
+  )
 }
 
 const ListWaperBox = styled(LoaderBox)`
@@ -163,7 +145,7 @@ const ListWaperBox = styled(LoaderBox)`
   display: flex;
   flex-direction: column;
   gap: 80px;
-`;
+`
 const ListContainerTabsItemBox = styled.div`
   position: relative;
   cursor: pointer;
@@ -185,7 +167,7 @@ const ListContainerTabsItemBox = styled.div`
       transform: translateX(-50%);
     }
   }
-`;
+`
 const ListContainerTabsBox = styled.div`
   color: #fff;
   font-size: 60px;
@@ -195,23 +177,23 @@ const ListContainerTabsBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
+`
 const ListContainerBox = styled.div`
   margin: 140px auto 0;
-`;
+`
 const HeadContainerApplyButton = styled(Button)`
   width: 300px;
   height: 80px;
   font-size: 22px;
   font-family: Montserrat-Black;
-`;
+`
 const HeadContainerApplyBox = styled.div`
   text-align: center;
   margin-top: 64px;
-`;
+`
 const HeadContainerBox = styled.div`
   margin-top: 145px;
-`;
+`
 const HeadContainerText = styled.div`
   font-size: 60px;
   line-height: 80px;
@@ -223,13 +205,13 @@ const HeadContainerText = styled.div`
   span {
     color: #f8931a;
   }
-`;
+`
 const HeadContainerBlockBox = styled.div`
   display: flex;
   justify-content: space-between;
   width: 960px;
   margin: 80px auto 0;
-`;
+`
 const HeadContainerItemBox = styled.div`
   text-align: center;
   width: 280px;
@@ -240,15 +222,15 @@ const HeadContainerItemBox = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-`;
+`
 const HeadContainerItemTitBox = styled.div`
   font-size: 16px;
   font-weight: 300;
   color: #6f6f76;
   font-family: Montserrat, Montserrat-Medium;
-`;
+`
 const HeadContainerItemValBox = styled.div`
   font-size: 32px;
   font-weight: 600;
   color: #ffffff;
-`;
+`

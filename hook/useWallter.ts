@@ -26,7 +26,6 @@ export default (type:any) => {
   const wallter = wallters.find(wallter=>{
     return wallter.name.toLocaleLowerCase() === type
   })
-  console.log({wallter})
   return {
     ...wallter,
     wallters

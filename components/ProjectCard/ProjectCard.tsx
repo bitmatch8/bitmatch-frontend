@@ -1,7 +1,4 @@
 import styled from "@emotion/styled";
-import UpcomingImg from "@/assets/img/upcomming1.png";
-import endedImg from "@/assets/img/ended.png";
-import Upcomming2Img from "@/assets/img/upcomming2.png";
 
 import Image from "next/image";
 import LinkIcon from "@/components/Svg/LinkIcon";
@@ -14,6 +11,7 @@ import ValueSkeleton from "@/components/ValueSkeleton";
 import GitbookIcon from "@/components/Svg/GitbookIcon";
 import DiscordIcon from "@/components/Svg/DiscordIcon";
 import { BuyState } from "@/utils/types";
+import OrderStageIcon from "../OrderStageIcon";
 
 const ProjectLinks: React.FC<{ detail: any }> = ({ detail }) => {
   return (
@@ -71,23 +69,12 @@ const LinkItem: React.FC<{ SvgIcon: any; to?: string }> = ({
   );
 };
 
-const statueSymbol: { [typeId in BuyState]: any } = {
-  [BuyState.Public_Ended]: endedImg,
-  [BuyState.Public_InProgress]: Upcomming2Img,
-  [BuyState.Public_NotStarted]: UpcomingImg,
-  [BuyState.White_Ended]: endedImg,
-  [BuyState.White_NotStarted]: UpcomingImg,
-  [BuyState.White_InProgress]: Upcomming2Img,
-};
+
 
 const ProjectCard: React.FC<{ detail: any; buyType: BuyState | null }> = ({
   detail,
   buyType,
 }) => {
-  const StatusImg = useMemo(() => {
-    if (buyType === null || !statueSymbol[buyType]) return null;
-    return statueSymbol[buyType];
-  }, [buyType]);
   return (
     <ProjectCardBox>
       <ProjectCardHeadBox>
@@ -119,11 +106,7 @@ const ProjectCard: React.FC<{ detail: any; buyType: BuyState | null }> = ({
               ) : (
                 ""
               )}
-              {StatusImg === null ? (
-                <ValueSkeleton width={50} height={30} />
-              ) : (
-                <ImgBox alt="" src={StatusImg} height={30} />
-              )}
+             <OrderStageIcon symbol={buyType}/> 
             </div>
           </ProjectCardHeadTitleBox>
         </ProjectCardHeadLeftBox>
