@@ -12,15 +12,10 @@ export const connectUnisat = createAppAsyncThunk(
   "wallter/connectUnisat",
   async (type: WallterType, { getState }) => {
    try{
-    console.log({type})
     const { wallter } = useWallter(type)
-    console.log({wallter})
     const network = await wallter.getNetwork();
-
-    console.log({network})
     if (network === process.env.NEXT_PUBLIC_NETWORK || type === 'okx') {
       const [address] = await wallter.requestAccounts()
-      console.log({ address })
       return { address, network, type }
     } else {
       const network = await wallter.switchNetwork(

@@ -125,13 +125,13 @@ const WhitelistStageButton: React.FC<{
   const isSoldOut=useMemo(()=>Number(info?.singlePersonPurchased) >= Number(hposa || 0) || Number(info?.tokennumber || 0) <= Number(info?.totalPersonPurchased || 0),[info,hposa])
   const isClaimed=useMemo(()=>isLimit && Number(info?.singlePersonPurchased) >= Number(hposa),[hposa,info])
   // console.log(isLimit , Number(info?.singlePersonPurchased) , Number(hposa))
-  if (network && network !== process.env.NEXT_PUBLIC_NETWORK && wallterType !== 'okx') {
-    return (
-      <WhitelistStageButtonBox onClick={onConnect}>
-        Switch Network
-      </WhitelistStageButtonBox>
-    )
-  }
+  // if (network && network !== process.env.NEXT_PUBLIC_NETWORK && wallterType !== 'okx') {
+  //   return (
+  //     <WhitelistStageButtonBox onClick={onConnect}>
+  //       Switch Network
+  //     </WhitelistStageButtonBox>
+  //   )
+  // }
   if (!address) {
     return (
       <WhitelistStageButtonBox onClick={onConnect}>
