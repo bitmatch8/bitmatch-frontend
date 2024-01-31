@@ -13,6 +13,7 @@ import {
   buySubmitAsync,
   selectBuy,
   addToast,
+  WallterType,
 } from "@/lib/redux"
 import { toLocalTime } from "@/utils"
 import useSwr from "@/hook/useSwr"
@@ -71,8 +72,8 @@ const WhitelistStageButton: React.FC<{
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}
-      connect={() => {
-        dispatch(connectUnisat())
+      connect={(type: WallterType) => {
+        dispatch(connectUnisat(type))
         onDismiss()
       }}></ConnectModal>
   )
