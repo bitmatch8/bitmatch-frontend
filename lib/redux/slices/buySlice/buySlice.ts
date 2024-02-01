@@ -19,18 +19,16 @@ export const buySlice = createSlice({
     setTabType:(state,action: PayloadAction<{type:any}>)=>{
       state.tabType=action.payload.type
     }
-    
   },
   extraReducers: (builder) => {
     builder
-      .addCase(buySubmitAsync.pending, (state,action) => {
+      .addCase(buySubmitAsync.pending, (state) => {
         state.status = 'loading'
       })
       .addCase(buySubmitAsync.fulfilled, (state, action) => {
         state.status = 'idle'
       }).addCase(buySubmitAsync.rejected, (state, action) => {
         state.status = 'idle'
-        console.log({action:action.meta.arg})
       })
   },
 })
