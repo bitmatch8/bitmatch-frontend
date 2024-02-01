@@ -7,6 +7,7 @@ import ProjectTabs from "@/components/ProjectTabs"
 import useDetail from "@/hook/useDetail"
 import OrderHistory from "@/components/OrderHistory"
 import ValueSkeleton from "@/components/ValueSkeleton"
+import styled from "@emotion/styled"
 export const Detail: React.FC<{id:any}> = ({id}) => {
   const {
     load,
@@ -28,7 +29,14 @@ export const Detail: React.FC<{id:any}> = ({id}) => {
       <ProjectCard detail={detail} buyType={buyType} />
       {load ? <>
       <Spaced size="150"/>
-        <ValueSkeleton width={1240} height={300}/>
+      <ValueSkeletonBox>
+      <ValueSkeleton width={1240} height={80}/>
+      <Spaced size="100"/>
+      <ValueSkeleton width={1240} height={300}/>
+      <Spaced size="100"/>
+      <ValueSkeleton width={1240} height={300}/>
+      
+      </ValueSkeletonBox>
       </>:<ProjectTabs
         whiteRead={readWhtie}
         publicRead={readPublic}
@@ -46,3 +54,7 @@ export const Detail: React.FC<{id:any}> = ({id}) => {
 export default Detail
 
 
+
+const ValueSkeletonBox=styled.div`
+height: 1046px;
+`
