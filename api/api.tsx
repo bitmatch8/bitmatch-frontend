@@ -4,6 +4,9 @@ import Ajax from "./Ajax"
 export const fetchDashboardApi = () => {
   return Ajax.get("/projectInfo/dashboard")
 }
+export const fetchOrderlistIsRepeated =(params:any)=>{
+  return Ajax.post('/orderlist/isRepeated',{params})
+}
 export const fetchProjectInfoSelectInfoApi = (params: any) => {
   const query_params = objectToUrlParams(params)
   return Ajax.get(`/projectInfo/selectInfo?status=1&${query_params}`)

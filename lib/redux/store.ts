@@ -12,13 +12,13 @@ import storage from "redux-persist/lib/storage";
 
 /* Instruments */
 import { reducer } from './rootReducer'
-import { middleware } from './middleware'
 
 
 // 持久化配置
 const persistConfig = {
-  key: "root",
+  key: "deindex",
   storage,
+  timeout:1000,
 };
 const persistedReducer = persistReducer(persistConfig, reducer);
 

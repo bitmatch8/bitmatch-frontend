@@ -5,7 +5,6 @@ import refreshConfig from '@/utils/config';
 
 const initialState: BuySliceState = {
   status: 'idle',
-  loading_map:new Map(),
   tabType:null,
   refresh_opt:0,
 }
@@ -19,21 +18,19 @@ export const buySlice = createSlice({
     },
     setTabType:(state,action: PayloadAction<{type:any}>)=>{
       state.tabType=action.payload.type
-    },
-    removeLoading:(state,action: PayloadAction<{id:any}>)=>{
-      state.loading_map.delete(action.payload.id)
     }
+    
   },
   extraReducers: (builder) => {
     builder
-      .addCase(buySubmitAsync.pending, (state) => {
+      .addCase(buySubmitAsync.pending, (state,action) => {
         state.status = 'loading'
       })
       .addCase(buySubmitAsync.fulfilled, (state, action) => {
         state.status = 'idle'
-        state.loading_map.set(action.payload?.pid,Date.now() + refreshConfig.submit_order_refreshInterval)
       }).addCase(buySubmitAsync.rejected, (state, action) => {
         state.status = 'idle'
+        console.log({action:action.meta.arg})
       })
   },
 })
@@ -41,6 +38,5 @@ export const buySlice = createSlice({
 export interface BuySliceState {
   tabType:any,
   refresh_opt:number,
-  loading_map:Map<any, any>,
   status: 'idle' | 'loading' | 'failed'
 }

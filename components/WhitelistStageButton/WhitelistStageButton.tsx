@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 import TimeCountdown from "@/components/TimeCountdown"
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton"
 import useModal from "@/hook/useModal"
-import { fetchSelectFaddress } from "@/api/api"
+import { fetchOrderlistIsRepeated, fetchSelectFaddress } from "@/api/api"
 import {
   useSelector,
   useDispatch,
@@ -17,6 +17,7 @@ import {
 } from "@/lib/redux"
 import { toLocalTime } from "@/utils"
 import useSwr from "@/hook/useSwr"
+import refreshConfig from "@/utils/config"
 
 const WhitelistStageButton: React.FC<{
   price: any
@@ -27,7 +28,7 @@ const WhitelistStageButton: React.FC<{
   buyAmount: any
   stage: any
   reload: any
-  isLimit:boolean
+  isLimit: boolean
   isWhiteInfo: any
   mposa: any
   hposa: any
@@ -47,7 +48,8 @@ const WhitelistStageButton: React.FC<{
 }) => {
   const dispatch = useDispatch()
   const { address } = useSelector(selectWallter)
-  const { status,loading_map,refresh_opt } = useSelector(selectBuy)
+  const { status, refresh_opt } = useSelector(selectBuy)
+  const [loading,setLoading]=useState(false)
   const { result: toAddress } = useSwr(
     { pid: detail.id },
     fetchSelectFaddress,
@@ -60,21 +62,18 @@ const WhitelistStageButton: React.FC<{
     return stage === "whitelist" && (isWhiteInfo === null || isWhiteInfo === 0)
   }, [isWhiteInfo, stage, toAddress])
 
-  const loading = useMemo(()=>{
-    console.log({loading_map})
-  //  const date = loading_map?.get(detail.id)
-  //  return date > Date.now()
-  },[loading_map,detail])
 
-  const sss = new Map()
-  console.log({loading,sss,loading_map,status,refresh_opt})
+
   const buttonText = useMemo(() => {
-    if (isWhiteInfo === 0 && stage === 'whitelist') {
+    if (isWhiteInfo === 0 && stage === "whitelist") {
       return "Not in whitelist"
-    } else if ((stage === "whitelist" && isWhiteInfo === null) || toAddress === null) {
+    } else if (
+      (stage === "whitelist" && isWhiteInfo === null) ||
+      toAddress === null
+    ) {
       return "Loading"
     }
-    return !isLimit ? 'Buy':'Claim'
+    return !isLimit ? "Buy" : "Claim"
   }, [isWhiteInfo, toAddress])
 
   const [onConnect, onDismiss] = useModal(
@@ -85,6 +84,7 @@ const WhitelistStageButton: React.FC<{
         onDismiss()
       }}></ConnectModal>
   )
+
   const onCLickBuy = async () => {
     if (status === "idle" && buyAmount && disabled === false && toAddress) {
       if (Number(mposa) > Number(buyAmount)) {
@@ -119,7 +119,17 @@ const WhitelistStageButton: React.FC<{
         buyAmount,
         toAddress,
         satoshis,
-        reload,
+        moveLoading:()=>{
+          setLoading(true)
+          setTimeout(() => {
+            setLoading(false)
+          }, refreshConfig.submit_order_refreshInterval);
+        },
+        reload: !isLimit ? () => 0 : fetchOrderlistIsRepeated({
+          "stage": "whitelist",
+          "pid": detail?.id,
+          "fromaddr": address
+        }).then(({ code }) => code),
         callback,
       }
       dispatch(buySubmitAsync(params))
@@ -131,8 +141,16 @@ const WhitelistStageButton: React.FC<{
     () => starttime.getTime() > Date.now(),
     [starttime]
   )
-  const isSoldOut=useMemo(()=>Number(info?.singlePersonPurchased) >= Number(hposa || 0) || Number(info?.tokennumber || 0) <= Number(info?.totalPersonPurchased || 0),[info,hposa])
-  const isClaimed=useMemo(()=>isLimit && Number(info?.singlePersonPurchased) >= Number(hposa),[hposa,info])
+  const isSoldOut = useMemo(
+    () =>
+      Number(info?.singlePersonPurchased) >= Number(hposa || 0) ||
+      Number(info?.tokennumber || 0) <= Number(info?.totalPersonPurchased || 0),
+    [info, hposa]
+  )
+  const isClaimed = useMemo(
+    () => isLimit && Number(info?.singlePersonPurchased) >= Number(hposa),
+    [hposa, info]
+  )
   // console.log(isLimit , Number(info?.singlePersonPurchased) , Number(hposa))
   // if (network && network !== process.env.NEXT_PUBLIC_NETWORK && wallterType !== 'okx') {
   //   return (
@@ -166,8 +184,8 @@ const WhitelistStageButton: React.FC<{
   } else if (starttime.getTime() < Date.now()) {
     return (
       <WhitelistStageButtonBox
-        disabled={status === "loading" || disabled}
-        isLoading={status === "loading"}
+        disabled={status === "loading" || disabled || loading}
+        isLoading={status === "loading" || loading}
         onClick={onCLickBuy}>
         {buttonText}
       </WhitelistStageButtonBox>
