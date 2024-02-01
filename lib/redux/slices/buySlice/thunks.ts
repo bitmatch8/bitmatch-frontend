@@ -30,6 +30,7 @@ export const buySubmitAsync = createAppAsyncThunk(
   async (params: BuySubmitProps, { dispatch,getState }) => {
     const { wallterType } = selectWallter(getState())
     const code = await params.reload()
+    console.log({code})
     if(code !== 0){
       throw new Error('error')
     }

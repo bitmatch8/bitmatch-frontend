@@ -5,7 +5,7 @@ export const fetchDashboardApi = () => {
   return Ajax.get("/projectInfo/dashboard")
 }
 export const fetchOrderlistIsRepeated =(params:any)=>{
-  return Ajax.post('/orderlist/isRepeated',{params})
+  return Ajax.post('/orderlist/isRepeated',params)
 }
 export const fetchProjectInfoSelectInfoApi = (params: any) => {
   const query_params = objectToUrlParams(params)
