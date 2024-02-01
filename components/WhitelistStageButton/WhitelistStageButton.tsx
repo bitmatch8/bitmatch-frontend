@@ -120,7 +120,7 @@ const WhitelistStageButton: React.FC<{
         toAddress,
         satoshis,
         moveLoading:()=>{
-          setLoading(true)
+          setLoading(isLimit)
           setTimeout(() => {
             setLoading(false)
           }, refreshConfig.submit_order_refreshInterval);
