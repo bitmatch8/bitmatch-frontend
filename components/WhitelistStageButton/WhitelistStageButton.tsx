@@ -1,6 +1,6 @@
 import Button from "@/components/Button"
 import styled from "@emotion/styled"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import TimeCountdown from "@/components/TimeCountdown"
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton"
 import useModal from "@/hook/useModal"
@@ -45,8 +45,8 @@ const WhitelistStageButton: React.FC<{
   mposa,
 }) => {
   const dispatch = useDispatch()
-  const { address, network,wallterType } = useSelector(selectWallter)
-  const { status } = useSelector(selectBuy)
+  const { address } = useSelector(selectWallter)
+  const { status,loading_map,refresh_opt } = useSelector(selectBuy)
   const { result: toAddress } = useSwr(
     { pid: detail.id },
     fetchSelectFaddress,
@@ -59,6 +59,14 @@ const WhitelistStageButton: React.FC<{
     return stage === "whitelist" && (isWhiteInfo === null || isWhiteInfo === 0)
   }, [isWhiteInfo, stage, toAddress])
 
+  const loading = useMemo(()=>{
+    console.log({loading_map})
+  //  const date = loading_map?.get(detail.id)
+  //  return date > Date.now()
+  },[loading_map,detail])
+
+  const sss = new Map()
+  console.log({loading,sss,loading_map,status,refresh_opt})
   const buttonText = useMemo(() => {
     if (isWhiteInfo === 0 && stage === 'whitelist') {
       return "Not in whitelist"

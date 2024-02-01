@@ -5,6 +5,6 @@ const refreshConfig ={
 	history_refreshInterval:30000,
 	balance_refreshInterval:60000,
 	network_refreshInterval:5000,
-	detail6_refreshInterval:10000
+	submit_order_refreshInterval:15000
 }
 export default refreshConfig

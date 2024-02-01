@@ -27,7 +27,7 @@ export const buySubmitAsync = createAppAsyncThunk(
   "buy/submit",
   async (params: BuySubmitProps, { dispatch,getState }) => {
     
-        const { wallterType } = selectWallter(getState())
+    const { wallterType } = selectWallter(getState())
 
     // const res_data = await params.reload()
     // console.log({res_data})
@@ -44,6 +44,7 @@ export const buySubmitAsync = createAppAsyncThunk(
       params.txHash = txHash
       params.callback(txHash)
       send_order(params,dispatch)
+      return {pid:params.pid}
     } catch (e) {
       console.log(e)
       // dispatch(toastSlice.actions.removeToast(uniqueId))
@@ -64,7 +65,6 @@ export const send_order = async (params: any,dispatch:any) => {
     )
     setTimeout(() => {
       dispatch(buySlice.actions.setRefresh({num:0}))
- 
     }, 5000);
   } catch (e) {
     setTimeout(() => {

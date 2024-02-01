@@ -61,26 +61,25 @@ const StateSucceeded: React.FC = () => {
 }
 const RefreshButton: React.FC = () => {
   const [click, setClick] = useState(false)
-  const dispatch=useDispatch()
-  const onClick=()=>{
-    if(click){
+  const dispatch = useDispatch()
+  const onClick = () => {
+    if (click) {
       return
     }
     dispatch(addToast({
-      icon:'success',
-      contxt:'Refresh successful'
+      icon: 'success',
+      contxt: 'Refresh successful'
     }))
-    dispatch(buySlice.actions.setRefresh({num:1000}))
+    dispatch(buySlice.actions.setRefresh({ num: 1000 }))
     setTimeout(() => {
-     
-    dispatch(buySlice.actions.setRefresh({num:0})) 
+      dispatch(buySlice.actions.setRefresh({ num: 0 }))
     }, 2000);
     setClick(true)
     setTimeout(() => {
       setClick(false)
     }, 15000);
   }
-  return <IconSvg width={20} fill={click ? '#ccc':'#fff'} onClick={onClick} className={click ? 'rotate':''} />
+  return <IconSvg width={20} fill={click ? '#ccc' : '#fff'} onClick={onClick} className={click ? 'rotate' : ''} />
 }
 const OrderHistoryHead: React.FC = () => {
   return (
@@ -140,7 +139,7 @@ const CopyItem: React.FC<{ text: string; len?: number }> = ({
 }
 
 
-const OrderStatus: { [name:string]: any } = {
+const OrderStatus: { [name: string]: any } = {
   [`${OrderState.PENDING}_FT`]: StatePending,
   [`${OrderState.DISTRIBUTE}_FT`]: StateDistributing,
   [`${OrderState.COMPLETED}_FT`]: StateCompleted,
