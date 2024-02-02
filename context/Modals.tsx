@@ -61,9 +61,6 @@ const StyledModalBackdrop = styled.div`
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;
   z-index: -1;
-  /* -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.01); */
 `
 
 export default Modals

@@ -1,6 +1,5 @@
 import { useEffect } from "react"
 
-
 import {
   wallterSlice,
   useSelector,
@@ -15,8 +14,7 @@ export default function WallterContext() {
   const dispatch = useDispatch()
   const { address,wallterType } = useSelector(selectWallter)
   const {wallter,installed} = useWallter(wallterType);
-  // const {wallter,installed} = handleWallter(wallterType)
-  // const balance = null
+
   const {result:balance} = useSwr(address,async()=>{
     const data =await wallter.getBalance()
     return {
@@ -24,6 +22,7 @@ export default function WallterContext() {
       data
     }
   },{ refreshInterval: refreshConfig.balance_refreshInterval })
+
   const {result:network} = useSwr({address,wallter},async({wallter}:{wallter:any})=>{
     const data =await wallter.getNetwork()
     return {
@@ -31,6 +30,7 @@ export default function WallterContext() {
       data
     }
   },{ refreshInterval: refreshConfig.network_refreshInterval })
+
   const handleAccountsChanged = (_accounts: string[]) => {
     if (_accounts.length > 0) {
       dispatch(wallterSlice.actions.setAddress({address:_accounts[0]}))
@@ -42,6 +42,7 @@ export default function WallterContext() {
   const handleNetworkChanged = (network: string) => {
     dispatch(wallterSlice.actions.setNetwork({network}))
   }
+
   async function checkUnisat() {
     if(!installed){
       return 
@@ -53,12 +54,13 @@ export default function WallterContext() {
       wallter.removeListener("networkChanged", handleNetworkChanged)
     }
   }
-  // console.log({network})
+  
   useEffect(()=>{
     if(network){
       dispatch(wallterSlice.actions.setNetwork({network}))
     } 
   },[network])
+
   useEffect(()=>{
     if(balance){
       dispatch(wallterSlice.actions.setBalance({balance}))
@@ -68,5 +70,6 @@ export default function WallterContext() {
   useEffect(() => {
     checkUnisat().then()
   }, [wallter,installed])
+  
   return <></>
 }

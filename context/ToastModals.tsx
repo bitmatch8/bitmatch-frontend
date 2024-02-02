@@ -25,14 +25,16 @@ export default function ToastModals() {
 }
 
 const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+  
   useEffect(() => {
     const fun = () => {
       dispatch(toastSlice.actions.removeToast(item.uniqueId || ""));
     };
     window.addEventListener("click", fun);
     return window.removeEventListener("click", fun);
-  }, []);
+  }, [])
+
   return (
     <ToastItemBox>
       <ToastItemContxtBox>
@@ -42,8 +44,8 @@ const ToastItemDom: React.FC<{ item: ToastItem }> = ({ item }) => {
         <ToastIner second={(item.endTime || 0) - Date.now() + 800} />
       </ToastItemFooterBox>}
     </ToastItemBox>
-  );
-};
+  )
+}
 const Fiext = styled.div`
   position: fixed;
   top: 100px;

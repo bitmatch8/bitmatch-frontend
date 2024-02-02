@@ -1,24 +1,19 @@
-import { addToast, selectWallter, useDispatch, useSelector } from "@/lib/redux"
+import { selectWallter, useSelector } from "@/lib/redux"
 import { useMemo, useState } from "react"
 import useSwr from "./useSwr"
 import { fetchQueryByWhitelist } from "@/api/api"
 
 const useBuy = (info: any, readData: any, detail: any, stage: any) => {
-  const dispatch = useDispatch()
   const [value, setValue] = useState("")
-  const { connected, address, network } = useSelector(selectWallter)
-  const { result: isWhiteInfo } = useSwr(
-    {
+  const { address } = useSelector(selectWallter)
+  const { result: isWhiteInfo } = useSwr({
       pid: detail.id,
       address,
-    },
-    address && stage === "whitelist" ? fetchQueryByWhitelist : null,
-    {}
-  )
-  
+    }, address && stage === "whitelist" ? fetchQueryByWhitelist : null,{})
+
   //是否限额
   const isLimit = useMemo(()=>(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"),[isWhiteInfo,stage])
-  // console.log({isLimit},isWhiteInfo , isWhiteInfo?.share , stage === "whitelist")
+
   //单地址最低份额
   const mposa = useMemo(() => {
     if (isLimit) {
@@ -26,6 +21,7 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
     }
     return info.mposa
   }, [info, isWhiteInfo,isLimit])
+
   //单地址最高份额
   const hposa = useMemo(() => {
     if (isLimit) {
@@ -33,18 +29,18 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
     }
     return info.hposa
   }, [info, isWhiteInfo,isLimit])
+
   //用户已购买份额
-  const singlePersonPurchased = useMemo(
-    () => info.singlePersonPurchased,
-    [info]
-  )
+  const singlePersonPurchased = useMemo(() => info.singlePersonPurchased,[info])
 
   const availableAmount = useMemo(() => {
     return (info?.tokennumber || 0) - (info?.totalPersonPurchased || 0)
   }, [info])
+
   const minAmount = useMemo(() => {
     return mposa
   }, [mposa])
+
   const maxAmount = useMemo(() => {
     if (isLimit) {
       return isWhiteInfo?.share
@@ -67,6 +63,7 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
       setValue(value)
     }
   }
+
   const showValue = useMemo(() => {
     if (isLimit) {
       if (Number(info?.singlePersonPurchased) >= Number(hposa)) {

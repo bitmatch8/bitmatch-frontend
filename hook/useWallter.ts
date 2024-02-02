@@ -1,5 +1,3 @@
-import { WallterType } from "@/lib/redux"
-import { useCallback, useMemo } from "react"
 
 export default (type:any) => {
   const unisatwallet = (window as any).unisat

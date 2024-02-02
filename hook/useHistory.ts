@@ -1,7 +1,6 @@
 import { fetchOrderCList } from "@/api/api"
-import refreshConfig from "@/utils/config"
 import { OrderState } from "@/utils/types"
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 import useSWR from "swr"
 export type HistoryItemProps = {
 	orderid: string

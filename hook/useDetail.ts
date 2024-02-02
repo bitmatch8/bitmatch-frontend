@@ -1,51 +1,74 @@
 import { fetchProjectInfoApi, fetchWhtielistInfoApi } from "@/api/api"
-import { buySlice, detailSlice, selectBuy, selectDetail, selectWallter, useDispatch } from "@/lib/redux"
+import {
+  buySlice,
+  detailSlice,
+  selectBuy,
+  selectDetail,
+  selectWallter,
+  useDispatch,
+} from "@/lib/redux"
 import { foramtDateInfo } from "@/utils"
 import refreshConfig from "@/utils/config"
 import { BuyState, DetailInfoType } from "@/utils/types"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { useSelector } from "react-redux"
 import useSwr from "./useSwr"
 
 const useDetail = (id: any) => {
+  const dispatch = useDispatch()
   const { address } = useSelector(selectWallter)
+  const { tabType: tabId } = useSelector(selectBuy)
+  const { detailLists, infoLists } = useSelector(selectDetail)
 
-  const { tabType:tabId } = useSelector(selectBuy)
-  const {detailLists,infoLists} = useSelector(selectDetail)
-  const detail = useMemo(()=>{
+  const detail = useMemo(() => {
     return detailLists[id] || null
-  },[id,detailLists])
-  
-  const {result:res_detail} = useSwr({
-      id,
-      address: address ? address : undefined,
-    },id ? fetchProjectInfoApi : null,{ }
-  )
+  }, [id, detailLists])
 
-  const pub_info_key=useMemo(()=>{
-    return detail === null || !detail?.pubid ? null  :`${detail.id}_${detail?.pubid}`
-  },[detail?.pubid])
-  const whi_info_key=useMemo(()=>{
-    return detail === null || !detail?.wid ? null:`${detail.id}_${detail?.wid}` 
-  },[detail?.wid])
-  const publicInfo=useMemo(()=>{
-    return pub_info_key === null || detail === null || !infoLists[pub_info_key]  ?  null : infoLists[pub_info_key]
-  },[id,infoLists])
-  const whiteInfo=useMemo(()=>{
-    return whi_info_key === null || detail === null || !infoLists[whi_info_key]  ?  null : infoLists[whi_info_key]
-  },[id,infoLists])
-  const {result:res_publicInfo,mutate:publicMutate} = useSwr({
+  const { result: res_detail } = useSwr({id,address: address ? address : undefined,}, id ? fetchProjectInfoApi : null, {} )
+
+  const pub_info_key = useMemo(() => {
+    return detail === null || !detail?.pubid
+      ? null
+      : `${detail.id}_${detail?.pubid}`
+  }, [detail?.pubid])
+
+  const whi_info_key = useMemo(() => {
+    return detail === null || !detail?.wid
+      ? null
+      : `${detail.id}_${detail?.wid}`
+  }, [detail?.wid])
+
+  const publicInfo = useMemo(() => {
+    return pub_info_key === null || detail === null || !infoLists[pub_info_key]
+      ? null
+      : infoLists[pub_info_key]
+  }, [id, infoLists])
+
+  const whiteInfo = useMemo(() => {
+    return whi_info_key === null || detail === null || !infoLists[whi_info_key]
+      ? null
+      : infoLists[whi_info_key]
+  }, [id, infoLists])
+
+  const { result: res_publicInfo, mutate: publicMutate } = useSwr(
+    {
       id: detail?.pubid,
       address,
     },
-    detail?.pubid && (!publicInfo || tabId === DetailInfoType.public)? fetchWhtielistInfoApi : null,
+    detail?.pubid && (!publicInfo || tabId === DetailInfoType.public)
+      ? fetchWhtielistInfoApi
+      : null,
     { refreshInterval: refreshConfig.publicInfo_refreshInterval }
   )
 
-  const {result:res_whiteInfo,mutate:whiteMutate} = useSwr({
+  const { result: res_whiteInfo, mutate: whiteMutate } = useSwr(
+    {
       id: detail?.wid,
       address,
-    },detail?.wid && (!whiteInfo || tabId === DetailInfoType.white) ? fetchWhtielistInfoApi : null,
+    },
+    detail?.wid && (!whiteInfo || tabId === DetailInfoType.white)
+      ? fetchWhtielistInfoApi
+      : null,
     { refreshInterval: refreshConfig.whiteInfo_refreshInterval }
   )
 
@@ -86,65 +109,72 @@ const useDetail = (id: any) => {
   const initTabId = () => {
     if (whiteType === BuyState.White_Ended && publicType) {
       if (publicType === BuyState.Public_Ended) {
-        dispatch(buySlice.actions.setTabType({type:DetailInfoType.white}))
+        dispatch(buySlice.actions.setTabType({ type: DetailInfoType.white }))
         return DetailInfoType.white
       }
-      dispatch(buySlice.actions.setTabType({type:DetailInfoType.public}))
+      dispatch(buySlice.actions.setTabType({ type: DetailInfoType.public }))
       return DetailInfoType.public
     } else if (whiteType) {
-      dispatch(buySlice.actions.setTabType({type:DetailInfoType.white}))
+      dispatch(buySlice.actions.setTabType({ type: DetailInfoType.white }))
       return DetailInfoType.white
     } else if (publicType) {
-      dispatch(buySlice.actions.setTabType({type:DetailInfoType.public}))
+      dispatch(buySlice.actions.setTabType({ type: DetailInfoType.public }))
       return DetailInfoType.public
     }
-    dispatch(buySlice.actions.setTabType({type:null})) 
+    dispatch(buySlice.actions.setTabType({ type: null }))
     return null
   }
 
-  useEffect(()=>{
-    initTabId() 
-  },[publicType, whiteType])
+  useEffect(() => {
+    initTabId()
+  }, [publicType, whiteType])
+
   const load = useMemo(() => {
-    return !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
-    
+    return (
+      !detail || (detail?.pubid && !publicInfo) || (detail?.wid && !whiteInfo)
+    )
   }, [detail, tabId, publicInfo, whiteInfo])
 
   const readWhtie = async () => {
-    const {code,data} = await fetchWhtielistInfoApi({
+    const { code, data } = await fetchWhtielistInfoApi({
       id: detail?.wid,
       address,
     })
-    if(code === 0){
-      dispatch(detailSlice.actions.setInfo({info:data,type_key:whi_info_key})) 
-      // whiteMutate(data)
-    }
-    return data 
+    code === 0 && dispatch(detailSlice.actions.setInfo({ info: data, type_key: whi_info_key }))
+    return data
   }
+
   const readPublic = async () => {
-    const {data,code}=await fetchWhtielistInfoApi({
+    const { data, code } = await fetchWhtielistInfoApi({
       id: detail?.pubid,
       address,
     })
-    if(code === 0){
-      dispatch(detailSlice.actions.setInfo({info:data,type_key:pub_info_key})) 
-      // publicMutate(data)
-    }
+    code === 0 && dispatch(detailSlice.actions.setInfo({ info: data, type_key: pub_info_key }))
     return whiteInfo
   }
 
-  
-  const dispatch =useDispatch()
-  
-  useEffect(()=>{
-    dispatch(detailSlice.actions.setInfo({info:res_whiteInfo,type_key:whi_info_key})) 
-  },[res_whiteInfo,whi_info_key])
-  useEffect(()=>{
-    dispatch(detailSlice.actions.setInfo({info:res_publicInfo,type_key:pub_info_key})) 
-  },[res_publicInfo,pub_info_key])
-  useEffect(()=>{
-    dispatch(detailSlice.actions.setDetail({detail:res_detail,id:id}))
-  },[res_detail,id])
+  useEffect(() => {
+    dispatch(
+      detailSlice.actions.setInfo({
+        info: res_whiteInfo,
+        type_key: whi_info_key,
+      })
+    )
+  }, [res_whiteInfo, whi_info_key])
+
+  useEffect(() => {
+    dispatch(
+      detailSlice.actions.setInfo({
+        info: res_publicInfo,
+        type_key: pub_info_key,
+      })
+    )
+  }, [res_publicInfo, pub_info_key])
+
+  useEffect(() => {
+    dispatch(detailSlice.actions.setDetail({ detail: res_detail, id: id }))
+  }, [res_detail, id])
+
   return {
     load,
     address,
