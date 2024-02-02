@@ -1,6 +1,11 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
 import createEmotionCache from "../components/createEmotionCache";
+import { GoogleAnalytics } from '@next/third-parties/google'
+
+
+
+
 
 export default class MyDocument extends Document {
   render() {
@@ -13,12 +18,25 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
           <meta name="emotion-insertion-point" content="" />
+          <script src="https://www.googletagmanager.com/gtag/js?id=G-1PHXBEXXWH"/>
+          <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-1PHXBEXXWH');
+            `,
+          }}
+        /> 
           {(this.props as any).emotionStyleTags}
         </Head>
         <body>
           <Main />
           <NextScript />
+          <GoogleAnalytics gaId="G-1PHXBEXXWH" />
         </body>
+        
       </Html>
     );
   }
