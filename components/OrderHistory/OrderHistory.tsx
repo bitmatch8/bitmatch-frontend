@@ -16,6 +16,8 @@ import useHistory, { HistoryItemProps } from "@/hook/useHistory"
 import { buySlice, selectBuy, useSelector } from "@/lib/redux"
 import RefreshIcon from "../Svg/RefreshIcon"
 import { addToast, useDispatch } from "@/lib/redux";
+import CircleLoader from "../Loader/CircleLoader"
+import RefreshLoader from "../Loader/RefreshLoader"
 
 const StatePending: React.FC = () => {
   return (
@@ -66,10 +68,10 @@ const RefreshButton: React.FC = () => {
     if (click) {
       return
     }
-    dispatch(addToast({
-      icon: 'success',
-      contxt: 'Refresh successful'
-    }))
+    // dispatch(addToast({
+    //   icon: 'success',
+    //   contxt: 'Refresh successful'
+    // }))
     dispatch(buySlice.actions.setRefresh({ num: 1000 }))
     setTimeout(() => {
       dispatch(buySlice.actions.setRefresh({ num: 0 }))
@@ -79,7 +81,8 @@ const RefreshButton: React.FC = () => {
       setClick(false)
     }, 15000);
   }
-  return <IconSvg width={20} fill={click ? '#ccc' : '#fff'} onClick={onClick} className={click ? 'rotate' : ''} />
+  return <RefreshLoader onClick={onClick} start={click}/>
+  // return click ? <CircleLoader size=""/>:<IconSvg width={20} fill={click ? '#ccc' : '#fff'} onClick={onClick} className={click ? 'rotate' : ''} />
 }
 const OrderHistoryHead: React.FC = () => {
   return (

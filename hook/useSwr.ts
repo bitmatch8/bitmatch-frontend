@@ -13,6 +13,7 @@ const useSwr = (arg:any,api:any,opt:any):any => {
     }else if(code === 1010){
       return 0
     }
+    return null
     
   },[data,isLoading,error])
   return {result,mutate} 
