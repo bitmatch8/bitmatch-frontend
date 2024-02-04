@@ -6,9 +6,23 @@ import Image from "next/image";
 import ValueSkeleton from "./ValueSkeleton";
 import Link from "next/link";
 import { ProjectType } from "@/utils/types";
+import { useMemo } from "react";
+import OrderStageIcon from "./OrderStageIcon";
 const ListWaperItem: React.FC<{ item: any | null }> = ({
   item,
 }) => {
+  const statusIcon = useMemo(()=>{
+    if(!item){
+      return null
+    }
+    const {publicStage,whitelistStage} = item
+    if([publicStage,whitelistStage].includes('Active')){
+      return 'Active'
+    }else if([publicStage,whitelistStage].includes('Upcoming')){
+      return 'Upcoming'
+    }
+    return 'Ended'
+  },[item])
   // console.log({whitelistStage:item?.whitelistStage})
   return (
     <ListWaperItemBox>
@@ -46,11 +60,12 @@ const ListWaperItem: React.FC<{ item: any | null }> = ({
                 )}
               </div>
               <div className="token">
-                {item === null ? (
+                <span>{item === null ? (
                   <ValueSkeleton width={150} />
                 ) : (
                   item?.projecttokenname
-                )}
+                )}</span>
+               {item === null ? <ValueSkeleton width={80}/>:<OrderStageIcon symbol={statusIcon}/>} 
               </div>
             </ListWaperItemUserNameBox>
           </ListWaperItemUserLineBox>
