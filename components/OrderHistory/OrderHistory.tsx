@@ -79,7 +79,7 @@ const RefreshButton: React.FC = () => {
     setClick(true)
     setTimeout(() => {
       setClick(false)
-    }, 15000);
+    }, 8000);
   }
   return <RefreshLoader onClick={onClick} start={click}/>
   // return click ? <CircleLoader size=""/>:<IconSvg width={20} fill={click ? '#ccc' : '#fff'} onClick={onClick} className={click ? 'rotate' : ''} />

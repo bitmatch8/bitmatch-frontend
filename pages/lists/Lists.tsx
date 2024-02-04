@@ -52,10 +52,10 @@ export default function IndexPage() {
   const { replace, asPath } = useRouter()
   const tabType = useMemo(() => {
     const has = asPath.split("#")[1]
-    return has ?? "ALL"
+    return (has ?? "ALL").toLocaleUpperCase()
   }, [asPath])
   const onClickTabItem = (type: string) => {
-    replace(`#${type}`)
+    replace(`#${type.toLocaleLowerCase()}`)
   }
   const projecttype = tabType === "ALL" ? undefined : tabType === "FT" ? 1 : 2
   const { result: result_lists } = useSwr(
