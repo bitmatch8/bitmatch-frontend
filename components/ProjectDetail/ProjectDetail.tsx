@@ -8,7 +8,7 @@ import useDetail from "@/hook/useDetail"
 import OrderHistory from "@/components/OrderHistory"
 import ValueSkeleton from "@/components/ValueSkeleton"
 import styled from "@emotion/styled"
-export const Detail: React.FC<{id:any}> = ({id}) => {
+export const ProjectDetail: React.FC<{id:any}> = ({id}) => {
   const {
     load,
     address,
@@ -51,7 +51,7 @@ export const Detail: React.FC<{id:any}> = ({id}) => {
     </>
   )
 }
-export default Detail
+export default ProjectDetail
 
 
 

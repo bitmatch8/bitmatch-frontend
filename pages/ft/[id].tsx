@@ -3,7 +3,7 @@
 import Page from "@/components/Page"
 import React, {  } from "react"
 import { useRouter } from "next/router"
-import Detail from "@/components/Detail"
+import Detail from "@/components/ProjectDetail"
 export default function IndexPage() {
   const {
     query: { id },

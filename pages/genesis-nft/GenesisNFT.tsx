@@ -1,7 +1,7 @@
 /* Components */
 
 import Page from "@/components/Page";
-import Detail from "@/components/Detail";
+import Detail from "@/components/ProjectDetail";
 
 export default function GenesisNFT() {
   return (
