@@ -15,7 +15,7 @@ const statueSymbol: { [typeId in BuyState | string]: any } = {
   [BuyState.White_InProgress]: Upcomming2Img,
 
   ['Ended']: endedImg,
-  ['']: UpcomingImg,
+  ['Upcoming']: UpcomingImg,
   ['Active']: Upcomming2Img,
 };
 
