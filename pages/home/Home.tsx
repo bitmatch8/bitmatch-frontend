@@ -25,6 +25,7 @@ import { Spaced } from "@/components/Spaced";
 import { Chains } from "@/utils/Chains";
 
 import Link from "next/link";
+import ProgressCountdown from "@/components/ProgressCountdown";
 
 const ChainIconItem: React.FC<{ chain: Chains; width: number }> = ({
   chain,
@@ -117,6 +118,7 @@ const DecentralizedIndex: React.FC = () => {
 export default function IndexPage() {
   return (
     <Page>
+      {/* <ProgressCountdown deadline={15000}  /> */}
       <HeadContainerBox>
         <HeadContainerText>
           <div>Unleash the Full</div>
