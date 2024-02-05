@@ -2,11 +2,11 @@ import React, { useRef } from "react"
 
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 
-interface LaunchCountdownProps {
+interface ProgressCountdownProps {
   deadline: number
 }
 
-const LaunchCountdown: React.FC<LaunchCountdownProps> = ({ deadline }) => {
+const ProgressCountdown: React.FC<ProgressCountdownProps> = ({ deadline }) => {
   const refObj=useRef(null)
   const percentage =10
   const step = 100/deadline
@@ -27,4 +27,4 @@ const LaunchCountdown: React.FC<LaunchCountdownProps> = ({ deadline }) => {
   )
 }
 
-export default LaunchCountdown
+export default ProgressCountdown
