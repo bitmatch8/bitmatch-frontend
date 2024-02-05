@@ -3,55 +3,67 @@
 import Button from "@/components/Button"
 import { hidehash } from "@/utils"
 import styled from "@emotion/styled"
-import Notice from "@/components/Notice"
 import QuitIcon from "@/assets/img/quit.png"
 import QuitLightIcon from "@/assets/img/quit_light.png"
-import XIcon from "@/assets/img/x.png"
+
 import {
   wallterSlice,
   useSelector,
   useDispatch,
   selectWallter,
-  addToast,
   connectUnisat,
   WallterType,
 } from "@/lib/redux"
-import React, { useState } from "react"
-import Image from "next/image"
+
+import React, { useEffect, useState } from "react"
 import useModal from "@/hook/useModal"
 import CloseIcon from "@/components/Svg/CloseIcon"
-
 import Link from "next/link"
 import WallterSymbol from "@/components/WallterSymbol"
 import useWallter from "@/hook/useWallter"
 
+
 const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
   const [show, setShow] = useState(false)
+  const [targetRef, setTargetRef] = useState<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const showDropdownMenu = () => {
+      setShow(true)
+    }
+    const hideDropdownMenu = (evt: MouseEvent | TouchEvent) => {
+      setShow(false)
+      evt.stopPropagation()
+    }
+    targetRef?.addEventListener("mouseenter", showDropdownMenu)
+    targetRef?.addEventListener("mouseleave", hideDropdownMenu)
+    return () => {
+      targetRef?.removeEventListener("mouseenter", showDropdownMenu)
+      targetRef?.removeEventListener("mouseleave", hideDropdownMenu)
+    }
+  }, [targetRef, setShow])
   const dispatch = useDispatch()
   const { wallterType } = useSelector(selectWallter)
-  const onClickShow = () => {
-    setShow(!show)
-  }
   const onClickQuit = () => {
     setShow(false)
     dispatch(wallterSlice.actions.disconnect())
   }
+  
   return (
     <UserToolsBox>
       <HistoryButtonBox href={"/history"}>History</HistoryButtonBox>
       <ContentSuccessBox>
-        <ContentSuccessTopBox>
-          <ContentSuccessLineBox onClick={onClickShow}>
-          <WallterSymbol size={20} symbol={String(wallterType || '').toLocaleUpperCase()}/>  {hidehash(address)} 
+        <ContentSuccessTopBox ref={setTargetRef}>
+          <ContentSuccessLineBox>
+            <WallterSymbol
+              size={20}
+              symbol={String(wallterType || "").toLocaleUpperCase()}
+            />{hidehash(address)}
           </ContentSuccessLineBox>
-          {show ? (
-            <ContentSuccessLineBox onClick={onClickQuit}>
+          {show ? <ContentSuccessLineBox onClick={onClickQuit}>
               <ImgBgBox />
               <DisconnectTextBox>Disconnect</DisconnectTextBox>
             </ContentSuccessLineBox>
-          ) : (
-            ""
-          )}
+           : ""}
         </ContentSuccessTopBox>
       </ContentSuccessBox>
     </UserToolsBox>
@@ -60,8 +72,7 @@ const ConnectSuccess: React.FC<{ address: string }> = ({ address }) => {
 
 const ConnectButton = () => {
   const dispatch = useDispatch()
-  const { address, connected, network } =
-    useSelector(selectWallter)
+  const { address, connected } = useSelector(selectWallter)
   const [onConnect, onDismiss] = useModal(
     <ConnectModal
       onDismiss={() => onDismiss()}
@@ -105,7 +116,6 @@ const ConnectButton = () => {
 export default ConnectButton
 
 const ConnectWallButton: React.FC<{ onConnect: any }> = ({ onConnect }) => {
-  const dispatch = useDispatch()
 
   return (
     <UserToolsBox>
@@ -124,19 +134,37 @@ export const ConnectModal: React.FC<{ onDismiss: any; connect: any }> = ({
   onDismiss,
   connect,
 }) => {
-  const {wallters} = useWallter('')
+  const { wallters } = useWallter("")
   return (
     <ConnectModalBox>
       <CloseButtonBox onClick={onDismiss}>
         <CloseIcon fill="#C2C5C8" width={36} />
       </CloseButtonBox>
-     {[wallters.map((item,key)=>{
-      return <ConnectLineBox className={`${item.installed ? '':'not_install'}`} key={key} onClick={() => item.installed ? connect(`${item.name}`.toLocaleLowerCase()) : ''}>
-      <WallterSymbol size={60} symbol={`${item.name}`.toLocaleUpperCase()} />
-      <ConnectTitle className="test" ><span>{item.name} Wallet</span><span className="tip">{item.installed ? '':'Not installed'}</span></ConnectTitle>
-    </ConnectLineBox>
-     })]} 
-      
+      {[
+        wallters.map((item, key) => {
+          return (
+            <ConnectLineBox
+              className={`${item.installed ? "" : "not_install"}`}
+              key={key}
+              onClick={() =>
+                item.installed
+                  ? connect(`${item.name}`.toLocaleLowerCase())
+                  : ""
+              }>
+              <WallterSymbol
+                size={60}
+                symbol={`${item.name}`.toLocaleUpperCase()}
+              />
+              <ConnectTitle className="test">
+                <span>{item.name} Wallet</span>
+                <span className="tip">
+                  {item.installed ? "" : "Not installed"}
+                </span>
+              </ConnectTitle>
+            </ConnectLineBox>
+          )
+        }),
+      ]}
     </ConnectModalBox>
   )
 }
@@ -165,7 +193,7 @@ const UserToolsBox = styled.div`
 const ConnectLineBox = styled.div`
   display: flex;
   align-items: center;
-  padding:0 30px;
+  padding: 0 30px;
   gap: 20px;
   font-size: 24px;
   font-weight: 500;
@@ -181,33 +209,22 @@ const ConnectLineBox = styled.div`
     color: #ffffff;
     border-color: #f7931a;
   }
-  &.not_install{
+  &.not_install {
     font-size: 18px;
     border-color: #6f6f76;
-    
-    &:hover{
+
+    &:hover {
       color: #c2c5c8;
       border-color: #6f6f76;
     }
   }
-  
 `
 const ConnectTitle = styled.div`
   font-family: Montserrat, Montserrat-Medium;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex:1;
-`
-const LogoBox = styled.div`
-  width: 200px;
-  height: 200px;
-  background: #24272b;
-  border-radius: 108px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  flex: 1;
 `
 const CloseButtonBox = styled.div`
   width: 36px;
@@ -237,9 +254,6 @@ const ConnectModalBox = styled.div`
   gap: 32px;
 `
 
-const ImgBox = styled(Image)`
-  height: auto;
-`
 
 const ImgBgBox = styled.span`
   display: inline-block;
