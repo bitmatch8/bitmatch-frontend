@@ -3,20 +3,17 @@ import { Spaced } from "@/components/Spaced"
 import DownIcon from "@/components/Svg/DownIcon"
 import TokenSymbol from "@/components/TokenSymbol"
 import styled from "@emotion/styled"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Pagination from "@/components/Pagination"
-import { fetchOrderCList } from "@/api/api"
 import ValueSkeleton from "../ValueSkeleton"
 import { dateFormat, hidehash } from "@/utils"
 import CopySvg from "../CopySvg"
 import { OrderState } from "@/utils/types"
 import EmptyList from "./EmptyList"
-import useSWR from "swr"
 import useHistory, { HistoryItemProps } from "@/hook/useHistory"
 import { buySlice, selectBuy, useSelector } from "@/lib/redux"
 import RefreshIcon from "../Svg/RefreshIcon"
-import { addToast, useDispatch } from "@/lib/redux";
-import CircleLoader from "../Loader/CircleLoader"
+import { useDispatch } from "@/lib/redux";
 import RefreshLoader from "../Loader/RefreshLoader"
 
 const StatePending: React.FC = () => {
@@ -81,7 +78,7 @@ const RefreshButton: React.FC = () => {
       setClick(false)
     }, 8000);
   }
-  return <RefreshLoader onClick={onClick} start={click}/>
+  return <RefreshLoader onClick={onClick} start={click} />
   // return click ? <CircleLoader size=""/>:<IconSvg width={20} fill={click ? '#ccc' : '#fff'} onClick={onClick} className={click ? 'rotate' : ''} />
 }
 const OrderHistoryHead: React.FC = () => {
@@ -271,9 +268,7 @@ const OrderHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
             onChange={reload}
             page={page}
           />
-        ) : (
-          ""
-        )}
+        ) : ""}
       </OrderHistoryBox>
     </>
   )
