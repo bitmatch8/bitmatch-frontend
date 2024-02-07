@@ -1,5 +1,6 @@
 import styled from "@emotion/styled"
 import { keyframes } from "@mui/material"
+import { Svg } from "../Svg/Svg"
 
 const rotate = keyframes`
   from {
@@ -32,6 +33,19 @@ export default function RefreshLoader({
   stroke?: string
   [k: string]: any
 }) {
+  // return (
+  //   <ProgressSvg viewBox="0 0 250 250" {...rest}>
+  //     <circle
+  //       className="progress"
+  //       cx="200"
+  //       cy="150"
+  //       r="40"
+  //       stroke="#888"
+  //       stroke-width="1"
+  //       fill="none"
+  //     />
+  //   </ProgressSvg>
+  // )
   return (
     <StyledSVG
       viewBox="0 0 24 24"
@@ -46,3 +60,14 @@ export default function RefreshLoader({
     </StyledSVG>
   )
 }
+const ProgressSvg = styled(Svg)`
+  .progress {
+    stroke-dasharray: 0, 250;
+    animation: progress 10s linear infinite;
+  }
+  @keyframes progress {
+    to {
+      stroke-dasharray: 250, 0;
+    }
+  }
+`
