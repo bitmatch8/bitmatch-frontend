@@ -125,7 +125,7 @@ const WhitelistStageButton: React.FC<{
             setLoading(false)
           }, refreshConfig.submit_order_refreshInterval);
         },
-        reload: !isLimit ? () => 0 : async ()=>fetchOrderlistIsRepeated({
+        reload: async ()=>fetchOrderlistIsRepeated({
           "stage": stage,
           "pid": detail?.id,
           "fromaddr": address,
