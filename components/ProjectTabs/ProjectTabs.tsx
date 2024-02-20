@@ -28,12 +28,9 @@ const ProjectTabs: React.FC<{
   publicRead,
 }) => {
   const dispatch = useDispatch()
-  const {replace,asPath} = useRouter()
+  const {replace} = useRouter()
   const { balance } = useSelector(selectWallter)
-  const tId = useMemo(()=>{
-    const has = asPath.split('#')[1]
-    return has ?? tabId
-  },[asPath,tabId]) 
+ 
   const onClickTabItem = (type: string) =>{
     replace(`#${type}`)
     dispatch(buySlice.actions.setTabType({type}))
@@ -53,7 +50,7 @@ const ProjectTabs: React.FC<{
           ProjectTabList?.map(({ title, id }: any, key: any) => (
             <ProjectTabsItemBox
               onClick={() => onClickTabItem(id)}
-              className={id === tId ? "active" : ""}
+              className={id === tabId ? "active" : ""}
               key={key}>
               {title}
             </ProjectTabsItemBox>
@@ -66,7 +63,7 @@ const ProjectTabs: React.FC<{
         </EmptyStageBox>
       ) : (
         <>
-          {whiteInfo && tId === DetailInfoType.white ? (
+          {whiteInfo && tabId === DetailInfoType.white ? (
             <WhitelistStage
               readData={whiteRead}
               stage="whitelist"
@@ -76,7 +73,7 @@ const ProjectTabs: React.FC<{
               info={whiteInfo}
             />
           ) : null}
-          {publicInfo && tId === DetailInfoType.public ? (
+          {publicInfo && tabId === DetailInfoType.public ? (
             <WhitelistStage
               readData={publicRead}
               stage="public"
@@ -86,7 +83,7 @@ const ProjectTabs: React.FC<{
               info={publicInfo}
             />
           ) : null}
-          {tId === DetailInfoType.info ? (
+          {tabId === DetailInfoType.info ? (
             <ProjectInformation
             title={detail?.projectname}
               show={detail.projecttype === ProjectType.FT}

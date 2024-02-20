@@ -13,13 +13,18 @@ import { BuyState, DetailInfoType } from "@/utils/types"
 import { useEffect, useMemo } from "react"
 import { useSelector } from "react-redux"
 import useSwr from "./useSwr"
+import { useRouter } from "next/router"
 
 const useDetail = (id: any) => {
   const dispatch = useDispatch()
   const { address } = useSelector(selectWallter)
-  const { tabType: tabId } = useSelector(selectBuy)
+  const { tabType: tId } = useSelector(selectBuy)
   const { detailLists, infoLists } = useSelector(selectDetail)
-
+  const {asPath} = useRouter()
+  const tabId = useMemo(()=>{
+    const has = asPath.split('#')[1]
+    return has ?? tId
+  },[asPath,tId]) 
   const detail = useMemo(() => {
     return detailLists[id] || null
   }, [id, detailLists])
