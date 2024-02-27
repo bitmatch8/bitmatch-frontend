@@ -3,7 +3,7 @@ import { Spaced } from "@/components/Spaced"
 import TokenSymbol from "@/components/TokenSymbol"
 import { BigNumber } from "@ethersproject/bignumber"
 import styled from "@emotion/styled"
-import { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import Input from "@/components/Input"
 import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
@@ -12,6 +12,8 @@ import WhitelistStageLine from "@/components/WhitelistStageLine"
 import useBuy from "@/hook/useBuy"
 import { dateFormat } from "@/utils"
 import { fetchFeesApi } from "@/api/api"
+import HelpIcon from "../Svg/HelpIcon"
+import TextTooltip from "../TextTooltip"
 
 const WhitelistStageFT: React.FC<{
   detail: any
@@ -23,6 +25,16 @@ const WhitelistStageFT: React.FC<{
 }> = ({ info, balance, title, detail, stage, readData }) => {
   const [fees, setFees] = useState(0)
 
+  const tipText = (
+    <TipTitleBox>
+      <p>
+        Users need to pay the cost for the burning and transfer transactions
+        included in FT orders, which is determined by the characteristics of the
+        Ordinals protocol.
+      </p>
+      <p>The larger the bytes a transaction contains, the higher the cost.</p>
+    </TipTitleBox>
+  )
   const {
     value,
     inputLoad,
@@ -43,7 +55,10 @@ const WhitelistStageFT: React.FC<{
     )
   }, [info, fees])
 
-  const isTest=useMemo(()=>process.env.NEXT_PUBLIC_TEST === "test",[process.env])
+  const isTest = useMemo(
+    () => process.env.NEXT_PUBLIC_TEST === "test",
+    [process.env]
+  )
   const initFees = async () => {
     if (isTest) {
       setFees(1)
@@ -64,6 +79,7 @@ const WhitelistStageFT: React.FC<{
     }
     return priceBig.mul(BigNumber.from(value || 0)).toString()
   }, [priceBig, fees, isLimit, value])
+
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
@@ -71,15 +87,27 @@ const WhitelistStageFT: React.FC<{
         <WhitelistStageLineBox>
           <WhitelistStageLine title="Token Name">
             {detail?.projecttokenname}
+            {/* <TextTooltip arrow title={tipText}>
+              <div>
+             <HelpIcon width={24}/>
+             </div> 
+            </TextTooltip> */}
           </WhitelistStageLine>
           <WhitelistStageLine title="Total Supply">
             {info?.tokennumber} {detail?.projecttokenname}
           </WhitelistStageLine>
         </WhitelistStageLineBox>
         <WhitelistStageLineBox>
-          <WhitelistStageLine title="Total Fundraising Amount">
-            <TokenSymbol size={22} symbol={info.projectcurrency} />
-            <span>{Number(info.targetnumber)}</span>
+          <WhitelistStageLine mark="" title={<SizeBox>
+             Size: 
+              <TextTooltip arrow title={tipText}>
+                <div>
+                  <HelpIcon width={24} />
+                </div>
+              </TextTooltip>
+            </SizeBox>}>
+            {/* <TokenSymbol size={22} symbol={info.projectcurrency} /> */}
+            <span>{Number(detail.size)} vB</span>
           </WhitelistStageLine>
           <WhitelistStageLine title="Price">
             {Number(price)} {info.projectcurrency} / {detail?.projecttokenname}
@@ -97,7 +125,8 @@ const WhitelistStageFT: React.FC<{
           <WhitelistStageLine
             style={{ flex: 1, paddingLeft: 16 }}
             title="Launch Time">
-            {dateFormat(info?.starttime) || 'TBA'} ～ {dateFormat(info?.enttime) || 'TBA'}
+            {dateFormat(info?.starttime) || "TBA"} ～{" "}
+            {dateFormat(info?.enttime) || "TBA"}
           </WhitelistStageLine>
         </WhitelistStageLineBox>
       </WhitelistStageCardBox>
@@ -118,9 +147,18 @@ const WhitelistStageFT: React.FC<{
             onMax={onMax}
           />
           <FooterTextLineBox>
-            <div>
-              <span>{value || 0}</span> {detail?.projecttokenname}
+            <div className="g">
+              Total Pay
+              <TextTooltip arrow title={tipText}>
+                <div>
+                  <HelpIcon width={24} />
+                </div>
+              </TextTooltip>
             </div>
+
+            {/* <div>
+              <span>{value || 0}</span> {detail?.projecttokenname}
+            </div> */}
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
@@ -152,6 +190,18 @@ const WhitelistStageFT: React.FC<{
 }
 export default WhitelistStageFT
 
+const SizeBox=styled.div`
+  display: flex;
+  gap: 10px;
+`
+const TipTitleBox = styled.div`
+  font-family: Montserrat, Montserrat;
+  font-weight: 300;
+  font-size: 20px;
+  color: #c2c5c8;
+  line-height: 26px;
+  text-align: left;
+`
 const FooterTextLineBox = styled.div`
   font-size: 24px;
   font-weight: 600;
@@ -161,6 +211,10 @@ const FooterTextLineBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  > div {
+    display: flex;
+    gap: 12px;
+  }
   .g {
     color: #6f6f76;
   }

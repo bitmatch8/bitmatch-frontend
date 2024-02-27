@@ -2,7 +2,7 @@ import styled from "@emotion/styled"
 import { CSSProperties, ReactNode } from "react"
 
 const WhitelistStageLine: React.FC<{
-  title: string
+  title:any 
   children?: ReactNode
   style?: CSSProperties
   mark?: string

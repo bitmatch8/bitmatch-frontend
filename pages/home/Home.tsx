@@ -314,6 +314,10 @@ const ChainIconItemBox = styled.div`
   color: #4f4f57;
   line-height: 24px;
   &:hover {
+    >div,>img{
+      transform: translateZ();
+      scale: 1.2;
+    }
     color: #fff;
     border-color: #f8931a;
   }

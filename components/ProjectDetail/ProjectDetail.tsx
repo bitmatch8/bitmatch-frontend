@@ -35,7 +35,6 @@ export const ProjectDetail: React.FC<{id:any}> = ({id}) => {
       <ValueSkeleton width={1240} height={300}/>
       <Spaced size="100"/>
       <ValueSkeleton width={1240} height={300}/>
-      
       </ValueSkeletonBox>
       </>:<ProjectTabs
         whiteRead={readWhtie}
