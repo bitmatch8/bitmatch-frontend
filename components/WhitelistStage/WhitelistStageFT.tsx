@@ -26,7 +26,7 @@ const WhitelistStageFT: React.FC<{
 }> = ({ info, balance, title, detail, stage, readData }) => {
   const [fees, setFees] = useState(0)
   
-  console.log({balance})
+  // console.log({balance})
 
   const {
     value,
