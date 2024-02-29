@@ -111,10 +111,10 @@ const WhitelistStageNFT: React.FC<{
   const TotalPayText = useMemo(() => {
     return (
       <TipTitleBox width="480px">
-        <p>
+        {/* <p>
           <span>Value</span>{" "}
           <span>{PayValue ? getFullDisplayBalance(PayValue, 8) : 0} BTC</span>
-        </p>
+        </p> */}
         <p>
           <span>Mint & Transfer fees</span>{" "}
           <span>
