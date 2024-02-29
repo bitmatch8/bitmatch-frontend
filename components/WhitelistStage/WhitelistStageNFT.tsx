@@ -42,10 +42,9 @@ const WhitelistStageNFT: React.FC<{
     mposa,
     hposa,
   } = useBuy(info, readData, detail, stage)
-  const isTest = useMemo(
-    () => process.env.NEXT_PUBLIC_TEST === "test",
-    [process.env]
-  )
+
+  const isTest = useMemo(() => process.env.NEXT_PUBLIC_TEST === "test",[process.env])
+
   const initFees = async () => {
     if (isTest) {
       setFees(1)
@@ -68,7 +67,7 @@ const WhitelistStageNFT: React.FC<{
   }, [detail])
 
   const NetworkFee = useMemo(() => {
-    return value ? (fees * fileSize) : 0
+    return value ? (fees) : 0
   }, [value, fees, fileSize])
   /**
    * Value =price*value
@@ -89,7 +88,7 @@ const WhitelistStageNFT: React.FC<{
 
   const TotalFees = useMemo(() => {
     return BigNumber.from(satoshis || 0).add(BigNumber.from(NetworkFee)).toString()
-  }, [NetworkFee, Transferfee])
+  }, [NetworkFee, satoshis,Transferfee])
 
   const PayValue = useMemo(() => {
     return value * Number(price)

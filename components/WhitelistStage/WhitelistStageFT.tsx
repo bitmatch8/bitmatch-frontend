@@ -57,9 +57,9 @@ const WhitelistStageFT: React.FC<{
     initFees()
   }, [isTest])
 
-  const old_price = useMemo(() => {
-    return Number((Number(info.targetnumber || 0) / Number(info.tokennumber || 0)).toFixed(8))
-  }, [info, fees])
+  // const old_price = useMemo(() => {
+  //   return Number((Number(info.targetnumber || 0) / Number(info.tokennumber || 0)).toFixed(8))
+  // }, [info, fees])
 
   const price = useMemo(() => {
     return info.targetnumber
@@ -75,7 +75,7 @@ const WhitelistStageFT: React.FC<{
   },[detail])
 
   const NetworkFee = useMemo(() => {
-    return value ? (fees * fileSize) : 0
+    return value ? (fees) : 0
   }, [value, fees, fileSize])
   /**
    * Value =price*value
