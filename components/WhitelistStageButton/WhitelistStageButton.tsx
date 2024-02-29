@@ -32,6 +32,8 @@ const WhitelistStageButton: React.FC<{
   isWhiteInfo: any
   mposa: any
   hposa: any
+  networkFee:any
+  fileSize:any
 }> = ({
   info,
   detail,
@@ -45,6 +47,8 @@ const WhitelistStageButton: React.FC<{
   isWhiteInfo,
   hposa,
   mposa,
+  networkFee,
+  fileSize
 }) => {
   const dispatch = useDispatch()
   const { address } = useSelector(selectWallter)
@@ -61,8 +65,6 @@ const WhitelistStageButton: React.FC<{
     }
     return stage === "whitelist" && (isWhiteInfo === null || isWhiteInfo === 0)
   }, [isWhiteInfo, stage, toAddress])
-
-
 
   const buttonText = useMemo(() => {
     if (isWhiteInfo === 0 && stage === "whitelist") {
@@ -119,6 +121,8 @@ const WhitelistStageButton: React.FC<{
         buyAmount,
         toAddress,
         satoshis,
+        size:fileSize,
+        handlingfee:networkFee,
         moveLoading:()=>{
           setLoading(isLimit)
           setTimeout(() => {
@@ -129,6 +133,8 @@ const WhitelistStageButton: React.FC<{
           "stage": stage,
           "pid": detail?.id,
           "fromaddr": address,
+          "size":fileSize,
+          "handlingfee":networkFee, 
           buyAmount:buyAmount
         }).then(({ code }) => code),
         callback,

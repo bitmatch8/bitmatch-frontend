@@ -32,8 +32,13 @@ export const getFullDisplayBalance = (balance: any, decimals = 18, displayDecima
   if(!balance){
     return undefined
   }
-  const [str1,str2] = formatUnits(balance,decimals).split('.')
-  const stringNumber = [str1,displayDecimals ? str2.slice(0,displayDecimals) : str2].join('.')
+  // console.log({balance})
+  const [str1,str2] = formatUnits(balance.toFixed(0),decimals).split('.')
+  let arr = [str1]
+  if(Number(str2) >0){
+    arr.push(displayDecimals ? str2.slice(0,displayDecimals) : str2)
+  }
+  const stringNumber = arr.join('.')
   return displayDecimals ? _trimEnd(_trimEnd(stringNumber, '0'), '.') : stringNumber
 }
 

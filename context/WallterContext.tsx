@@ -17,6 +17,7 @@ export default function WallterContext() {
 
   const {result:balance} = useSwr(address,async()=>{
     const data =await wallter.getBalance()
+    console.log({data})
     return {
       code:0,
       data
@@ -62,6 +63,7 @@ export default function WallterContext() {
   },[network])
 
   useEffect(()=>{
+    console.log({balance})
     if(balance){
       dispatch(wallterSlice.actions.setBalance({balance}))
     }

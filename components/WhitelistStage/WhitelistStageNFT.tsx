@@ -3,21 +3,23 @@ import ImgBox from "@/components/ImgBox"
 import { Spaced } from "@/components/Spaced"
 import { BigNumber } from "@ethersproject/bignumber"
 import TokenSymbol from "@/components/TokenSymbol"
-import NFTSHOWImg from "@/assets/img/nft_show.png"
 import styled from "@emotion/styled"
 import { useEffect, useMemo, useState } from "react"
 import Input from "@/components/Input"
 import ValueSkeleton from "@/components/ValueSkeleton"
-import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
+import {
+  formatUnitsAmount,
+  getFullDisplayBalance,
+  parseFixedAmount,
+} from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
 import useBuy from "@/hook/useBuy"
 import { dateFormat } from "@/utils"
-import { DetailInfoType } from "@/utils/types"
-import useSwr from "@/hook/useSwr"
-import useSWR from "swr"
 import { fetchFeesApi } from "@/api/api"
+import TextTooltip from "../TextTooltip"
+import HelpIcon from "../Svg/HelpIcon"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -40,7 +42,10 @@ const WhitelistStageNFT: React.FC<{
     mposa,
     hposa,
   } = useBuy(info, readData, detail, stage)
-  const isTest=useMemo(()=>process.env.NEXT_PUBLIC_TEST === "test",[process.env])
+  const isTest = useMemo(
+    () => process.env.NEXT_PUBLIC_TEST === "test",
+    [process.env]
+  )
   const initFees = async () => {
     if (isTest) {
       setFees(1)
@@ -49,18 +54,63 @@ const WhitelistStageNFT: React.FC<{
       setFees(fees?.fastestFee || 0)
     }
   }
+
   useEffect(() => {
     initFees()
   }, [isTest])
+
   const price = useMemo(() => {
     return parseFixedAmount(info.targetnumber || 0, 8)
   }, [info, stage, fees])
+
+  const fileSize=useMemo(()=>{
+    return Number(detail.size || 550) 
+  },[detail])
+
+  const NetworkFee = useMemo(() => {
+    return (value || 0) * Number(((fees + 1) * fileSize * 1.3).toFixed(0))
+  }, [value, fees,fileSize])
+
   const satoshis = useMemo(() => {
-    if (isLimit) {
-      return ((fees + 1) * 550 * 1.1).toFixed(0)
+    if (isLimit){
+      return NetworkFee
     }
-    return price.mul(BigNumber.from(value || 0)).toString()
-  }, [price, value, fees, isLimit])
+    return price.mul(BigNumber.from(value || 0)).add(BigNumber.from(NetworkFee)).toString()
+  }, [price, value, fees, isLimit,NetworkFee])
+
+  const Transferfee = useMemo(() => {
+    return (value || 0) * Number(price)
+  }, [value, price])
+
+  const TotalFees = useMemo(() => {
+    return Number(NetworkFee) + Number(Transferfee)
+  }, [NetworkFee, Transferfee])
+  const PayValue=useMemo(()=>{
+    return value * Number(price) 
+  },[value,price])
+  const HelpTipText = useMemo(()=>(
+    <TipTitleBox>
+      <p>
+      Users need to pay costs for the minting and transfer transactions included in the NFT order
+      </p>
+      <p>The larger the bytes a transaction contains, the higher the cost.</p>
+    </TipTitleBox>
+  ),[])
+
+  const TotalPayText = useMemo(() => {
+    return (
+      <TipTitleBox width="500px">
+                <p>
+          Value {PayValue ? getFullDisplayBalance(PayValue, 8) : 0} BTC
+        </p>
+        <p>
+          Inscribe & Transfer fees {Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC
+        </p>
+        <p>Network Fee (Standard) {NetworkFee ? getFullDisplayBalance(NetworkFee, 8) : 0} BTC</p>
+        <p>Total Pay {TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</p>
+      </TipTitleBox>
+    )
+  }, [Transferfee, NetworkFee, TotalFees])
 
   return (
     <WhitelistStageBox>
@@ -75,16 +125,31 @@ const WhitelistStageNFT: React.FC<{
             <TokenSymbol size={22} symbol={info?.projectcurrency} />
             <span>{info?.targetnumber}</span>
           </WhitelistStageLine>
+          <WhitelistStageLine
+            mark=""
+            title={
+              <SizeBox>
+                Size:
+                <TextTooltip arrow title={HelpTipText}>
+                  <div>
+                    <HelpIcon width={24} />
+                  </div>
+                </TextTooltip>
+              </SizeBox>
+            }>
+            {" "}
+            <span>{Number(fileSize)} vB</span>
+          </WhitelistStageLine>
           <WhitelistStageLine title="Minimum Limit">{mposa}</WhitelistStageLine>
           <WhitelistStageLine title="Maximum Limit">{hposa}</WhitelistStageLine>
           <WhitelistStageLine title="Launch Time">
             {info === null ? (
               <ValueSkeleton width={200} height={50} />
             ) : (
-              <div style={{textAlign:'right'}}>
-                <div>{dateFormat(info?.starttime) || 'TBA'}</div>
+              <div style={{ textAlign: "right" }}>
+                <div>{dateFormat(info?.starttime) || "TBA"}</div>
                 <div>～</div>
-                <div>{dateFormat(info?.enttime) || 'TBA'}</div>
+                <div>{dateFormat(info?.enttime) || "TBA"}</div>
               </div>
             )}
           </WhitelistStageLine>
@@ -115,18 +180,25 @@ const WhitelistStageNFT: React.FC<{
             onChange={onChangeInput}
           />
           <FooterTextLineBox>
-            <div>
-              <span>{value || 0}</span> {detail?.projecttokenname}
+            <div className="g">
+              Total Pay
+              <TextTooltip arrow title={TotalPayText}>
+                <div>
+                  <HelpIcon width={24} />
+                </div>
+              </TextTooltip>
             </div>
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
           <WhitelistStageButton
             isLimit={isLimit}
+            fileSize={fileSize}
             mposa={mposa}
             hposa={hposa}
             isWhiteInfo={isWhiteInfo}
             price={price}
+            networkFee={NetworkFee}
             detail={detail}
             info={info}
             satoshis={satoshis}
@@ -138,7 +210,7 @@ const WhitelistStageNFT: React.FC<{
           <FooterTextLineBox>
             <span className="g">Balance</span>
             <span>
-              {formatUnitsAmount(balance.confirmed, 8)} {info.projectcurrency}
+              {getFullDisplayBalance(balance.confirmed, 8) || 0} {info.projectcurrency}
             </span>
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
@@ -149,6 +221,20 @@ const WhitelistStageNFT: React.FC<{
 }
 export default WhitelistStageNFT
 
+const SizeBox = styled.div`
+  display: flex;
+  gap: 10px;
+`
+const TipTitleBox = styled.div<{ width?: string }>`
+  max-width: ${({ width }) => width || "345px"};
+  font-family: Montserrat, Montserrat;
+  font-weight: 300;
+  font-size: 20px;
+  color: #c2c5c8;
+  line-height: 26px;
+  text-align: left;
+`
+
 const FooterTextLineBox = styled.div`
   font-size: 24px;
   font-weight: 600;
@@ -158,6 +244,10 @@ const FooterTextLineBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  > div {
+    display: flex;
+    gap: 12px;
+  }
   span {
     color: #f7931a;
   }

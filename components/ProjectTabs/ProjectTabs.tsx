@@ -29,13 +29,20 @@ const ProjectTabs: React.FC<{
 }) => {
   const dispatch = useDispatch()
   const {replace} = useRouter()
-  const { balance } = useSelector(selectWallter)
+  const { balance:user_balance,address } = useSelector(selectWallter)
  
   const onClickTabItem = (type: string) =>{
     replace(`#${type}`)
     dispatch(buySlice.actions.setTabType({type}))
   }
   
+  const balance=useMemo(()=>{
+    return address ? user_balance : {
+      confirmed: 0,
+      unconfirmed: 0,
+      total: 0
+    }
+  },[user_balance,address])
   const WhitelistStage =
     String(detail?.projecttype) === ProjectType.NFT
       ? WhitelistStageNFT

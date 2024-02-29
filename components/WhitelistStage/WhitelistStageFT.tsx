@@ -3,9 +3,9 @@ import { Spaced } from "@/components/Spaced"
 import TokenSymbol from "@/components/TokenSymbol"
 import { BigNumber } from "@ethersproject/bignumber"
 import styled from "@emotion/styled"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { ReactElement, ReactNode, useEffect, useMemo, useState } from "react"
 import Input from "@/components/Input"
-import { formatUnitsAmount, parseFixedAmount } from "@/utils/formatBalance"
+import { formatUnitsAmount, getFullDisplayBalance, parseFixedAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
@@ -14,6 +14,7 @@ import { dateFormat } from "@/utils"
 import { fetchFeesApi } from "@/api/api"
 import HelpIcon from "../Svg/HelpIcon"
 import TextTooltip from "../TextTooltip"
+
 
 const WhitelistStageFT: React.FC<{
   detail: any
@@ -24,17 +25,9 @@ const WhitelistStageFT: React.FC<{
   readData: any
 }> = ({ info, balance, title, detail, stage, readData }) => {
   const [fees, setFees] = useState(0)
+  
+  console.log({balance})
 
-  const tipText = (
-    <TipTitleBox>
-      <p>
-        Users need to pay the cost for the burning and transfer transactions
-        included in FT orders, which is determined by the characteristics of the
-        Ordinals protocol.
-      </p>
-      <p>The larger the bytes a transaction contains, the higher the cost.</p>
-    </TipTitleBox>
-  )
   const {
     value,
     inputLoad,
@@ -47,13 +40,6 @@ const WhitelistStageFT: React.FC<{
     hposa,
     maxAmount,
   } = useBuy(info, readData, detail, stage)
-  const price = useMemo(() => {
-    return Number(
-      (Number(info.targetnumber || 0) / Number(info.tokennumber || 0)).toFixed(
-        8
-      )
-    )
-  }, [info, fees])
 
   const isTest = useMemo(
     () => process.env.NEXT_PUBLIC_TEST === "test",
@@ -70,15 +56,67 @@ const WhitelistStageFT: React.FC<{
   useEffect(() => {
     initFees()
   }, [isTest])
+
+  const price = useMemo(() => {
+    return Number((Number(info.targetnumber || 0) / Number(info.tokennumber || 0)).toFixed(8))
+  }, [info, fees])
+
   const priceBig = useMemo(() => {
     return parseFixedAmount(String(price), 8)
   }, [info, price])
+
+  const fileSize=useMemo(()=>{
+    return Number(detail.size || 550) 
+  },[detail])
+  const NetworkFee = useMemo(() => {
+    return Number(((fees + 1) * fileSize * 1.3).toFixed(0))
+  }, [value, fees,fileSize])
+
   const satoshis = useMemo(() => {
-    if (isLimit) {
-      return ((fees + 1) * 550 * 1.1).toFixed(0)
+    if (isLimit){
+      return NetworkFee
     }
-    return priceBig.mul(BigNumber.from(value || 0)).toString()
+      
+    return priceBig.mul(BigNumber.from(value || 0)).add(BigNumber.from(NetworkFee)).toString()
   }, [priceBig, fees, isLimit, value])
+
+  const Transferfee = useMemo(() => {
+    return fees
+  }, [value, fees])
+
+  const TotalFees = useMemo(() => {
+    return Number(NetworkFee) + Number(Transferfee)
+  }, [NetworkFee, Transferfee])
+
+  const PayValue=useMemo(()=>{
+    return value * price
+  },[value,price])
+
+  const HelpTipText = useMemo(()=>(
+    <TipTitleBox>
+      <p>
+        Users need to pay the cost for the burning and transfer transactions
+        included in FT orders, which is determined by the characteristics of the
+        Ordinals protocol.
+      </p>
+      <p>The larger the bytes a transaction contains, the higher the cost.</p>
+    </TipTitleBox>
+  ),[])
+
+  const TotalPayText = useMemo(() => {
+    return (
+      <TipTitleBox width="500px">
+        <p>
+          Value {PayValue ? getFullDisplayBalance(PayValue, 8) : 0} BTC
+        </p>
+        <p>
+          Inscribe & Transfer fees {Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC
+        </p>
+        <p>Network Fee (Standard) {NetworkFee ? getFullDisplayBalance(NetworkFee, 8) : 0} BTC</p>
+        <p>Total Pay {TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</p>
+      </TipTitleBox>
+    )
+  }, [Transferfee, NetworkFee, TotalFees,PayValue])
 
   return (
     <WhitelistStageBox>
@@ -87,11 +125,6 @@ const WhitelistStageFT: React.FC<{
         <WhitelistStageLineBox>
           <WhitelistStageLine title="Token Name">
             {detail?.projecttokenname}
-            {/* <TextTooltip arrow title={tipText}>
-              <div>
-             <HelpIcon width={24}/>
-             </div> 
-            </TextTooltip> */}
           </WhitelistStageLine>
           <WhitelistStageLine title="Total Supply">
             {info?.tokennumber} {detail?.projecttokenname}
@@ -100,14 +133,14 @@ const WhitelistStageFT: React.FC<{
         <WhitelistStageLineBox>
           <WhitelistStageLine mark="" title={<SizeBox>
              Size: 
-              <TextTooltip arrow title={tipText}>
+              <TextTooltip arrow title={HelpTipText}>
                 <div>
                   <HelpIcon width={24} />
                 </div>
               </TextTooltip>
             </SizeBox>}>
             {/* <TokenSymbol size={22} symbol={info.projectcurrency} /> */}
-            <span>{Number(detail.size)} vB</span>
+            <span>{fileSize} vB</span>
           </WhitelistStageLine>
           <WhitelistStageLine title="Price">
             {Number(price)} {info.projectcurrency} / {detail?.projecttokenname}
@@ -149,22 +182,21 @@ const WhitelistStageFT: React.FC<{
           <FooterTextLineBox>
             <div className="g">
               Total Pay
-              <TextTooltip arrow title={tipText}>
+              <TextTooltip arrow title={TotalPayText}>
                 <div>
                   <HelpIcon width={24} />
                 </div>
               </TextTooltip>
             </div>
-
-            {/* <div>
-              <span>{value || 0}</span> {detail?.projecttokenname}
-            </div> */}
+            
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
         <WhitelistStageFooterItem>
           <WhitelistStageButton
             hposa={hposa}
             mposa={mposa}
+            fileSize={fileSize}
+            networkFee={NetworkFee}
             isLimit={isLimit}
             isWhiteInfo={isWhiteInfo}
             price={priceBig}
@@ -179,7 +211,7 @@ const WhitelistStageFT: React.FC<{
           <FooterTextLineBox>
             <span className="g">Balance</span>
             <span>
-              {formatUnitsAmount(balance.confirmed, 8)} {info.projectcurrency}
+              {getFullDisplayBalance(balance.confirmed, 8) || 0} {info.projectcurrency}
             </span>
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
@@ -194,7 +226,8 @@ const SizeBox=styled.div`
   display: flex;
   gap: 10px;
 `
-const TipTitleBox = styled.div`
+const TipTitleBox = styled.div<{width?:string}>`
+  max-width: ${({width})=>width || '345px'};
   font-family: Montserrat, Montserrat;
   font-weight: 300;
   font-size: 20px;

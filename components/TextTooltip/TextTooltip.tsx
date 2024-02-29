@@ -2,9 +2,11 @@ import React from "react";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip"
 import styled from "@emotion/styled";
 
-const TextTooltip = styled(({ className, ...props }: TooltipProps) => (
+interface TipProps extends TooltipProps{
+}
+const TextTooltip = styled(({ className,...props }: TipProps) => (
   <Tooltip
-  open={true}
+  // open={true}
     {...props}
     placement="right"
     componentsProps={{
@@ -17,7 +19,7 @@ const TextTooltip = styled(({ className, ...props }: TooltipProps) => (
   />
 ))({
   [`& .${tooltipClasses.tooltip}`]: {
-    maxWidth: 410,
+    maxWidth:500,
     padding: 30,
     borderRadius: 24,
     backgroundColor: "#181B20",
