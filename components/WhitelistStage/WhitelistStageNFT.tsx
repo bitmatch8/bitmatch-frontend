@@ -77,7 +77,7 @@ const WhitelistStageNFT: React.FC<{
    * Total Pay = value + transfer fees + network fee
    */
   const Transferfee = useMemo(() => {
-    return (value || 0) * Number(((fees + 1) * fileSize * 1.3).toFixed(0))
+    return (value || 0) * Number(Math.ceil((fees + 1) * fileSize * 1.3))
   }, [value, price])
 
   const satoshis = useMemo(() => {

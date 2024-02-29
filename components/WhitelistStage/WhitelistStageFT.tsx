@@ -84,7 +84,7 @@ const WhitelistStageFT: React.FC<{
    * Total Pay = value + transfer fees + network fee
    */
   const Transferfee = useMemo(() => {
-    return (value || 0) * Number(Math.ceil(((fees + 1) * fileSize * 1.3)))
+    return Number(Math.ceil(((fees + 1) * fileSize * 1.3)))
   }, [value, price,fees,fileSize])
 
   const satoshis = useMemo(() => {
