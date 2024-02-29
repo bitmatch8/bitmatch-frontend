@@ -46,12 +46,12 @@ const WhitelistStageFT: React.FC<{
     [process.env]
   )
   const initFees = async () => {
-    // if (isTest) {
-    //   setFees(1)
-    // } else {
+    if (isTest) {
+      setFees(1)
+    } else {
       const fees = await fetchFeesApi()
       setFees(fees?.fastestFee || 0)
-    // }
+    }
   }
   useEffect(() => {
     initFees()

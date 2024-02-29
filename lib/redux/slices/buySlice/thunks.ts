@@ -32,13 +32,13 @@ export const buySubmitAsync = createAppAsyncThunk(
     const {code,msg} = await params.reload()
     // console.log({code})
     if(code !== 0){
-      dispatch(
-        addToast({
-          // second: 0,
-          icon: "warning",
-          contxt: msg,
-        })
-      )
+      // dispatch(
+      //   addToast({
+      //     // second: 0,
+      //     icon: "warning",
+      //     contxt: msg,
+      //   })
+      // )
       throw new Error('error')
     }
     const {wallter} = useWallter(wallterType)
