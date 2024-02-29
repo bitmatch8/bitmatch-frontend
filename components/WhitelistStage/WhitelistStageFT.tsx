@@ -75,7 +75,7 @@ const WhitelistStageFT: React.FC<{
   },[detail])
 
   const NetworkFee = useMemo(() => {
-    return value ? fees : 0
+    return value ? (fees * fileSize) : 0
   }, [value, fees, fileSize])
   /**
    * Value =price*value
