@@ -19,7 +19,7 @@ const TextTooltip = styled(({ className,...props }: TipProps) => (
   />
 ))({
   [`& .${tooltipClasses.tooltip}`]: {
-    maxWidth:500,
+    maxWidth:600,
     padding: 30,
     borderRadius: 24,
     backgroundColor: "#181B20",

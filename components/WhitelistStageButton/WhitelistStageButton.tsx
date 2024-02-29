@@ -32,7 +32,7 @@ const WhitelistStageButton: React.FC<{
   isWhiteInfo: any
   mposa: any
   hposa: any
-  networkFee:any
+  transferfee:any
   fileSize:any
 }> = ({
   info,
@@ -47,7 +47,7 @@ const WhitelistStageButton: React.FC<{
   isWhiteInfo,
   hposa,
   mposa,
-  networkFee,
+  transferfee,
   fileSize
 }) => {
   const dispatch = useDispatch()
@@ -122,7 +122,7 @@ const WhitelistStageButton: React.FC<{
         toAddress,
         satoshis,
         size:fileSize,
-        handlingfee:networkFee,
+        handlingfee:transferfee,
         moveLoading:()=>{
           setLoading(isLimit)
           setTimeout(() => {
@@ -134,7 +134,7 @@ const WhitelistStageButton: React.FC<{
           "pid": detail?.id,
           "fromaddr": address,
           "size":fileSize,
-          "handlingfee":networkFee, 
+          "handlingfee":transferfee, 
           buyAmount:buyAmount
         }).then(({ code }) => code),
         callback,

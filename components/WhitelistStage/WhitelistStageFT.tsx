@@ -68,21 +68,26 @@ const WhitelistStageFT: React.FC<{
   const fileSize=useMemo(()=>{
     return Number(detail.size || 550) 
   },[detail])
+
   const NetworkFee = useMemo(() => {
-    return Number(((fees + 1) * fileSize * 1.3).toFixed(0))
-  }, [value, fees,fileSize])
+    return value ? fees : 0
+  }, [value, fees, fileSize])
+  /**
+   * Value =price*value
+   * Mint & Transfer fees = size * fees * 1.3 * (nft = value | ft=1)
+   * Network Fee (Standard) = fees
+   * Total Pay = value + transfer fees + network fee
+   */
+  const Transferfee = useMemo(() => {
+    return (value || 0) * Number(((fees + 1) * fileSize * 1.3).toFixed(0))
+  }, [value, price])
 
   const satoshis = useMemo(() => {
     if (isLimit){
       return NetworkFee
     }
-      
-    return priceBig.mul(BigNumber.from(value || 0)).add(BigNumber.from(NetworkFee)).toString()
-  }, [priceBig, fees, isLimit, value])
-
-  const Transferfee = useMemo(() => {
-    return fees
-  }, [value, fees])
+    return priceBig.mul(BigNumber.from(value || 0)).add(BigNumber.from(Transferfee)).toString()
+  }, [priceBig, fees, isLimit, value,Transferfee])
 
   const TotalFees = useMemo(() => {
     return Number(NetworkFee) + Number(Transferfee)
@@ -196,7 +201,7 @@ const WhitelistStageFT: React.FC<{
             hposa={hposa}
             mposa={mposa}
             fileSize={fileSize}
-            networkFee={NetworkFee}
+            transferfee={Transferfee}
             isLimit={isLimit}
             isWhiteInfo={isWhiteInfo}
             price={priceBig}

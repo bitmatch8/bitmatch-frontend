@@ -63,51 +63,74 @@ const WhitelistStageNFT: React.FC<{
     return parseFixedAmount(info.targetnumber || 0, 8)
   }, [info, stage, fees])
 
-  const fileSize=useMemo(()=>{
-    return Number(detail.size || 550) 
-  },[detail])
+  const fileSize = useMemo(() => {
+    return Number(detail.size || 550)
+  }, [detail])
 
   const NetworkFee = useMemo(() => {
+    return value ? fees : 0
+  }, [value, fees, fileSize])
+  /**
+   * Value =price*value
+   * Mint & Transfer fees = size * fees * 1.3 * (nft = value | ft=1)
+   * Network Fee (Standard) = fees
+   * Total Pay = value + transfer fees + network fee
+   */
+  const Transferfee = useMemo(() => {
     return (value || 0) * Number(((fees + 1) * fileSize * 1.3).toFixed(0))
-  }, [value, fees,fileSize])
+  }, [value, price])
 
   const satoshis = useMemo(() => {
-    if (isLimit){
-      return NetworkFee
+    if (isLimit) {
+      return Transferfee
     }
-    return price.mul(BigNumber.from(value || 0)).add(BigNumber.from(NetworkFee)).toString()
-  }, [price, value, fees, isLimit,NetworkFee])
-
-  const Transferfee = useMemo(() => {
-    return (value || 0) * Number(price)
-  }, [value, price])
+    return price.mul(BigNumber.from(value || 0)).add(BigNumber.from(Transferfee)).toString()
+  }, [price, value, fees, isLimit, Transferfee])
 
   const TotalFees = useMemo(() => {
     return Number(NetworkFee) + Number(Transferfee)
   }, [NetworkFee, Transferfee])
-  const PayValue=useMemo(()=>{
-    return value * Number(price) 
-  },[value,price])
-  const HelpTipText = useMemo(()=>(
-    <TipTitleBox>
-      <p>
-      Users need to pay costs for the minting and transfer transactions included in the NFT order
-      </p>
-      <p>The larger the bytes a transaction contains, the higher the cost.</p>
-    </TipTitleBox>
-  ),[])
+
+  const PayValue = useMemo(() => {
+    return value * Number(price)
+  }, [value, price])
+
+  const HelpTipText = useMemo(
+    () => (
+      <TipTitleBox>
+        <p>
+          Users need to pay costs for the minting and transfer transactions
+          included in the NFT order
+        </p>
+        <p>The larger the bytes a transaction contains, the higher the cost.</p>
+      </TipTitleBox>
+    ),
+    []
+  )
 
   const TotalPayText = useMemo(() => {
     return (
-      <TipTitleBox width="500px">
-                <p>
-          Value {PayValue ? getFullDisplayBalance(PayValue, 8) : 0} BTC
+      <TipTitleBox width="480px">
+        <p>
+          <span>Value</span>{" "}
+          <span>{PayValue ? getFullDisplayBalance(PayValue, 8) : 0} BTC</span>
         </p>
         <p>
-          Inscribe & Transfer fees {Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC
+          <span>Mint & Transfer fees</span>{" "}
+          <span>
+            {Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC
+          </span>
         </p>
-        <p>Network Fee (Standard) {NetworkFee ? getFullDisplayBalance(NetworkFee, 8) : 0} BTC</p>
-        <p>Total Pay {TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</p>
+        <p>
+          <span>Network Fee (Standard)</span>{" "}
+          <span>
+            {NetworkFee ? getFullDisplayBalance(NetworkFee, 8) : 0} BTC
+          </span>
+        </p>
+        <p>
+          <span>Total Pay</span>{" "}
+          <span>{TotalFees ? getFullDisplayBalance(TotalFees, 8) : 0} BTC</span>
+        </p>
       </TipTitleBox>
     )
   }, [Transferfee, NetworkFee, TotalFees])
@@ -198,7 +221,7 @@ const WhitelistStageNFT: React.FC<{
             hposa={hposa}
             isWhiteInfo={isWhiteInfo}
             price={price}
-            networkFee={NetworkFee}
+            transferfee={Transferfee}
             detail={detail}
             info={info}
             satoshis={satoshis}
@@ -210,7 +233,8 @@ const WhitelistStageNFT: React.FC<{
           <FooterTextLineBox>
             <span className="g">Balance</span>
             <span>
-              {getFullDisplayBalance(balance.confirmed, 8) || 0} {info.projectcurrency}
+              {getFullDisplayBalance(balance.confirmed, 8) || 0}{" "}
+              {info.projectcurrency}
             </span>
           </FooterTextLineBox>
         </WhitelistStageFooterItem>
@@ -226,13 +250,18 @@ const SizeBox = styled.div`
   gap: 10px;
 `
 const TipTitleBox = styled.div<{ width?: string }>`
-  max-width: ${({ width }) => width || "345px"};
+  width: ${({ width }) => width || "345px"};
   font-family: Montserrat, Montserrat;
   font-weight: 300;
   font-size: 20px;
   color: #c2c5c8;
   line-height: 26px;
   text-align: left;
+  p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 `
 
 const FooterTextLineBox = styled.div`
