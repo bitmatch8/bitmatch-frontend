@@ -62,7 +62,8 @@ const WhitelistStageFT: React.FC<{
   }, [info, fees])
 
   const price = useMemo(() => {
-    return parseFixedAmount(String(info.targetnumber || old_price), 8)
+    return info.targetnumber
+    // return parseFixedAmount(String(info.targetnumber || old_price), 8)
   }, [info, stage, fees])
 
   const priceBig = useMemo(() => {
