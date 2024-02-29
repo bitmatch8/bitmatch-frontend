@@ -88,7 +88,7 @@ const WhitelistStageNFT: React.FC<{
   }, [price, value, fees, isLimit, Transferfee])
 
   const TotalFees = useMemo(() => {
-    return Number(NetworkFee) + Number(Transferfee)
+    return BigNumber.from(satoshis || 0).add(BigNumber.from(NetworkFee)).toString()
   }, [NetworkFee, Transferfee])
 
   const PayValue = useMemo(() => {
