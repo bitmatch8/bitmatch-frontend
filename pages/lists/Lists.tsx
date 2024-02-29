@@ -56,6 +56,7 @@ export default function IndexPage() {
   }, [asPath])
   const onClickTabItem = (type: string) => {
     replace(`#${type.toLocaleLowerCase()}`)
+    setPageNum(1)
   }
   const projecttype = tabType === "ALL" ? undefined : tabType === "FT" ? 1 : 2
   const { result: result_lists } = useSwr(
