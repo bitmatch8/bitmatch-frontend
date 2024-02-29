@@ -136,9 +136,10 @@ const WhitelistStageButton: React.FC<{
           "size":fileSize,
           "handlingfee":transferfee, 
           buyAmount:buyAmount
-        }).then(({ code }) => code),
+        }).then(({ code,msg }) => ({code,msg})),
         callback,
       }
+      console.log({params})
       dispatch(buySubmitAsync(params))
     }
   }
