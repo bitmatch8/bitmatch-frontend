@@ -29,7 +29,7 @@ const useDetail = (id: any) => {
     return detailLists[id] || null
   }, [id, detailLists])
 
-  const { result: res_detail } = useSwr({id,address: address ? address : undefined,}, id ? fetchProjectInfoApi : null, {} )
+  const { result: res_detail } = useSwr({id,address: address ? address : undefined,}, !!id ? fetchProjectInfoApi : null, {} )
 
   const pub_info_key = useMemo(() => {
     return detail === null || !detail?.pubid
