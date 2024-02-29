@@ -46,12 +46,12 @@ const WhitelistStageFT: React.FC<{
     [process.env]
   )
   const initFees = async () => {
-    if (isTest) {
-      setFees(1)
-    } else {
+    // if (isTest) {
+    //   setFees(1)
+    // } else {
       const fees = await fetchFeesApi()
       setFees(fees?.fastestFee || 0)
-    }
+    // }
   }
   useEffect(() => {
     initFees()
@@ -84,7 +84,7 @@ const WhitelistStageFT: React.FC<{
    * Total Pay = value + transfer fees + network fee
    */
   const Transferfee = useMemo(() => {
-    return value ?  Number(Math.ceil(((fees + 1) * fileSize * 1.3))) : 0
+    return value ?  Number(Math.ceil(((fees ) * fileSize * 1.3))) : 0
   }, [value, price,fees,fileSize,value])
 
   const satoshis = useMemo(() => {
