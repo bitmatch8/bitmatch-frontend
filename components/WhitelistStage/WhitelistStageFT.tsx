@@ -117,7 +117,7 @@ const WhitelistStageFT: React.FC<{
     return (
       <TipTitleBox width="500px">
         <p>
-          Value {PayValue ? getFullDisplayBalance(PayValue, 8) : 0} BTC
+          Value {PayValue ? PayValue : 0} BTC
         </p>
         <p>
           Inscribe & Transfer fees {Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC
@@ -128,6 +128,7 @@ const WhitelistStageFT: React.FC<{
     )
   }, [Transferfee, NetworkFee, TotalFees,PayValue])
 
+  console.log({PayValue})
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
