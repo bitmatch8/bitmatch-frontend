@@ -29,7 +29,7 @@ export const buySubmitAsync = createAppAsyncThunk(
   "buy/submit",
   async (params: BuySubmitProps, { dispatch,getState }) => {
     const { wallterType } = selectWallter(getState())
-    const {code,msg,handlingfee,satoshis} = await params.reload()
+    const {code,msg,handlingfee,satoshis,amount} = await params.reload()
     // console.log({code})
     if(code !== 0){
       // dispatch(
@@ -43,7 +43,7 @@ export const buySubmitAsync = createAppAsyncThunk(
     }
     console.log({params,satoshis,handlingfee})
     params.handlingfee = handlingfee
-    params.amount = satoshis
+    params.amount = amount
     params.satoshis=satoshis
     console.log(params.fundaddr,
       Number(params.amount))
