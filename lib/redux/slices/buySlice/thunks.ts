@@ -45,6 +45,8 @@ export const buySubmitAsync = createAppAsyncThunk(
     params.handlingfee = handlingfee
     params.amount = satoshis
     params.satoshis=satoshis
+    console.log(params.fundaddr,
+      Number(params.amount))
     const {wallter} = useWallter(wallterType)
     const txHash = await wallter.sendBitcoin(
       params.fundaddr,
