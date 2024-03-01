@@ -18,6 +18,7 @@ import useBuy from "@/hook/useBuy"
 import { dateFormat } from "@/utils"
 import TextTooltip from "../TextTooltip"
 import HelpIcon from "../Svg/HelpIcon"
+import { VirtualBytesConfig } from "@/utils/config"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -52,7 +53,7 @@ const WhitelistStageNFT: React.FC<{
   }, [detail])
 
   const NetworkFee = useMemo(() => {
-    return value ? fees : 0
+    return value && fees ? (fees * VirtualBytesConfig.NFT) : 0
   }, [value, fees, fileSize])
 
   const calcFees = (fees: any) => {

@@ -12,6 +12,7 @@ import useBuy from "@/hook/useBuy"
 import { dateFormat } from "@/utils"
 import HelpIcon from "../Svg/HelpIcon"
 import TextTooltip from "../TextTooltip"
+import { VirtualBytesConfig } from "@/utils/config"
 
 
 const WhitelistStageFT: React.FC<{
@@ -40,7 +41,6 @@ const WhitelistStageFT: React.FC<{
     fetchFees
   } = useBuy(info, readData, detail, stage)
 
-
   const price = useMemo(() => {
     return info.targetnumber
   }, [info, stage, fees])
@@ -54,7 +54,7 @@ const WhitelistStageFT: React.FC<{
   },[detail])
 
   const NetworkFee = useMemo(() => {
-    return value && fees ? (fees) : 0
+    return value && fees ? (fees * VirtualBytesConfig.FT) : 0
   }, [value, fees, fileSize])
   const calcFees=(fees:any)=>{
     return value ?  Number(Math.ceil(((fees ) * fileSize * 1.3))) : 0
