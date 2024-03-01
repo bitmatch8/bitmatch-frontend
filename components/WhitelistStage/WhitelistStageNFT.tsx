@@ -221,7 +221,7 @@ const WhitelistStageNFT: React.FC<{
             fetchData={async () => {
               const { data } = await fetchFees()
               const handlingfee= calcFees(data)
-              const satoshis=calcSatoshis(handlingfee)
+              const satoshis=calcSatoshis(0)
               return {handlingfee,satoshis}
             }}
             detail={detail}

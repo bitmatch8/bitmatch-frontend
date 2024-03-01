@@ -76,7 +76,7 @@ const WhitelistStageFT: React.FC<{
     if (isLimit){
       return Transferfee
     }
-    return calcSatoshis(Transferfee) 
+    return calcSatoshis(Transferfee)
   }, [priceBig, fees, isLimit, value,Transferfee])
 
   const TotalFees = useMemo(() => {
@@ -194,7 +194,7 @@ const WhitelistStageFT: React.FC<{
             fetchData={async () => {
               const { data } = await fetchFees()
               const handlingfee= calcFees(data)
-              const satoshis=calcSatoshis(handlingfee)
+              const satoshis=calcSatoshis(0)
               return {handlingfee,satoshis}
             }}
             isLimit={isLimit}
