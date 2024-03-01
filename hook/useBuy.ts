@@ -1,7 +1,7 @@
 import { selectWallter, useSelector } from "@/lib/redux"
 import { useMemo, useState } from "react"
 import useSwr from "./useSwr"
-import { fetchQueryByWhitelist } from "@/api/api"
+import { fetchFeesApi, fetchQueryByWhitelist } from "@/api/api"
 
 const useBuy = (info: any, readData: any, detail: any, stage: any) => {
   const [value, setValue] = useState("")
@@ -13,7 +13,14 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
 
   //是否限额
   const isLimit = useMemo(()=>(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"),[isWhiteInfo,stage])
-
+  const fetchFees = async()=>{
+    const data = await fetchFeesApi()
+    return {
+      code:0,
+      data:data?.fastestFee
+    }
+  }
+  const {result:fees} = useSwr({},fetchFees,{})
   //单地址最低份额
   const mposa = useMemo(() => {
     if (isLimit) {
@@ -98,6 +105,8 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
   }
 
   return {
+    fees,
+    fetchFees,
     isLimit,
     inputLoad,
     isWhiteInfo,

@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { v4 } from 'uuid';
 import { buySubmitAsync } from './thunks';
-import refreshConfig from '@/utils/config';
 
 const initialState: BuySliceState = {
   status: 'idle',

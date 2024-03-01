@@ -15,7 +15,7 @@ import { fetchFeesApi } from "@/api/api"
 import HelpIcon from "../Svg/HelpIcon"
 import TextTooltip from "../TextTooltip"
 import useSwr from "@/hook/useSwr"
-import refreshConfig from "@/utils/config"
+import {RefreshConfig} from "@/utils/config"
 
 
 const WhitelistStageFT: React.FC<{
@@ -40,14 +40,10 @@ const WhitelistStageFT: React.FC<{
     mposa,
     hposa,
     maxAmount,
+    fees,
+    fetchFees
   } = useBuy(info, readData, detail, stage)
-  const {result:fees} = useSwr({},async()=>{
-    const data = await fetchFeesApi()
-    return {
-      code:0,
-      data:data?.fastestFee
-    }
-  },{ refreshInterval: refreshConfig.fees_refreshInterval })
+
 
   const price = useMemo(() => {
     return info.targetnumber
@@ -64,6 +60,12 @@ const WhitelistStageFT: React.FC<{
   const NetworkFee = useMemo(() => {
     return value && fees ? (fees) : 0
   }, [value, fees, fileSize])
+  const calcFees=(fees:any)=>{
+    return value ?  Number(Math.ceil(((fees ) * fileSize * 1.3))) : 0
+  }
+  const calcSatoshis=(Transferfee:any)=>{
+    return priceBig.mul(BigNumber.from(value || 0)).add(BigNumber.from(Transferfee)).toString()
+  }
   /**
    * Value =price*value
    * Mint & Transfer fees = size * fees * 1.3 * (nft = value | ft=1)
@@ -71,14 +73,14 @@ const WhitelistStageFT: React.FC<{
    * Total Pay = value + transfer fees + network fee
    */
   const Transferfee = useMemo(() => {
-    return value ?  Number(Math.ceil(((fees ) * fileSize * 1.3))) : 0
+    return calcFees(fees) 
   }, [value, price,fees,fileSize,value])
 
   const satoshis = useMemo(() => {
     if (isLimit){
       return Transferfee
     }
-    return priceBig.mul(BigNumber.from(value || 0)).add(BigNumber.from(Transferfee)).toString()
+    return calcSatoshis(Transferfee) 
   }, [priceBig, fees, isLimit, value,Transferfee])
 
   const TotalFees = useMemo(() => {
@@ -193,7 +195,12 @@ const WhitelistStageFT: React.FC<{
             hposa={hposa}
             mposa={mposa}
             fileSize={fileSize}
-            transferfee={Transferfee}
+            fetchData={async () => {
+              const { data } = await fetchFees()
+              const handlingfee= calcFees(data)
+              const satoshis=calcSatoshis(handlingfee)
+              return {handlingfee,satoshis}
+            }}
             isLimit={isLimit}
             isWhiteInfo={isWhiteInfo}
             price={priceBig}

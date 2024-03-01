@@ -8,7 +8,7 @@ import {
   useDispatch,
 } from "@/lib/redux"
 import { foramtDateInfo } from "@/utils"
-import refreshConfig from "@/utils/config"
+import {RefreshConfig} from "@/utils/config"
 import { BuyState, DetailInfoType } from "@/utils/types"
 import { useEffect, useMemo } from "react"
 import { useSelector } from "react-redux"
@@ -63,7 +63,7 @@ const useDetail = (id: any) => {
     detail?.pubid && (!publicInfo || tabId === DetailInfoType.public)
       ? fetchWhtielistInfoApi
       : null,
-    { refreshInterval: refreshConfig.publicInfo_refreshInterval }
+    { refreshInterval: RefreshConfig.publicInfo_refreshInterval }
   )
 
   const { result: res_whiteInfo, mutate: whiteMutate } = useSwr(
@@ -74,7 +74,7 @@ const useDetail = (id: any) => {
     detail?.wid && (!whiteInfo || tabId === DetailInfoType.white)
       ? fetchWhtielistInfoApi
       : null,
-    { refreshInterval: refreshConfig.whiteInfo_refreshInterval }
+    { refreshInterval: RefreshConfig.whiteInfo_refreshInterval }
   )
 
   const whiteType = useMemo(() => {

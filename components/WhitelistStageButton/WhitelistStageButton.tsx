@@ -17,7 +17,7 @@ import {
 } from "@/lib/redux"
 import { toLocalTime } from "@/utils"
 import useSwr from "@/hook/useSwr"
-import refreshConfig from "@/utils/config"
+import {RefreshConfig} from "@/utils/config"
 
 const WhitelistStageButton: React.FC<{
   price: any
@@ -32,7 +32,7 @@ const WhitelistStageButton: React.FC<{
   isWhiteInfo: any
   mposa: any
   hposa: any
-  transferfee:any
+  fetchData:any
   fileSize:any
 }> = ({
   info,
@@ -47,7 +47,7 @@ const WhitelistStageButton: React.FC<{
   isWhiteInfo,
   hposa,
   mposa,
-  transferfee,
+  fetchData,
   fileSize
 }) => {
   const dispatch = useDispatch()
@@ -119,21 +119,23 @@ const WhitelistStageButton: React.FC<{
         toAddress,
         satoshis,
         size:fileSize,
-        handlingfee:transferfee,
         moveLoading:()=>{
           setLoading(isLimit)
           setTimeout(() => {
             setLoading(false)
-          }, refreshConfig.submit_order_refreshInterval);
+          }, RefreshConfig.submit_order_refreshInterval);
         },
-        reload: async ()=>fetchOrderlistIsRepeated({
-          "stage": stage,
-          "pid": detail?.id,
-          "fromaddr": address,
-          "size":fileSize,
-          "handlingfee":transferfee, 
-          buyAmount:buyAmount
-        }).then(({ code,msg }) => ({code,msg})),
+        reload: async ()=>{
+          const {handlingfee,satoshis}  = await fetchData()
+          return fetchOrderlistIsRepeated({
+            "stage": stage,
+            "pid": detail?.id,
+            "fromaddr": address,
+            "size":fileSize,
+            "handlingfee":handlingfee, 
+            buyAmount:buyAmount
+          }).then(({ code,msg }) => ({code,msg,handlingfee,satoshis}))
+        },
         callback,
       }
       // console.log({params})

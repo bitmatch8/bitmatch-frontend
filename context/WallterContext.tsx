@@ -8,7 +8,7 @@ import {
 } from '@/lib/redux'
 import useWallter from "@/hook/useWallter"
 import useSwr from "@/hook/useSwr"
-import refreshConfig from "@/utils/config"
+import {RefreshConfig} from "@/utils/config"
 
 export default function WallterContext() {
   const dispatch = useDispatch()
@@ -21,7 +21,7 @@ export default function WallterContext() {
       code:0,
       data
     }
-  },{ refreshInterval: refreshConfig.balance_refreshInterval })
+  },{ refreshInterval: RefreshConfig.balance_refreshInterval })
 
   const {result:network} = useSwr({address,wallter},async({wallter}:{wallter:any})=>{
     const data =await wallter.getNetwork()
@@ -29,7 +29,7 @@ export default function WallterContext() {
       code:0,
       data
     }
-  },{ refreshInterval: refreshConfig.network_refreshInterval })
+  },{ refreshInterval: RefreshConfig.network_refreshInterval })
 
   const handleAccountsChanged = (_accounts: string[]) => {
     if (_accounts.length > 0) {

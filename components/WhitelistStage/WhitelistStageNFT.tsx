@@ -21,7 +21,7 @@ import { fetchFeesApi } from "@/api/api"
 import TextTooltip from "../TextTooltip"
 import HelpIcon from "../Svg/HelpIcon"
 import useSwr from "@/hook/useSwr"
-import refreshConfig from "@/utils/config"
+import { RefreshConfig } from "@/utils/config"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -43,15 +43,9 @@ const WhitelistStageNFT: React.FC<{
     isLimit,
     mposa,
     hposa,
+    fees,
+    fetchFees,
   } = useBuy(info, readData, detail, stage)
-
-  const {result:fees} = useSwr({},async()=>{
-    const data = await fetchFeesApi()
-    return {
-      code:0,
-      data:data?.fastestFee
-    }
-  },{ refreshInterval: refreshConfig.fees_refreshInterval })
 
   const price = useMemo(() => {
     return parseFixedAmount(info.targetnumber || 0, 8)
@@ -62,8 +56,21 @@ const WhitelistStageNFT: React.FC<{
   }, [detail])
 
   const NetworkFee = useMemo(() => {
-    return value ? (fees) : 0
+    return value ? fees : 0
   }, [value, fees, fileSize])
+
+  const calcFees = (fees: any) => {
+    return (value || 0) * Number(Math.ceil(fees * fileSize * 1.3))
+  }
+  const calcSatoshis=(Transferfee:any)=>{
+    if (isLimit) {
+      return Transferfee
+    }
+    return price
+      .mul(BigNumber.from(value || 0))
+      .add(BigNumber.from(Transferfee))
+      .toString()
+  }
   /**
    * Value =price*value
    * Mint & Transfer fees = size * fees * 1.3 * (nft = value | ft=1)
@@ -71,19 +78,18 @@ const WhitelistStageNFT: React.FC<{
    * Total Pay = value + transfer fees + network fee
    */
   const Transferfee = useMemo(() => {
-    return (value || 0) * Number(Math.ceil((fees) * fileSize * 1.3))
-  }, [value, price,fileSize])
+    return calcFees(fees)
+  }, [value, price, fees, fileSize])
 
   const satoshis = useMemo(() => {
-    if (isLimit) {
-      return Transferfee
-    }
-    return price.mul(BigNumber.from(value || 0)).add(BigNumber.from(Transferfee)).toString()
+    return calcSatoshis(Transferfee)
   }, [price, value, fees, isLimit, Transferfee])
 
   const TotalFees = useMemo(() => {
-    return BigNumber.from(satoshis || 0).add(BigNumber.from(NetworkFee)).toString()
-  }, [NetworkFee, satoshis,Transferfee])
+    return BigNumber.from(satoshis || 0)
+      .add(BigNumber.from(NetworkFee))
+      .toString()
+  }, [NetworkFee, satoshis, Transferfee])
 
   const PayValue = useMemo(() => {
     return value * Number(price)
@@ -127,7 +133,7 @@ const WhitelistStageNFT: React.FC<{
         </p>
       </TipTitleBox>
     )
-  }, [Transferfee, NetworkFee, TotalFees,value])
+  }, [Transferfee, NetworkFee, TotalFees, value])
 
   return (
     <WhitelistStageBox>
@@ -215,7 +221,12 @@ const WhitelistStageNFT: React.FC<{
             hposa={hposa}
             isWhiteInfo={isWhiteInfo}
             price={price}
-            transferfee={Transferfee}
+            fetchData={async () => {
+              const { data } = await fetchFees()
+              const handlingfee= calcFees(data)
+              const satoshis=calcSatoshis(handlingfee)
+              return {handlingfee,satoshis}
+            }}
             detail={detail}
             info={info}
             satoshis={satoshis}
@@ -248,7 +259,7 @@ const TipTitleBox = styled.div<{ width?: string }>`
   font-family: Montserrat, Montserrat;
   font-weight: 300;
   font-size: 20px;
-  color: #C2C5C8;
+  color: #c2c5c8;
   line-height: 26px;
   text-align: left;
   p {

@@ -10,7 +10,6 @@ import { useMemo } from "react";
 
 import ValueSkeleton from "@/components/ValueSkeleton";
 import { fetchProjectInfoSelectInfoApi } from "@/api/api";
-import refreshConfig from "@/utils/config";
 import useSwr from "@/hook/useSwr";
 
 export default function ProjectLists() {
