@@ -228,7 +228,7 @@ const SizeBox=styled.div`
 `
 const TipTitleBox = styled.div<{width?:string}>`
   width: ${({ width }) => width || "345px"};
-  font-family: Montserrat, Montserrat;
+  font-family: 'Montserrat Light';
   font-weight: 300;
   font-size: 20px;
   color: #c2c5c8;
