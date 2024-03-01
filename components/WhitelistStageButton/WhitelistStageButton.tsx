@@ -131,6 +131,7 @@ const WhitelistStageButton: React.FC<{
           return fetchOrderlistIsRepeated({
             "stage": stage,
             "pid": detail?.id,
+            "type": detail.projecttype,
             "fromaddr": address,
             "size":fileSize,
             "handlingfee":handlingfee, 
