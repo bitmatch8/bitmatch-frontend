@@ -20,6 +20,8 @@ import { dateFormat } from "@/utils"
 import { fetchFeesApi } from "@/api/api"
 import TextTooltip from "../TextTooltip"
 import HelpIcon from "../Svg/HelpIcon"
+import useSwr from "@/hook/useSwr"
+import refreshConfig from "@/utils/config"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -29,7 +31,7 @@ const WhitelistStageNFT: React.FC<{
   stage: any
   readData: any
 }> = ({ info, balance, title, detail, stage, readData }) => {
-  const [fees, setFees] = useState(0)
+  // const [fees, setFees] = useState(0)
   const {
     value,
     inputLoad,
@@ -43,20 +45,13 @@ const WhitelistStageNFT: React.FC<{
     hposa,
   } = useBuy(info, readData, detail, stage)
 
-  const isTest = useMemo(() => process.env.NEXT_PUBLIC_TEST === "test",[process.env])
-
-  const initFees = async () => {
-    // if (isTest) {
-    //   setFees(1)
-    // } else {
-      const fees = await fetchFeesApi()
-      setFees(fees?.fastestFee || 0)
-    // }
-  }
-
-  useEffect(() => {
-    initFees()
-  }, [isTest])
+  const {result:fees} = useSwr({},async()=>{
+    const data = await fetchFeesApi()
+    return {
+      code:0,
+      data:data?.fastestFee
+    }
+  },{ refreshInterval: refreshConfig.fees_refreshInterval })
 
   const price = useMemo(() => {
     return parseFixedAmount(info.targetnumber || 0, 8)

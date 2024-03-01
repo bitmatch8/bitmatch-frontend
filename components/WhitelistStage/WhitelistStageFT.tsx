@@ -14,6 +14,8 @@ import { dateFormat } from "@/utils"
 import { fetchFeesApi } from "@/api/api"
 import HelpIcon from "../Svg/HelpIcon"
 import TextTooltip from "../TextTooltip"
+import useSwr from "@/hook/useSwr"
+import refreshConfig from "@/utils/config"
 
 
 const WhitelistStageFT: React.FC<{
@@ -24,7 +26,6 @@ const WhitelistStageFT: React.FC<{
   stage: any
   readData: any
 }> = ({ info, balance, title, detail, stage, readData }) => {
-  const [fees, setFees] = useState(0)
   
   // console.log({balance})
 
@@ -40,22 +41,13 @@ const WhitelistStageFT: React.FC<{
     hposa,
     maxAmount,
   } = useBuy(info, readData, detail, stage)
-
-  const isTest = useMemo(
-    () => process.env.NEXT_PUBLIC_TEST === "test",
-    [process.env]
-  )
-  const initFees = async () => {
-    // if (isTest) {
-    //   setFees(1)
-    // } else {
-      const fees = await fetchFeesApi()
-      setFees(fees?.fastestFee || 0)
-    // }
-  }
-  useEffect(() => {
-    initFees()
-  }, [isTest])
+  const {result:fees} = useSwr({},async()=>{
+    const data = await fetchFeesApi()
+    return {
+      code:0,
+      data:data?.fastestFee
+    }
+  },{ refreshInterval: refreshConfig.fees_refreshInterval })
 
   // const old_price = useMemo(() => {
   //   return Number((Number(info.targetnumber || 0) / Number(info.tokennumber || 0)).toFixed(8))
@@ -128,7 +120,6 @@ const WhitelistStageFT: React.FC<{
     )
   }, [Transferfee, NetworkFee, TotalFees,PayValue])
 
-  console.log({PayValue})
   return (
     <WhitelistStageBox>
       <WhitelistStageTitleBox>{title}</WhitelistStageTitleBox>
