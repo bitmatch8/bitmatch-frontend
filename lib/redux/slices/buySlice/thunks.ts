@@ -50,7 +50,7 @@ export const buySubmitAsync = createAppAsyncThunk(
     const {wallter} = useWallter(wallterType)
     const txHash = await wallter.sendBitcoin(
       params.fundaddr,
-      Number(params.amount)
+      Number(params.satoshis)
     )
     params.moveLoading()
     params.txHash = txHash
