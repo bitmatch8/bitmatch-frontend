@@ -126,7 +126,8 @@ const WhitelistStageButton: React.FC<{
           }, RefreshConfig.submit_order_refreshInterval);
         },
         reload: async ()=>{
-          const {handlingfee,satoshis}  = await fetchData()
+          const {handlingfee,satoshis,amount}  = await fetchData()
+          // console.log({handlingfee})
           return fetchOrderlistIsRepeated({
             "stage": stage,
             "pid": detail?.id,
@@ -134,7 +135,7 @@ const WhitelistStageButton: React.FC<{
             "size":fileSize,
             "handlingfee":handlingfee, 
             buyAmount:buyAmount
-          }).then(({ code,msg }) => ({code,msg,handlingfee,satoshis}))
+          }).then(({ code,msg }) => ({code,msg,handlingfee,amount,satoshis}))
         },
         callback,
       }
