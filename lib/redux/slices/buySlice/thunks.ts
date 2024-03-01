@@ -41,6 +41,7 @@ export const buySubmitAsync = createAppAsyncThunk(
       // )
       throw new Error('error')
     }
+    console.log({params,satoshis,handlingfee})
     params.handlingfee = handlingfee
     params.amount = satoshis
     params.satoshis=satoshis
