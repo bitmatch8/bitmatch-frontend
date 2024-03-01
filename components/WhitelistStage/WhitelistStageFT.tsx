@@ -49,13 +49,8 @@ const WhitelistStageFT: React.FC<{
     }
   },{ refreshInterval: refreshConfig.fees_refreshInterval })
 
-  // const old_price = useMemo(() => {
-  //   return Number((Number(info.targetnumber || 0) / Number(info.tokennumber || 0)).toFixed(8))
-  // }, [info, fees])
-
   const price = useMemo(() => {
     return info.targetnumber
-    // return parseFixedAmount(String(info.targetnumber || old_price), 8)
   }, [info, stage, fees])
 
   const priceBig = useMemo(() => {
@@ -67,7 +62,7 @@ const WhitelistStageFT: React.FC<{
   },[detail])
 
   const NetworkFee = useMemo(() => {
-    return value ? (fees) : 0
+    return value && fees ? (fees) : 0
   }, [value, fees, fileSize])
   /**
    * Value =price*value
@@ -107,15 +102,15 @@ const WhitelistStageFT: React.FC<{
 
   const TotalPayText = useMemo(() => {
     return (
-      <TipTitleBox width="500px">
+      <TipTitleBox width="450px">
         <p>
-          Value {PayValue ? PayValue : 0} BTC
+          <span>Value</span> <span>{PayValue ? PayValue : 0} BTC</span>
         </p>
         <p>
-          Inscribe & Transfer fees {Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC
+          <span>Inscribe & Transfer fees</span> <span>{Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC</span>
         </p>
-        <p>Network Fee (Standard) {NetworkFee ? getFullDisplayBalance(NetworkFee, 8) : 0} BTC</p>
-        <p>Total Pay {TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</p>
+        <p><span>Network Fee (Standard)</span> <span>{NetworkFee ? getFullDisplayBalance(NetworkFee, 8) : 0} BTC</span></p>
+        <p><span>Total Pay</span> <span>{TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</span></p>
       </TipTitleBox>
     )
   }, [Transferfee, NetworkFee, TotalFees,PayValue])
@@ -229,13 +224,18 @@ const SizeBox=styled.div`
   gap: 10px;
 `
 const TipTitleBox = styled.div<{width?:string}>`
-  max-width: ${({width})=>width || '345px'};
+  width: ${({ width }) => width || "345px"};
   font-family: Montserrat, Montserrat;
   font-weight: 300;
   font-size: 20px;
   color: #c2c5c8;
   line-height: 26px;
   text-align: left;
+  p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 `
 const FooterTextLineBox = styled.div`
   font-size: 24px;

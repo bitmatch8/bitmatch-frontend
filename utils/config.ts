@@ -6,6 +6,6 @@ const refreshConfig ={
 	balance_refreshInterval:60000,
 	network_refreshInterval:5000,
 	submit_order_refreshInterval:60000,
-	fees_refreshInterval:10000
+	fees_refreshInterval:60000
 }
 export default refreshConfig

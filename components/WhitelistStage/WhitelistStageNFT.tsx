@@ -104,13 +104,13 @@ const WhitelistStageNFT: React.FC<{
 
   const TotalPayText = useMemo(() => {
     return (
-      <TipTitleBox width="480px">
-        {/* <p>
-          <span>Value</span>{" "}
-          <span>{PayValue ? getFullDisplayBalance(PayValue, 8) : 0} BTC</span>
-        </p> */}
+      <TipTitleBox width="450px">
         <p>
-          <span>Mint & Transfer fees</span>{" "}
+          <span>Value({value | 0})</span>{" "}
+          <span>{PayValue ? getFullDisplayBalance(PayValue, 8) : 0} BTC</span>
+        </p>
+        <p>
+          <span>Mint & Transfer fees({value | 0})</span>{" "}
           <span>
             {Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC
           </span>
@@ -118,7 +118,7 @@ const WhitelistStageNFT: React.FC<{
         <p>
           <span>Network Fee (Standard)</span>{" "}
           <span>
-            {NetworkFee ? getFullDisplayBalance(NetworkFee, 8) : 0} BTC
+            {NetworkFee ? `~${getFullDisplayBalance(NetworkFee, 8)}` : 0} BTC
           </span>
         </p>
         <p>
@@ -127,7 +127,7 @@ const WhitelistStageNFT: React.FC<{
         </p>
       </TipTitleBox>
     )
-  }, [Transferfee, NetworkFee, TotalFees])
+  }, [Transferfee, NetworkFee, TotalFees,value])
 
   return (
     <WhitelistStageBox>
@@ -248,7 +248,7 @@ const TipTitleBox = styled.div<{ width?: string }>`
   font-family: Montserrat, Montserrat;
   font-weight: 300;
   font-size: 20px;
-  color: #c2c5c8;
+  color: #C2C5C8;
   line-height: 26px;
   text-align: left;
   p {
