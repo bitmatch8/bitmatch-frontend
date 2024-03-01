@@ -4,11 +4,10 @@ import { Spaced } from "@/components/Spaced"
 import { BigNumber } from "@ethersproject/bignumber"
 import TokenSymbol from "@/components/TokenSymbol"
 import styled from "@emotion/styled"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import Input from "@/components/Input"
 import ValueSkeleton from "@/components/ValueSkeleton"
 import {
-  formatUnitsAmount,
   getFullDisplayBalance,
   parseFixedAmount,
 } from "@/utils/formatBalance"
@@ -17,11 +16,8 @@ import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
 import useBuy from "@/hook/useBuy"
 import { dateFormat } from "@/utils"
-import { fetchFeesApi } from "@/api/api"
 import TextTooltip from "../TextTooltip"
 import HelpIcon from "../Svg/HelpIcon"
-import useSwr from "@/hook/useSwr"
-import { RefreshConfig } from "@/utils/config"
 
 const WhitelistStageNFT: React.FC<{
   detail: any
@@ -78,7 +74,7 @@ const WhitelistStageNFT: React.FC<{
    * Total Pay = value + transfer fees + network fee
    */
   const Transferfee = useMemo(() => {
-    return calcFees(fees)
+    return calcFees(fees) || 0
   }, [value, price, fees, fileSize])
 
   const satoshis = useMemo(() => {
@@ -127,7 +123,7 @@ const WhitelistStageNFT: React.FC<{
             {NetworkFee ? `~${getFullDisplayBalance(NetworkFee, 8)}` : 0} BTC
           </span>
         </p>
-        <p>
+        <p style={{fontWeight:500}}>
           <span>Total Pay</span>{" "}
           <span>{TotalFees ? getFullDisplayBalance(TotalFees, 8) : 0} BTC</span>
         </p>
@@ -263,6 +259,9 @@ const TipTitleBox = styled.div<{ width?: string }>`
   line-height: 26px;
   text-align: left;
   p {
+    /* padding: 0;
+    margin: 0; */
+    margin: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;

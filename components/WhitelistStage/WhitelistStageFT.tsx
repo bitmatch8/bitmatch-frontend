@@ -1,21 +1,17 @@
 /** @type {import('next').NextConfig} */
 import { Spaced } from "@/components/Spaced"
-import TokenSymbol from "@/components/TokenSymbol"
 import { BigNumber } from "@ethersproject/bignumber"
 import styled from "@emotion/styled"
-import React, { ReactElement, ReactNode, useEffect, useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import Input from "@/components/Input"
-import { formatUnitsAmount, getFullDisplayBalance, parseFixedAmount } from "@/utils/formatBalance"
+import { getFullDisplayBalance, parseFixedAmount } from "@/utils/formatBalance"
 import WhitelistStageButton from "@/components/WhitelistStageButton"
 import WhitelistStageProgress from "@/components/WhitelistStageProgress"
 import WhitelistStageLine from "@/components/WhitelistStageLine"
 import useBuy from "@/hook/useBuy"
 import { dateFormat } from "@/utils"
-import { fetchFeesApi } from "@/api/api"
 import HelpIcon from "../Svg/HelpIcon"
 import TextTooltip from "../TextTooltip"
-import useSwr from "@/hook/useSwr"
-import {RefreshConfig} from "@/utils/config"
 
 
 const WhitelistStageFT: React.FC<{
@@ -111,7 +107,7 @@ const WhitelistStageFT: React.FC<{
         <p>
           <span>Inscribe & Transfer fees</span> <span>{Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC</span>
         </p>
-        <p><span>Network Fee (Standard)</span> <span>{NetworkFee ? getFullDisplayBalance(NetworkFee, 8) : 0} BTC</span></p>
+        <p><span>Network Fee (Standard)</span> <span>{NetworkFee ? `~${getFullDisplayBalance(NetworkFee, 8)}` : 0} BTC</span></p>
         <p><span>Total Pay</span> <span>{TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</span></p>
       </TipTitleBox>
     )
@@ -239,6 +235,8 @@ const TipTitleBox = styled.div<{width?:string}>`
   line-height: 26px;
   text-align: left;
   p {
+    padding: 0;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
