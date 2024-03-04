@@ -54,7 +54,7 @@ const WhitelistStageFT: React.FC<{
   },[detail])
 
   const NetworkFee = useMemo(() => {
-    return value && fees ? (fees * VirtualBytesConfig.FT) : 0
+    return fees ? (fees * VirtualBytesConfig.FT) : 0
   }, [value, fees, fileSize])
   const calcFees=(fees:any)=>{
     return value ?  Number(Math.ceil(((fees ) * fileSize * 1.3))) : 0
@@ -108,7 +108,7 @@ const WhitelistStageFT: React.FC<{
           <span>Inscribe & Transfer fees</span> <span>{Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC</span>
         </p>
         <p><span>Network Fee (Standard)</span> <span>{NetworkFee ? `~${getFullDisplayBalance(NetworkFee, 8)}` : 0} BTC</span></p>
-        <p style={{fontWeight:500}}><span>Total Pay</span> <span>{TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</span></p>
+        <p style={{fontWeight:500}}><span>Total Pay</span> <span>{TotalFees ? `~${getFullDisplayBalance(TotalFees, 8)}`:0} BTC</span></p>
       </TipTitleBox>
     )
   }, [Transferfee, NetworkFee, TotalFees,PayValue])

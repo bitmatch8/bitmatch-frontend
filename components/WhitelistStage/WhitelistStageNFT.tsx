@@ -53,7 +53,7 @@ const WhitelistStageNFT: React.FC<{
   }, [detail])
 
   const NetworkFee = useMemo(() => {
-    return value && fees ? (fees * VirtualBytesConfig.NFT) : 0
+    return fees ? (fees * VirtualBytesConfig.NFT) : 0
   }, [value, fees, fileSize])
 
   const calcFees = (fees: any) => {
@@ -126,7 +126,7 @@ const WhitelistStageNFT: React.FC<{
         </p>
         <p style={{fontWeight:500}}>
           <span>Total Pay</span>{" "}
-          <span>{TotalFees ? getFullDisplayBalance(TotalFees, 8) : 0} BTC</span>
+          <span>{TotalFees ? `~${getFullDisplayBalance(TotalFees, 8)}` : 0} BTC</span>
         </p>
       </TipTitleBox>
     )
