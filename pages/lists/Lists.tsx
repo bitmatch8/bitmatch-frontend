@@ -90,7 +90,7 @@ export default function IndexPage() {
           />
           <HeadContainerItem
             unit={"$"}
-            title="Total Liquidity Rais"
+            title="Total Liquidity"
             value={dashboard === null ? null : dashboard.raisedCount}
           />
           <HeadContainerItem
