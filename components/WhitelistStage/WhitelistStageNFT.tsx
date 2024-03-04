@@ -53,7 +53,8 @@ const WhitelistStageNFT: React.FC<{
   }, [detail])
 
   const NetworkFee = useMemo(() => {
-    return fees ? (fees * VirtualBytesConfig.NFT) : 0
+    console.log(fees ? (fees * VirtualBytesConfig.NFT) : '0')
+    return fees ? (fees * VirtualBytesConfig.NFT) : '0'
   }, [value, fees, fileSize])
 
   const calcFees = (fees: any) => {
@@ -83,6 +84,7 @@ const WhitelistStageNFT: React.FC<{
   }, [price, value, fees, isLimit, Transferfee])
 
   const TotalFees = useMemo(() => {
+    // console.log({NetworkFee})
     return BigNumber.from(satoshis || 0)
       .add(BigNumber.from(NetworkFee))
       .toString()

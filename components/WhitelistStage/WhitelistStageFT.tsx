@@ -54,7 +54,8 @@ const WhitelistStageFT: React.FC<{
   },[detail])
 
   const NetworkFee = useMemo(() => {
-    return fees ? (fees * VirtualBytesConfig.FT) : 0
+    console.log(fees , VirtualBytesConfig.NFT,fees ? (fees * VirtualBytesConfig.NFT) : '0','fees ? (fees * VirtualBytesConfig.NFT) ')
+    return fees ? (fees * VirtualBytesConfig.FT) : "0"
   }, [value, fees, fileSize])
   const calcFees=(fees:any)=>{
     return value ?  Number(Math.ceil(((fees ) * fileSize * 1.3))) : 0
@@ -90,7 +91,7 @@ const WhitelistStageFT: React.FC<{
   const HelpTipText = useMemo(()=>(
     <TipTitleBox>
       <p>
-        Users need to pay the cost for the burning and transfer transactions
+        Users need to pay the cost for the inscribe and transfer transactions
         included in FT orders, which is determined by the characteristics of the
         Ordinals protocol.
       </p>

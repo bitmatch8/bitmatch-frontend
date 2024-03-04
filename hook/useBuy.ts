@@ -26,7 +26,7 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
       data:data?.fastestFee
     }
   }
-  const {result:fees} = useSwr({},fetchFees,{})
+  const {result:fees} = useSwr('fetchFees',fetchFees,{})
   //单地址最低份额
   const mposa = useMemo(() => {
     if (isLimit) {
