@@ -54,7 +54,6 @@ const WhitelistStageFT: React.FC<{
   },[detail])
 
   const NetworkFee = useMemo(() => {
-    console.log(fees , VirtualBytesConfig.NFT,fees ? (fees * VirtualBytesConfig.NFT) : '0','fees ? (fees * VirtualBytesConfig.NFT) ')
     return fees ? (fees * VirtualBytesConfig.FT) : "0"
   }, [value, fees, fileSize])
   const calcFees=(fees:any)=>{
