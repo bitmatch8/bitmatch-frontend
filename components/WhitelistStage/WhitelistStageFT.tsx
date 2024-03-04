@@ -108,7 +108,7 @@ const WhitelistStageFT: React.FC<{
           <span>Inscribe & Transfer fees</span> <span>{Transferfee ? getFullDisplayBalance(Transferfee, 8) : 0} BTC</span>
         </p>
         <p><span>Network Fee (Standard)</span> <span>{NetworkFee ? `~${getFullDisplayBalance(NetworkFee, 8)}` : 0} BTC</span></p>
-        <p><span>Total Pay</span> <span>{TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</span></p>
+        <p style={{fontWeight:500}}><span>Total Pay</span> <span>{TotalFees ? getFullDisplayBalance(TotalFees, 8):0} BTC</span></p>
       </TipTitleBox>
     )
   }, [Transferfee, NetworkFee, TotalFees,PayValue])
@@ -236,8 +236,9 @@ const TipTitleBox = styled.div<{width?:string}>`
   line-height: 26px;
   text-align: left;
   p {
-    padding: 0;
-    margin: 0;
+    /* padding: 0;
+    margin: 0; */
+    margin: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
