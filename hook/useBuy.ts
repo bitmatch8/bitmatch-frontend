@@ -14,6 +14,12 @@ const useBuy = (info: any, readData: any, detail: any, stage: any) => {
   //是否限额
   const isLimit = useMemo(()=>(isWhiteInfo && isWhiteInfo?.share && stage === "whitelist"),[isWhiteInfo,stage])
   const fetchFees = async()=>{
+    if(process.env.NEXT_PUBLIC_TEST === 'test'){
+      return {
+        code:0,
+        data:1
+      }
+    }
     const data = await fetchFeesApi()
     return {
       code:0,
