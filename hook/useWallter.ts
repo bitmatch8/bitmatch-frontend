@@ -1,4 +1,6 @@
 
+'use strict'
+
 export default (type:any) => {
   const unisatwallet = (window as any).unisat
   const okxwallet = (window as any)?.okxwallet?.bitcoin

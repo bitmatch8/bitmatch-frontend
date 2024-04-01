@@ -8,7 +8,7 @@ import {
 
 import { persistStore, persistReducer } from "redux-persist";
 
-import storage from "redux-persist/lib/storage";
+import storage from "redux-persist/lib/storage/session";
 
 /* Instruments */
 import { reducer } from './rootReducer'
@@ -16,7 +16,7 @@ import { reducer } from './rootReducer'
 
 // 持久化配置
 const persistConfig = {
-  key: "deindex",
+  key: "de-index",
   storage,
   timeout:1000,
 };
