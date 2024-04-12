@@ -9,6 +9,23 @@ input:focus {
         line-height: 26px;
     }
 }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  z-index: 99;
+}
+::-webkit-scrollbar-track {
+  border-radius: 0px;
+  border: none;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: #bfbfbf;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 .etching-topHeader {
     display: flex;
     justify-content: space-between;
@@ -96,11 +113,13 @@ input:focus {
 .etch-formFatherBox {
     margin-top: 60px;
     width: 1240px;
-    min-height: 900px;
     padding-top: 60px;
     padding-bottom: 40px;
+}
+.etch-blockBox {
+    padding: 60px 0 40px;
     background: #181B20;
-    border-radius: 36px;
+    border-radius: 36px;    
 }
 
 .etch-flowPathBox {
@@ -319,4 +338,183 @@ input:focus {
 @keyframes btnSpin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.etch-descBox {
+    margin: 60px 40px 0;
+    background: #24272B;
+    border-radius: 24px;
+    padding: 32px 40px 40px;
+    .etch-descTopBackBox {
+        display: flex;
+        align-items: center;
+        height: 28px;
+        cursor: pointer;
+        .etch-flowTopBackBtn {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: url(../assets/img/etch-top-back-btn.png) no-repeat;
+            background-size: 100%;
+        }
+        .etch-flowTopBackTxt {
+            margin-left: 12px;
+            font-weight: 600;
+            font-size: 20px;
+            color: #DBDBDB;
+        }
+    }
+    .etch-descTopPleaDou {
+        margin: 40px 0 0;
+        height: 40px;
+        font-weight: 600;
+        font-size: 32px;
+        color: #FFFFFF;
+        line-height: 40px;
+    }
+    .etch-descTopYouAre {
+        margin: 20px 0 0;
+        height: 20px;
+        line-height: 20px;
+        color: #6F6F76;
+        font-size: 20px;
+        &>span {
+            color: #FFF;
+        }
+    }
+    .etch-descTopDetailBox {
+        margin-top: 40px;
+        height: 200px;
+        background: #181B20;
+        box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
+        border-radius: 24px;
+        padding: 40px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    .etch-descDetailTopTxt {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 24px;
+        &>span {
+            font-weight: 500;
+            font-size: 24px;
+            color: #6F6F76;
+        }
+    }
+    .etch-descWord {
+        margin-top: 24px;
+        font-weight: 500;
+        font-size: 24px;
+        color: #FFFFFF;
+        line-height: 32px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+}
+.etch-costBox {
+    margin-top: 60px;
+    padding: 40px;
+    .etch-cardBox {
+        display: flex;
+        &>div {
+            margin-left: 40px;
+            width: 360px;
+            height: 306px;
+            background: #24272B;
+            border-radius: 24px;
+            border: 2px solid #32353A;
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+        .etch-cardTopTit {
+            height: 80px;
+            margin: 0;
+            border-bottom: 2px solid #32353A;
+            font-weight: 600;
+            font-size: 24px;
+            color: #FFFFFF;
+            text-align: center;
+            line-height: 80px;
+        }
+        .etch-cardCenterNum {
+            margin: 38px 0 0;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 40px;
+            color: #F7931A;
+        }
+        .etch-cardCustomInput {
+            margin: 30px auto 0;
+            width: 240px;
+            height: 56px;
+            background: #181B20;
+            box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            &>input {
+                border: none;
+                background: none;
+                width: 220px;
+                margin-left: 10px;
+                height: 30px;
+                margin-top: 13px;
+                line-height: 30px;
+                text-align: center;
+                font-weight: 600;
+                font-size: 40px;
+                color: #F7931A;
+            }
+        }
+        .etch-cardSats {
+            margin: 32px 0 0;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 24px;
+            color: #6F6F76;
+        }
+        .etch-cardWithin {
+            margin: 16px 0 0;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+    }
+}
+.etch-theCurTip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 60px auto 0;
+    height: 24px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 20px;
+    color: #F7931A;
+    &>span {
+        margin-right: 8px;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background: url(../assets/img/etch-warning-icon.png) no-repeat;
+        background-size: 100%;
+    }
+}
+.etch-timesShown {
+    margin: 16px auto 0;
+    height: 24px;
+    line-height: 24px;
+    font-weight: 500;
+    font-size: 20px;
+    color: #C2C5C8;
+    text-align: center;
 }

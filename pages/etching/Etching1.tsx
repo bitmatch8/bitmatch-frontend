@@ -3,7 +3,7 @@ import EtchFlowPath from "@/components/EtchFlowPath"
 import TextTooltip from "@/components/TextTooltip"
 import { Switch } from "@mui/material"
 
-export default function History() {
+export default function Etching1() {
     const [checked, setChecked] = React.useState(false);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,9 +16,21 @@ export default function History() {
             <p>Can contain a "·" between characters.</p>
         </div>
     ),[])
+    const RuneOffsetTipText = useMemo(()=>(
+        <div className="etch-tipInnerBox">
+            <p>After Etching to the height to start Mint</p>
+        </div>
+    ),[])
+    const RuneHieghtTipText = useMemo(()=>(
+        <div className="etch-tipInnerBox">
+            <p>Open Minting start height and end height</p>
+        </div>
+    ),[])
+
+    
 
     return (
-        <>
+        <div className="etch-blockBox">
             <EtchFlowPath flowType={1} flowName="etching"></EtchFlowPath>
             <div className="etch-formBox">
                 <div className="etch-formItemBox">
@@ -126,7 +138,7 @@ export default function History() {
                         <div className="etch-formTitleBox">
                             <span className="etch-star">*</span>
                             <span className="etch-itemTitle">Offset</span>
-                            <TextTooltip arrow title={RuneTipText}>
+                            <TextTooltip arrow title={RuneOffsetTipText}>
                                 <span className="etch-askIcon"></span>
                             </TextTooltip>
                         </div>
@@ -141,7 +153,7 @@ export default function History() {
                                 <div className="etch-formTitleBox">
                                     <span className="etch-star">*</span>
                                     <span className="etch-itemTitle">Height</span>
-                                    <TextTooltip arrow title={RuneTipText}>
+                                    <TextTooltip arrow title={RuneHieghtTipText}>
                                         <span className="etch-askIcon"></span>
                                     </TextTooltip>
                                 </div>
@@ -183,6 +195,6 @@ export default function History() {
                 Next
                 <span className="etch-bottomBtnLoading"></span>
             </div>
-        </>
+        </div>
     )
 }
