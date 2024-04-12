@@ -1,5 +1,6 @@
 import Page from "@/components/Page"
 import History from "./History"
+import Etching1 from "./Etching1"
 
 export default function IndexPage() {
     return (
@@ -11,16 +12,16 @@ export default function IndexPage() {
                 </div>
                 <div className="etch-topRightSearchBox">
                     <input type="text" />
-                    <span className="eatch-topRightBtn"></span>
+                    <span className="etch-topRightBtn"></span>
                 </div>
             </div>
-            <div style={{ color: '#FFF', textAlign: 'center' }}>
-                <span>Etching</span>
-                <span style={{marginLeft: '20px'}}>Mint</span>
-                <span style={{marginLeft: '20px'}}>Transfer</span>
+            <div className="etch-tabox">
+                <div className="etch-tabCur">Etching</div>
+                <div>Mint</div>
+                <div>Transfer</div>
             </div>
-            <div style={{ height: '300px', border: '1px solid red' }}>
-
+            <div className="etch-formFatherBox">
+                <Etching1></Etching1>
             </div>
             <History></History>
         </Page>
