@@ -1,0 +1,61 @@
+.etching-topHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 100px;
+    height: 100px;
+    .etch-topLeftTitle {
+        display: flex;
+        align-items: center;
+        position: relative;
+        height: 100px;
+        font-family: Montserrat, Montserrat;
+        font-weight: 600;
+        font-size: 60px;
+        color: #DBDBDB;
+        line-height: 100px;
+        text-align: left;
+        font-style: normal;
+        text-transform: none;
+        .etch-bottomLine {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 120px;
+            height: 6px;
+            background: #F7931A;
+            border-radius: 3px;
+        }
+    }
+    .etch-topRightSearchBox {
+        position: relative;
+        width: 700px;
+        height: 80px;
+        background: #181B20;
+        border-radius: 24px;
+        &>input {
+            margin: 30px 0 30px 24px;
+            width: 590px;
+            height: 20px;
+            border: none;
+            background: #181B20;
+            font-family: Montserrat, Montserrat;
+            font-weight: 500;
+            font-size: 20px;
+            color: #DBDBDB;
+        }
+        input:focus {
+            outline: none;
+        }
+        .eatch-topRightBtn {
+            position: absolute;
+            margin: 22px;
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: url(../assets/img/etch-top-search.png) no-repeat;
+            background-size: 100%;
+            cursor: pointer;
+        }
+    }
+}

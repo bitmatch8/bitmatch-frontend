@@ -4,7 +4,16 @@ import History from "./History"
 export default function IndexPage() {
     return (
         <Page>
-            <p style={{ color: '#FFF', textAlign: 'center' }}>Runes</p>
+            <div className="etching-topHeader">
+                <div className="etch-topLeftTitle">
+                    Runes
+                    <div className="etch-bottomLine"></div>
+                </div>
+                <div className="etch-topRightSearchBox">
+                    <input type="text" />
+                    <span className="eatch-topRightBtn"></span>
+                </div>
+            </div>
             <div style={{ color: '#FFF', textAlign: 'center' }}>
                 <span>Etching</span>
                 <span style={{marginLeft: '20px'}}>Mint</span>
