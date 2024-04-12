@@ -2,7 +2,7 @@ import Page from "@/components/Page"
 import History from "./History"
 import Etching1 from "./Etching1"
 import Etching2 from "./Etching2"
-
+import Etching3 from "./Etching3"
 
 export default function IndexPage() {
     return (
@@ -24,7 +24,8 @@ export default function IndexPage() {
             </div>
             <div className="etch-formFatherBox">
                 {/* <Etching1></Etching1> */}
-                <Etching2></Etching2>
+                {/* <Etching2></Etching2> */}
+                <Etching3></Etching3>
             </div>
             <History></History>
         </Page>

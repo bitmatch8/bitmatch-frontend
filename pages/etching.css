@@ -9,6 +9,9 @@ input:focus {
         line-height: 26px;
     }
 }
+.etch-mt200 {
+    margin-top: 200px !important;
+}
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -517,4 +520,131 @@ input:focus {
     font-size: 20px;
     color: #C2C5C8;
     text-align: center;
+}
+.etch-countBox {
+    margin: 68px auto 0;
+    .etch-countItem {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 32px;
+        height: 24px;
+        .etch-countKeyName {
+            width: 152px;
+            height: 24px;
+            line-height: 24px;
+            font-weight: 500;
+            font-size: 20px;
+            color: #C2C5C8;
+            text-align: right;
+        }
+        .etch-countAskTip {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: url(../assets/img/etch-ask-icon.png) no-repeat;
+            background-size: 100%;
+        }
+        .etch-countNoAskTip {
+            display: inline-block;
+            width: 24px;
+        }
+        .etch-countNull {
+            display: inline-block;
+            width: 190px;
+        }
+        .etch-countValue {
+            display: inline-block;
+            width: 186px;
+            font-weight: 600;
+            font-size: 24px;
+            color: #FFFFFF;
+            text-align: left;
+        }
+        .etch-countDoller {
+            display: inline-block;
+            width: 130px;
+            font-weight: 600;
+            font-size: 24px;
+            color: #6F6F76;
+        }
+    }
+    .etch-countLine {
+        margin-top: 32px;
+        border: 2px solid #25282D;
+    }
+}
+.etch-detailTit {
+    margin: 0;
+    height: 40px;
+    line-height: 40px;
+    font-weight: 600;
+    font-size: 32px;
+    color: #FFFFFF;
+    text-align: center;
+}
+.etch-detailContent {
+    margin-top: 40px;
+    padding: 40px;
+    line-height: 32px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-weight: 500;
+    font-size: 24px;
+    color: #FFFFFF;
+    background: #181B20;
+    box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
+    border-radius: 24px;
+}
+.etch-nullData {
+    margin: 160px auto 0;
+    width: 168px;
+    height: 136px;
+    background: url(../assets/img/etch-nullData.png) no-repeat;
+    background-size: 100%;
+}
+.etch-submited {
+    margin: 32px auto 0;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+.etch-txHash {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 100px auto 0;
+    height: 24px;
+    font-weight: 500;
+    font-size: 24px;
+    color: #C2C5C8;
+}
+.etch-copyBtn {
+    margin-left: 16px;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: url(../assets/img/etch-copyBtn.png) no-repeat;
+    background-size: 100%;
+    cursor: pointer;
+    &:hover {
+        background: url(../assets/img/etch-copyBtnHover.png) no-repeat;
+        background-size: 100%;
+    }
+}
+.etch-jumpBtn {
+    margin-left: 12px;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: url(../assets/img/etch-jumpBtn.png) no-repeat;
+    background-size: 100%;
+    cursor: pointer;
+    &:hover {
+        background: url(../assets/img/etch-jumpBtnHover.png) no-repeat;
+        background-size: 100%;
+    }
 }
