@@ -23,8 +23,8 @@ export const TopBar = () => {
     },
     {
       title: "Marketplace",
-      path: "",
-      tip: "Coming Soon",
+      path: "/etching",
+      // tip: "Coming Soon",
     },
     {
       title: "Genesis NFT",
