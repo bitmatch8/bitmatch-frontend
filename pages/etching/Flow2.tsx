@@ -2,7 +2,10 @@ import React, { useMemo } from "react"
 import EtchFlowPath from "@/components/EtchFlowPath"
 import TextTooltip from "@/components/TextTooltip"
 
-export default function Etching2() {
+export default function Etching2(props: any) {
+    const { formData } = props;
+    console.log('第二步拿到第一步的表单数据：：：', formData);
+
     const SatsTipText = useMemo(()=>(
         <div className="etch-tipInnerBox">
             <p>Specify the amount of satoshis stored in each Rune.</p>

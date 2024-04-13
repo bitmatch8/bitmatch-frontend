@@ -1,3 +1,4 @@
+import React from "react"
 import Page from "@/components/Page"
 import History from "./History"
 import Etching1 from "./Etching1"
@@ -7,6 +8,16 @@ import Mint1 from "./Mint1"
 import Transfer1 from "./Transfer1"
 
 export default function IndexPage() {
+    const [flowName, setFlowName] = React.useState('etching');
+    const [flowIndex, setFlowIndex] = React.useState(1);
+    const [formData, setFormData] = React.useState({});
+
+    const getFlow1Data = (data: any) => {
+        const { flowIndex } = data;
+        setFlowIndex(flowIndex);
+        setFormData(data);
+    }
+
     return (
         <Page>
             <div className="etching-topHeader">
@@ -25,11 +36,21 @@ export default function IndexPage() {
                 <div>Transfer</div>
             </div>
             <div className="etch-formFatherBox">
-                {/* <Etching1></Etching1> */}
-                {/* <Flow2></Flow2> */}
-                {/* <Flow3></Flow3> */}
-                {/* <Mint1></Mint1> */}
-                <Transfer1></Transfer1>
+                {
+                    flowName==='etching'&&flowIndex===1 && <Etching1 handleBackData={getFlow1Data}></Etching1>
+                }
+                {
+                    flowName==='mint'&&flowIndex===1 && <Mint1></Mint1>
+                }
+                {
+                    flowName==='transfer'&&flowIndex===1 && <Transfer1></Transfer1>
+                }
+                {
+                    flowIndex===2 && <Flow2 flowName={flowName} formData={formData}></Flow2>
+                }
+                {
+                    flowIndex===3 && <Flow3 flowName={flowName}></Flow3>
+                }
             </div>
             <History></History>
         </Page>
