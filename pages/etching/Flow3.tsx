@@ -2,7 +2,9 @@ import React, { useMemo } from "react"
 import EtchFlowPath from "@/components/EtchFlowPath"
 import TextTooltip from "@/components/TextTooltip"
 
-export default function Etching3() {
+export default function Etching3(props: any) {
+
+
     return (
         <>
             <div className="etch-blockBox">
