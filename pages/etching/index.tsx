@@ -1,8 +1,10 @@
 import Page from "@/components/Page"
 import History from "./History"
 import Etching1 from "./Etching1"
-import Etching2 from "./Etching2"
-import Etching3 from "./Etching3"
+import Flow2 from "./Flow2"
+import Flow3 from "./Flow3"
+import Mint1 from "./Mint1"
+import Transfer1 from "./Transfer1"
 
 export default function IndexPage() {
     return (
@@ -24,8 +26,10 @@ export default function IndexPage() {
             </div>
             <div className="etch-formFatherBox">
                 {/* <Etching1></Etching1> */}
-                {/* <Etching2></Etching2> */}
-                <Etching3></Etching3>
+                {/* <Flow2></Flow2> */}
+                {/* <Flow3></Flow3> */}
+                {/* <Mint1></Mint1> */}
+                <Transfer1></Transfer1>
             </div>
             <History></History>
         </Page>

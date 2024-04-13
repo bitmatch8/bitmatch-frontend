@@ -212,7 +212,7 @@ input:focus {
                 width: 98%;
                 margin-left: 1%;
                 height: 60px;
-                margin-top: 20px;
+                margin-top: 16px;
                 padding-left: 40px;
                 background: #181B20;
                 line-height: 100px;
@@ -236,6 +236,63 @@ input:focus {
                 font-size: 32px;
                 color: #FFFFFF;
                 line-height: 70px;
+            }
+            .mui-style-1i6mb4l-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+                width: 98%;
+                margin-left: 1%;
+                margin-top: 6px;
+                font-weight: 600;
+                font-size: 32px;
+                color: #FFFFFF;
+                .mui-style-15brxlr-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+                    padding-left: 40px;
+                }
+            }
+        }
+        .etch-mintAmontBox {
+            border: none;
+            display: flex;
+            .etch-mitAmontInputBox {
+                display: flex;
+                width: 560px;
+                height: 100px;
+                border-radius: 24px;
+                border: 3px solid #6F6F76;
+                &>input {
+                    width: 100%;
+                    margin: 18px 24px 18px 1%;
+                    height: 60px;
+                    padding-left: 40px;
+                    background: #181B20;
+                    font-weight: 600;
+                    font-size: 32px;
+                    color: #6F6F76;
+                    border: none;
+                }
+            }
+            .etch-amontRightBox {
+                margin-left: 40px;
+                margin-top: 16px;
+                height: 68px;
+                .etch-amontRightTop {
+                    margin: 0;
+                    height: 32px;
+                    font-weight: 500;
+                    font-size: 32px;
+                    color: #DBDBDB;
+                    line-height: 32px;
+                }
+                .etch-amontRightBottom {
+                    margin: 16px 0 0;
+                    height: 20px;
+                    line-height: 20px;
+                    font-weight: 500;
+                    font-size: 20px;
+                    color: #6F6F76;
+                    &>span {
+                        color: #F7931A;
+                    }
+                }
             }
         }
         .etch-timeType {
