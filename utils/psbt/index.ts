@@ -9,7 +9,7 @@ import {
 } from "./psbt1";
 import { Address } from "@cmdcode/tapscript";
 
-function getUnisatAddressType(address: string): string {
+export function getUnisatAddressType(address: string): string {
   switch (Address.decode(address).type) {
     case "p2pkh":
       return ADDRESS_TYPE_P2PKH;
@@ -23,6 +23,7 @@ function getUnisatAddressType(address: string): string {
       return "UNKENOW_ADDR";
   }
 }
+export const LOWEST_FEE = 550;
 
 export {
   ADDRESS_TYPE_P2SH,
@@ -32,5 +33,4 @@ export {
   ADDRESS_TYPE_P2TR,
   generatePsbt,
   pushPsbt,
-  getUnisatAddressType,
 };
