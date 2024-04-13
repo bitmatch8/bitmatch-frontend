@@ -9,13 +9,22 @@ import Transfer1 from "./Transfer1"
 
 export default function IndexPage() {
     const [flowName, setFlowName] = React.useState('etching');
-    const [flowIndex, setFlowIndex] = React.useState(1);
+    const [flowIndex, setFlowIndex] = React.useState(3);
     const [formData, setFormData] = React.useState({});
 
     const getFlow1Data = (data: any) => {
         const { flowIndex } = data;
         setFlowIndex(flowIndex);
         setFormData(data);
+    }
+    const getFlow2BackData = (fName: string, findex: number) => {
+        setFlowName(fName);
+        setFlowIndex(findex);
+    }
+
+    const getFlow3BackData = (fName: string) => {
+        setFlowName(fName);
+        setFlowIndex(1);
     }
 
     return (
@@ -46,10 +55,10 @@ export default function IndexPage() {
                     flowName==='transfer'&&flowIndex===1 && <Transfer1></Transfer1>
                 }
                 {
-                    flowIndex===2 && <Flow2 flowName={flowName} formData={formData}></Flow2>
+                    flowIndex===2 && <Flow2 flowName={flowName} formData={formData} handleBackFlow2={getFlow2BackData}></Flow2>
                 }
                 {
-                    flowIndex===3 && <Flow3 flowName={flowName}></Flow3>
+                    flowIndex===3 && <Flow3 flowName={flowName} handleBackFlow3={getFlow3BackData}></Flow3>
                 }
             </div>
             <History></History>

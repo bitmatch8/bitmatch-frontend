@@ -489,6 +489,9 @@ input:focus {
             &:first-child {
                 margin-left: 0;
             }
+            &.cur {
+                border: 2px solid #F7931A;
+            }
         }
         .etch-cardTopTit {
             height: 80px;
@@ -679,8 +682,37 @@ input:focus {
     font-size: 24px;
     color: #C2C5C8;
 }
-.etch-copyBtn {
+.etch-copyBtnBox {
     margin-left: 16px;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    .etch-tipscard {
+        position: absolute;
+        top: 34px;
+        left: -46px;
+        background-color: rgba(0,0,0,0.5);
+        border-radius: 8px;
+        span {
+          display: inline-block;
+          position: absolute;
+          width: 10px;
+          height:10px;
+          top:-6px;
+          left: 52px;
+          background-color: rgba(0, 0, 0, 0.5);
+          transform: rotate(45deg);
+        }
+        p {
+          font-size: 12px;
+          padding:10px;
+          width: 110px !important;;
+        }
+    }
+}
+.etch-copyBtn {
+    position: relative;
+    top: -2px;
     display: inline-block;
     width: 24px;
     height: 24px;
