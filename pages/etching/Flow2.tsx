@@ -3,8 +3,11 @@ import EtchFlowPath from "@/components/EtchFlowPath"
 import TextTooltip from "@/components/TextTooltip"
 
 export default function Etching2(props: any) {
-    const { formData } = props;
-    console.log('第二步拿到第一步的表单数据：：：', formData);
+    const { formData, handleBackFlow2, flowName } = props;
+
+    const [sats, setSats] = React.useState(8);
+    const [stasCurIndex, setStasCurIndex] = React.useState(1);
+    const [inputStas3, setInputStas3] = React.useState(25);
 
     const SatsTipText = useMemo(()=>(
         <div className="etch-tipInnerBox">
@@ -21,6 +24,29 @@ export default function Etching2(props: any) {
             <p>Fee by size: 4.99%.</p>
         </div>
     ),[])
+
+    const handleStas3 = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputStas3(Number(event.target.value));
+        setSats(Number(event.target.value));
+        setStasCurIndex(3);
+    }
+
+    const handleSats = (curIndex: number, num: number)=> {
+        setStasCurIndex(curIndex);
+        if (curIndex !== 3) {
+            setSats(num);
+            return;
+        }
+        setSats(inputStas3);
+    }
+    const goBackFlow1 = () => {
+        handleBackFlow2(flowName, 1);
+    }
+    const go2Pay = () => {
+        console.log('第一个页面的表单数据', formData);
+        console.log('第二个页面的sats选择', sats);
+        handleBackFlow2(flowName, 3);
+    }
     
 
     return (
@@ -28,7 +54,7 @@ export default function Etching2(props: any) {
             <div className="etch-blockBox">
                 <EtchFlowPath flowType={2} flowName="etching"></EtchFlowPath>
                 <div className="etch-descBox">
-                    <div className="etch-descTopBackBox">
+                    <div className="etch-descTopBackBox" onClick={goBackFlow1}>
                         <span className="etch-flowTopBackBtn"></span>
                         <span className="etch-flowTopBackTxt">Back</span>
                     </div>
@@ -49,22 +75,22 @@ export default function Etching2(props: any) {
 
             <div className="etch-blockBox etch-costBox">
                 <div className="etch-cardBox">
-                    <div>
+                    <div onClick={()=> handleSats(1, 8)} className={stasCurIndex===1?'cur':''}>
                         <p className="etch-cardTopTit">Economy</p>
                         <p className="etch-cardCenterNum">8</p>
                         <p className="etch-cardSats">sats/vB</p>
                         <p className="etch-cardWithin">Within hours to days</p>
                     </div>
-                    <div>
+                    <div onClick={()=> handleSats(2, 12)} className={stasCurIndex===2?'cur':''}>
                         <p className="etch-cardTopTit">Normal</p>
                         <p className="etch-cardCenterNum">12</p>
                         <p className="etch-cardSats">sats/vB</p>
                         <p className="etch-cardWithin">Within an hour</p>
                     </div>
-                    <div>
+                    <div onClick={()=> handleSats(3, 25)} className={stasCurIndex===3?'cur':''}>
                         <p className="etch-cardTopTit">Custom</p>
                         <div className="etch-cardCustomInput">
-                            <input type="text" value="25" />
+                            <input type="text" value={inputStas3} onChange={handleStas3} />
                         </div>
                         <p className="etch-cardSats">sats/vB</p>
                         <p className="etch-cardWithin">Within 30 mins</p>
@@ -125,7 +151,7 @@ export default function Etching2(props: any) {
                     <span className="etch-balanceTxt">Balance</span>
                     <span className="etch-balanceNum">1.23456789 BTC</span>
                 </div>
-                <div className="etch-bottomBtn">Pay & Etching</div>
+                <div className="etch-bottomBtn" onClick={go2Pay}>Pay & Etching</div>
             </div>
             
         </>

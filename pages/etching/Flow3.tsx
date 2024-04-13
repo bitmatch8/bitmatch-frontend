@@ -1,9 +1,25 @@
 import React, { useMemo } from "react"
 import EtchFlowPath from "@/components/EtchFlowPath"
-import TextTooltip from "@/components/TextTooltip"
+import copy from "copy-to-clipboard"
 
 export default function Etching3(props: any) {
+    const { flowName, handleBackFlow3 } = props;
 
+    const [isCopiedHash, setIsCopiedHash] = React.useState(false);
+
+    const go2Flow1 = () => {
+        handleBackFlow3(flowName);
+    }
+    const go2mmp = () => {
+        window.location.href = 'https://mempool.space/zh/';
+    }
+    const go2CopyHash = () => {
+        copy('hash link');
+        setIsCopiedHash(true);
+        setTimeout(() => {
+            setIsCopiedHash(false);
+        }, 3000);
+    }
 
     return (
         <>
@@ -21,10 +37,16 @@ export default function Etching3(props: any) {
                 <p className="etch-submited">Tx submited</p>
                 <p className="etch-txHash">
                     Tx Hash:  d3b10b02def8086cdd1a…df5bc9c20325acf8c0a80b8
-                    <span className="etch-copyBtn"></span>
-                    <span className="etch-jumpBtn"></span>
+                    <div className="etch-copyBtnBox">
+                        <span className="etch-copyBtn" onClick={go2CopyHash}></span>
+                        <div className="etch-tipscard" style={{ display: isCopiedHash ? 'block' : 'none' }}>
+                            <span></span>
+                            <p>copy success!</p>
+                        </div>
+                    </div>
+                    <span className="etch-jumpBtn" onClick={go2mmp}></span>
                 </p>
-                <div className="etch-bottomBtn etch-mt200">Back</div>
+                <div className="etch-bottomBtn etch-mt200" onClick={go2Flow1}>Back</div>
             </div>
         </>
         
