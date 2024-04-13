@@ -1,8 +1,17 @@
-import React, { useMemo } from "react"
-import EtchFlowPath from "@/components/EtchFlowPath"
-import TextTooltip from "@/components/TextTooltip"
-import { Switch } from "@mui/material"
-
+import React, { useMemo } from "react";
+import EtchFlowPath from "@/components/EtchFlowPath";
+import TextTooltip from "@/components/TextTooltip";
+import { Switch } from "@mui/material";
+import {
+  useSelector,
+  selectWallter,
+  WallterType,
+  useDispatch,
+  connectUnisat,
+} from "@/lib/redux";
+import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
+import useModal from "@/hook/useModal";
+import bitcoin from "bitcoinjs-lib";
 
 export default function Etching1(props: any) {
     const { handleBackData } = props;
@@ -22,188 +31,211 @@ export default function Etching1(props: any) {
     const [offset, setOffset] = React.useState('');
     const [startHeight, setStartHeight] = React.useState('');
     const [endHeight, setEndHeight] = React.useState('');
+    const {
+        address,
+        balance,
+        status: connectStatus,
+      } = useSelector(selectWallter);
+      const dispatch = useDispatch();
+      const [onConnect, onDismiss] = useModal(
+        <ConnectModal
+          onDismiss={() => onDismiss()}
+          connect={(type: WallterType) => {
+            dispatch(connectUnisat(type));
+            onDismiss();
+          }}
+        ></ConnectModal>
+      ); //钱包弹窗
     
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked(event.target.checked);
+  const RuneTipText = useMemo(
+    () => (
+      <div className="etch-tipInnerBox">
+        <p>12 characters</p>
+        <p>Can contain a "·" between characters.</p>
+      </div>
+    ),
+    []
+  );
+  const RuneOffsetTipText = useMemo(
+    () => (
+      <div className="etch-tipInnerBox">
+        <p>After Etching to the height to start Mint</p>
+      </div>
+    ),
+    []
+  );
+  const RuneHieghtTipText = useMemo(
+    () => (
+      <div className="etch-tipInnerBox">
+        <p>Open Minting start height and end height</p>
+      </div>
+    ),
+    []
+  );
+
+  const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRune(event.target.value);
+}
+const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const runeVal: string = event.target.value;
+    const runeValLength = runeVal.length;
+    if (runeVal[0] === '·' || runeVal[runeValLength-1] === '·') {
+        setRuneErrorTip('The first and last characters cannot be ·');
+        setRune('');
+        return;
+    }
+    let charArr = [];
+    let isUpperLetter = false; // 验证是否是大写字母
+    for (let i=0;i<runeValLength;i++) {
+        if (runeVal[i] !== '·') {
+            charArr.push(runeVal[i]);
+            if (runeVal.charCodeAt(i)>=0x0041 && runeVal.charCodeAt(i)<=0x005A) {
+                isUpperLetter = false;
+            } else {
+                isUpperLetter = true;
+            }
+        }
+    }
+    if (charArr.length !== 12) {
+        setRuneErrorTip('Rune must 12 letters');
+        setRune('');
+        return;
+    }
+    if (isUpperLetter) {
+        setRuneErrorTip('Characters must be all uppercase');
+        setRune('');
+        return;
+    }
+    setRuneErrorTip('');
+}
+const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPremine(event.target.value);
+}
+const checkPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const premineAmontValue: string = event.target.value;
+    if (isNaN(Number(premineAmontValue)) || Number(premineAmontValue)<=0 || Number(premineAmontValue)%1!==0) {
+        setPremineErrorTip('Premine Amount must be a positive integer');
+        setPremine('');
+        return;
+    }
+    setPremineErrorTip('');
+}
+const setPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPremineReceiveAddress(event.target.value);
+}
+const checkPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const premineAddressValue = event.target.value;
+    if (!premineAddressValue) {
+        setPremineReceiveAddressErrorTip('Please input Premine Receive Address');
+        return;
+    }
+    setPremineReceiveAddressErrorTip('');
+}
+const setPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCap(event.target.value);
+}
+const checkPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let pubAmontValue = event.target.value;
+    if (isNaN(Number(pubAmontValue)) || Number(pubAmontValue)<=0 || Number(pubAmontValue)%1!==0) {
+        setCapErrorTip('Public Amount must be a positive integer');
+        setCap('');
+        return;
+    }
+    setCapErrorTip('');
+}
+const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(event.target.value);
+}
+const checkMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const mintAmountValue = event.target.value;
+    if (isNaN(Number(mintAmountValue)) || Number(mintAmountValue)<=0 || Number(mintAmountValue)%1!==0) {
+        setAmountErrorTip('Mint Amount must be a positive integer');
+        setAmount('');
+        return;
+    }
+    if (Number(mintAmountValue) > Number(cap)) {
+        setAmountErrorTip('Mint Amount cannot be greater than Public Amount');
+        setAmount('');
+        return;
+    }
+    setAmountErrorTip('');
+}
+const setOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setOffset(event.target.value);
+}
+const setStartHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStartHeight(event.target.value);
+}
+const setEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEndHeight(event.target.value);
+}
+
+const checkFormData = ()=> {
+    if (!rune) {
+        setRuneErrorTip('Please input Rune');
+        return false;
+    }
+    if (runeErrorTip) {
+        return false;
+    }
+    if (!premine) {
+        setPremineErrorTip('Please input Premine Amount');
+        return false;
+    }
+    if (premineErrorTip) {
+        return false;
+    }
+    if (!premineReceiveAddress) {
+        setPremineReceiveAddressErrorTip('Please input Premine Receive Address');
+        return false;
+    }
+    if (checked) {
+        if (!cap) {
+            setCapErrorTip('Please input Public Amount');
+            return false;
+        }
+        if (capErrorTip) {
+            return false;
+        }
+        if (!amount) {
+            setCapErrorTip('Please input Mint Amount');
+            return false;
+        }
+        if (amountErrorTip) {
+            return false;
+        }
+    }
+
+
+    return true;
+}
+
+const assembleFormData = () => {
+    const checkFormResult = checkFormData();
+    if (!checkFormResult) {
+        return;
+    }
+    let callbackData: any = {
+        flowIndex: 2,
+        rune,
+        divisibility: 0,
+        premine,
+        premineReceiveAddress,
+        cap,
+        amount,
     };
-
-    const RuneTipText = useMemo(()=>(
-        <div className="etch-tipInnerBox">
-            <p>12 characters</p>
-            <p>Can contain a "·" between characters.</p>
-        </div>
-    ),[])
-    const RuneOffsetTipText = useMemo(()=>(
-        <div className="etch-tipInnerBox">
-            <p>After Etching to the height to start Mint</p>
-        </div>
-    ),[])
-    const RuneHieghtTipText = useMemo(()=>(
-        <div className="etch-tipInnerBox">
-            <p>Open Minting start height and end height</p>
-        </div>
-    ),[])
-
-    const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRune(event.target.value);
+    callbackData['start'] = offset + startHeight;
+    callbackData['end'] = offset + endHeight;
+    if (offOrHei === 'height') {
+        callbackData['start'] = startHeight;
+        callbackData['end'] = endHeight;
     }
-    const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const runeVal: string = event.target.value;
-        const runeValLength = runeVal.length;
-        if (runeVal[0] === '·' || runeVal[runeValLength-1] === '·') {
-            setRuneErrorTip('The first and last characters cannot be ·');
-            setRune('');
-            return;
-        }
-        let charArr = [];
-        let isUpperLetter = false; // 验证是否是大写字母
-        for (let i=0;i<runeValLength;i++) {
-            if (runeVal[i] !== '·') {
-                charArr.push(runeVal[i]);
-                if (runeVal.charCodeAt(i)>=0x0041 && runeVal.charCodeAt(i)<=0x005A) {
-                    isUpperLetter = false;
-                } else {
-                    isUpperLetter = true;
-                }
-            }
-        }
-        if (charArr.length !== 12) {
-            setRuneErrorTip('Rune must 12 letters');
-            setRune('');
-            return;
-        }
-        if (isUpperLetter) {
-            setRuneErrorTip('Characters must be all uppercase');
-            setRune('');
-            return;
-        }
-        setRuneErrorTip('');
-    }
-    const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPremine(event.target.value);
-    }
-    const checkPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const premineAmontValue: string = event.target.value;
-        if (isNaN(Number(premineAmontValue)) || Number(premineAmontValue)<=0 || Number(premineAmontValue)%1!==0) {
-            setPremineErrorTip('Premine Amount must be a positive integer');
-            setPremine('');
-            return;
-        }
-        setPremineErrorTip('');
-    }
-    const setPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPremineReceiveAddress(event.target.value);
-    }
-    const checkPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const premineAddressValue = event.target.value;
-        if (!premineAddressValue) {
-            setPremineReceiveAddressErrorTip('Please input Premine Receive Address');
-            return;
-        }
-        setPremineReceiveAddressErrorTip('');
-    }
-    const setPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCap(event.target.value);
-    }
-    const checkPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let pubAmontValue = event.target.value;
-        if (isNaN(Number(pubAmontValue)) || Number(pubAmontValue)<=0 || Number(pubAmontValue)%1!==0) {
-            setCapErrorTip('Public Amount must be a positive integer');
-            setCap('');
-            return;
-        }
-        setCapErrorTip('');
-    }
-    const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAmount(event.target.value);
-    }
-    const checkMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const mintAmountValue = event.target.value;
-        if (isNaN(Number(mintAmountValue)) || Number(mintAmountValue)<=0 || Number(mintAmountValue)%1!==0) {
-            setAmountErrorTip('Mint Amount must be a positive integer');
-            setAmount('');
-            return;
-        }
-        if (Number(mintAmountValue) > Number(cap)) {
-            setAmountErrorTip('Mint Amount cannot be greater than Public Amount');
-            setAmount('');
-            return;
-        }
-        setAmountErrorTip('');
-    }
-    const setOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOffset(event.target.value);
-    }
-    const setStartHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStartHeight(event.target.value);
-    }
-    const setEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEndHeight(event.target.value);
-    }
-
-    const checkFormData = ()=> {
-        if (!rune) {
-            setRuneErrorTip('Please input Rune');
-            return false;
-        }
-        if (runeErrorTip) {
-            return false;
-        }
-        if (!premine) {
-            setPremineErrorTip('Please input Premine Amount');
-            return false;
-        }
-        if (premineErrorTip) {
-            return false;
-        }
-        if (!premineReceiveAddress) {
-            setPremineReceiveAddressErrorTip('Please input Premine Receive Address');
-            return false;
-        }
-        if (checked) {
-            if (!cap) {
-                setCapErrorTip('Please input Public Amount');
-                return false;
-            }
-            if (capErrorTip) {
-                return false;
-            }
-            if (!amount) {
-                setCapErrorTip('Please input Mint Amount');
-                return false;
-            }
-            if (amountErrorTip) {
-                return false;
-            }
-        }
-
-
-        return true;
-    }
-
-    const assembleFormData = () => {
-        const checkFormResult = checkFormData();
-        if (!checkFormResult) {
-            return;
-        }
-        let callbackData: any = {
-            flowIndex: 2,
-            rune,
-            divisibility: 0,
-            premine,
-            premineReceiveAddress,
-            cap,
-            amount,
-        };
-        callbackData['start'] = offset + startHeight;
-        callbackData['end'] = offset + endHeight;
-        if (offOrHei === 'height') {
-            callbackData['start'] = startHeight;
-            callbackData['end'] = endHeight;
-        }
-        handleBackData(callbackData);
-    }
+    handleBackData(callbackData);
+}
 
     return (
         <div className="etch-blockBox">
@@ -357,21 +389,30 @@ export default function Etching1(props: any) {
                         
                     </div>
                 }
-
-            </div>
-
-            <div className="etch-bottomBalanceBox">
-                <span className="etch-balanceTxt">Balance</span>
-                <span className="etch-balanceNum">1.23456789 BTC</span>
-            </div>
-            <div className="etch-bottomBtn">Connect wallet</div>
-            <div className="etch-bottomBtn" onClick={assembleFormData}>
-                Next
-            </div>
-            <div className="etch-bottomBtn">
-                Next
-                <span className="etch-bottomBtnLoading"></span>
-            </div>
         </div>
-    )
+
+      <div className="etch-bottomBalanceBox">
+        <span className="etch-balanceTxt">Balance</span>
+        <span className="etch-balanceNum">{balance.total / 1e8} BTC</span>
+      </div>
+      {address ? (
+        <>
+          {connectStatus === "loading" ? (
+            <div className="etch-bottomBtn">
+              Next
+              <span className="etch-bottomBtnLoading"></span>
+            </div>
+          ) : (
+            <div className="etch-bottomBtn" onClick={assembleFormData}>
+              Next
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="etch-bottomBtn" onClick={onConnect}>
+          Connect wallet
+        </div>
+      )}
+    </div>
+  );
 }
