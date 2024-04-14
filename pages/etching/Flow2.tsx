@@ -156,7 +156,7 @@ export default function Etching2(props: any) {
 
       if (txid) {
         console.log("txid", txid); //TODO: 吧hash带到第三步
-        handleBackFlow2(flowName, 3);
+        handleBackFlow2(flowName, 3, txid);
       } else {
         setEtchingLoading(false);
         alert("Error");
