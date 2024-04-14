@@ -1,4 +1,5 @@
 import React from "react"
+import { useRouter } from 'next/router';
 import Page from "@/components/Page"
 import History from "./History"
 import Etching1 from "./Etching1"
@@ -9,9 +10,12 @@ import Transfer1 from "./Transfer1"
 
 export default function IndexPage() {
     const [flowName, setFlowName] = React.useState('etching');
-    const [flowIndex, setFlowIndex] = React.useState(1);
+    const [flowIndex, setFlowIndex] = React.useState(2);
     const [formData, setFormData] = React.useState({});
     const [flow3Hash, setFlow3Hash] = React.useState('');
+    const [searchVal, setSearchVal] = React.useState('');
+
+    const router = useRouter();
 
     const getFlow1Data = (data: any) => {
         const { flowIndex } = data;
@@ -31,6 +35,16 @@ export default function IndexPage() {
         setFlowIndex(1);
     }
 
+    const setSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchVal(event.target.value);
+    };
+    const go2SearchPage = ()=> {
+        if (!searchVal) {
+            return;
+        }
+        router.push('/search?q='+searchVal);
+    }
+
     return (
         <Page>
             <div className="etching-topHeader">
@@ -39,8 +53,8 @@ export default function IndexPage() {
                     <div className="etch-bottomLine"></div>
                 </div>
                 <div className="etch-topRightSearchBox">
-                    <input type="text" />
-                    <span className="etch-topRightBtn"></span>
+                    <input type="text" onChange={setSearchValue} value={searchVal} />
+                    <span className="etch-topRightBtn" onClick={go2SearchPage}></span>
                 </div>
             </div>
             <div className="etch-tabox">

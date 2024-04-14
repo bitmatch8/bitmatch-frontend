@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, WallterType } from "@/lib/redux";
 import { useState } from "react";
+import { resolve } from "path";
 
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
@@ -17,6 +18,20 @@ export default function Etching2(props: any) {
   const [inputStas3, setInputStas3] = React.useState(25);
   const [etchingLoading, setEtchingLoading] = useState(false);
   const { address, balance, wallterType } = useSelector(selectWallter);
+  const [satsInRuneDoller, setSatsInRuneDoller] = React.useState('');
+
+  const getBTCPrice = () => {
+    return new Promise((resolve, reject) => {
+      fetch('https://api.pro.coinbase.com/products/BTC-USD/ticker')
+      .then(response => response.json())
+      .then(data => {
+          const bitcoinPrice = data.price;
+          resolve(bitcoinPrice);
+      })
+      .catch(error => console.error('获取比特币价格时出错：', error));
+    })
+  }
+
   const wallet =
     wallterType === "unisat" ? window.unisat : window.okxwallet?.bitcoin;
 
@@ -198,6 +213,16 @@ export default function Etching2(props: any) {
     }
   };
 
+  const getDollers = async ()=> {
+    const btcPrice = await getBTCPrice();
+    console.log('==btc price==::', btcPrice);
+    setSatsInRuneDoller('0.339');
+  }
+
+  useEffect(() => {
+    getDollers();
+  }, [])
+
   return (
     <>
       <div className="etch-blockBox">
@@ -272,7 +297,7 @@ export default function Etching2(props: any) {
             </TextTooltip>
             <span className="etch-countNull"></span>
             <span className="etch-countValue">1 X 546 sats</span>
-            <span className="etch-countDoller">~$0.39</span>
+            <span className="etch-countDoller">~${satsInRuneDoller}</span>
           </div>
           <div className="etch-countItem">
             <span className="etch-countKeyName">Network Fee：</span>
