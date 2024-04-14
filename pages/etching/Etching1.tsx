@@ -455,7 +455,7 @@ const assembleFormData = () => {
       {address ? (
         <>
           {connectStatus === "loading" ? (
-            <div className="etch-bottomBtn">
+            <div className="etch-bottomBtn etch-bottomBtnLoading">
               Next
               <span className="etch-bottomBtnLoading"></span>
             </div>

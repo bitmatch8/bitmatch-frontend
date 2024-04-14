@@ -395,6 +395,9 @@ input:focus {
         -webkit-animation: btnSpin 2s linear infinite;
     }
 }
+.etch-bottomBtnLoading {
+    background: #292C30;
+}
 @keyframes btnSpin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
