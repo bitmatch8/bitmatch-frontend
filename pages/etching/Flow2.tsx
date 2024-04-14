@@ -4,6 +4,7 @@ import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, WallterType } from "@/lib/redux";
+import { useState } from "react";
 
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
@@ -11,7 +12,10 @@ export default function Etching2(props: any) {
   const [sats, setSats] = React.useState(8);
   const [stasCurIndex, setStasCurIndex] = React.useState(1);
   const [inputStas3, setInputStas3] = React.useState(25);
-  const { address, balance } = useSelector(selectWallter);
+  const [etchingLoading, setEtchingLoading] = useState(false);
+  const { address, balance, wallterType } = useSelector(selectWallter);
+  const wallet =
+    wallterType === "unisat" ? window.unisat : window.okxwallet?.bitcoin;
 
   const SatsTipText = useMemo(
     () => (
@@ -57,7 +61,7 @@ export default function Etching2(props: any) {
   };
 
   //Sign & Pay Button
-  const go2Pay = () => {
+  const go2Pay = async () => {
     console.log("第一个页面的表单数据", formData);
     console.log("第二个页面的sats选择", sats);
 
@@ -72,7 +76,6 @@ export default function Etching2(props: any) {
       rune,
       start,
       timeType,
-      offset,
     } = formData;
 
     const initRunesStone = {
@@ -90,8 +93,8 @@ export default function Etching2(props: any) {
       terms = {
         ...terms,
         offset: {
-          start: BigInt(offset + start),
-          end: BigInt(offset + end),
+          start: BigInt(start),
+          end: BigInt(end),
         },
       };
     } else {
@@ -110,19 +113,54 @@ export default function Etching2(props: any) {
       },
     };
 
-    //1.生成Buffer
-    const opReturnOutput = encodeRunestoneUnsafe(runesStone);
-    //2.sign/push
-    // try {
-    //   const payment = {
-    //     addressType: psbt.getUnisatAddressType(address as string), //TODO: 映射不同的addressType
-    //     address: address,
-    //     publicKey: pubkey,
-    //     amount: 1000, //TODO: 550写死
-    //   };
-    // }
+    // const runesStone = {
+    //   etching: {
+    //     rune: "RUNE",
+    //     symbol: "$",
+    //     premine: BigInt(10000),
+    //     terms: {
+    //       cap: BigInt(10000),
+    //       amount: BigInt(10),
+    //     },
+    //   },
+    //   int: {
+    //     block: 2585958,
+    //     tx: 114,
+    //   },
+    //   pointer: 0,
+    // };
 
-    handleBackFlow2(flowName, 3);
+    setEtchingLoading(true);
+    try {
+      //1.生成Buffer
+      const opReturnOutput = encodeRunestoneUnsafe(runesStone);
+      console.log("opReturnOutput", opReturnOutput);
+      //2.sign/push
+      const payment = {
+        addressType: psbt.getUnisatAddressType(address as string),
+        address: address,
+        publicKey: await wallet.getPublicKey(),
+        amount: psbt.LOWEST_FEE,
+      };
+      const txid = await signPsbt(
+        payment,
+        null,
+        premineReceiveAddress,
+        1,
+        opReturnOutput,
+        1
+      );
+
+      if (txid) {
+        console.log("txid", txid); //TODO: 吧hash带到第三步
+        handleBackFlow2(flowName, 3);
+      } else {
+        setEtchingLoading(false);
+        alert("Error");
+      }
+    } catch {
+      setEtchingLoading(false);
+    }
   };
 
   //signPsbt
@@ -143,17 +181,15 @@ export default function Etching2(props: any) {
         opReturnOutput,
         opNum
       );
+      console.log("unsignedPsbt", unsignedPsbt);
 
       if (!unsignedPsbt) {
         throw new Error();
       }
 
-      // const unisat = (window as any).unisat;
-
-      // const signedPsbtBase64 = await unisat.signPsbt(unsignedPsbt.psbtBase64);
-      // const txid = await unisat.pushPsbt(signedPsbtBase64);
-
-      // return txid;
+      const signedPsbtBase64 = await wallet.signPsbt(unsignedPsbt.psbtBase64);
+      const txid = await wallet.pushPsbt(signedPsbtBase64);
+      return txid;
     } catch (error) {
       throw new Error();
     }
@@ -273,11 +309,26 @@ export default function Etching2(props: any) {
 
         <div className="etch-bottomBalanceBox">
           <span className="etch-balanceTxt">Balance</span>
-          <span className="etch-balanceNum">1.23456789 BTC</span>
+          <span className="etch-balanceNum">{balance.total / 1e8} BTC</span>
         </div>
-        <div className="etch-bottomBtn" onClick={go2Pay}>
-          Pay & Etching
-        </div>
+        {balance.total < psbt.LOWEST_FEE ? (
+          <div className="etch-bottomBtn etch-bottomBtnLoading">
+            Insufficient Balance
+          </div>
+        ) : (
+          <>
+            {etchingLoading ? (
+              <div className="etch-bottomBtn etch-bottomBtnLoading">
+                Etching
+                <span className="etch-bottomBtnLoading"></span>
+              </div>
+            ) : (
+              <div className="etch-bottomBtn" onClick={go2Pay}>
+                Pay & Etching
+              </div>
+            )}
+          </>
+        )}
       </div>
     </>
   );
