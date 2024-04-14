@@ -3,7 +3,7 @@ import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
-import { useSelector, selectWallter, WallterType } from "@/lib/redux";
+import { useSelector, selectWallter } from "@/lib/redux";
 
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
@@ -16,20 +16,20 @@ export default function Etching2(props: any) {
   const [inputStas3, setInputStas3] = React.useState(25);
   const [etchingLoading, setEtchingLoading] = useState(false);
   const { address, balance, wallterType } = useSelector(selectWallter);
-  const [satsInRuneDoller, setSatsInRuneDoller] = React.useState('');
-  const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState('');
+  const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
+  const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState("");
 
   const getBTCPrice = () => {
     return new Promise((resolve, reject) => {
-      fetch('https://api.pro.coinbase.com/products/BTC-USD/ticker')
-      .then(response => response.json())
-      .then(data => {
+      fetch("https://api.pro.coinbase.com/products/BTC-USD/ticker")
+        .then((response) => response.json())
+        .then((data) => {
           const bitcoinPrice = data.price;
           resolve(bitcoinPrice);
-      })
-      .catch(error => console.error('获取比特币价格时出错：', error));
-    })
-  }
+        })
+        .catch((error) => console.error("获取比特币价格时出错：", error));
+    });
+  };
 
   const wallet =
     wallterType === "unisat" ? window.unisat : window.okxwallet?.bitcoin;
@@ -78,21 +78,64 @@ export default function Etching2(props: any) {
   };
 
   //Sign & Pay Button
+  //Sign & Pay Button
   const go2Pay = async () => {
     console.log("第一个页面的表单数据", formData);
     console.log("第二个页面的sats选择", sats);
+    setEtchingLoading(true);
+    try {
+      //0.构建数据
+      const {
+        mintAmount, //页面上mint第一步的Amount
+        premineReceiveAddress, //页面上etching/min/transfer第一步三个Receive Address相关字段都传这个
+      } = formData;
+      const runesStone = generateRunesStoneData();
+      //1.生成Buffer
+      const opReturnOutput = encodeRunestoneUnsafe(runesStone);
+      console.log("opReturnOutput", opReturnOutput);
+      //2.sign/push
+      const payment = {
+        addressType: psbt.getUnisatAddressType(address as string),
+        address: address,
+        publicKey: await wallet.getPublicKey(),
+        amount: psbt.LOWEST_FEE,
+      };
+      //3.得到交易结果
+      const txid = await signPsbt(
+        payment,
+        null,
+        premineReceiveAddress,
+        sats,
+        opReturnOutput,
+        flowName == "mint" ? mintAmount : 1
+      );
 
-    //0.构建数据
+      if (txid) {
+        console.log("txid", txid);
+        handleBackFlow2(flowName, 3, txid);
+      } else {
+        console.log("Error");
+      }
+      setEtchingLoading(false);
+    } catch {
+      setEtchingLoading(false);
+    }
+  };
+
+  //生成 runesStone 数据
+  const generateRunesStoneData = () => {
     const {
       amount,
       cap,
       divisibility,
       end,
       premine,
-      premineReceiveAddress,
       rune,
       start,
       timeType,
+      transferAmount, //页面上transfer第一步的Amount
+      tx, //根据符文名称请求符文信息接口，接口返回的 tx hash/index
+      block, //根据符文名称请求符文信息接口，接口返回的 block height
     } = formData;
 
     let runesStone: RunestoneSpec = {};
@@ -133,40 +176,28 @@ export default function Etching2(props: any) {
         },
       };
     } else if (flowName === "mint") {
-    } else if (flowName == "transfer") {
-    }
-
-    setEtchingLoading(true);
-    try {
-      //1.生成Buffer
-      const opReturnOutput = encodeRunestoneUnsafe(runesStone);
-      console.log("opReturnOutput", opReturnOutput);
-      //2.sign/push
-      const payment = {
-        addressType: psbt.getUnisatAddressType(address as string),
-        address: address,
-        publicKey: await wallet.getPublicKey(),
-        amount: psbt.LOWEST_FEE,
+      runesStone = {
+        mint: {
+          block: BigInt(block),
+          tx: tx,
+        },
+        pointer: 0,
       };
-      const txid = await signPsbt(
-        payment,
-        null,
-        premineReceiveAddress,
-        sats,
-        opReturnOutput,
-        1
-      );
-
-      if (txid) {
-        console.log("txid", txid);
-        handleBackFlow2(flowName, 3, txid);
-      } else {
-        setEtchingLoading(false);
-        alert("Error");
-      }
-    } catch {
-      setEtchingLoading(false);
+    } else if (flowName == "transfer") {
+      runesStone = {
+        edicts: [
+          {
+            id: {
+              block: BigInt(block),
+              tx: tx,
+            },
+            amount: BigInt(transferAmount),
+            output: 0,
+          },
+        ],
+      };
     }
+    return runesStone;
   };
 
   //signPsbt
@@ -205,9 +236,9 @@ export default function Etching2(props: any) {
     const bitcoinAmount = sats / 100000000; // 将 sats 转换为比特币
     const amountInUSD = bitcoinAmount * Number(bitcoinPriceUSD); // 将比特币转换为美元
     return amountInUSD;
-  }
+  };
 
-  const getDollers = async ()=> {
+  const getDollers = async () => {
     const btcPrice = await getBTCPrice();
     const satsDollerValue = satsToUSD(546, btcPrice);
     const satsDollerValueShow = Number(satsDollerValue).toFixed(2);
@@ -215,11 +246,11 @@ export default function Etching2(props: any) {
     const serviceFeeValue = satsToUSD(2000, btcPrice);
     const serviceFeeValueShow = Number(serviceFeeValue).toFixed(2);
     setServiceFeeeDolloer(serviceFeeValueShow);
-  }
+  };
 
   useEffect(() => {
     getDollers();
-  }, [])
+  }, []);
 
   const btnText = useMemo(() => {
     if (flowName === "etching") {
@@ -331,7 +362,7 @@ export default function Etching2(props: any) {
             </TextTooltip>
             <span className="etch-countNull"></span>
             <span className="etch-countValue">2000 sats</span>
-            <span className="etch-countDoller">~${ serviceFeeeDolloer }</span>
+            <span className="etch-countDoller">~${serviceFeeeDolloer}</span>
           </div>
           <div className="etch-countItem">
             <span className="etch-countKeyName">Fee by Size：</span>
