@@ -8,6 +8,9 @@ import { useSelector, selectWallter, WallterType } from "@/lib/redux";
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
 
+  let formDataBack = JSON.parse(JSON.stringify(formData));
+  delete formDataBack.flowIndex;
+
   const [sats, setSats] = React.useState(8);
   const [stasCurIndex, setStasCurIndex] = React.useState(1);
   const [inputStas3, setInputStas3] = React.useState(25);
@@ -180,7 +183,7 @@ export default function Etching2(props: any) {
               <span>Detail：</span>
               <span>～ 88vB</span>
             </p>
-            <div className="etch-descWord">{`{"p":"brc-20","op":"deploy","tick":"A·B·C·A·W·E·V·R·S·F·E·E","lim":"1000","max":"21000000","lim":"1000","max":"21000000","lim":"1000","max":"21000000","lim":"1000","max":"21000000","lim":"1000","max":"21000000","lim":"1000","max":"21000000","lim":"1000","max":"21000000"}`}</div>
+            <div className="etch-descWord">{JSON.stringify(formDataBack)}</div>
           </div>
         </div>
       </div>
