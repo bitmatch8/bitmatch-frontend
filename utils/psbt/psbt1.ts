@@ -2,9 +2,9 @@ import { base64, hex } from "@scure/base";
 import * as btc from "@scure/btc-signer";
 import * as secp256k1 from "@noble/secp256k1";
 import axios from "axios";
-import { useSelector, selectWallter } from "@/lib/redux";
+// import { useSelector, selectWallter } from "@/lib/redux";
 
-const { network } = useSelector(selectWallter);
+const network = "testnet";
 
 const SERVER_URL =
   network === "testnet"
