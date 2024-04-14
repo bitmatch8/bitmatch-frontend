@@ -44,6 +44,10 @@ export default function IndexPage() {
         }
         router.push('/search?q='+searchVal);
     }
+    const setFlowNameTab = (name: string) => {
+        setFlowName(name);
+        setFlowIndex(1);
+    }
 
     return (
         <Page>
@@ -58,9 +62,9 @@ export default function IndexPage() {
                 </div>
             </div>
             <div className="etch-tabox">
-                <div className="etch-tabCur" onClick={()=> setFlowName('etching')}>Etching</div>
-                <div onClick={()=> setFlowName('mint')}>Mint</div>
-                <div onClick={()=> setFlowName('transfer')}>Transfer</div>
+                <div className={flowName==='etching'?'etch-tabCur':''} onClick={()=> setFlowNameTab('etching')}>Etching</div>
+                <div className={flowName==='mint'?'etch-tabCur':''} onClick={()=> setFlowNameTab('mint')}>Mint</div>
+                <div className={flowName==='transfer'?'etch-tabCur':''} onClick={()=> setFlowNameTab('transfer')}>Transfer</div>
             </div>
             <div className="etch-formFatherBox">
                 {
