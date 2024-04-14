@@ -162,20 +162,20 @@ export default function Mint1(props: any) {
                     <p className="etch-formErrorTip"></p>
                 </div>
                 <div className="etch-formItemBox">
-                <div className="etch-formTitleBox">
-                    <span className="etch-star">*</span>
-                    <span className="etch-itemTitle">Premine Receive Address</span>
-                </div>
-                <div className="etch-inputBox1">
-                    <input
-                    type="text"
-                    placeholder="bc1p…"
-                    value={premineReceiveAddress}
-                    onChange={setPremineRecAdd}
-                    onBlur={checkPremineRecAdd}
-                    />
-                </div>
-                <p className="etch-formErrorTip">{premineReceiveAddressErrorTip}</p>
+                    <div className="etch-formTitleBox">
+                        <span className="etch-star">*</span>
+                        <span className="etch-itemTitle">Premine Receive Address</span>
+                    </div>
+                    <div className="etch-inputBox1">
+                        <input
+                            type="text"
+                            placeholder="bc1p…"
+                            value={premineReceiveAddress}
+                            onChange={setPremineRecAdd}
+                            onBlur={checkPremineRecAdd}
+                            />
+                    </div>
+                    <p className="etch-formErrorTip">{premineReceiveAddressErrorTip}</p>
                 </div>
             </div>
 

@@ -74,7 +74,7 @@ export default function IndexPage() {
                     flowName==='mint'&&flowIndex===1 && <Mint1 handleBackData={getFlow1Data}></Mint1>
                 }
                 {
-                    flowName==='transfer'&&flowIndex===1 && <Transfer1></Transfer1>
+                    flowName==='transfer'&&flowIndex===1 && <Transfer1 handleBackData={getFlow1Data}></Transfer1>
                 }
                 {
                     flowIndex===2 && <Flow2 flowName={flowName} formData={formData} handleBackFlow2={getFlow2BackData}></Flow2>
