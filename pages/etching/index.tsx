@@ -67,7 +67,7 @@ export default function IndexPage() {
                     flowName==='etching'&&flowIndex===1 && <Etching1 handleBackData={getFlow1Data}></Etching1>
                 }
                 {
-                    flowName==='mint'&&flowIndex===1 && <Mint1></Mint1>
+                    flowName==='mint'&&flowIndex===1 && <Mint1 handleBackData={getFlow1Data}></Mint1>
                 }
                 {
                     flowName==='transfer'&&flowIndex===1 && <Transfer1></Transfer1>

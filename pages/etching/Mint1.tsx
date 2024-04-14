@@ -1,13 +1,42 @@
 import React, { useEffect } from "react"
 import EtchFlowPath from "@/components/EtchFlowPath"
+import {
+    useSelector,
+    selectWallter,
+    WallterType,
+    useDispatch,
+    connectUnisat,
+  } from "@/lib/redux";
+import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
+import useModal from "@/hook/useModal";
 
-export default function Etching1() {
+export default function Mint1(props: any) {
+    const { handleBackData } = props;
+
     const [rune, setRune] = React.useState("");
     const [runeErrorTip, setRuneErrorTip] = React.useState("");
     const [mintAmount, setMmintAmount] = React.useState(1);
     const [totalMintAmount, setTotalMintAmount] = React.useState(2100);
-    
+    const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
+    const [premineReceiveAddressErrorTip, setPremineReceiveAddressErrorTip] =
+    React.useState("");
 
+    const {
+        address,
+        balance,
+        status: connectStatus,
+      } = useSelector(selectWallter);
+      const dispatch = useDispatch();
+      const [onConnect, onDismiss] = useModal(
+        <ConnectModal
+          onDismiss={() => onDismiss()}
+          connect={(type: WallterType) => {
+            dispatch(connectUnisat(type));
+            onDismiss();
+          }}
+        ></ConnectModal>
+      ); //钱包弹窗
+    
     const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRune(event.target.value);
     };
@@ -47,7 +76,49 @@ export default function Etching1() {
         setRuneErrorTip("");
     };
     const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setMmintAmount(event.target.value);
+        setMmintAmount(Number(event.target.value));
+    };
+    const setPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPremineReceiveAddress(event.target.value);
+    };
+    const checkPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const premineAddressValue = event.target.value;
+        if (!premineAddressValue) {
+            setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
+            return;
+        }
+        setPremineReceiveAddressErrorTip("");
+    };
+
+    const checkFormData = () => {
+        if (!rune) {
+            setRuneErrorTip("Please input Rune");
+            return false;
+        }
+        if (runeErrorTip) {
+            return false;
+        }
+        if (!premineReceiveAddress) {
+            setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
+            return false;
+        }
+        return true;
+    }
+
+    const assembleFormData = () => {
+        const checkFormResult = checkFormData();
+        if (!checkFormResult) {
+            return;
+        }
+        let callbackData: any = {
+            flowIndex: 2,
+            rune,
+            divisibility: 0,
+            mintAmount: totalMintAmount,
+            premineReceiveAddress,
+        };
+        
+        handleBackData(callbackData);
     };
 
     useEffect(() => {
@@ -91,29 +162,45 @@ export default function Etching1() {
                     <p className="etch-formErrorTip"></p>
                 </div>
                 <div className="etch-formItemBox">
-                    <div className="etch-formTitleBox">
-                        <span className="etch-star">*</span>
-                        <span className="etch-itemTitle">Receive Address</span>
-                    </div>
-                    <div className="etch-inputBox1">
-                        <input type="text" placeholder="bc1p…" />
-                    </div>
-                    <p className="etch-formErrorTip"></p>
+                <div className="etch-formTitleBox">
+                    <span className="etch-star">*</span>
+                    <span className="etch-itemTitle">Premine Receive Address</span>
+                </div>
+                <div className="etch-inputBox1">
+                    <input
+                    type="text"
+                    placeholder="bc1p…"
+                    value={premineReceiveAddress}
+                    onChange={setPremineRecAdd}
+                    onBlur={checkPremineRecAdd}
+                    />
+                </div>
+                <p className="etch-formErrorTip">{premineReceiveAddressErrorTip}</p>
                 </div>
             </div>
 
             <div className="etch-bottomBalanceBox">
                 <span className="etch-balanceTxt">Balance</span>
-                <span className="etch-balanceNum">1.23456789 BTC</span>
+                <span className="etch-balanceNum">{balance.total / 1e8} BTC</span>
             </div>
-            <div className="etch-bottomBtn">Connect wallet</div>
-            <div className="etch-bottomBtn">
-                Next
-            </div>
-            <div className="etch-bottomBtn">
-                Next
-                <span className="etch-bottomBtnLoading"></span>
-            </div>
+            {address ? (
+                <>
+                {connectStatus === "loading" ? (
+                    <div className="etch-bottomBtn etch-bottomBtnLoading">
+                    Next
+                    <span className="etch-bottomBtnLoading"></span>
+                    </div>
+                ) : (
+                    <div className="etch-bottomBtn" onClick={assembleFormData}>
+                    Next
+                    </div>
+                )}
+                </>
+            ) : (
+                <div className="etch-bottomBtn" onClick={onConnect}>
+                Connect wallet
+                </div>
+            )}
         </div>
     )
 }
