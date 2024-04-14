@@ -12,7 +12,7 @@ export default function Etching1() {
 
     return (
         <div className="etch-blockBox">
-            <EtchFlowPath flowType={1} flowName="mint"></EtchFlowPath>
+            <EtchFlowPath flowType={1} flowName="transfer"></EtchFlowPath>
             <div className="etch-formBox">
                 <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">

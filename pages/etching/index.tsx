@@ -10,7 +10,7 @@ import Transfer1 from "./Transfer1"
 
 export default function IndexPage() {
     const [flowName, setFlowName] = React.useState('etching');
-    const [flowIndex, setFlowIndex] = React.useState(2);
+    const [flowIndex, setFlowIndex] = React.useState(1);
     const [formData, setFormData] = React.useState({});
     const [flow3Hash, setFlow3Hash] = React.useState('');
     const [searchVal, setSearchVal] = React.useState('');
@@ -58,9 +58,9 @@ export default function IndexPage() {
                 </div>
             </div>
             <div className="etch-tabox">
-                <div className="etch-tabCur">Etching</div>
-                <div>Mint</div>
-                <div>Transfer</div>
+                <div className="etch-tabCur" onClick={()=> setFlowName('etching')}>Etching</div>
+                <div onClick={()=> setFlowName('mint')}>Mint</div>
+                <div onClick={()=> setFlowName('transfer')}>Transfer</div>
             </div>
             <div className="etch-formFatherBox">
                 {
