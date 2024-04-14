@@ -2,16 +2,10 @@ import { base64, hex } from "@scure/base";
 import * as btc from "@scure/btc-signer";
 import * as secp256k1 from "@noble/secp256k1";
 import axios from "axios";
-// import { useSelector, selectWallter } from "@/lib/redux";
 
-const network = "testnet";
+const SERVER_URL = "https://mempool.space/testnet/api";
 
-const SERVER_URL =
-  network === "testnet"
-    ? "https://mempool.space/testnet/api"
-    : "https://mempool.space/api";
-
-const NETWORK = network === "testnet" ? btc.TEST_NETWORK : btc.NETWORK;
+const NETWORK = btc.TEST_NETWORK;
 const MIN_RELAY_FEE = 1000;
 
 const DUMMY_PRIVATEKEY =
@@ -96,7 +90,7 @@ export const generatePsbt = async (
   recipientAddress: string,
   feeRate: number,
   opReturnOutput: Buffer,
-  opNum: number = 1
+  opNum: number
 ) => {
   try {
     const tx = new btc.Transaction({ allowUnknownOutputs: true });
@@ -160,12 +154,12 @@ export const generatePsbt = async (
 
     tx.addOutputAddress(recipientAddress, BigInt(payment.amount), NETWORK);
     for (let i = 0; i < opNum; i++) {
-      tx.addOutput({ script: opReturnOutput, amount: BigInt(0) });
+      tx.addOutput({ script: opReturnOutput, amount: BigInt(0) }); //TODO:
     }
 
     dummyTx.addOutputAddress(recipientAddress, BigInt(payment.amount), NETWORK);
     for (let i = 0; i < opNum; i++) {
-      dummyTx.addOutput({ script: opReturnOutput, amount: BigInt(0) });
+      dummyTx.addOutput({ script: opReturnOutput, amount: BigInt(0) }); //TODO:
     }
 
     let response = await axios.get(
