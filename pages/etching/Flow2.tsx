@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, WallterType } from "@/lib/redux";
-import { useState } from "react";
 import { resolve } from "path";
 
 export default function Etching2(props: any) {
@@ -96,57 +95,46 @@ export default function Etching2(props: any) {
       timeType,
     } = formData;
 
-    const initRunesStone = {
-      rune,
-      divisibility,
-      premine: BigInt(premine),
-      spacers: [], //TODO: 需要计算一下
-      symbol: "⧉",
-    };
-    let terms: any = {
-      cap: BigInt(cap),
-      amount: BigInt(amount),
-    };
-    if (timeType == "offset") {
-      terms = {
-        ...terms,
-        offset: {
-          start: BigInt(start),
-          end: BigInt(end),
-        },
-      };
-    } else {
-      terms = {
-        ...terms,
-        height: {
-          start: BigInt(start),
-          end: BigInt(end),
-        },
-      };
-    }
-    const runesStone: RunestoneSpec = {
-      etching: {
-        ...initRunesStone,
-        terms,
-      },
-    };
+    let runesStone: RunestoneSpec = {};
 
-    // const runesStone = {
-    //   etching: {
-    //     rune: "RUNE",
-    //     symbol: "$",
-    //     premine: BigInt(10000),
-    //     terms: {
-    //       cap: BigInt(10000),
-    //       amount: BigInt(10),
-    //     },
-    //   },
-    //   int: {
-    //     block: 2585958,
-    //     tx: 114,
-    //   },
-    //   pointer: 0,
-    // };
+    if (flowName == "etching") {
+      const initRunesStone = {
+        rune,
+        divisibility,
+        premine: BigInt(premine),
+        spacers: psbt.getSpacers(rune),
+        symbol: "⧉",
+      };
+      let terms: any = {
+        cap: BigInt(cap),
+        amount: BigInt(amount),
+      };
+      if (timeType == "offset") {
+        terms = {
+          ...terms,
+          offset: {
+            start: BigInt(start),
+            end: BigInt(end),
+          },
+        };
+      } else {
+        terms = {
+          ...terms,
+          height: {
+            start: BigInt(start),
+            end: BigInt(end),
+          },
+        };
+      }
+      runesStone = {
+        etching: {
+          ...initRunesStone,
+          terms,
+        },
+      };
+    } else if (flowName === "mint") {
+    } else if (flowName == "transfer") {
+    }
 
     setEtchingLoading(true);
     try {
@@ -164,13 +152,13 @@ export default function Etching2(props: any) {
         payment,
         null,
         premineReceiveAddress,
-        1,
+        sats,
         opReturnOutput,
         1
       );
 
       if (txid) {
-        console.log("txid", txid); //TODO: 吧hash带到第三步
+        console.log("txid", txid);
         handleBackFlow2(flowName, 3, txid);
       } else {
         setEtchingLoading(false);
@@ -222,6 +210,25 @@ export default function Etching2(props: any) {
   useEffect(() => {
     getDollers();
   }, [])
+
+  const btnText = useMemo(() => {
+    if (flowName === "etching") {
+      return {
+        submitText: "Pay & Etching",
+        loadingText: "Etching",
+      };
+    } else if (flowName === "mint") {
+      return {
+        submitText: "Mint",
+        loadingText: "Minting",
+      };
+    } else if (flowName === "transfer") {
+      return {
+        submitText: "Transfer",
+        loadingText: "Transfer",
+      };
+    }
+  }, [flowName]);
 
   return (
     <>
@@ -347,12 +354,12 @@ export default function Etching2(props: any) {
           <>
             {etchingLoading ? (
               <div className="etch-bottomBtn etch-bottomBtnLoading">
-                Etching
+                {btnText?.loadingText}
                 <span className="etch-bottomBtnLoading"></span>
               </div>
             ) : (
               <div className="etch-bottomBtn" onClick={go2Pay}>
-                Pay & Etching
+                {btnText?.submitText}
               </div>
             )}
           </>
