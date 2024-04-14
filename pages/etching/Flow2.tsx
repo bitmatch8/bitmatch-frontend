@@ -4,7 +4,6 @@ import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, WallterType } from "@/lib/redux";
-import { resolve } from "path";
 
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
@@ -18,6 +17,7 @@ export default function Etching2(props: any) {
   const [etchingLoading, setEtchingLoading] = useState(false);
   const { address, balance, wallterType } = useSelector(selectWallter);
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState('');
+  const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState('');
 
   const getBTCPrice = () => {
     return new Promise((resolve, reject) => {
@@ -201,10 +201,20 @@ export default function Etching2(props: any) {
     }
   };
 
+  const satsToUSD = (sats: number, bitcoinPriceUSD: any) => {
+    const bitcoinAmount = sats / 100000000; // 将 sats 转换为比特币
+    const amountInUSD = bitcoinAmount * Number(bitcoinPriceUSD); // 将比特币转换为美元
+    return amountInUSD;
+  }
+
   const getDollers = async ()=> {
     const btcPrice = await getBTCPrice();
-    console.log('==btc price==::', btcPrice);
-    setSatsInRuneDoller('0.339');
+    const satsDollerValue = satsToUSD(546, btcPrice);
+    const satsDollerValueShow = Number(satsDollerValue).toFixed(2);
+    setSatsInRuneDoller(satsDollerValueShow);
+    const serviceFeeValue = satsToUSD(2000, btcPrice);
+    const serviceFeeValueShow = Number(serviceFeeValue).toFixed(2);
+    setServiceFeeeDolloer(serviceFeeValueShow);
   }
 
   useEffect(() => {
@@ -321,7 +331,7 @@ export default function Etching2(props: any) {
             </TextTooltip>
             <span className="etch-countNull"></span>
             <span className="etch-countValue">2000 sats</span>
-            <span className="etch-countDoller">~$1.42</span>
+            <span className="etch-countDoller">~${ serviceFeeeDolloer }</span>
           </div>
           <div className="etch-countItem">
             <span className="etch-countKeyName">Fee by Size：</span>
