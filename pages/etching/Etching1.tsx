@@ -29,8 +29,12 @@ export default function Etching1(props: any) {
     const [amountErrorTip, setAmountErrorTip] = React.useState('');
     const [offOrHei, setOffOrHei] = React.useState('offset');
     const [offset, setOffset] = React.useState('');
+    const [offsetErrorTip, setOffsetErrorTip] = React.useState('');
     const [startHeight, setStartHeight] = React.useState('');
+    const [startHeightErrorTip, setSstartHeightErrorTip] = React.useState('');
     const [endHeight, setEndHeight] = React.useState('');
+    const [endHeightErrorTip, setEndHeightErrorTip] = React.useState('');
+
     const {
         address,
         balance,
@@ -167,11 +171,38 @@ const checkMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
 const setOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     setOffset(event.target.value);
 }
+const checkOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const offsetValue = event.target.value;
+    if (isNaN(Number(offsetValue)) || Number(offsetValue)<=0 || Number(offsetValue)%1!==0) {
+        setOffsetErrorTip('Offset must be a positive integer');
+        setOffset('');
+        return;
+    }
+    setOffsetErrorTip('');
+}
 const setStartHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStartHeight(event.target.value);
 }
+const checkStartHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const startHeightValue = event.target.value
+    if (isNaN(Number(startHeightValue)) || Number(startHeightValue)<=0 || Number(startHeightValue)%1!==0) {
+        setSstartHeightErrorTip('Start Height must be a positive integer');
+        setStartHeight('');
+        return;
+    }
+    setSstartHeightErrorTip('');
+}
 const setEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEndHeight(event.target.value);
+}
+const checkEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const endHeightValue = event.target.value
+    if (isNaN(Number(endHeightValue)) || Number(endHeightValue)<=0 || Number(endHeightValue)%1!==0) {
+        setEndHeightErrorTip('End Height must be a positive integer');
+        setEndHeight('');
+        return;
+    }
+    setEndHeightErrorTip('');
 }
 
 const checkFormData = ()=> {
@@ -208,9 +239,30 @@ const checkFormData = ()=> {
         if (amountErrorTip) {
             return false;
         }
+        if (offOrHei === 'offset') {
+            if (!offset) {
+                setCapErrorTip('Please input Offset');
+                return false;
+            }
+            if (offsetErrorTip) {
+                return false;
+            }
+        }
+        if (!startHeight) {
+            setCapErrorTip('Please input Start Height');
+            return false;
+        }
+        if (startHeightErrorTip) {
+            return false;
+        }
+        if (!endHeight) {
+            setCapErrorTip('Please input End Height');
+            return false;
+        }
+        if (endHeightErrorTip) {
+            return false;
+        }
     }
-
-
     return true;
 }
 
@@ -225,14 +277,17 @@ const assembleFormData = () => {
         divisibility: 0,
         premine,
         premineReceiveAddress,
-        cap,
-        amount,
     };
-    callbackData['start'] = offset + startHeight;
-    callbackData['end'] = offset + endHeight;
-    if (offOrHei === 'height') {
-        callbackData['start'] = startHeight;
-        callbackData['end'] = endHeight;
+    if (checked) {
+        callbackData['cap'] = cap;
+        callbackData['amount'] = amount;
+        callbackData['timeType'] = offOrHei;
+        callbackData['start'] = offset + startHeight;
+        callbackData['end'] = offset + endHeight;
+        if (offOrHei === 'height') {
+            callbackData['start'] = startHeight;
+            callbackData['end'] = endHeight;
+        }
     }
     handleBackData(callbackData);
 }
@@ -321,7 +376,7 @@ const assembleFormData = () => {
                                         <span className="etch-star">*</span>
                                         <span className="etch-itemTitle">Time Type</span>
                                     </div>
-                                    <div className="etch-inputBox1 etch-timeType cur" onClick={()=> setOffOrHei('offset')}>
+                                    <div className={`etch-inputBox1 etch-timeType ${offOrHei==='offset'?'cur':''}`} onClick={()=> setOffOrHei('offset')}>
                                         Offset
                                         <span className="etch-timeTypeCur"></span>
                                     </div>
@@ -334,7 +389,7 @@ const assembleFormData = () => {
                                         <span className="etch-star"></span>
                                         <span className="etch-itemTitle"></span>
                                     </div>
-                                    <div className="etch-inputBox1 etch-timeType" onClick={()=> setOffOrHei('height')}>
+                                    <div className={`etch-inputBox1 etch-timeType ${offOrHei==='height'?'cur':''}`} onClick={()=> setOffOrHei('height')}>
                                         Height
                                         <span className="etch-timeTypeCur"></span>
                                     </div>
@@ -342,19 +397,21 @@ const assembleFormData = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="etch-formItemBox">
-                            <div className="etch-formTitleBox">
-                                <span className="etch-star">*</span>
-                                <span className="etch-itemTitle">Offset</span>
-                                <TextTooltip arrow title={RuneOffsetTipText}>
-                                    <span className="etch-askIcon"></span>
-                                </TextTooltip>
+                        {
+                            offOrHei==='offset' && <div className="etch-formItemBox">
+                                <div className="etch-formTitleBox">
+                                    <span className="etch-star">*</span>
+                                    <span className="etch-itemTitle">Offset</span>
+                                    <TextTooltip arrow title={RuneOffsetTipText}>
+                                        <span className="etch-askIcon"></span>
+                                    </TextTooltip>
+                                </div>
+                                <div className="etch-inputBox1">
+                                    <input type="text" placeholder="100" value={offset} onChange={setOffsetAmount} onBlur={checkOffsetAmount} />
+                                </div>
+                                <p className="etch-formErrorTip">{ offsetErrorTip }</p>
                             </div>
-                            <div className="etch-inputBox1">
-                                <input type="text" placeholder="100" onBlur={setOffsetAmount} />
-                            </div>
-                            <p className="etch-formErrorTip"></p>
-                        </div>
+                        }
                         <div className="etch-formItemBox etch-formTtemBox2">
                             <div className="etch-formItemInner">
                                 <div className="etch-formItemBox">
@@ -366,10 +423,10 @@ const assembleFormData = () => {
                                         </TextTooltip>
                                     </div>
                                     <div className="etch-inputBox1">
-                                        <input type="text" placeholder="8400000" className="etch-mintHeightInput" onBlur={setStartHeightNumber} />
+                                        <input type="text" placeholder="8400000" className="etch-mintHeightInput" value={startHeight} onChange={setStartHeightNumber} onBlur={checkStartHeightNumber} />
                                         <span className="etch-mintHieghtZc">Start Height</span>
                                     </div>
-                                    <p className="etch-formErrorTip"></p>
+                                    <p className="etch-formErrorTip">{ startHeightErrorTip }</p>
                                 </div>
                             </div>
                             <div className="etch-formItemInner">
@@ -379,10 +436,10 @@ const assembleFormData = () => {
                                         <span className="etch-itemTitle"></span>
                                     </div>
                                     <div className="etch-inputBox1">
-                                        <input type="text" placeholder="2100" className="etch-mintHeightInput" onBlur={setEndtHeightNumber} />
+                                        <input type="text" placeholder="2100" className="etch-mintHeightInput" value={endHeight} onChange={setEndtHeightNumber} onBlur={checkEndtHeightNumber} />
                                         <span className="etch-mintHieghtZc">End Height</span>
                                     </div>
-                                    <p className="etch-formErrorTip"></p>
+                                    <p className="etch-formErrorTip">{ endHeightErrorTip }</p>
                                 </div>
                             </div>
                         </div>
