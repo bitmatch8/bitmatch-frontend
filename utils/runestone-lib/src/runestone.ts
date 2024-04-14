@@ -33,6 +33,10 @@ export class Runestone {
     readonly etching: Option<Etching>
   ) {}
 
+  get rune(): Option<Rune> {
+    return this.etching.andThen((etching) => etching.rune);
+  }
+
   static decipher(transaction: RunestoneTx): Option<Artifact> {
     const optionPayload = Runestone.payload(transaction);
     if (optionPayload.isNone()) {
