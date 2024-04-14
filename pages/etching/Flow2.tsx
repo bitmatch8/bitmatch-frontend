@@ -201,7 +201,7 @@ export default function Etching2(props: any) {
   return (
     <>
       <div className="etch-blockBox">
-        <EtchFlowPath flowType={2} flowName="etching"></EtchFlowPath>
+        <EtchFlowPath flowType={2} flowName={flowName}></EtchFlowPath>
         <div className="etch-descBox">
           <div className="etch-descTopBackBox" onClick={goBackFlow1}>
             <span className="etch-flowTopBackBtn"></span>

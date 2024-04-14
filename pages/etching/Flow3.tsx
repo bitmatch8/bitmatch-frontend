@@ -27,7 +27,7 @@ export default function Etching3(props: any) {
     return (
         <>
             <div className="etch-blockBox">
-                <EtchFlowPath flowType={3} flowName="etching"></EtchFlowPath>
+                <EtchFlowPath flowType={3} flowName={flowName}></EtchFlowPath>
                 <div className="etch-descBox">
                     <p className="etch-detailTit">Rune Detail</p>
                     <div className="etch-detailContent">{JSON.stringify(formDataBack)}</div>

@@ -21,10 +21,12 @@ export default function EtchFlowPath(props: any) {
                     flowName==='transfer' && <p className="etch-flowTxt" style={{color:flowType===2?'#F7931A':'#6F6F76;'}}>Pay & Transfer</p>
                 }
             </div>
-            <div className="etch-flowLine"></div>
+            <div className="etch-flowLine">
+                <div className="etch-flowLineShadow" style={{width:flowType===3?'100px':'0'}}></div>
+            </div>
             <div className="etch-flowItem">
                 <p className="etch-flowNum">3</p>
-                <p className="etch-flowTxt">Etching Result</p>
+                <p className="etch-flowTxt" style={{color:flowType===3?'#F7931A':'#6F6F76;'}}>Etching Result</p>
             </div>
         </div>
     )
