@@ -25,6 +25,17 @@ export function getUnisatAddressType(address: string): string {
 }
 export const LOWEST_FEE = 550;
 
+export function getSpacers(rune: string): number[] {
+  let result = [];
+  const arr = rune.split("·");
+  arr.reduce((accumulator, currentValue, currentIndex, array) => {
+    result.push(accumulator + currentValue.length - 1);
+    return accumulator + currentValue.length;
+  }, 0);
+
+  return result.slice(0, result.length - 1);
+}
+
 export {
   ADDRESS_TYPE_P2SH,
   ADDRESS_TYPE_P2PKH,
