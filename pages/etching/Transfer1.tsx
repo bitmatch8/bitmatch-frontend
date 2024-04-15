@@ -140,7 +140,26 @@ export default function Etching1(props: any) {
     useEffect(() => {
         if (address) {
             getRunesList(address).then((res) => {
-                setRunes(res['result']['runes']);
+                if (res['result']['runes'].length > 0) {
+                    setRunes(res['result']['runes']);
+                    
+                    // 获取所需的tx和block数据
+                    let runeVal = res['result']['runes'][0]['rune_name'];
+                    setRune(runeVal); 
+                    fetchRuneInfoByRuneName(runeVal).then((res) => {
+                        setTx(res['result']['rune']['txid']);
+                        setBlock(res['result']['rune']['height']);
+                        // 获取剩余可Mint数量
+                        const premineNum = res['result']['rune']['premine'] || 0;
+                        const capacityNum = res['result']['rune']['capacity'] || 0;
+                        let totalNum = premineNum + capacityNum;
+                        fetchHasMintAmount(runeVal).then((mres) => {
+                            const hasMintNum = mres['result']['mintAmount'];
+                            let renuNumShow = totalNum - hasMintNum;
+                            setRuneNum(renuNumShow);
+                        })
+                    })
+                } 
             })
         }
     }, [])
