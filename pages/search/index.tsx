@@ -65,7 +65,10 @@ const RuneResultCom: React.FC<RuneResultProps> = ({ runeInfo }) => {
                 {item.name !== "transaction" ? (
                   item.value
                 ) : (
-                  <a href="" target="_blank">
+                  <a
+                    href={`${process.env.NEXT_PUBLIC_MEMPOOLURL}${item.value}`}
+                    target="_blank"
+                  >
                     {item.value}
                   </a>
                 )}
