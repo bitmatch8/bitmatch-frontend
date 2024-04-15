@@ -93,7 +93,7 @@ export default function Etching2(props: any) {
     setEtchingLoading(true);
     if (!unsignedPsbt) {
       setEtchingLoading(false);
-      throw new Error();
+      throw new Error("unsignedPsbt error");
     }
 
     try {
@@ -103,18 +103,17 @@ export default function Etching2(props: any) {
         console.log("txid", txid);
         handleBackFlow2(flowName, 3, txid);
       } else {
-        console.log("Error");
+        throw new Error("unisat sign & push failed");
       }
       setEtchingLoading(false);
-    } catch (e) {
-      console.log("Error", e);
+    } catch (e: any) {
       setEtchingLoading(false);
+      throw new Error(e);
     }
   };
   //Psbt
   const initPsbt = async () => {
     console.log("第一个页面的表单数据1", formData);
-    console.log("第二个页面的sats选择1", sats);
     try {
       //0.构建数据
       const {
@@ -172,8 +171,8 @@ export default function Etching2(props: any) {
       );
       console.log("----unsignedPsbt----", unsignedPsbt);
       setUnsignedPsbt(unsignedPsbt);
-    } catch (e) {
-      console.log("initPsbt Error", e);
+    } catch (e: any) {
+      throw new Error(e);
     }
   };
 
@@ -191,6 +190,7 @@ export default function Etching2(props: any) {
       transferAmount, //页面上transfer第一步的Amount
       tx, //根据符文名称请求符文信息接口，接口返回的 tx hash/index
       block, //根据符文名称请求符文信息接口，接口返回的 block height
+      publicMintChecked = false,
     } = formData;
 
     let runesStone: RunestoneSpec = {};
@@ -203,33 +203,42 @@ export default function Etching2(props: any) {
         spacers: psbt.getSpacers(rune),
         symbol: "⧉",
       };
-      let terms: any = {
-        cap: BigInt(cap),
-        amount: BigInt(amount),
-      };
-      if (timeType == "offset") {
+      let terms: any = {};
+      if (publicMintChecked) {
         terms = {
-          ...terms,
-          offset: {
-            start: BigInt(start),
-            end: BigInt(end),
-          },
+          cap: BigInt(cap),
+          amount: BigInt(amount),
         };
-      } else {
-        terms = {
-          ...terms,
-          height: {
-            start: BigInt(start),
-            end: BigInt(end),
-          },
-        };
+        if (timeType == "offset") {
+          terms = {
+            ...terms,
+            offset: {
+              start: BigInt(start),
+              end: BigInt(end),
+            },
+          };
+        } else {
+          terms = {
+            ...terms,
+            height: {
+              start: BigInt(start),
+              end: BigInt(end),
+            },
+          };
+        }
       }
-      runesStone = {
-        etching: {
-          ...initRunesStone,
-          terms,
-        },
-      };
+      runesStone = publicMintChecked
+        ? {
+            etching: {
+              ...initRunesStone,
+              terms,
+            },
+          }
+        : {
+            etching: {
+              ...initRunesStone,
+            },
+          };
     } else if (flowName === "mint") {
       runesStone = {
         mint: {
