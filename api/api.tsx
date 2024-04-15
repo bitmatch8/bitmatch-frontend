@@ -50,3 +50,8 @@ export const fetchFeesApi = () => {
 export const fetchRuneSearchApi = (name: string) => {
   return Ajax.get(`/nestone/search/runes/by/name/${name}`);
 };
+
+// 根据rune name返回所需tx等值
+export const fetchRuneInfoByRuneName = (name: string) => {
+  return Ajax.get(`/runestone/search/runes/by/name/${name}`);
+};

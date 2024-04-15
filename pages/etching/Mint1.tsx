@@ -9,6 +9,8 @@ import {
   } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
+import { fetchRuneInfoByRuneName } from "@/api/api";
+import useSwr from "@/hook/useSwr";
 
 export default function Mint1(props: any) {
     const { handleBackData } = props;
@@ -74,6 +76,8 @@ export default function Mint1(props: any) {
             return;
         }
         setRuneErrorTip("");
+
+        fetchRuneInfoByRuneName(runeVal)
     };
     const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMmintAmount(Number(event.target.value));
