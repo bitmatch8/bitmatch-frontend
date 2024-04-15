@@ -93,7 +93,7 @@ export default function Etching2(props: any) {
     setEtchingLoading(true);
     if (!unsignedPsbt) {
       setEtchingLoading(false);
-      throw new Error();
+      throw new Error("unsignedPsbt error");
     }
 
     try {
@@ -103,12 +103,12 @@ export default function Etching2(props: any) {
         console.log("txid", txid);
         handleBackFlow2(flowName, 3, txid);
       } else {
-        console.log("Error");
+        throw new Error("unisat sign & push failed");
       }
       setEtchingLoading(false);
-    } catch (e) {
-      console.log("Error", e);
+    } catch (e: any) {
       setEtchingLoading(false);
+      throw new Error(e);
     }
   };
   //Psbt
