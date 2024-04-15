@@ -3,7 +3,7 @@ import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
-import { useSelector, selectWallter, wallterType } from "@/lib/redux";
+import { useSelector, selectWallter, useDispatch, addToast } from "@/lib/redux";
 
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
@@ -15,10 +15,11 @@ export default function Etching2(props: any) {
   const [stasCurIndex, setStasCurIndex] = React.useState(2);
   const [inputStas3, setInputStas3] = React.useState(25);
   const [etchingLoading, setEtchingLoading] = useState(false);
-  const { address, balance } = useSelector(selectWallter);
+  const { address, balance, wallterType } = useSelector(selectWallter);
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
   const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState("");
   const [unsignedPsbt, setUnsignedPsbt] = useState<any>(null);
+  const dispatch = useDispatch();
 
   const getBTCPrice = () => {
     return new Promise((resolve, reject) => {
@@ -79,6 +80,16 @@ export default function Etching2(props: any) {
   };
 
   const go2Pay = async () => {
+    const addressType = psbt.getUnisatAddressType(address as string);
+    if (addressType == "p2pkh") {
+      dispatch(
+        addToast({
+          contxt: "The current address format is not supported, please switch",
+          icon: "warning",
+        })
+      );
+      return;
+    }
     setEtchingLoading(true);
     if (!unsignedPsbt) {
       setEtchingLoading(false);
