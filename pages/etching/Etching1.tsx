@@ -308,6 +308,7 @@ export default function Etching1(props: any) {
       divisibility: 0,
       premine,
       premineReceiveAddress,
+      publicMintChecked: checked,
     };
     if (checked) {
       callbackData["cap"] = cap;
