@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
-import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
+import { encodeRunestone, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, useDispatch, addToast } from "@/lib/redux";
 
@@ -85,7 +85,10 @@ export default function Etching2(props: any) {
 
   const go2Pay = async () => {
     const addressType = psbt.getUnisatAddressType(address as string);
-    if (addressType == "p2pkh") {
+    if (
+      addressType == psbt.ADDRESS_TYPE_P2PKH ||
+      addressType === psbt.ADDRESS_TYPE_P2SH_P2WPKH
+    ) {
       dispatch(
         addToast({
           contxt: "The current address type is not supported, please switch",
@@ -154,8 +157,8 @@ export default function Etching2(props: any) {
       // };
 
       //1.生成Buffer
-      const opReturnOutput = encodeRunestoneUnsafe(runesStone);
-      console.log("----opReturnOutput----", opReturnOutput);
+      const opReturnOutput = encodeRunestone(runesStone);
+      console.log("----opReturnOutput----", opReturnOutput.encodedRunestone);
       //2.sign/push
       const payment = {
         addressType: psbt.getUnisatAddressType(address as string),
@@ -170,7 +173,7 @@ export default function Etching2(props: any) {
         null,
         premineReceiveAddress,
         sats,
-        opReturnOutput,
+        opReturnOutput.encodedRunestone,
         flowName == "mint" ? mintAmount : 1
       );
       console.log("----unsignedPsbt----", unsignedPsbt);
@@ -216,10 +219,10 @@ export default function Etching2(props: any) {
         if (timeType == "offset") {
           terms = {
             ...terms,
-            offset: {
-              start: BigInt(start),
-              end: BigInt(end),
-            },
+            // offset: {
+            //   start: BigInt(start),
+            //   end: BigInt(end),
+            // },
           };
         } else {
           terms = {

@@ -1,14 +1,20 @@
 import Page from "@/components/Page";
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchRuneSearchApi } from "@/api/api";
-import useSwr from "@/hook/useSwr";
+import useRuneSearch from "@/hook/useRuneSearch";
+import useDebounce from "@/hook/useDebounce";
 import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
 import Grid from "@mui/material/Grid";
 import { hidehash } from "@/utils";
 import BackArrowIcon from "@/components/Svg/BackArrowIcon";
 import { borderColor, height, style } from "styled-system";
 import { Spaced } from "@/components/Spaced";
+import SearchRuneIcon from "@/components/Svg/SearchRuneIcon";
+import nodataImg from "@/assets/img/runes/nodata.png";
+import searchingImg from "@/assets/img/runes/searching.png";
+import Image from "next/image";
 
 const CssTextField = styled(TextField)({
   "& .MuiInputBase-input": {
@@ -37,27 +43,61 @@ const CssTextField = styled(TextField)({
   },
 });
 
+const SearchSvg: React.FC = () => {
+  return (
+    <SearchIconBox>
+      <SearchRuneIcon width={32} />
+    </SearchIconBox>
+  );
+};
+interface RuneResultProps {
+  runeInfo: any;
+}
+const RuneResultCom: React.FC<RuneResultProps> = ({ runeInfo }) => {
+  return (
+    <RuneResultBox>
+      <ul>
+        {runeInfo.map((item: any, index: number) => {
+          return (
+            <li key={`runeItem${index}`}>
+              <div className="label">{item.label}：</div>
+              <div className="value">
+                {item.name !== "transaction" ? (
+                  item.value
+                ) : (
+                  <a href="" target="_blank">
+                    {item.value}
+                  </a>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </RuneResultBox>
+  );
+};
+
 export default function SearchPage() {
+  const [searchKey, setSearchKey] = useState(""); // 查询使用的条件
+  const debouncedSearchTerm = useDebounce(searchKey, 500);
+
+  // 获取搜索结果
+  const { result } = useRuneSearch(debouncedSearchTerm, fetchRuneSearchApi, {});
+
   const handleBack = () => {
     window.history.go(-1);
   };
 
-  const [runeInfo, setRuneInfo] = useState([
-    { name: "rune", label: "Rune", value: "werwer" },
-    { name: "etcher", label: "Etcher", value: "" },
-    { name: "amount", label: "Total Amount", value: "" },
-    { name: "height", label: "Height", value: "" },
-    { name: "time", label: "Timestamp", value: "" },
-    { name: "transaction", label: "Genesis Transaction", value: "" },
-  ]);
+  const handleInput = (event: any) => {
+    setSearchKey(event.target.value);
+  };
 
-  // const [addrInfo, setAddrInfo] = useState([
-  //   {
-  //     addr: "AAAAAAAAAAAAA",
-  //     amount: "21000",
-  //     owner: "bc1pm撒旦法撒旦法的是SHjhch",
-  //   },
-  // ]);
+  useEffect(() => {
+    let searchParams = new URLSearchParams(location.search);
+    let initKey = searchParams.get("q") || "";
+    setSearchKey(initKey);
+  }, []);
 
   return (
     <Page>
@@ -67,30 +107,46 @@ export default function SearchPage() {
           <BackArrowIcon width={36} />
         </div>
         <div className="inputBox">
-          <CssTextField variant="outlined" />
+          <CssTextField
+            variant="outlined"
+            value={searchKey}
+            onInput={handleInput}
+            autoComplete="off"
+            placeholder="Search Rune"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="end">
+                  <SearchSvg />
+                </InputAdornment>
+              ),
+            }}
+          />
         </div>
       </InputBox>
       <Spaced size="60" />
-      <RuneResultBox>
-        <ul>
-          {runeInfo.map((item: any, index: number) => {
-            return (
-              <li key={`runeItem${index}`}>
-                <div className="label">{item.label}：</div>
-                <div className="value">
-                  {item.name !== "transaction" ? (
-                    item.value
-                  ) : (
-                    <a href="" target="_blank">
-                      item.value
-                    </a>
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </RuneResultBox>
+
+      {result === null ? (
+        <>
+          {searchKey && (
+            <SearchingBox>
+              <SearchingImg src={searchingImg} alt="" />
+              <div className="text">Search in progress …</div>
+            </SearchingBox>
+          )}
+        </>
+      ) : (
+        <>
+          {result?.exist && result?.runeInfo ? (
+            <RuneResultCom runeInfo={result.runeInfo} />
+          ) : (
+            <NodataBox>
+              <NodataImg src={nodataImg} alt="" />
+              <div className="text">No data retrieved</div>
+            </NodataBox>
+          )}
+        </>
+      )}
+
       {/* <AddrResultBox>
         <Grid
           container
@@ -212,4 +268,30 @@ const AddrResultBox = styled.div`
     color: #c2c5c8;
     text-align: center;
   }
+`;
+const SearchIconBox = styled.div`
+  position: absolute;
+  right: 22px;
+  display: flex;
+`;
+const EmptyBase = styled.div`
+  text-align: center;
+  margin-top: 160px;
+  margin-bottom: 175px;
+  .text {
+    font-weight: 500;
+    font-size: 20px;
+    color: #ffffff;
+    line-height: 20px;
+    text-align: center;
+    margin-top: 32px;
+  }
+`;
+const NodataBox = styled(EmptyBase)``;
+const SearchingBox = styled(EmptyBase)``;
+const NodataImg = styled(Image)`
+  width: auto;
+`;
+const SearchingImg = styled(Image)`
+  width: auto;
 `;
