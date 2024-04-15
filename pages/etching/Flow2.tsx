@@ -23,6 +23,7 @@ export default function Etching2(props: any) {
   const [networkFeeShow, setNetworkFeeShow] = React.useState(0);
   const [networkFeeDollerShow, setNetworkFeeDollerShow] = React.useState("");
   const [feeBySizeShow, setFeeBySizeShow] = React.useState("");
+  const [feeBySizeDolloerShow, setFeeBySizeDolloerShow] = React.useState("");
   const dispatch = useDispatch();
 
   const getBTCPrice = () => {
@@ -298,7 +299,12 @@ export default function Etching2(props: any) {
     const netFeeDollerShow = Number(networkFeeDoller).toFixed(2);
     setNetworkFeeDollerShow(netFeeDollerShow);
     // Fee by Size 的展示
-    
+    const feeSize = Number(networkFeeSats)*0.05;
+    const feeSizeShow = (Number(networkFeeSats)*0.05).toFixed(2);
+    setFeeBySizeShow(String(feeSizeShow));
+    const feeSizeDoller = satsToUSD(feeSize, btcPrice);
+    const feeSizeDollerShow = feeSizeDoller.toFixed(2);
+    setFeeBySizeDolloerShow(String(feeSizeDollerShow));
   }
 
   useEffect(() => {
@@ -432,8 +438,8 @@ export default function Etching2(props: any) {
               <span className="etch-countAskTip"></span>
             </TextTooltip>
             <span className="etch-countNull"></span>
-            <span className="etch-countValue">111 sats</span>
-            <span className="etch-countDoller">~$0.04</span>
+            <span className="etch-countValue">{ feeBySizeShow } sats</span>
+            <span className="etch-countDoller">~${ feeBySizeDolloerShow }</span>
           </div>
           <div className="etch-countLine"></div>
           <div className="etch-countItem">
