@@ -314,8 +314,9 @@ export default function Etching1(props: any) {
       callbackData["cap"] = cap;
       callbackData["amount"] = amount;
       callbackData["timeType"] = offOrHei;
-      callbackData["start"] = offset + startHeight;
-      callbackData["end"] = offset + endHeight;
+      if (offOrHei === "offset") {
+        callbackData["offset"] = offset;
+      }
       if (offOrHei === "height") {
         callbackData["start"] = startHeight;
         callbackData["end"] = endHeight;
@@ -490,51 +491,53 @@ export default function Etching1(props: any) {
                 <p className="etch-formErrorTip">{offsetErrorTip}</p>
               </div>
             )}
-            <div className="etch-formItemBox etch-formTtemBox2">
-              <div className="etch-formItemInner">
-                <div className="etch-formItemBox">
-                  <div className="etch-formTitleBox">
-                    <span className="etch-star">*</span>
-                    <span className="etch-itemTitle">Height</span>
-                    <TextTooltip arrow title={RuneHieghtTipText}>
-                      <span className="etch-askIcon"></span>
-                    </TextTooltip>
+            {
+              offOrHei === "height" && <div className="etch-formItemBox etch-formTtemBox2">
+                <div className="etch-formItemInner">
+                  <div className="etch-formItemBox">
+                    <div className="etch-formTitleBox">
+                      <span className="etch-star">*</span>
+                      <span className="etch-itemTitle">Height</span>
+                      <TextTooltip arrow title={RuneHieghtTipText}>
+                        <span className="etch-askIcon"></span>
+                      </TextTooltip>
+                    </div>
+                    <div className="etch-inputBox1">
+                      <input
+                        type="text"
+                        placeholder="8400000"
+                        className="etch-mintHeightInput"
+                        value={startHeight}
+                        onChange={setStartHeightNumber}
+                        onBlur={checkStartHeightNumber}
+                      />
+                      <span className="etch-mintHieghtZc">Start Height</span>
+                    </div>
+                    <p className="etch-formErrorTip">{startHeightErrorTip}</p>
                   </div>
-                  <div className="etch-inputBox1">
-                    <input
-                      type="text"
-                      placeholder="8400000"
-                      className="etch-mintHeightInput"
-                      value={startHeight}
-                      onChange={setStartHeightNumber}
-                      onBlur={checkStartHeightNumber}
-                    />
-                    <span className="etch-mintHieghtZc">Start Height</span>
+                </div>
+                <div className="etch-formItemInner">
+                  <div className="etch-formItemBox">
+                    <div className="etch-formTitleBox">
+                      <span className="etch-star"></span>
+                      <span className="etch-itemTitle"></span>
+                    </div>
+                    <div className="etch-inputBox1">
+                      <input
+                        type="text"
+                        placeholder="2100"
+                        className="etch-mintHeightInput"
+                        value={endHeight}
+                        onChange={setEndtHeightNumber}
+                        onBlur={checkEndtHeightNumber}
+                      />
+                      <span className="etch-mintHieghtZc">End Height</span>
+                    </div>
+                    <p className="etch-formErrorTip">{endHeightErrorTip}</p>
                   </div>
-                  <p className="etch-formErrorTip">{startHeightErrorTip}</p>
                 </div>
               </div>
-              <div className="etch-formItemInner">
-                <div className="etch-formItemBox">
-                  <div className="etch-formTitleBox">
-                    <span className="etch-star"></span>
-                    <span className="etch-itemTitle"></span>
-                  </div>
-                  <div className="etch-inputBox1">
-                    <input
-                      type="text"
-                      placeholder="2100"
-                      className="etch-mintHeightInput"
-                      value={endHeight}
-                      onChange={setEndtHeightNumber}
-                      onBlur={checkEndtHeightNumber}
-                    />
-                    <span className="etch-mintHieghtZc">End Height</span>
-                  </div>
-                  <p className="etch-formErrorTip">{endHeightErrorTip}</p>
-                </div>
-              </div>
-            </div>
+            }
           </div>
         )}
       </div>
