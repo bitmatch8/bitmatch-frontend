@@ -9,13 +9,14 @@ import {
   } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
-import { fetchRuneInfoByRuneName } from "@/api/api";
+import { fetchRuneInfoByRuneName, fetchHasMintAmount } from "@/api/api";
 import useSwr from "@/hook/useSwr";
 
 export default function Mint1(props: any) {
     const { handleBackData } = props;
 
     const [rune, setRune] = React.useState("");
+    const [runeNum, setRuneNum] = React.useState(0);
     const [runeErrorTip, setRuneErrorTip] = React.useState("");
     const [mintAmount, setMmintAmount] = React.useState(1);
     const [totalMintAmount, setTotalMintAmount] = React.useState(2100);
@@ -79,10 +80,21 @@ export default function Mint1(props: any) {
         }
         setRuneErrorTip("");
 
+        // 获取所需的tx和block数据
         fetchRuneInfoByRuneName(runeVal).then((res) => {
             setTx(res['result']['rune']['txid']);
             setBlock(res['result']['rune']['height']);
+            // 获取剩余可Mint数量
+            const premineNum = res['result']['rune']['premine'] || 0;
+            const capacityNum = res['result']['rune']['capacity'] || 0;
+            let totalNum = premineNum + capacityNum;
+            fetchHasMintAmount(runeVal).then((mres) => {
+                const hasMintNum = mres['result']['mintAmount'];
+                let renuNumShow = totalNum - hasMintNum;
+                setRuneNum(renuNumShow);
+            })
         })
+        
     };
     const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMmintAmount(Number(event.target.value));
@@ -154,7 +166,12 @@ export default function Mint1(props: any) {
                             onBlur={checkRuneName}
                         />
                     </div>
-                    <p className="etch-formErrorTip">{ runeErrorTip }</p>
+                    <p className="etch-formErrorTip etch-formErrorTipMintRune">
+                        <span>{ runeErrorTip }</span>
+                        {
+                            rune && <span>{ rune } only has { runeNum } left to mint</span>
+                        }
+                    </p>
                 </div>
                 <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">
