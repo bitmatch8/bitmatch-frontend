@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import EtchFlowPath from "@/components/EtchFlowPath"
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,16 +11,21 @@ import {
   } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
+import { getRunesList, fetchRuneInfoByRuneName, fetchHasMintAmount } from "@/api/api";
 
 export default function Etching1(props: any) {
     const { handleBackData } = props;
     const [rune, setRune] = React.useState('');
+    const [runes, setRunes] = React.useState([]);
+    const [runeNum, setRuneNum] = React.useState(0);
     const [runeErrorTip, setRuneErrorTip] = React.useState('');
     const [amount, setAamount] = React.useState('');
     const [amountErrorTip, setAmountErrorTip] = React.useState('');
     const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
     const [premineReceiveAddressErrorTip, setPremineReceiveAddressErrorTip] =
     React.useState("");
+    const [block, setBlock] = React.useState(0);
+    const [tx, setTx] = React.useState('');
 
     const {
         address,
@@ -40,8 +45,31 @@ export default function Etching1(props: any) {
 
     const handleRuneChange = (event: SelectChangeEvent) => {
         setRune(event.target.value);
+        let runeVal = event.target.value;
+        // 获取所需的tx和block数据
+        fetchRuneInfoByRuneName(runeVal).then((res) => {
+            setTx(res['result']['rune']['txid']);
+            setBlock(res['result']['rune']['height']);
+            // 获取剩余可Mint数量
+            const premineNum = res['result']['rune']['premine'] || 0;
+            const capacityNum = res['result']['rune']['capacity'] || 0;
+            let totalNum = premineNum + capacityNum;
+            fetchHasMintAmount(runeVal).then((mres) => {
+                const hasMintNum = mres['result']['mintAmount'];
+                let renuNumShow = totalNum - hasMintNum;
+                setRuneNum(renuNumShow);
+            })
+        })
     };
     const setAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let amontValue = Number(event.target.value);
+        if (!rune) {
+            setAmountErrorTip("Please check Rune");
+            return;
+        }
+        if (amontValue > runeNum) {
+            return;
+        }
         setAamount(event.target.value);
     };
     const checkAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +99,7 @@ export default function Etching1(props: any) {
 
     const checkFormData = () => {
         if (!rune) {
-            setRuneErrorTip("Please input Rune");
+            setRuneErrorTip("Please select Rune");
             return false;
         }
         if (runeErrorTip) {
@@ -102,10 +130,20 @@ export default function Etching1(props: any) {
             divisibility: 0,
             transferAmount: amount,
             premineReceiveAddress,
+            block,
+            tx,
         };
         
         handleBackData(callbackData);
     };
+
+    useEffect(() => {
+        if (address) {
+            getRunesList(address).then((res) => {
+                setRunes(res['result']['runes']);
+            })
+        }
+    }, [])
 
     return (
         <div className="etch-blockBox">
@@ -121,12 +159,21 @@ export default function Etching1(props: any) {
                             value={rune}
                             onChange={handleRuneChange}
                             displayEmpty
+                            placeholder="Please check rune"
                         >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
+                            {
+                                runes.map((item, index) => (
+                                    <MenuItem value={item.rune_name} key={index}>{ item.rune_name }</MenuItem>
+                                ))
+                            }
                         </Select>
                     </div>
-                    <p className="etch-formErrorTip">{ runeErrorTip }</p>
+                    <p className="etch-formErrorTip etch-formErrorTipMintRune">
+                        <span>{ runeErrorTip }</span>
+                        {
+                            rune && <span>{ rune } only has { runeNum } left to mint</span>
+                        }
+                    </p>
                 </div>
                 <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">
