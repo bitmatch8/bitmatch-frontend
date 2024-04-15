@@ -1,6 +1,8 @@
 import Page from "@/components/Page";
 import styled from "@emotion/styled";
 import React, { useState } from "react";
+import { fetchRuneSearchApi } from "@/api/api";
+import useSwr from "@/hook/useSwr";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { hidehash } from "@/utils";
@@ -49,13 +51,13 @@ export default function SearchPage() {
     { name: "transaction", label: "Genesis Transaction", value: "" },
   ]);
 
-  const [addrInfo, setAddrInfo] = useState([
-    {
-      addr: "AAAAAAAAAAAAA",
-      amount: "21000",
-      owner: "bc1pm撒旦法撒旦法的是SHjhch",
-    },
-  ]);
+  // const [addrInfo, setAddrInfo] = useState([
+  //   {
+  //     addr: "AAAAAAAAAAAAA",
+  //     amount: "21000",
+  //     owner: "bc1pm撒旦法撒旦法的是SHjhch",
+  //   },
+  // ]);
 
   return (
     <Page>
@@ -69,29 +71,27 @@ export default function SearchPage() {
         </div>
       </InputBox>
       <Spaced size="60" />
-      {1 === 2 && (
-        <RuneResultBox>
-          <ul>
-            {runeInfo.map((item: any, index: number) => {
-              return (
-                <li key={`runeItem${index}`}>
-                  <div className="label">{item.label}：</div>
-                  <div className="value">
-                    {item.name !== "transaction" ? (
+      <RuneResultBox>
+        <ul>
+          {runeInfo.map((item: any, index: number) => {
+            return (
+              <li key={`runeItem${index}`}>
+                <div className="label">{item.label}：</div>
+                <div className="value">
+                  {item.name !== "transaction" ? (
+                    item.value
+                  ) : (
+                    <a href="" target="_blank">
                       item.value
-                    ) : (
-                      <a href="" target="_blank">
-                        item.value
-                      </a>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </RuneResultBox>
-      )}
-      <AddrResultBox>
+                    </a>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </RuneResultBox>
+      {/* <AddrResultBox>
         <Grid
           container
           spacing={{ xs: 2, md: 5 }}
@@ -111,7 +111,7 @@ export default function SearchPage() {
             );
           })}
         </Grid>
-      </AddrResultBox>
+      </AddrResultBox> */}
     </Page>
   );
 }

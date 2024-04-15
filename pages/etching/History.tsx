@@ -67,7 +67,7 @@ const StateSucceeded: React.FC = () => {
 const SelectSvg: React.FC = () => {
   return (
     <SelectIconBox>
-      <SelectIcon width={32} fill="#6F6F76" />
+      <SelectIcon width={20} fill="#6F6F76" />
     </SelectIconBox>
   );
 };
@@ -147,13 +147,6 @@ const RuneHistoryHead: React.FC = () => {
   );
 };
 
-const IconSvg = styled(RefreshIcon)`
-  transition: all 1s ease-in-out;
-  cursor: pointer;
-  &.rotate {
-    transform: rotate(360deg);
-  }
-`;
 const EmptyLine: React.FC = () => {
   return (
     <RuneHistoryLineDetailBox
@@ -195,7 +188,7 @@ const RuneHistoryItem: React.FC<{
   onClick: any;
   show: boolean;
 }> = ({ item, show, onClick }) => {
-  const StateComponents = OrderStatus[`${item.status}_${item.type}`];
+  // const StateComponents = OrderStatus[`${item.status}_${item.type}`];
   return (
     <RuneHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <RuneHistoryLineBox>
@@ -213,9 +206,9 @@ const RuneHistoryItem: React.FC<{
         <RuneHistoryItemBox className="fee">{item.fee}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="state">
           {item.state}
-          <StateItemBox>
+          {/* <StateItemBox>
             {StateComponents ? <StateComponents /> : ""}
-          </StateItemBox>
+          </StateItemBox> */}
         </RuneHistoryItemBox>
       </RuneHistoryLineBox>
       {/* <RuneHistoryLineBox> */}
@@ -247,15 +240,16 @@ const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
   const [index, setIndex] = useState<number | null>(null);
   const { refresh_opt } = useSelector(selectBuy);
 
-  //   const { list: lists, total } = useHistory(
-  //     {
-  //       pageNum: page,
-  //       fromAddr: address,
-  //       pid,
-  //       pageSize,
-  //     },
-  //     { refreshInterval: refresh_opt }
-  //   );
+  // const { list: lists, total } = useHistory(
+  //   {
+  //     pageNum: page,
+  //     fromAddr: address,
+  //     pid,
+  //     pageSize,
+  //   },
+  //   { refreshInterval: refresh_opt }
+  // );
+
   const lists = [
     {
       rune: "A·B·C·A·W·E·V·R·S·F·E·E",
@@ -279,6 +273,10 @@ const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
   const total = 200;
   const reload = (page: any) => {
     setPage(page);
+  };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setHistoryType(event.target.value);
   };
 
   const typeList = [
@@ -305,6 +303,7 @@ const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
                 MenuProps={{
                   sx: dropdownStyle,
                 }}
+                onChange={handleChange}
               >
                 {typeList.map((item: any) => {
                   return (
@@ -321,7 +320,7 @@ const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
       )}
       <RuneHistoryBox>
         <RuneHistoryHead />
-        <OrderContainerBox>
+        <RuneContainerBox>
           {lists === null ? (
             [null, null, null].map((_, key) => <EmptyLine key={key} />)
           ) : lists.length === 0 ? (
@@ -336,7 +335,7 @@ const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
               />
             ))
           )}
-        </OrderContainerBox>
+        </RuneContainerBox>
         <Spaced size="36" />
         {/* {total > pageSize ? (
           <Pagination
@@ -390,7 +389,7 @@ const RuneHistoryLineDetailBox = styled.div`
     }
   }
 `;
-const OrderContainerBox = styled.div`
+const RuneContainerBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -515,4 +514,6 @@ const RuneHistoryItemBox = styled(RuneHistoryItemBase)`
 const SelectIconBox = styled.div`
   position: absolute;
   right: 16px;
+  display: flex;
+  align-items: center;
 `;

@@ -61,7 +61,7 @@
 
 "@cmdcode/tapscript@^1.4.6":
   version "1.4.6"
-  resolved "https://registry.npmmirror.com/@cmdcode/tapscript/-/tapscript-1.4.6.tgz#f5cc6f71d7151a66d8a777c02e5ce2703c319066"
+  resolved "https://registry.yarnpkg.com/@cmdcode/tapscript/-/tapscript-1.4.6.tgz#f5cc6f71d7151a66d8a777c02e5ce2703c319066"
   integrity sha512-lrcLBSwX/T4OZjBdIupGeqGtOKC4MMSZUC7FwV6zOlqcAPHVVvtXDKKm4VTKDtszAvtObfLBpizSY69F4NJqQQ==
 
 "@emotion/babel-plugin@^11.11.0":
