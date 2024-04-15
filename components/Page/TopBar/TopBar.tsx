@@ -23,8 +23,8 @@ export const TopBar = () => {
     },
     {
       title: "Marketplace",
-      path: "",
-      tip: "Coming Soon",
+      path: "/etching",
+      // tip: "Coming Soon",
     },
     {
       title: "Genesis NFT",
@@ -42,16 +42,16 @@ export const TopBar = () => {
           <LinkItem
             key={key}
             className={pathname === link.path ? "active" : ""}
-            onClick={() =>
-              link.tip
-                ? dispatch(
-                    addToast({
-                      icon: "warning",
-                      contxt: link.tip,
-                    })
-                  )
-                : ""
-            }
+            // onClick={() =>
+            //   link.tip
+            //     ? dispatch(
+            //         addToast({
+            //           icon: "warning",
+            //           contxt: link.tip,
+            //         })
+            //       )
+            //     : ""
+            // }
             href={link.path}
           >
             {link.title}
