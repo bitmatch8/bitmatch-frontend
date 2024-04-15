@@ -11,8 +11,8 @@ export default function Etching2(props: any) {
   let formDataBack = JSON.parse(JSON.stringify(formData));
   delete formDataBack.flowIndex;
 
-  const [sats, setSats] = React.useState(8);
-  const [stasCurIndex, setStasCurIndex] = React.useState(1);
+  const [sats, setSats] = React.useState(12);
+  const [stasCurIndex, setStasCurIndex] = React.useState(2);
   const [inputStas3, setInputStas3] = React.useState(25);
   const [etchingLoading, setEtchingLoading] = useState(false);
   const { address, balance, wallterType } = useSelector(selectWallter);
