@@ -97,7 +97,12 @@ export default function Mint1(props: any) {
         
     };
     const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setMmintAmount(Number(event.target.value));
+        let amountValue = Number(event.target.value);
+        if (amountValue * 2100 > runeNum) {
+            return;
+        } else {
+            setMmintAmount(Number(event.target.value));
+        }
     };
     const setPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPremineReceiveAddress(event.target.value);
