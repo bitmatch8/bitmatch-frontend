@@ -298,7 +298,7 @@ export default function Etching1(props: any) {
   };
 
   const assembleFormData = () => {
-    const checkFormResult = true; //checkFormData();
+    const checkFormResult = checkFormData(); //
     if (!checkFormResult) {
       return;
     }

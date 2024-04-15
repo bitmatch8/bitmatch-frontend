@@ -227,6 +227,7 @@ export const generatePsbt = async (
 
         const psbt = tx.toPSBT();
         const psbtBase64 = base64.encode(psbt);
+        console.log();
 
         return {
           psbt,

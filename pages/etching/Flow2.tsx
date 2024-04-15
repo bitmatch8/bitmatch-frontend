@@ -84,7 +84,7 @@ export default function Etching2(props: any) {
     if (addressType == "p2pkh") {
       dispatch(
         addToast({
-          contxt: "The current address format is not supported, please switch",
+          contxt: "The current address type is not supported, please switch",
           icon: "warning",
         })
       );
@@ -96,15 +96,20 @@ export default function Etching2(props: any) {
       throw new Error();
     }
 
-    const signedPsbtBase64 = await wallet.signPsbt(unsignedPsbt.psbtBase64);
-    const txid = await wallet.pushPsbt(signedPsbtBase64);
-    if (txid) {
-      console.log("txid", txid);
-      handleBackFlow2(flowName, 3, txid);
-    } else {
-      console.log("Error");
+    try {
+      const signedPsbtBase64 = await wallet.signPsbt(unsignedPsbt.psbtBase64);
+      const txid = await wallet.pushPsbt(signedPsbtBase64);
+      if (txid) {
+        console.log("txid", txid);
+        handleBackFlow2(flowName, 3, txid);
+      } else {
+        console.log("Error");
+      }
+      setEtchingLoading(false);
+    } catch (e) {
+      console.log("Error", e);
+      setEtchingLoading(false);
     }
-    setEtchingLoading(false);
   };
   //Psbt
   const initPsbt = async () => {
@@ -117,9 +122,37 @@ export default function Etching2(props: any) {
         premineReceiveAddress, //页面上etching/min/transfer第一步三个Receive Address相关字段都传这个
       } = formData;
       const runesStone = generateRunesStoneData();
+
+      // const runesStone = {
+      //   etching: {
+      //     rune: "RUNE",
+      //     symbol: "$",
+      //     premine: BigInt(10000),
+      //     terms: {
+      //       cap: BigInt(10000),
+      //       amount: BigInt(10),
+      //     },
+      //   },
+      //   // mint: {
+      //   //   block: 2585958,
+      //   //   tx: 114,
+      //   // },
+      //   // pointer: 0,
+      //   // edicts: [
+      //   //   {
+      //   //     id: {
+      //   //       block: 2585958,
+      //   //       tx: 114,
+      //   //     },
+      //   //     amount: 2, // tranfer的总量
+      //   //     output: 0, //默认先写0，后面再调整具体
+      //   //   },
+      //   // ],
+      // };
+
       //1.生成Buffer
       const opReturnOutput = encodeRunestoneUnsafe(runesStone);
-      console.log("opReturnOutput", opReturnOutput);
+      console.log("----opReturnOutput----", opReturnOutput);
       //2.sign/push
       const payment = {
         addressType: psbt.getUnisatAddressType(address as string),
@@ -127,6 +160,7 @@ export default function Etching2(props: any) {
         publicKey: await wallet.getPublicKey(),
         amount: psbt.LOWEST_FEE,
       };
+      console.log("----payment----", payment);
       //3.得到交易结果
       const unsignedPsbt = await psbt.generatePsbt(
         payment,
@@ -136,9 +170,11 @@ export default function Etching2(props: any) {
         opReturnOutput,
         flowName == "mint" ? mintAmount : 1
       );
-      console.log("unsignedPsbt", unsignedPsbt);
+      console.log("----unsignedPsbt----", unsignedPsbt);
       setUnsignedPsbt(unsignedPsbt);
-    } catch {}
+    } catch (e) {
+      console.log("initPsbt Error", e);
+    }
   };
 
   //生成 runesStone 数据
@@ -216,6 +252,7 @@ export default function Etching2(props: any) {
         ],
       };
     }
+    console.log("----runesStone----", runesStone);
     return runesStone;
   };
   const satsToUSD = (sats: number, bitcoinPriceUSD: any) => {
