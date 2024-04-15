@@ -3,7 +3,7 @@ import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
-import { useSelector, selectWallter } from "@/lib/redux";
+import { useSelector, selectWallter, wallterType } from "@/lib/redux";
 
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
@@ -18,6 +18,7 @@ export default function Etching2(props: any) {
   const { address, balance } = useSelector(selectWallter);
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
   const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState("");
+  const [unsignedPsbt, setUnsignedPsbt] = useState<any>(null);
 
   const getBTCPrice = () => {
     return new Promise((resolve, reject) => {
@@ -31,7 +32,8 @@ export default function Etching2(props: any) {
     });
   };
 
-  const wallet = window.unisat;
+  const wallet =
+    wallterType === "okx" ? window.okxwallet?.bitcoin : window.unisat;
 
   const SatsTipText = useMemo(
     () => (
@@ -76,12 +78,27 @@ export default function Etching2(props: any) {
     handleBackFlow2(flowName, 1);
   };
 
-  //Sign & Pay Button
-  //Sign & Pay Button
   const go2Pay = async () => {
+    setEtchingLoading(true);
+    if (!unsignedPsbt) {
+      setEtchingLoading(false);
+      throw new Error();
+    }
+
+    const signedPsbtBase64 = await wallet.signPsbt(unsignedPsbt.psbtBase64);
+    const txid = await wallet.pushPsbt(signedPsbtBase64);
+    if (txid) {
+      console.log("txid", txid);
+      handleBackFlow2(flowName, 3, txid);
+    } else {
+      console.log("Error");
+    }
+    setEtchingLoading(false);
+  };
+  //Psbt
+  const initPsbt = async () => {
     console.log("第一个页面的表单数据", formData);
     console.log("第二个页面的sats选择", sats);
-    setEtchingLoading(true);
     try {
       //0.构建数据
       const {
@@ -100,7 +117,7 @@ export default function Etching2(props: any) {
         amount: psbt.LOWEST_FEE,
       };
       //3.得到交易结果
-      const txid = await signPsbt(
+      const unsignedPsbt = await psbt.generatePsbt(
         payment,
         null,
         premineReceiveAddress,
@@ -108,17 +125,9 @@ export default function Etching2(props: any) {
         opReturnOutput,
         flowName == "mint" ? mintAmount : 1
       );
-
-      if (txid) {
-        console.log("txid", txid);
-        handleBackFlow2(flowName, 3, txid);
-      } else {
-        console.log("Error");
-      }
-      setEtchingLoading(false);
-    } catch {
-      setEtchingLoading(false);
-    }
+      console.log("unsignedPsbt", unsignedPsbt);
+      setUnsignedPsbt(unsignedPsbt);
+    } catch {}
   };
 
   //生成 runesStone 数据
@@ -198,39 +207,6 @@ export default function Etching2(props: any) {
     }
     return runesStone;
   };
-
-  //signPsbt
-  const signPsbt = async (
-    payment: any,
-    ordinals: any,
-    recipientAddress: string,
-    feeRate: number,
-    opReturnOutput: any,
-    opNum: number
-  ) => {
-    try {
-      const unsignedPsbt = await psbt.generatePsbt(
-        payment,
-        ordinals,
-        recipientAddress,
-        feeRate,
-        opReturnOutput,
-        opNum
-      );
-      console.log("unsignedPsbt", unsignedPsbt);
-
-      if (!unsignedPsbt) {
-        throw new Error();
-      }
-
-      const signedPsbtBase64 = await wallet.signPsbt(unsignedPsbt.psbtBase64);
-      const txid = await wallet.pushPsbt(signedPsbtBase64);
-      return txid;
-    } catch (error) {
-      throw new Error();
-    }
-  };
-
   const satsToUSD = (sats: number, bitcoinPriceUSD: any) => {
     const bitcoinAmount = sats / 100000000; // 将 sats 转换为比特币
     const amountInUSD = bitcoinAmount * Number(bitcoinPriceUSD); // 将比特币转换为美元
@@ -249,6 +225,10 @@ export default function Etching2(props: any) {
 
   useEffect(() => {
     getDollers();
+  }, []);
+
+  useEffect(() => {
+    initPsbt();
   }, []);
 
   const btnText = useMemo(() => {

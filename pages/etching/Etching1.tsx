@@ -11,7 +11,6 @@ import {
 } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
-import bitcoin from "bitcoinjs-lib";
 
 export default function Etching1(props: any) {
   const { handleBackData } = props;
