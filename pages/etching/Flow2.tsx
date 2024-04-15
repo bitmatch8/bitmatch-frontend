@@ -113,8 +113,8 @@ export default function Etching2(props: any) {
   };
   //Psbt
   const initPsbt = async () => {
-    console.log("第一个页面的表单数据", formData);
-    console.log("第二个页面的sats选择", sats);
+    console.log("第一个页面的表单数据1", formData);
+    console.log("第二个页面的sats选择1", sats);
     try {
       //0.构建数据
       const {
