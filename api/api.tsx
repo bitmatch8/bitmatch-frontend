@@ -48,5 +48,5 @@ export const fetchFeesApi = () => {
 };
 
 export const fetchRuneSearchApi = (name: string) => {
-  return Ajax.get(`/nestone/search/runes/by/name/${name}`);
+  return Ajax.get(`/runestone/search/runes/by/name/${name}`);
 };
