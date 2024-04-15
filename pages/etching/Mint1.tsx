@@ -22,6 +22,8 @@ export default function Mint1(props: any) {
     const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
     const [premineReceiveAddressErrorTip, setPremineReceiveAddressErrorTip] =
     React.useState("");
+    const [block, setBlock] = React.useState(0);
+    const [tx, setTx] = React.useState('');
 
     const {
         address,
@@ -77,7 +79,10 @@ export default function Mint1(props: any) {
         }
         setRuneErrorTip("");
 
-        fetchRuneInfoByRuneName(runeVal)
+        fetchRuneInfoByRuneName(runeVal).then((res) => {
+            setTx(res['result']['rune']['txid']);
+            setBlock(res['result']['rune']['height']);
+        })
     };
     const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMmintAmount(Number(event.target.value));
@@ -120,6 +125,8 @@ export default function Mint1(props: any) {
             divisibility: 0,
             mintAmount: totalMintAmount,
             premineReceiveAddress,
+            block,
+            tx,
         };
         
         handleBackData(callbackData);
