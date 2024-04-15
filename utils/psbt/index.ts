@@ -26,7 +26,7 @@ export function getUnisatAddressType(address: string): string {
 export const LOWEST_FEE = 550;
 
 export function getSpacers(rune: string): number[] {
-  let result = [];
+  let result: number[] = [];
   const arr = rune.split("·");
   arr.reduce((accumulator, currentValue, currentIndex, array) => {
     result.push(accumulator + currentValue.length - 1);

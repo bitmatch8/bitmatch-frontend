@@ -15,7 +15,7 @@ export default function Etching2(props: any) {
   const [stasCurIndex, setStasCurIndex] = React.useState(2);
   const [inputStas3, setInputStas3] = React.useState(25);
   const [etchingLoading, setEtchingLoading] = useState(false);
-  const { address, balance, wallterType } = useSelector(selectWallter);
+  const { address, balance } = useSelector(selectWallter);
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
   const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState("");
 
@@ -31,8 +31,7 @@ export default function Etching2(props: any) {
     });
   };
 
-  const wallet =
-    wallterType === "unisat" ? window.unisat : window.okxwallet?.bitcoin;
+  const wallet = window.unisat;
 
   const SatsTipText = useMemo(
     () => (
@@ -202,12 +201,12 @@ export default function Etching2(props: any) {
 
   //signPsbt
   const signPsbt = async (
-    payment,
-    ordinals,
-    recipientAddress,
-    feeRate,
-    opReturnOutput,
-    opNum
+    payment: any,
+    ordinals: any,
+    recipientAddress: string,
+    feeRate: number,
+    opReturnOutput: any,
+    opNum: number
   ) => {
     try {
       const unsignedPsbt = await psbt.generatePsbt(
