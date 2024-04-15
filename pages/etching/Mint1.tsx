@@ -165,7 +165,7 @@ export default function Mint1(props: any) {
                     <div className="etch-inputBox1">
                         <input
                             type="text"
-                            placeholder="12 letter identifier like ”ABCDE·FGHI”"
+                            placeholder="13 letter identifier like ”ABCDE·FGHI”"
                             value={rune}
                             onChange={setRuneName}
                             onBlur={checkRuneName}
