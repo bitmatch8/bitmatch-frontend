@@ -207,8 +207,8 @@ export default function Etching2(props: any) {
 
     if (flowName == "etching") {
       const initRunesStone = {
-        rune,
-        divisibility,
+        runeName: rune,
+        divisibility: divisibility,
         premine: BigInt(premine),
         spacers: psbt.getSpacers(rune),
         symbol: "⧉",
