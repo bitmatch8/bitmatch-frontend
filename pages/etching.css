@@ -328,6 +328,10 @@ input:focus {
                 visibility: hidden;
             }
         }
+        .etch-formErrorTipMintRune {
+            display: flex;
+            justify-content: space-between;
+        }
     }
     .etch-mintSetBtnBox {
         display: flex;

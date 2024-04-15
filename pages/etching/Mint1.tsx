@@ -9,17 +9,22 @@ import {
   } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
+import { fetchRuneInfoByRuneName, fetchHasMintAmount } from "@/api/api";
+import useSwr from "@/hook/useSwr";
 
 export default function Mint1(props: any) {
     const { handleBackData } = props;
 
     const [rune, setRune] = React.useState("");
+    const [runeNum, setRuneNum] = React.useState(0);
     const [runeErrorTip, setRuneErrorTip] = React.useState("");
     const [mintAmount, setMmintAmount] = React.useState(1);
     const [totalMintAmount, setTotalMintAmount] = React.useState(2100);
     const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
     const [premineReceiveAddressErrorTip, setPremineReceiveAddressErrorTip] =
     React.useState("");
+    const [block, setBlock] = React.useState(0);
+    const [tx, setTx] = React.useState('');
 
     const {
         address,
@@ -63,8 +68,8 @@ export default function Mint1(props: any) {
             }
             }
         }
-        if (charArr.length !== 12) {
-            setRuneErrorTip("Rune must 12 letters");
+        if (charArr.length !== 13) {
+            setRuneErrorTip("Rune must 13 letters");
             setRune("");
             return;
         }
@@ -74,9 +79,30 @@ export default function Mint1(props: any) {
             return;
         }
         setRuneErrorTip("");
+
+        // 获取所需的tx和block数据
+        fetchRuneInfoByRuneName(runeVal).then((res) => {
+            setTx(res['result']['rune']['txid']);
+            setBlock(res['result']['rune']['height']);
+            // 获取剩余可Mint数量
+            const premineNum = res['result']['rune']['premine'] || 0;
+            const capacityNum = res['result']['rune']['capacity'] || 0;
+            let totalNum = premineNum + capacityNum;
+            fetchHasMintAmount(runeVal).then((mres) => {
+                const hasMintNum = mres['result']['mintAmount'];
+                let renuNumShow = totalNum - hasMintNum;
+                setRuneNum(renuNumShow);
+            })
+        })
+        
     };
     const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setMmintAmount(Number(event.target.value));
+        let amountValue = Number(event.target.value);
+        if (amountValue * 2100 > runeNum) {
+            return;
+        } else {
+            setMmintAmount(Number(event.target.value));
+        }
     };
     const setPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPremineReceiveAddress(event.target.value);
@@ -116,6 +142,8 @@ export default function Mint1(props: any) {
             divisibility: 0,
             mintAmount: totalMintAmount,
             premineReceiveAddress,
+            block,
+            tx,
         };
         
         handleBackData(callbackData);
@@ -137,13 +165,18 @@ export default function Mint1(props: any) {
                     <div className="etch-inputBox1">
                         <input
                             type="text"
-                            placeholder="12 letter identifier like ”ABCDE·FGHI”"
+                            placeholder="13 letter identifier like ”ABCDE·FGHI”"
                             value={rune}
                             onChange={setRuneName}
                             onBlur={checkRuneName}
                         />
                     </div>
-                    <p className="etch-formErrorTip">{ runeErrorTip }</p>
+                    <p className="etch-formErrorTip etch-formErrorTipMintRune">
+                        <span>{ runeErrorTip }</span>
+                        {
+                            rune && <span>{ rune } only has { runeNum } left to mint</span>
+                        }
+                    </p>
                 </div>
                 <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">
