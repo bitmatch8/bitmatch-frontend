@@ -63,8 +63,8 @@ export default function Mint1(props: any) {
             }
             }
         }
-        if (charArr.length !== 12) {
-            setRuneErrorTip("Rune must 12 letters");
+        if (charArr.length !== 13) {
+            setRuneErrorTip("Rune must 13 letters");
             setRune("");
             return;
         }
