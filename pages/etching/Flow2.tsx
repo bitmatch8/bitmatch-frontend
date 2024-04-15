@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
-import { encodeRunestoneUnsafe, RunestoneSpec } from "@/utils/runestone-lib";
+import { encodeRunestone, RunestoneSpec } from "@/utils/runestone-lib";
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, useDispatch, addToast } from "@/lib/redux";
 
@@ -19,6 +19,13 @@ export default function Etching2(props: any) {
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
   const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState("");
   const [unsignedPsbt, setUnsignedPsbt] = useState<any>(null);
+  const [byteNum, setByteNum] = React.useState(88);
+  const [networkFeeShow, setNetworkFeeShow] = React.useState(0);
+  const [networkFeeDollerShow, setNetworkFeeDollerShow] = React.useState("");
+  const [feeBySizeShow, setFeeBySizeShow] = React.useState("");
+  const [feeBySizeDolloerShow, setFeeBySizeDolloerShow] = React.useState("");
+  const [totalNumDomShow, setTotalNumDomShow] = React.useState("");
+  const [totalDollerDomShow, setTotalDollerDomShow] = React.useState("");
   const dispatch = useDispatch();
 
   const getBTCPrice = () => {
@@ -81,7 +88,10 @@ export default function Etching2(props: any) {
 
   const go2Pay = async () => {
     const addressType = psbt.getUnisatAddressType(address as string);
-    if (addressType == "p2pkh") {
+    if (
+      addressType == psbt.ADDRESS_TYPE_P2PKH ||
+      addressType === psbt.ADDRESS_TYPE_P2SH_P2WPKH
+    ) {
       dispatch(
         addToast({
           contxt: "The current address type is not supported, please switch",
@@ -150,8 +160,8 @@ export default function Etching2(props: any) {
       // };
 
       //1.生成Buffer
-      const opReturnOutput = encodeRunestoneUnsafe(runesStone);
-      console.log("----opReturnOutput----", opReturnOutput);
+      const opReturnOutput = encodeRunestone(runesStone);
+      console.log("----opReturnOutput----", opReturnOutput.encodedRunestone);
       //2.sign/push
       const payment = {
         addressType: psbt.getUnisatAddressType(address as string),
@@ -166,7 +176,7 @@ export default function Etching2(props: any) {
         null,
         premineReceiveAddress,
         sats,
-        opReturnOutput,
+        opReturnOutput.encodedRunestone,
         flowName == "mint" ? mintAmount : 1
       );
       console.log("----unsignedPsbt----", unsignedPsbt);
@@ -212,10 +222,10 @@ export default function Etching2(props: any) {
         if (timeType == "offset") {
           terms = {
             ...terms,
-            offset: {
-              start: BigInt(start),
-              end: BigInt(end),
-            },
+            // offset: {
+            //   start: BigInt(start),
+            //   end: BigInt(end),
+            // },
           };
         } else {
           terms = {
@@ -280,6 +290,32 @@ export default function Etching2(props: any) {
     setServiceFeeeDolloer(serviceFeeValueShow);
   };
 
+  const getNetworkFeeDoller = async (sats: any, byteNum: any) => {
+    // 获取比特币当前价格
+    const btcPrice = await getBTCPrice();
+    // 获取Network Fee是多少聪
+    const networkFeeSats = sats * byteNum;
+    setNetworkFeeShow(networkFeeSats);
+    // 根据聪费率转换美元
+    const networkFeeDoller = satsToUSD(networkFeeSats, btcPrice);
+    const netFeeDollerShow = Number(networkFeeDoller).toFixed(2);
+    setNetworkFeeDollerShow(netFeeDollerShow);
+    // Fee by Size 的展示
+    const feeSize = Number(networkFeeSats)*0.05;
+    const feeSizeShow = (Number(networkFeeSats)*0.05).toFixed(2);
+    setFeeBySizeShow(String(feeSizeShow));
+    const feeSizeDoller = satsToUSD(feeSize, btcPrice);
+    const feeSizeDollerShow = feeSizeDoller.toFixed(2);
+    setFeeBySizeDolloerShow(String(feeSizeDollerShow));
+    // 总价的计算展示
+    const totalNum = 546 + 2000 + networkFeeSats + feeSize;
+    const totalNumShow = totalNum.toFixed(2);
+    setTotalNumDomShow(totalNumShow);
+    const totalDollerNum = satsToUSD(totalNum, btcPrice);
+    const totalDollerNumShow = totalDollerNum.toFixed(2);
+    setTotalDollerDomShow(totalDollerNumShow);
+  }
+
   useEffect(() => {
     getDollers();
   }, []);
@@ -287,6 +323,11 @@ export default function Etching2(props: any) {
   useEffect(() => {
     initPsbt();
   }, []);
+
+  // 计算Network Fee
+  useEffect(() => {
+    getNetworkFeeDoller(sats, byteNum);
+  }, [sats, byteNum])
 
   const btnText = useMemo(() => {
     if (flowName === "etching") {
@@ -387,8 +428,8 @@ export default function Etching2(props: any) {
             <span className="etch-countKeyName">Network Fee：</span>
             <span className="etch-countNoAskTip"></span>
             <span className="etch-countNull"></span>
-            <span className="etch-countValue">2210 sats</span>
-            <span className="etch-countDoller">~$0.39</span>
+            <span className="etch-countValue">{ networkFeeShow } sats</span>
+            <span className="etch-countDoller">~${ networkFeeDollerShow }</span>
           </div>
           <div className="etch-countLine"></div>
           <div className="etch-countItem">
@@ -406,16 +447,16 @@ export default function Etching2(props: any) {
               <span className="etch-countAskTip"></span>
             </TextTooltip>
             <span className="etch-countNull"></span>
-            <span className="etch-countValue">111 sats</span>
-            <span className="etch-countDoller">~$0.04</span>
+            <span className="etch-countValue">{ feeBySizeShow } sats</span>
+            <span className="etch-countDoller">~${ feeBySizeDolloerShow }</span>
           </div>
           <div className="etch-countLine"></div>
           <div className="etch-countItem">
             <span className="etch-countKeyName">Total：</span>
             <span className="etch-countNoAskTip"></span>
             <span className="etch-countNull"></span>
-            <span className="etch-countValue">4867 sats</span>
-            <span className="etch-countDoller">~$2.75</span>
+            <span className="etch-countValue">{ totalNumDomShow } sats</span>
+            <span className="etch-countDoller">~${ totalDollerDomShow }</span>
           </div>
         </div>
 

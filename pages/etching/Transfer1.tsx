@@ -181,7 +181,7 @@ export default function Etching1(props: any) {
                             placeholder="Please check rune"
                         >
                             {
-                                runes.map((item, index) => (
+                                runes.map((item: any, index: number) => (
                                     <MenuItem value={item.rune_name} key={index}>{ item.rune_name }</MenuItem>
                                 ))
                             }
