@@ -21,40 +21,48 @@ export interface RunestoneStorage {
   /**
    * Get the most recently indexed block's index and hash stored in IRunestoneStorage.
    */
-  getCurrentBlock(): Promise<BlockInfo | null>;
+  getCurrentBlock(): Promise<BlockIdentifier | null>;
 
   /**
    * Reset the most recent index block to a previous block height/hash by unindexing all blocks
    * following the specified block (this is used to handle reorgs).
    * @param block the block height and hash to reset current block to
    */
-  resetCurrentBlock(block: BlockInfo): Promise<void>;
+  resetCurrentBlock(block: BlockIdentifier): Promise<void>;
+
+  /**
+   * Seeds the database with any predefined etchings.
+   * @param etchings etchings to seed the database with
+   */
+  seedEtchings(etchings: RuneEtching[]): Promise<void>;
 
   /**
    * Save new utxo balances for the given block.
-   * @param balances the block with all the new utxo balances
+   * @param runeBlockIndex the block with all the new utxo balances
    */
-  saveBlockIndex(balances: RuneBlockIndex): Promise<void>;
+  saveBlockIndex(runeBlockIndex: RuneBlockIndex): Promise<void>;
 
   /**
    * Get the etching that deployed the rune if it exists.
-   * @param rune rune string representation
+   * @param runeLocation rune id string representation
    */
-  getEtching(rune: string): Promise<RuneEtching | null>;
+  getEtching(runeLocation: string): Promise<RuneEtching | null>;
 
   /**
    * Get the total valid mint counts for rune.
-   * @param rune rune string representation
+   * @param rune rune id string representation
+   * @param blockhash hash to specify explicit block chain tip to use
    */
-  getValidMintCount(rune: string): Promise<number>;
+  getValidMintCount(runeLocation: string, blockhash: string): Promise<number>;
+
+  getRuneLocation(runeTicker: string): Promise<RuneLocation | null>;
 
   /**
-   * Get the rune balance for the given UTXO.
-   * @param rune rune string representation
+   * Get the rune balances for the given UTXO.
    * @param txid transaction id
    * @param vout output index in transaction
    */
-  getUtxoBalance(rune: string, txid: string, vout: number): Promise<RuneUtxoBalance>;
+  getUtxoBalance(txid: string, vout: number): Promise<RuneUtxoBalance[]>;
 }
 
 export type RunestoneIndexerOptions = {
@@ -71,9 +79,30 @@ export type RunestoneIndexerOptions = {
   pollIntervalMs?: number;
 };
 
-export type BlockInfo = {
+export type BlockIdentifier = {
   height: number;
   hash: string;
+};
+
+export type BlockInfo = BlockIdentifier & {
+  previousblockhash: string;
+  time: number;
+};
+
+export type RuneLocation = {
+  block: number;
+  tx: number;
+};
+
+export namespace RuneLocation {
+  export function toString(runeId: RuneLocation): string {
+    return `${runeId.block}:${runeId.tx}`;
+  }
+}
+
+export type RuneOutput = {
+  txid: string;
+  vout: number;
 };
 
 export type RuneUtxoBalance = {
@@ -81,15 +110,17 @@ export type RuneUtxoBalance = {
   vout: number;
   address?: string;
   scriptPubKey: Buffer;
-  rune: string;
+  runeId: RuneLocation;
+  runeTicker: string;
   amount: bigint;
 };
 
-export type RuneEtchingSpec = {
-  rune?: string;
+export type RuneMintCount = { mint: RuneLocation; count: number };
+export type RuneBalance = { runeId: RuneLocation; amount: bigint };
+
+export type RuneEtchingBase = {
   divisibility?: number;
   premine?: bigint;
-  spacers?: number[];
   symbol?: string;
   terms?: {
     cap?: bigint;
@@ -103,21 +134,23 @@ export type RuneEtchingSpec = {
       end?: bigint;
     };
   };
+  turbo?: boolean;
 };
 
-export type RuneEtching = RuneEtchingSpec & {
-  rune: string;
-};
+export type RuneEtchingSpec = RuneEtchingBase & { runeName?: string };
 
-export type RuneMint = {
-  rune: string;
+export type RuneEtching = ({ valid: false } | ({ valid: true } & RuneEtchingBase)) & {
+  runeId: RuneLocation;
+  runeTicker: string;
+  runeName: string;
   txid: string;
-  valid: boolean;
 };
 
 export type RuneBlockIndex = {
   block: BlockInfo;
   etchings: RuneEtching[];
-  mints: RuneMint[];
+  mintCounts: RuneMintCount[];
   utxoBalances: RuneUtxoBalance[];
+  spentOutputs: RuneOutput[];
+  burnedBalances: RuneBalance[];
 };
