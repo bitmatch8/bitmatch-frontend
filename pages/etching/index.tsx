@@ -10,7 +10,7 @@ import Transfer1 from "./Transfer1"
 
 export default function IndexPage() {
     const [flowName, setFlowName] = React.useState('etching');
-    const [flowIndex, setFlowIndex] = React.useState(1);
+    const [flowIndex, setFlowIndex] = React.useState(2);
     const [formData, setFormData] = React.useState({});
     const [flow3Hash, setFlow3Hash] = React.useState('');
     const [searchVal, setSearchVal] = React.useState('');

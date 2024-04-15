@@ -19,6 +19,10 @@ export default function Etching2(props: any) {
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
   const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState("");
   const [unsignedPsbt, setUnsignedPsbt] = useState<any>(null);
+  const [byteNum, setByteNum] = React.useState(88);
+  const [networkFeeShow, setNetworkFeeShow] = React.useState(0);
+  const [networkFeeDollerShow, setNetworkFeeDollerShow] = React.useState("");
+  const [feeBySizeShow, setFeeBySizeShow] = React.useState("");
   const dispatch = useDispatch();
 
   const getBTCPrice = () => {
@@ -280,6 +284,20 @@ export default function Etching2(props: any) {
     setServiceFeeeDolloer(serviceFeeValueShow);
   };
 
+  const getNetworkFeeDoller = async (sats: any, byteNum: any) => {
+    // 获取比特币当前价格
+    const btcPrice = await getBTCPrice();
+    // 获取Network Fee是多少聪
+    const networkFeeSats = sats * byteNum;
+    setNetworkFeeShow(networkFeeSats);
+    // 根据聪费率转换美元
+    const networkFeeDoller = satsToUSD(networkFeeSats, btcPrice);
+    const netFeeDollerShow = Number(networkFeeDoller).toFixed(2);
+    setNetworkFeeDollerShow(netFeeDollerShow);
+    // Fee by Size 的展示
+    
+  }
+
   useEffect(() => {
     getDollers();
   }, []);
@@ -287,6 +305,11 @@ export default function Etching2(props: any) {
   useEffect(() => {
     initPsbt();
   }, []);
+
+  // 计算Network Fee
+  useEffect(() => {
+    getNetworkFeeDoller(sats, byteNum);
+  }, [sats, byteNum])
 
   const btnText = useMemo(() => {
     if (flowName === "etching") {
@@ -387,8 +410,8 @@ export default function Etching2(props: any) {
             <span className="etch-countKeyName">Network Fee：</span>
             <span className="etch-countNoAskTip"></span>
             <span className="etch-countNull"></span>
-            <span className="etch-countValue">2210 sats</span>
-            <span className="etch-countDoller">~$0.39</span>
+            <span className="etch-countValue">{ networkFeeShow } sats</span>
+            <span className="etch-countDoller">~${ networkFeeDollerShow }</span>
           </div>
           <div className="etch-countLine"></div>
           <div className="etch-countItem">
