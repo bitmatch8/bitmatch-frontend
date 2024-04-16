@@ -192,7 +192,7 @@ export default function Etching2(props: any) {
       );
       console.log("----unsignedPsbt----", unsignedPsbt);
       setUnsignedPsbt(unsignedPsbt);
-      setByteNum((unsignedPsbt as any).vsize);
+      setByteNum((unsignedPsbt as any).vsize || 0);
     } catch (e: any) {
       throw new Error(e);
     }
@@ -481,7 +481,7 @@ export default function Etching2(props: any) {
           <span className="etch-balanceTxt">Balance</span>
           <span className="etch-balanceNum">{balance.total / 1e8} BTC</span>
         </div>
-        {balance.total < psbt.LOWEST_FEE ? (
+        {balance.confirmed < Number(totalNumDomShow) ? (
           <div className="etch-bottomBtn etch-bottomBtnLoading">
             Insufficient Balance
           </div>
