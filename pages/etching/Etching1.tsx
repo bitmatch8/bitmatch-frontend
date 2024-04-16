@@ -98,6 +98,12 @@ export default function Etching1(props: any) {
         let upperChar = runeVal[i].toUpperCase();
         upperStr += upperChar;
       }
+      if (i!==0 && i!==runeVal.length-1 && runeVal[i] === '·') {
+        if (runeVal[i-1] === '·' || runeVal[i+1] === '·') {
+          errorChar = true;
+          break;
+        }
+      }
     }
     if (errorChar) {
       return;
@@ -142,9 +148,11 @@ export default function Etching1(props: any) {
   const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const premineAmontValue: string = event.target.value;
     if (
-      isNaN(Number(premineAmontValue)) ||
-      Number(premineAmontValue) <= 0 ||
-      Number(premineAmontValue) % 1 !== 0
+      premineAmontValue && (
+        isNaN(Number(premineAmontValue)) ||
+        Number(premineAmontValue) <= 0 ||
+        Number(premineAmontValue) % 1 !== 0
+      )
     ) {
       return;
     }
