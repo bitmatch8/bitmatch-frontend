@@ -109,8 +109,8 @@ export default function Etching2(props: any) {
     try {
       const signedPsbtBase64 = await wallet.signPsbt(unsignedPsbt.psbtBase64);
       const txid = await wallet.pushPsbt(signedPsbtBase64);
+      console.log("txid", txid);
       if (txid) {
-        console.log("txid", txid);
         handleBackFlow2(flowName, 3, txid);
       } else {
         throw new Error("unisat sign & push failed");
@@ -118,7 +118,7 @@ export default function Etching2(props: any) {
       setEtchingLoading(false);
     } catch (e: any) {
       setEtchingLoading(false);
-      throw new Error(e);
+      console.log(e);
     }
   };
   //Psbt
@@ -181,6 +181,7 @@ export default function Etching2(props: any) {
       );
       console.log("----unsignedPsbt----", unsignedPsbt);
       setUnsignedPsbt(unsignedPsbt);
+      setByteNum((unsignedPsbt as any).vsize);
     } catch (e: any) {
       throw new Error(e);
     }
@@ -301,8 +302,8 @@ export default function Etching2(props: any) {
     const netFeeDollerShow = Number(networkFeeDoller).toFixed(2);
     setNetworkFeeDollerShow(netFeeDollerShow);
     // Fee by Size 的展示
-    const feeSize = Number(networkFeeSats)*0.05;
-    const feeSizeShow = (Number(networkFeeSats)*0.05).toFixed(2);
+    const feeSize = Number(networkFeeSats) * 0.05;
+    const feeSizeShow = (Number(networkFeeSats) * 0.05).toFixed(2);
     setFeeBySizeShow(String(feeSizeShow));
     const feeSizeDoller = satsToUSD(feeSize, btcPrice);
     const feeSizeDollerShow = feeSizeDoller.toFixed(2);
@@ -314,7 +315,7 @@ export default function Etching2(props: any) {
     const totalDollerNum = satsToUSD(totalNum, btcPrice);
     const totalDollerNumShow = totalDollerNum.toFixed(2);
     setTotalDollerDomShow(totalDollerNumShow);
-  }
+  };
 
   useEffect(() => {
     getDollers();
@@ -327,7 +328,7 @@ export default function Etching2(props: any) {
   // 计算Network Fee
   useEffect(() => {
     getNetworkFeeDoller(sats, byteNum);
-  }, [sats, byteNum])
+  }, [sats, byteNum]);
 
   const btnText = useMemo(() => {
     if (flowName === "etching") {
@@ -428,8 +429,8 @@ export default function Etching2(props: any) {
             <span className="etch-countKeyName">Network Fee：</span>
             <span className="etch-countNoAskTip"></span>
             <span className="etch-countNull"></span>
-            <span className="etch-countValue">{ networkFeeShow } sats</span>
-            <span className="etch-countDoller">~${ networkFeeDollerShow }</span>
+            <span className="etch-countValue">{networkFeeShow} sats</span>
+            <span className="etch-countDoller">~${networkFeeDollerShow}</span>
           </div>
           <div className="etch-countLine"></div>
           <div className="etch-countItem">
@@ -447,16 +448,16 @@ export default function Etching2(props: any) {
               <span className="etch-countAskTip"></span>
             </TextTooltip>
             <span className="etch-countNull"></span>
-            <span className="etch-countValue">{ feeBySizeShow } sats</span>
-            <span className="etch-countDoller">~${ feeBySizeDolloerShow }</span>
+            <span className="etch-countValue">{feeBySizeShow} sats</span>
+            <span className="etch-countDoller">~${feeBySizeDolloerShow}</span>
           </div>
           <div className="etch-countLine"></div>
           <div className="etch-countItem">
             <span className="etch-countKeyName">Total：</span>
             <span className="etch-countNoAskTip"></span>
             <span className="etch-countNull"></span>
-            <span className="etch-countValue">{ totalNumDomShow } sats</span>
-            <span className="etch-countDoller">~${ totalDollerDomShow }</span>
+            <span className="etch-countValue">{totalNumDomShow} sats</span>
+            <span className="etch-countDoller">~${totalDollerDomShow}</span>
           </div>
         </div>
 
