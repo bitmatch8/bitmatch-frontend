@@ -62,19 +62,22 @@ export default function Etching1(props: any) {
         })
     };
     const setAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let amontValue = Number(event.target.value);
+        let amontValue = event.target.value;
         if (!rune) {
             setAmountErrorTip("Please check Rune");
             return;
         }
         if (
-            isNaN(Number(amontValue)) ||
-            Number(amontValue) <= 0 ||
-            Number(amontValue) % 1 !== 0
+            amontValue && (
+                isNaN(Number(amontValue)) ||
+                Number(amontValue) <= 0 ||
+                Number(amontValue) % 1 !== 0 ||
+                amontValue.indexOf('.') !== -1
+            )
         ) {
             return;
         }
-        if (amontValue > runeNum) {
+        if (Number(amontValue) > runeNum) {
             return;
         }
         setAamount(event.target.value);
