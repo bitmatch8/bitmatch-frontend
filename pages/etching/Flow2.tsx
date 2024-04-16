@@ -368,7 +368,7 @@ export default function Etching2(props: any) {
           <div className="etch-descTopDetailBox">
             <p className="etch-descDetailTopTxt">
               <span>Detail：</span>
-              <span>～ 88vB</span>
+              <span>～ { byteNum }vB</span>
             </p>
             <div className="etch-descWord">{JSON.stringify(formDataBack)}</div>
           </div>
