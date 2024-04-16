@@ -42,15 +42,36 @@ export default function Mint1(props: any) {
         ></ConnectModal>
       ); //钱包弹窗
     
-    const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRune(event.target.value);
+      const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const runeVal: string = event.target.value;
+        var regex = /^[A-Za-z·]$/;
+        console.log('=-=-==', runeVal);
+        let errorChar = false;
+        let upperStr = '';
+        for (let i=0;i<runeVal.length;i++) {
+          if (runeVal[0] === '·') {
+            errorChar = true;
+            break;
+          }
+          if (!regex.test(runeVal[i])) {
+            errorChar = true;
+            break;
+          } else {
+            let upperChar = runeVal[i].toUpperCase();
+            upperStr += upperChar;
+          }
+        }
+        if (errorChar) {
+          return;
+        }
+        setRune(upperStr);
     };
     const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
         const runeVal: string = event.target.value;
         const runeValLength = runeVal.length;
         if (runeVal[0] === "·" || runeVal[runeValLength - 1] === "·") {
             setRuneErrorTip("The first and last characters cannot be ·");
-            setRune("");
+            // setRune("");
             return;
         }
         let charArr = [];
@@ -70,12 +91,12 @@ export default function Mint1(props: any) {
         }
         if (charArr.length !== 13) {
             setRuneErrorTip("Rune must 13 letters");
-            setRune("");
+            // setRune("");
             return;
         }
         if (isUpperLetter) {
             setRuneErrorTip("Characters must be all uppercase");
-            setRune("");
+            // setRune("");
             return;
         }
         setRuneErrorTip("");
