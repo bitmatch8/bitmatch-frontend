@@ -445,7 +445,7 @@ export default function Etching1(props: any) {
     if (address) {
       setPremineReceiveAddress(address);      
     }
-  }, [])
+  }, [address])
 
   return (
     <div className="etch-blockBox">
