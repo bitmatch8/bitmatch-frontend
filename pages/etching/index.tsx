@@ -14,6 +14,7 @@ export default function IndexPage() {
     const [formData, setFormData] = React.useState({});
     const [flow3Hash, setFlow3Hash] = React.useState('');
     const [searchVal, setSearchVal] = React.useState('');
+    const [twoTo1Data, set2to1Data] = React.useState({});
 
     const router = useRouter();
 
@@ -22,11 +23,14 @@ export default function IndexPage() {
         setFlowIndex(flowIndex);
         setFormData(data);
     }
-    const getFlow2BackData = (fName: string, findex: number, txHash: string) => {
+    const getFlow2BackData = (fName: string, findex: number, backData: any) => {
         setFlowName(fName);
         setFlowIndex(findex);
-        if (txHash) {
-            setFlow3Hash(txHash);
+        if (findex === 3) {
+            setFlow3Hash(backData);
+        }
+        if (findex === 1) {
+            set2to1Data(backData);
         }
     }
 
@@ -68,13 +72,13 @@ export default function IndexPage() {
             </div>
             <div className="etch-formFatherBox">
                 {
-                    flowName==='etching'&&flowIndex===1 && <Etching1 handleBackData={getFlow1Data}></Etching1>
+                    flowName==='etching'&&flowIndex===1 && <Etching1 handleBackData={getFlow1Data} from2To1Data={twoTo1Data}></Etching1>
                 }
                 {
-                    flowName==='mint'&&flowIndex===1 && <Mint1 handleBackData={getFlow1Data}></Mint1>
+                    flowName==='mint'&&flowIndex===1 && <Mint1 handleBackData={getFlow1Data} from2To1Data={twoTo1Data}></Mint1>
                 }
                 {
-                    flowName==='transfer'&&flowIndex===1 && <Transfer1 handleBackData={getFlow1Data}></Transfer1>
+                    flowName==='transfer'&&flowIndex===1 && <Transfer1 handleBackData={getFlow1Data} from2To1Data={twoTo1Data}></Transfer1>
                 }
                 {
                     flowIndex===2 && <Flow2 flowName={flowName} formData={formData} handleBackFlow2={getFlow2BackData}></Flow2>

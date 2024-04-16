@@ -94,7 +94,7 @@ export default function Etching2(props: any) {
     setSats(Number(inputStas3));
   };
   const goBackFlow1 = () => {
-    handleBackFlow2(flowName, 1);
+    handleBackFlow2(flowName, 1, formData);
   };
 
   const go2Pay = async () => {

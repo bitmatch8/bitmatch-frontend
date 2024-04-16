@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
 import { Switch } from "@mui/material";
@@ -13,7 +13,7 @@ import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
 
 export default function Etching1(props: any) {
-  const { handleBackData } = props;
+  const { handleBackData, from2To1Data } = props;
 
   const [checked, setChecked] = React.useState(false);
   const [rune, setRune] = React.useState("");
@@ -401,6 +401,27 @@ export default function Etching1(props: any) {
     }
     handleBackData(callbackData);
   };
+
+  useEffect(() => {
+    if (from2To1Data.rune) {
+      setRune(from2To1Data.rune);
+      setPremine(from2To1Data.premine);
+      setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+      setChecked(from2To1Data.publicMintChecked);
+      if (from2To1Data.publicMintChecked) {
+        setCap(from2To1Data.cap);
+        setAmount(from2To1Data.amount);
+        setOffOrHei(from2To1Data.timeType);
+        if (from2To1Data.timeType === 'offset') {
+          setOffset(from2To1Data.offset);
+        }
+        if (from2To1Data.timeType === 'height') {
+          setStartHeight(from2To1Data.start);
+          setEndHeight(from2To1Data.end);
+        }
+      }
+    }
+  }, [from2To1Data])
 
   return (
     <div className="etch-blockBox">
