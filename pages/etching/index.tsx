@@ -49,6 +49,11 @@ export default function IndexPage() {
         router.push('/search?q='+searchVal);
     }
     const setFlowNameTab = (name: string) => {
+        if (flowName !== name) {
+            set2to1Data({
+                rune: null
+            })
+        }
         setFlowName(name);
         setFlowIndex(1);
     }
