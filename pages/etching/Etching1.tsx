@@ -121,7 +121,7 @@ export default function Etching1(props: any) {
     let charArr = [];
     let isUpperLetter = false; // 验证是否是大写字母
     for (let i = 0; i < runeValLength; i++) {
-      if (runeVal[i] !== "·") {
+      if (runeVal[i] !== ".") {
         charArr.push(runeVal[i]);
         if (
           runeVal.charCodeAt(i) >= 0x0041 &&
