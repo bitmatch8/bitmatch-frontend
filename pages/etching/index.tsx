@@ -125,7 +125,7 @@ export default function IndexPage() {
           ></Flow3>
         )}
       </div>
-      <History></History>
+      {/* <History></History> */}
     </Page>
   );
 }
