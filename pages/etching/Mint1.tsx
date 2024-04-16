@@ -13,12 +13,13 @@ import { fetchRuneSearchApi, fetchHasMintAmount } from "@/api/api";
 import useSwr from "@/hook/useSwr";
 
 export default function Mint1(props: any) {
-    const { handleBackData } = props;
+    const { handleBackData, from2To1Data } = props;
 
     const [rune, setRune] = React.useState("");
     const [runeNum, setRuneNum] = React.useState(0);
     const [runeErrorTip, setRuneErrorTip] = React.useState("");
     const [mintAmount, setMmintAmount] = React.useState(1);
+    const [mintAmountErrorTip, setMmintAmountErrorTip] = React.useState("");
     const [totalMintAmount, setTotalMintAmount] = React.useState(2100);
     const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
     const [premineReceiveAddressErrorTip, setPremineReceiveAddressErrorTip] =
@@ -144,6 +145,10 @@ export default function Mint1(props: any) {
         if (runeErrorTip) {
             return false;
         }
+        if (!mintAmount) {
+            setMmintAmountErrorTip('Please Input Amount');
+            return false;
+        }
         if (!premineReceiveAddress) {
             setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
             return false;
@@ -172,6 +177,15 @@ export default function Mint1(props: any) {
     useEffect(() => {
         setTotalMintAmount(2100*mintAmount);
     }, [mintAmount])
+
+    useEffect(() => {
+        if (from2To1Data.rune) {
+            setRune(from2To1Data.rune);
+            setTotalMintAmount(from2To1Data.mintAmount);
+            setMmintAmount(from2To1Data.mintAmount/2100);
+            setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+        }
+    }, [from2To1Data])
 
     return (
         <div className="etch-blockBox">
@@ -212,7 +226,7 @@ export default function Mint1(props: any) {
                             <p className="etch-amontRightBottom">Total <span>{totalMintAmount}</span> {rune}</p>
                         </div>
                     </div>
-                    <p className="etch-formErrorTip"></p>
+                    <p className="etch-formErrorTip">{ mintAmountErrorTip }</p>
                 </div>
                 <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">
