@@ -183,7 +183,7 @@ export function encodeRunestone(runestone: RunestoneSpec): {
     etching = Some(
       new Etching(divisibility, rune, spacers, symbol, terms, premine, turbo)
     );
-    etchingCommitment = rune.isSome() ? rune.unwrap().commitment : undefined;
+    //etchingCommitment = rune.isSome() ? rune.unwrap().commitment : undefined;
   }
 
   return {

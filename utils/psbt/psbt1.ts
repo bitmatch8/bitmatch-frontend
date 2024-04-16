@@ -233,6 +233,7 @@ export const generatePsbt = async (
           psbt,
           psbtBase64,
           paymentUtxoCount,
+          vsize: feeTx.vsize,
         };
       }
     }
