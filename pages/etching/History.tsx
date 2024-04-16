@@ -4,65 +4,16 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputBase from "@mui/material/InputBase";
-import DownIcon from "@/components/Svg/DownIcon";
-import TokenSymbol from "@/components/TokenSymbol";
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import Pagination from "@/components/Pagination";
 import ValueSkeleton from "@/components/ValueSkeleton";
 import { dateFormat, hidehash } from "@/utils";
 import CopySvg from "@/components/CopySvg";
-import { OrderState } from "@/utils/types";
 import EmptyList from "@/components/OrderHistory/EmptyList";
 import useHistory, { HistoryItemProps } from "@/hook/useRuneHistory";
-import { buySlice, selectBuy, useSelector } from "@/lib/redux";
-import RefreshIcon from "@/components/Svg/RefreshIcon";
-import { useDispatch } from "@/lib/redux";
-import RefreshLoader from "@/components/Loader/RefreshLoader";
+import { selectBuy, useSelector } from "@/lib/redux";
 import SelectIcon from "@/components/Svg/SelectIcon";
-
-const StatePending: React.FC = () => {
-  return (
-    <>
-      <span className="waiting">Pending</span>
-    </>
-  );
-};
-
-const StateDistributing: React.FC = () => {
-  return (
-    <>
-      <span className="waiting">Distributing</span>
-    </>
-  );
-};
-
-const StateCompleted: React.FC = () => {
-  return (
-    <>
-      <span className="waiting">Verifying</span>
-    </>
-  );
-};
-const StateCancelled: React.FC = () => {
-  return (
-    <>
-      <span className="cancelled">Failed</span>
-    </>
-  );
-};
-const StateSucceeded: React.FC = () => {
-  return (
-    <>
-      <div>
-        <span className="succeeded">Succeeded</span>
-      </div>
-      {/* <div>
-        <ViewButton>View</ViewButton>
-      </div> */}
-    </>
-  );
-};
 
 const SelectSvg: React.FC = () => {
   return (
@@ -72,7 +23,7 @@ const SelectSvg: React.FC = () => {
   );
 };
 
-const SelectInput = styled(InputBase)(({ theme }) => ({
+const SelectInput = styled(InputBase)(() => ({
   "& .MuiInputBase-input": {
     borderRadius: "12px",
     position: "relative",
@@ -168,27 +119,11 @@ const CopyItem: React.FC<{ text: string; len?: number }> = ({
   return <CopySvg text={text}>{hidehash(text, len)}</CopySvg>;
 };
 
-const OrderStatus: { [name: string]: any } = {
-  [`${OrderState.PENDING}_FT`]: StatePending,
-  [`${OrderState.DISTRIBUTE}_FT`]: StateDistributing,
-  [`${OrderState.COMPLETED}_FT`]: StateCompleted,
-  [`${OrderState.UNISATVERFY}_FT`]: StateSucceeded,
-  [`${OrderState.FAIL}_FT`]: StateCancelled,
-  [`${OrderState.FAILED}_FT`]: StateCancelled,
-
-  [`${OrderState.PENDING}_NFT`]: StatePending,
-  [`${OrderState.DISTRIBUTE}_NFT`]: StateDistributing,
-  [`${OrderState.COMPLETED}_NFT`]: StateSucceeded,
-  [`${OrderState.UNISATVERFY}_NFT`]: StateSucceeded,
-  [`${OrderState.FAIL}_NFT`]: StateCancelled,
-  [`${OrderState.FAILED}_NFT`]: StateCancelled,
-};
 const RuneHistoryItem: React.FC<{
   item: HistoryItemProps;
   onClick: any;
   show: boolean;
 }> = ({ item, show, onClick }) => {
-  // const StateComponents = OrderStatus[`${item.status}_${item.type}`];
   return (
     <RuneHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <RuneHistoryLineBox>
@@ -204,27 +139,8 @@ const RuneHistoryItem: React.FC<{
           <CopyItem text={item.receivedAddr} />
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="fee">{item.fee}</RuneHistoryItemBox>
-        <RuneHistoryItemBox className="state">
-          {item.state}
-          {/* <StateItemBox>
-            {StateComponents ? <StateComponents /> : ""}
-          </StateItemBox> */}
-        </RuneHistoryItemBox>
+        <RuneHistoryItemBox className="state">{item.state}</RuneHistoryItemBox>
       </RuneHistoryLineBox>
-      {/* <RuneHistoryLineBox> */}
-      {/* <RuneHistoryItemBox className="rune">
-          <div className="title">From Address</div>
-          <div> {hidehash(item.fromaddr, 6)}</div>
-        </RuneHistoryItemBox> */}
-      {/* <RuneHistoryItemBox className="types">
-          <div className="title">To Address</div>
-          <div> {hidehash(item.fundaddr, 6)}</div>
-        </RuneHistoryItemBox> */}
-      {/* <RuneHistoryItemBox className="time">
-          <div className="title">Time</div>
-          <div> {dateFormat(item.createtime, true)}</div>
-        </RuneHistoryItemBox> */}
-      {/* </RuneHistoryLineBox> */}
     </RuneHistoryLineDetailBox>
   );
 };
@@ -352,12 +268,7 @@ const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
   );
 };
 export default RuneHistory;
-const ViewButton = styled(Button)`
-  width: 66px;
-  height: 24px;
-  border-radius: 6px;
-  font-size: 14px;
-`;
+
 const RuneHistoryLineDetailBox = styled.div`
   height: 80px;
   transition: all 0.2s ease-in-out;
