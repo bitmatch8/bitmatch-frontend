@@ -45,7 +45,7 @@ export default function Etching3(props: any) {
       <div className="etch-blockBox etch-costBox">
         <div className="etch-nullData"></div>
         <p className="etch-submited">Tx submited</p>
-        <p className="etch-txHash">
+        <div className="etch-txHash">
           Tx Hash: {flow3TxHash}
           <div className="etch-copyBtnBox">
             <span className="etch-copyBtn" onClick={go2CopyHash}></span>
@@ -58,7 +58,7 @@ export default function Etching3(props: any) {
             </div>
           </div>
           <span className="etch-jumpBtn" onClick={go2mmp}></span>
-        </p>
+        </div>
         <div className="etch-bottomBtn etch-mt200" onClick={go2Flow1}>
           Back
         </div>
