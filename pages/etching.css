@@ -32,7 +32,6 @@ input:focus {
 .etching-topHeader {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin-top: 100px;
     height: 100px;
     .etch-topLeftTitle {
@@ -60,6 +59,7 @@ input:focus {
     }
     .etch-topRightSearchBox {
         position: relative;
+        top: 18px;
         width: 700px;
         height: 80px;
         background: #181B20;
@@ -129,13 +129,16 @@ input:focus {
     display: flex;
     align-items: center;
     margin: 0 auto;
-    width: 864px;
+    width: 896px;
     height: 60px;
     &>div {
         margin-right: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+    .etch-flowItem2 {
+        width: 146px;
     }
     .etch-flowLine {
         position: relative;
@@ -160,6 +163,24 @@ input:focus {
         color: #6F6F76;
         line-height: 55px;
         font-style: italic;
+    }
+    .etch-flowNum1 {
+        width: 25px;
+        height: 38px;
+        background: url(../assets/img/etch-flowNum1.png) no-repeat;
+        background-size: 100%;
+    }
+    .etch-flowNum2 {
+        width: 30px;
+        height: 39px;
+        background: url(../assets/img/etch-flowNum2.png) no-repeat;
+        background-size: 100%;
+    }
+    .etch-flowNum3 {
+        width: 32px;
+        height: 42px;
+        background: url(../assets/img/etch-flowNum3.png) no-repeat;
+        background-size: 100%;
     }
     .etch-flowTxt {
         margin: 0;
@@ -244,8 +265,13 @@ input:focus {
                 font-weight: 600;
                 font-size: 32px;
                 color: #FFFFFF;
-                .mui-style-15brxlr-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+                .MuiInputBase-input {
                     padding-left: 40px;
+                }
+            }
+            .Mui-focused {
+                .MuiOutlinedInput-notchedOutline {
+                    border-color: #181B20 !important;
                 }
             }
         }
@@ -347,6 +373,13 @@ input:focus {
         }
         .etch-mintSetSwitchBox {
             margin-left: 28px;
+            .MuiSwitch-track {
+                border-radius: 4px;
+                background-color: #ccc;
+            }
+            .MuiSwitch-thumb {
+                border-radius: 6px;
+            }
         }
     }
     .etch-formTtemBox2 {

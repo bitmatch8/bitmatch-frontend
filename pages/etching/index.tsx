@@ -66,7 +66,7 @@ export default function IndexPage() {
           <div className="etch-bottomLine"></div>
         </div>
         <div className="etch-topRightSearchBox">
-          <input type="text" onChange={setSearchValue} value={searchVal} />
+          <input type="text" onChange={setSearchValue} value={searchVal} placeholder="Search Rune or Address" />
           <span className="etch-topRightBtn" onClick={go2SearchPage}></span>
         </div>
       </div>

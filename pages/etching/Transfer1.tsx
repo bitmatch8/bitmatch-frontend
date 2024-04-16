@@ -234,23 +234,23 @@ export default function Etching1(props: any) {
                         <span className="etch-itemTitle">Rune</span>
                     </div>
                     <div className="etch-inputBox1">
-                    <Select
-                        value={rune}
-                        displayEmpty
-                        IconComponent={SelectSvg}
-                        MenuProps={{
-                            sx: dropdownStyle,
-                        }}
-                        onChange={handleRuneChange}
-                    >
-                        {runes.map((item: any, index: number) => {
-                        return (
-                            <MenuItem value={item.rune_name} key={index}>
-                            { item.rune_name }
-                            </MenuItem>
-                        );
-                        })}
-                    </Select>
+                        <Select
+                            value={rune}
+                            displayEmpty
+                            IconComponent={SelectSvg}
+                            MenuProps={{
+                                sx: dropdownStyle,
+                            }}
+                            onChange={handleRuneChange}
+                        >
+                            {runes.map((item: any, index: number) => {
+                            return (
+                                <MenuItem value={item.rune_name} key={index}>
+                                { item.rune_name }
+                                </MenuItem>
+                            );
+                            })}
+                        </Select>
                     </div>
                     <p className="etch-formErrorTip etch-formErrorTipMintRune">
                         <span>{ runeErrorTip }</span>
