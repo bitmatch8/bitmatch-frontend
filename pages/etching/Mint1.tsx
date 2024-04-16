@@ -45,7 +45,6 @@ export default function Mint1(props: any) {
       const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
         const runeVal: string = event.target.value;
         var regex = /^[A-Za-z·]$/;
-        console.log('=-=-==', runeVal);
         let errorChar = false;
         let upperStr = '';
         for (let i=0;i<runeVal.length;i++) {

@@ -13,7 +13,7 @@ export default function Etching2(props: any) {
 
   const [sats, setSats] = React.useState(12);
   const [stasCurIndex, setStasCurIndex] = React.useState(2);
-  const [inputStas3, setInputStas3] = React.useState(25);
+  const [inputStas3, setInputStas3] = React.useState('25');
   const [etchingLoading, setEtchingLoading] = useState(false);
   const { address, balance, wallterType } = useSelector(selectWallter);
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
@@ -69,7 +69,11 @@ export default function Etching2(props: any) {
   );
 
   const handleStas3 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputStas3(Number(event.target.value));
+    const stas3Val = event.target.value;
+    if (Number(stas3Val) <= 8) {
+      return;
+    }
+    setInputStas3(event.target.value);
     setSats(Number(event.target.value));
     setStasCurIndex(3);
   };
@@ -80,7 +84,7 @@ export default function Etching2(props: any) {
       setSats(num);
       return;
     }
-    setSats(inputStas3);
+    setSats(Number(inputStas3));
   };
   const goBackFlow1 = () => {
     handleBackFlow2(flowName, 1);
