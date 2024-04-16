@@ -156,11 +156,17 @@ export const generatePsbt = async (
     for (let i = 0; i < opNum; i++) {
       tx.addOutput({ script: opReturnOutput, amount: BigInt(0) }); //TODO:
     }
+    // '我们的服务费' > 0 && tx.addOutputAddress(
+    //   "我们的地址",
+    //   BigInt("我们的服务费"),
+    //   NETWORK
+    // );
 
     dummyTx.addOutputAddress(recipientAddress, BigInt(payment.amount), NETWORK);
     for (let i = 0; i < opNum; i++) {
       dummyTx.addOutput({ script: opReturnOutput, amount: BigInt(0) }); //TODO:
     }
+    // '我们的服务费' > 0 &&  dummyTx.addOutputAddress("我们的地址", BigInt("我们的服务费"), NETWORK);
 
     let response = await axios.get(
       `${SERVER_URL}/address/${payment.address}/utxo`

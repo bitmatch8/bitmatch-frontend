@@ -36,6 +36,9 @@ export function getSpacers(rune: string): number[] {
   return result.slice(0, result.length - 1);
 }
 
+export const TESTNET_NETWORK_URL = "https://mempool.space/testnet";
+export const LIVENET_NETWORK_URL = "https://mempool.space";
+
 export {
   ADDRESS_TYPE_P2SH,
   ADDRESS_TYPE_P2PKH,
