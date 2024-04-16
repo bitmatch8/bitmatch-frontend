@@ -141,6 +141,14 @@ export default function Etching1(props: any) {
     setRuneErrorTip("");
   };
   const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const premineAmontValue: string = event.target.value;
+    if (
+      isNaN(Number(premineAmontValue)) ||
+      Number(premineAmontValue) <= 0 ||
+      Number(premineAmontValue) % 1 !== 0
+    ) {
+      return;
+    }
     setPremine(event.target.value);
   };
   const checkPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,6 +176,14 @@ export default function Etching1(props: any) {
     setPremineReceiveAddressErrorTip("");
   };
   const setPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let pubAmontValue = event.target.value;
+    if (
+      isNaN(Number(pubAmontValue)) ||
+      Number(pubAmontValue) <= 0 ||
+      Number(pubAmontValue) % 1 !== 0
+    ) {
+      return;
+    }
     setCap(event.target.value);
   };
   const checkPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,6 +200,18 @@ export default function Etching1(props: any) {
     setCapErrorTip("");
   };
   const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const mintAmountValue = event.target.value;
+    if (
+      isNaN(Number(mintAmountValue)) ||
+      Number(mintAmountValue) <= 0 ||
+      Number(mintAmountValue) % 1 !== 0
+    ) {
+      return;
+    }
+    if (Number(mintAmountValue) > Number(cap)) {
+      setAmountErrorTip("Mint Amount cannot be greater than Public Amount");
+      return;
+    }
     setAmount(event.target.value);
   };
   const checkMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -205,6 +233,14 @@ export default function Etching1(props: any) {
     setAmountErrorTip("");
   };
   const setOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const offsetValue = event.target.value;
+    if (
+      isNaN(Number(offsetValue)) ||
+      Number(offsetValue) <= 0 ||
+      Number(offsetValue) % 1 !== 0
+    ) {
+      return;
+    }
     setOffset(event.target.value);
   };
   const checkOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -221,6 +257,14 @@ export default function Etching1(props: any) {
     setOffsetErrorTip("");
   };
   const setStartHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const startHeightValue = event.target.value;
+    if (
+      isNaN(Number(startHeightValue)) ||
+      Number(startHeightValue) <= 0 ||
+      Number(startHeightValue) % 1 !== 0
+    ) {
+      return;
+    }
     setStartHeight(event.target.value);
   };
   const checkStartHeightNumber = (
@@ -239,6 +283,14 @@ export default function Etching1(props: any) {
     setSstartHeightErrorTip("");
   };
   const setEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const endHeightValue = event.target.value;
+    if (
+      isNaN(Number(endHeightValue)) ||
+      Number(endHeightValue) <= 0 ||
+      Number(endHeightValue) % 1 !== 0
+    ) {
+      return;
+    }
     setEndHeight(event.target.value);
   };
   const checkEndtHeightNumber = (
@@ -251,6 +303,11 @@ export default function Etching1(props: any) {
       Number(endHeightValue) % 1 !== 0
     ) {
       setEndHeightErrorTip("End Height must be a positive integer");
+      setEndHeight("");
+      return;
+    }
+    if (Number(endHeightValue) <= Number(startHeight)) {
+      setEndHeightErrorTip("End Height must more than Start Height");
       setEndHeight("");
       return;
     }
