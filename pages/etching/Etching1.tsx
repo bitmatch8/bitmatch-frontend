@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
 import { Switch } from "@mui/material";
@@ -13,7 +13,7 @@ import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
 
 export default function Etching1(props: any) {
-  const { handleBackData } = props;
+  const { handleBackData, from2To1Data } = props;
 
   const [checked, setChecked] = React.useState(false);
   const [rune, setRune] = React.useState("");
@@ -58,7 +58,7 @@ export default function Etching1(props: any) {
   const RuneTipText = useMemo(
     () => (
       <div className="etch-tipInnerBox">
-        <p>12 characters</p>
+        <p>13 characters</p>
         <p>Can contain a "·" between characters.</p>
       </div>
     ),
@@ -82,14 +82,34 @@ export default function Etching1(props: any) {
   );
 
   const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRune(event.target.value);
+    const runeVal: string = event.target.value;
+    var regex = /^[A-Za-z·]$/;
+    let errorChar = false;
+    let upperStr = "";
+    for (let i = 0; i < runeVal.length; i++) {
+      if (runeVal[0] === "·") {
+        errorChar = true;
+        break;
+      }
+      if (!regex.test(runeVal[i])) {
+        errorChar = true;
+        break;
+      } else {
+        let upperChar = runeVal[i].toUpperCase();
+        upperStr += upperChar;
+      }
+    }
+    if (errorChar) {
+      return;
+    }
+    setRune(upperStr);
   };
   const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const runeVal: string = event.target.value;
     const runeValLength = runeVal.length;
     if (runeVal[0] === "·" || runeVal[runeValLength - 1] === "·") {
       setRuneErrorTip("The first and last characters cannot be ·");
-      setRune("");
+      // setRune("");
       return;
     }
     let charArr = [];
@@ -109,17 +129,25 @@ export default function Etching1(props: any) {
     }
     if (charArr.length !== 13) {
       setRuneErrorTip("Rune must 13 letters");
-      setRune("");
+      // setRune("");
       return;
     }
     if (isUpperLetter) {
       setRuneErrorTip("Characters must be all uppercase");
-      setRune("");
+      // setRune("");
       return;
     }
     setRuneErrorTip("");
   };
   const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const premineAmontValue: string = event.target.value;
+    if (
+      isNaN(Number(premineAmontValue)) ||
+      Number(premineAmontValue) <= 0 ||
+      Number(premineAmontValue) % 1 !== 0
+    ) {
+      return;
+    }
     setPremine(event.target.value);
   };
   const checkPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,6 +175,14 @@ export default function Etching1(props: any) {
     setPremineReceiveAddressErrorTip("");
   };
   const setPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let pubAmontValue = event.target.value;
+    if (
+      isNaN(Number(pubAmontValue)) ||
+      Number(pubAmontValue) <= 0 ||
+      Number(pubAmontValue) % 1 !== 0
+    ) {
+      return;
+    }
     setCap(event.target.value);
   };
   const checkPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,6 +199,18 @@ export default function Etching1(props: any) {
     setCapErrorTip("");
   };
   const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const mintAmountValue = event.target.value;
+    if (
+      isNaN(Number(mintAmountValue)) ||
+      Number(mintAmountValue) <= 0 ||
+      Number(mintAmountValue) % 1 !== 0
+    ) {
+      return;
+    }
+    if (Number(mintAmountValue) > Number(cap)) {
+      setAmountErrorTip("Mint Amount cannot be greater than Public Amount");
+      return;
+    }
     setAmount(event.target.value);
   };
   const checkMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,6 +232,14 @@ export default function Etching1(props: any) {
     setAmountErrorTip("");
   };
   const setOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const offsetValue = event.target.value;
+    if (
+      isNaN(Number(offsetValue)) ||
+      Number(offsetValue) <= 0 ||
+      Number(offsetValue) % 1 !== 0
+    ) {
+      return;
+    }
     setOffset(event.target.value);
   };
   const checkOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -200,6 +256,14 @@ export default function Etching1(props: any) {
     setOffsetErrorTip("");
   };
   const setStartHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const startHeightValue = event.target.value;
+    if (
+      isNaN(Number(startHeightValue)) ||
+      Number(startHeightValue) <= 0 ||
+      Number(startHeightValue) % 1 !== 0
+    ) {
+      return;
+    }
     setStartHeight(event.target.value);
   };
   const checkStartHeightNumber = (
@@ -218,6 +282,14 @@ export default function Etching1(props: any) {
     setSstartHeightErrorTip("");
   };
   const setEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const endHeightValue = event.target.value;
+    if (
+      isNaN(Number(endHeightValue)) ||
+      Number(endHeightValue) <= 0 ||
+      Number(endHeightValue) % 1 !== 0
+    ) {
+      return;
+    }
     setEndHeight(event.target.value);
   };
   const checkEndtHeightNumber = (
@@ -230,6 +302,11 @@ export default function Etching1(props: any) {
       Number(endHeightValue) % 1 !== 0
     ) {
       setEndHeightErrorTip("End Height must be a positive integer");
+      setEndHeight("");
+      return;
+    }
+    if (Number(endHeightValue) <= Number(startHeight)) {
+      setEndHeightErrorTip("End Height must more than Start Height");
       setEndHeight("");
       return;
     }
@@ -324,6 +401,27 @@ export default function Etching1(props: any) {
     }
     handleBackData(callbackData);
   };
+
+  useEffect(() => {
+    if (from2To1Data.rune) {
+      setRune(from2To1Data.rune);
+      setPremine(from2To1Data.premine);
+      setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+      setChecked(from2To1Data.publicMintChecked);
+      if (from2To1Data.publicMintChecked) {
+        setCap(from2To1Data.cap);
+        setAmount(from2To1Data.amount);
+        setOffOrHei(from2To1Data.timeType);
+        if (from2To1Data.timeType === "offset") {
+          setOffset(from2To1Data.offset);
+        }
+        if (from2To1Data.timeType === "height") {
+          setStartHeight(from2To1Data.start);
+          setEndHeight(from2To1Data.end);
+        }
+      }
+    }
+  }, [from2To1Data]);
 
   return (
     <div className="etch-blockBox">
@@ -491,8 +589,8 @@ export default function Etching1(props: any) {
                 <p className="etch-formErrorTip">{offsetErrorTip}</p>
               </div>
             )}
-            {
-              offOrHei === "height" && <div className="etch-formItemBox etch-formTtemBox2">
+            {offOrHei === "height" && (
+              <div className="etch-formItemBox etch-formTtemBox2">
                 <div className="etch-formItemInner">
                   <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">
@@ -537,7 +635,7 @@ export default function Etching1(props: any) {
                   </div>
                 </div>
               </div>
-            }
+            )}
           </div>
         )}
       </div>

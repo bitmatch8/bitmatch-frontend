@@ -11,10 +11,10 @@ import {
   } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
-import { getRunesList, fetchRuneInfoByRuneName, fetchHasMintAmount } from "@/api/api";
+import { getRunesList, fetchRuneSearchApi, fetchHasMintAmount } from "@/api/api";
 
 export default function Etching1(props: any) {
-    const { handleBackData } = props;
+    const { handleBackData, from2To1Data } = props;
     const [rune, setRune] = React.useState('');
     const [runes, setRunes] = React.useState([]);
     const [runeNum, setRuneNum] = React.useState(0);
@@ -47,7 +47,7 @@ export default function Etching1(props: any) {
         setRune(event.target.value);
         let runeVal = event.target.value;
         // 获取所需的tx和block数据
-        fetchRuneInfoByRuneName(runeVal).then((res) => {
+        fetchRuneSearchApi(runeVal).then((res) => {
             setTx(res['result']['rune']['txid']);
             setBlock(res['result']['rune']['height']);
             // 获取剩余可Mint数量
@@ -65,6 +65,13 @@ export default function Etching1(props: any) {
         let amontValue = Number(event.target.value);
         if (!rune) {
             setAmountErrorTip("Please check Rune");
+            return;
+        }
+        if (
+            isNaN(Number(amontValue)) ||
+            Number(amontValue) <= 0 ||
+            Number(amontValue) % 1 !== 0
+        ) {
             return;
         }
         if (amontValue > runeNum) {
@@ -146,12 +153,12 @@ export default function Etching1(props: any) {
                     // 获取所需的tx和block数据
                     let runeVal = res['result']['runes'][0]['rune_name'];
                     setRune(runeVal); 
-                    fetchRuneInfoByRuneName(runeVal).then((res) => {
-                        setTx(res['result']['rune']['txid']);
-                        setBlock(res['result']['rune']['height']);
+                    fetchRuneSearchApi(runeVal).then((res) => {
+                        setTx(res['result']['rune']&&res['result']['rune']['txid'] || 0);
+                        setBlock(res['result']['rune']&&res['result']['rune']['height'] || 0);
                         // 获取剩余可Mint数量
-                        const premineNum = res['result']['rune']['premine'] || 0;
-                        const capacityNum = res['result']['rune']['capacity'] || 0;
+                        const premineNum = res['result']['rune']&&res['result']['rune']['premine'] || 0;
+                        const capacityNum = res['result']['rune']&&res['result']['rune']['capacity'] || 0;
                         let totalNum = premineNum + capacityNum;
                         fetchHasMintAmount(runeVal).then((mres) => {
                             const hasMintNum = mres['result']['mintAmount'];
@@ -163,6 +170,14 @@ export default function Etching1(props: any) {
             })
         }
     }, [])
+
+    useEffect(() => {
+        if (from2To1Data.rune) {
+            setRune(from2To1Data.rune);
+            setAamount(from2To1Data.transferAmount);
+            setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+        }
+    }, [from2To1Data])
 
     return (
         <div className="etch-blockBox">

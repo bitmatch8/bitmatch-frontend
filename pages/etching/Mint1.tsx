@@ -9,16 +9,17 @@ import {
   } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
-import { fetchRuneInfoByRuneName, fetchHasMintAmount } from "@/api/api";
+import { fetchRuneSearchApi, fetchHasMintAmount } from "@/api/api";
 import useSwr from "@/hook/useSwr";
 
 export default function Mint1(props: any) {
-    const { handleBackData } = props;
+    const { handleBackData, from2To1Data } = props;
 
     const [rune, setRune] = React.useState("");
     const [runeNum, setRuneNum] = React.useState(0);
     const [runeErrorTip, setRuneErrorTip] = React.useState("");
     const [mintAmount, setMmintAmount] = React.useState(1);
+    const [mintAmountErrorTip, setMmintAmountErrorTip] = React.useState("");
     const [totalMintAmount, setTotalMintAmount] = React.useState(2100);
     const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
     const [premineReceiveAddressErrorTip, setPremineReceiveAddressErrorTip] =
@@ -42,15 +43,35 @@ export default function Mint1(props: any) {
         ></ConnectModal>
       ); //钱包弹窗
     
-    const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRune(event.target.value);
+      const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const runeVal: string = event.target.value;
+        var regex = /^[A-Za-z·]$/;
+        let errorChar = false;
+        let upperStr = '';
+        for (let i=0;i<runeVal.length;i++) {
+          if (runeVal[0] === '·') {
+            errorChar = true;
+            break;
+          }
+          if (!regex.test(runeVal[i])) {
+            errorChar = true;
+            break;
+          } else {
+            let upperChar = runeVal[i].toUpperCase();
+            upperStr += upperChar;
+          }
+        }
+        if (errorChar) {
+          return;
+        }
+        setRune(upperStr);
     };
     const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
         const runeVal: string = event.target.value;
         const runeValLength = runeVal.length;
         if (runeVal[0] === "·" || runeVal[runeValLength - 1] === "·") {
             setRuneErrorTip("The first and last characters cannot be ·");
-            setRune("");
+            // setRune("");
             return;
         }
         let charArr = [];
@@ -70,23 +91,23 @@ export default function Mint1(props: any) {
         }
         if (charArr.length !== 13) {
             setRuneErrorTip("Rune must 13 letters");
-            setRune("");
+            // setRune("");
             return;
         }
         if (isUpperLetter) {
             setRuneErrorTip("Characters must be all uppercase");
-            setRune("");
+            // setRune("");
             return;
         }
         setRuneErrorTip("");
 
         // 获取所需的tx和block数据
-        fetchRuneInfoByRuneName(runeVal).then((res) => {
-            setTx(res['result']['rune']['txid']);
-            setBlock(res['result']['rune']['height']);
+        fetchRuneSearchApi(runeVal).then((res) => {
+            setTx(res['result']['rune']&&res['result']['rune']['txid'] || 0);
+            setBlock(res['result']['rune']&&res['result']['rune']['height'] || 0);
             // 获取剩余可Mint数量
-            const premineNum = res['result']['rune']['premine'] || 0;
-            const capacityNum = res['result']['rune']['capacity'] || 0;
+            const premineNum = res['result']['rune']&&res['result']['rune']['premine'] || 0;
+            const capacityNum = res['result']['rune']&&res['result']['rune']['capacity'] || 0;
             let totalNum = premineNum + capacityNum;
             fetchHasMintAmount(runeVal).then((mres) => {
                 const hasMintNum = mres['result']['mintAmount'];
@@ -124,6 +145,10 @@ export default function Mint1(props: any) {
         if (runeErrorTip) {
             return false;
         }
+        if (!mintAmount) {
+            setMmintAmountErrorTip('Please Input Amount');
+            return false;
+        }
         if (!premineReceiveAddress) {
             setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
             return false;
@@ -152,6 +177,15 @@ export default function Mint1(props: any) {
     useEffect(() => {
         setTotalMintAmount(2100*mintAmount);
     }, [mintAmount])
+
+    useEffect(() => {
+        if (from2To1Data.rune) {
+            setRune(from2To1Data.rune);
+            setTotalMintAmount(from2To1Data.mintAmount);
+            setMmintAmount(from2To1Data.mintAmount/2100);
+            setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+        }
+    }, [from2To1Data])
 
     return (
         <div className="etch-blockBox">
@@ -192,7 +226,7 @@ export default function Mint1(props: any) {
                             <p className="etch-amontRightBottom">Total <span>{totalMintAmount}</span> {rune}</p>
                         </div>
                     </div>
-                    <p className="etch-formErrorTip"></p>
+                    <p className="etch-formErrorTip">{ mintAmountErrorTip }</p>
                 </div>
                 <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">
