@@ -185,9 +185,11 @@ export default function Etching1(props: any) {
   const setPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     let pubAmontValue = event.target.value;
     if (
-      isNaN(Number(pubAmontValue)) ||
-      Number(pubAmontValue) <= 0 ||
-      Number(pubAmontValue) % 1 !== 0
+      pubAmontValue && (
+        isNaN(Number(pubAmontValue)) ||
+        Number(pubAmontValue) <= 0 ||
+        Number(pubAmontValue) % 1 !== 0
+      )
     ) {
       return;
     }
@@ -209,9 +211,11 @@ export default function Etching1(props: any) {
   const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const mintAmountValue = event.target.value;
     if (
-      isNaN(Number(mintAmountValue)) ||
-      Number(mintAmountValue) <= 0 ||
-      Number(mintAmountValue) % 1 !== 0
+      mintAmountValue && (
+        isNaN(Number(mintAmountValue)) ||
+        Number(mintAmountValue) <= 0 ||
+        Number(mintAmountValue) % 1 !== 0
+      )
     ) {
       return;
     }
@@ -242,9 +246,11 @@ export default function Etching1(props: any) {
   const setOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const offsetValue = event.target.value;
     if (
-      isNaN(Number(offsetValue)) ||
-      Number(offsetValue) <= 0 ||
-      Number(offsetValue) % 1 !== 0
+      offsetValue && (
+        isNaN(Number(offsetValue)) ||
+        Number(offsetValue) <= 0 ||
+        Number(offsetValue) % 1 !== 0
+      )
     ) {
       return;
     }
@@ -266,9 +272,11 @@ export default function Etching1(props: any) {
   const setStartHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     const startHeightValue = event.target.value;
     if (
-      isNaN(Number(startHeightValue)) ||
-      Number(startHeightValue) <= 0 ||
-      Number(startHeightValue) % 1 !== 0
+      startHeightValue && (
+        isNaN(Number(startHeightValue)) ||
+        Number(startHeightValue) <= 0 ||
+        Number(startHeightValue) % 1 !== 0
+      )
     ) {
       return;
     }
@@ -292,9 +300,11 @@ export default function Etching1(props: any) {
   const setEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     const endHeightValue = event.target.value;
     if (
-      isNaN(Number(endHeightValue)) ||
-      Number(endHeightValue) <= 0 ||
-      Number(endHeightValue) % 1 !== 0
+      endHeightValue && (
+        isNaN(Number(endHeightValue)) ||
+        Number(endHeightValue) <= 0 ||
+        Number(endHeightValue) % 1 !== 0
+      )
     ) {
       return;
     }
