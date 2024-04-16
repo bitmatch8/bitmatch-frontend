@@ -151,7 +151,8 @@ export default function Etching1(props: any) {
       premineAmontValue && (
         isNaN(Number(premineAmontValue)) ||
         Number(premineAmontValue) <= 0 ||
-        Number(premineAmontValue) % 1 !== 0
+        Number(premineAmontValue) % 1 !== 0 ||
+        premineAmontValue.indexOf('.') !== -1
       )
     ) {
       return;
@@ -188,7 +189,8 @@ export default function Etching1(props: any) {
       pubAmontValue && (
         isNaN(Number(pubAmontValue)) ||
         Number(pubAmontValue) <= 0 ||
-        Number(pubAmontValue) % 1 !== 0
+        Number(pubAmontValue) % 1 !== 0 || 
+        pubAmontValue.indexOf('.') !== -1
       )
     ) {
       return;
@@ -214,7 +216,8 @@ export default function Etching1(props: any) {
       mintAmountValue && (
         isNaN(Number(mintAmountValue)) ||
         Number(mintAmountValue) <= 0 ||
-        Number(mintAmountValue) % 1 !== 0
+        Number(mintAmountValue) % 1 !== 0 || 
+        mintAmountValue.indexOf('.') !== -1
       )
     ) {
       return;
@@ -249,7 +252,8 @@ export default function Etching1(props: any) {
       offsetValue && (
         isNaN(Number(offsetValue)) ||
         Number(offsetValue) <= 0 ||
-        Number(offsetValue) % 1 !== 0
+        Number(offsetValue) % 1 !== 0 || 
+        offsetValue.indexOf('.') !== -1
       )
     ) {
       return;
@@ -275,7 +279,8 @@ export default function Etching1(props: any) {
       startHeightValue && (
         isNaN(Number(startHeightValue)) ||
         Number(startHeightValue) <= 0 ||
-        Number(startHeightValue) % 1 !== 0
+        Number(startHeightValue) % 1 !== 0 || 
+        startHeightValue.indexOf('.') !== -1
       )
     ) {
       return;
@@ -303,7 +308,8 @@ export default function Etching1(props: any) {
       endHeightValue && (
         isNaN(Number(endHeightValue)) ||
         Number(endHeightValue) <= 0 ||
-        Number(endHeightValue) % 1 !== 0
+        Number(endHeightValue) % 1 !== 0 || 
+        endHeightValue.indexOf('.') !== -1
       )
     ) {
       return;
