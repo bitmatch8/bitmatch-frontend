@@ -45,11 +45,11 @@ export default function Mint1(props: any) {
     
       const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
         const runeVal: string = event.target.value;
-        var regex = /^[A-Za-z·]$/;
+        var regex = /^[A-Za-z.]$/;
         let errorChar = false;
         let upperStr = '';
         for (let i=0;i<runeVal.length;i++) {
-          if (runeVal[0] === '·') {
+          if (runeVal[0] === '.') {
             errorChar = true;
             break;
           }
@@ -60,6 +60,12 @@ export default function Mint1(props: any) {
             let upperChar = runeVal[i].toUpperCase();
             upperStr += upperChar;
           }
+          if (i!==0 && i!==runeVal.length-1 && runeVal[i] === '.') {
+            if (runeVal[i-1] === '.' || runeVal[i+1] === '.') {
+              errorChar = true;
+              break;
+            }
+          }
         }
         if (errorChar) {
           return;
@@ -69,15 +75,15 @@ export default function Mint1(props: any) {
     const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
         const runeVal: string = event.target.value;
         const runeValLength = runeVal.length;
-        if (runeVal[0] === "·" || runeVal[runeValLength - 1] === "·") {
-            setRuneErrorTip("The first and last characters cannot be ·");
+        if (runeVal[0] === "·" || runeVal[runeValLength - 1] === ".") {
+            setRuneErrorTip("The first and last characters cannot be .");
             // setRune("");
             return;
         }
         let charArr = [];
         let isUpperLetter = false; // 验证是否是大写字母
         for (let i = 0; i < runeValLength; i++) {
-            if (runeVal[i] !== "·") {
+            if (runeVal[i] !== ".") {
             charArr.push(runeVal[i]);
             if (
                 runeVal.charCodeAt(i) >= 0x0041 &&
@@ -199,7 +205,7 @@ export default function Mint1(props: any) {
                     <div className="etch-inputBox1">
                         <input
                             type="text"
-                            placeholder="13 letter identifier like ”ABCDE·FGHI”"
+                            placeholder="13 letter identifier like ”ABCDE.FGHI”"
                             value={rune}
                             onChange={setRuneName}
                             onBlur={checkRuneName}

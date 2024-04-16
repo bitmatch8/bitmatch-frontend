@@ -59,7 +59,7 @@ export default function Etching1(props: any) {
     () => (
       <div className="etch-tipInnerBox">
         <p>13 characters</p>
-        <p>Can contain a "·" between characters.</p>
+        <p>Can contain a "." between characters.</p>
       </div>
     ),
     []
@@ -83,11 +83,11 @@ export default function Etching1(props: any) {
 
   const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const runeVal: string = event.target.value;
-    var regex = /^[A-Za-z·]$/;
+    var regex = /^[A-Za-z.]$/;
     let errorChar = false;
     let upperStr = "";
     for (let i = 0; i < runeVal.length; i++) {
-      if (runeVal[0] === "·") {
+      if (runeVal[0] === ".") {
         errorChar = true;
         break;
       }
@@ -98,8 +98,8 @@ export default function Etching1(props: any) {
         let upperChar = runeVal[i].toUpperCase();
         upperStr += upperChar;
       }
-      if (i!==0 && i!==runeVal.length-1 && runeVal[i] === '·') {
-        if (runeVal[i-1] === '·' || runeVal[i+1] === '·') {
+      if (i!==0 && i!==runeVal.length-1 && runeVal[i] === '.') {
+        if (runeVal[i-1] === '.' || runeVal[i+1] === '.') {
           errorChar = true;
           break;
         }
@@ -113,8 +113,8 @@ export default function Etching1(props: any) {
   const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const runeVal: string = event.target.value;
     const runeValLength = runeVal.length;
-    if (runeVal[0] === "·" || runeVal[runeValLength - 1] === "·") {
-      setRuneErrorTip("The first and last characters cannot be ·");
+    if (runeVal[0] === "." || runeVal[runeValLength - 1] === ".") {
+      setRuneErrorTip("The first and last characters cannot be .");
       // setRune("");
       return;
     }
@@ -456,7 +456,7 @@ export default function Etching1(props: any) {
           <div className="etch-inputBox1">
             <input
               type="text"
-              placeholder="13 letter identifier like ”ABCDE·FGHI”"
+              placeholder="13 letter identifier like ”ABCDE.FGHI”"
               value={rune}
               onChange={setRuneName}
               onBlur={checkRuneName}
