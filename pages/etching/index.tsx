@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Page from "@/components/Page";
-import History from "./History";
+// import History from "./History";
 import Etching1 from "./Etching1";
 import Flow2 from "./Flow2";
 import Flow3 from "./Flow3";
