@@ -365,7 +365,7 @@ export default function Etching1(props: any) {
         return false;
       }
       if (!amount) {
-        setCapErrorTip("Please input Mint Amount");
+        setAmountErrorTip("Please input Mint Amount");
         return false;
       }
       if (amountErrorTip) {
