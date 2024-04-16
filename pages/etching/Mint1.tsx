@@ -9,7 +9,7 @@ import {
   } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
-import { fetchRuneInfoByRuneName, fetchHasMintAmount } from "@/api/api";
+import { fetchRuneSearchApi, fetchHasMintAmount } from "@/api/api";
 import useSwr from "@/hook/useSwr";
 
 export default function Mint1(props: any) {
@@ -42,15 +42,35 @@ export default function Mint1(props: any) {
         ></ConnectModal>
       ); //钱包弹窗
     
-    const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRune(event.target.value);
+      const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const runeVal: string = event.target.value;
+        var regex = /^[A-Za-z·]$/;
+        let errorChar = false;
+        let upperStr = '';
+        for (let i=0;i<runeVal.length;i++) {
+          if (runeVal[0] === '·') {
+            errorChar = true;
+            break;
+          }
+          if (!regex.test(runeVal[i])) {
+            errorChar = true;
+            break;
+          } else {
+            let upperChar = runeVal[i].toUpperCase();
+            upperStr += upperChar;
+          }
+        }
+        if (errorChar) {
+          return;
+        }
+        setRune(upperStr);
     };
     const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
         const runeVal: string = event.target.value;
         const runeValLength = runeVal.length;
         if (runeVal[0] === "·" || runeVal[runeValLength - 1] === "·") {
             setRuneErrorTip("The first and last characters cannot be ·");
-            setRune("");
+            // setRune("");
             return;
         }
         let charArr = [];
@@ -70,23 +90,23 @@ export default function Mint1(props: any) {
         }
         if (charArr.length !== 13) {
             setRuneErrorTip("Rune must 13 letters");
-            setRune("");
+            // setRune("");
             return;
         }
         if (isUpperLetter) {
             setRuneErrorTip("Characters must be all uppercase");
-            setRune("");
+            // setRune("");
             return;
         }
         setRuneErrorTip("");
 
         // 获取所需的tx和block数据
-        fetchRuneInfoByRuneName(runeVal).then((res) => {
-            setTx(res['result']['rune']['txid']);
-            setBlock(res['result']['rune']['height']);
+        fetchRuneSearchApi(runeVal).then((res) => {
+            setTx(res['result']['rune']&&res['result']['rune']['txid'] || 0);
+            setBlock(res['result']['rune']&&res['result']['rune']['height'] || 0);
             // 获取剩余可Mint数量
-            const premineNum = res['result']['rune']['premine'] || 0;
-            const capacityNum = res['result']['rune']['capacity'] || 0;
+            const premineNum = res['result']['rune']&&res['result']['rune']['premine'] || 0;
+            const capacityNum = res['result']['rune']&&res['result']['rune']['capacity'] || 0;
             let totalNum = premineNum + capacityNum;
             fetchHasMintAmount(runeVal).then((mres) => {
                 const hasMintNum = mres['result']['mintAmount'];
