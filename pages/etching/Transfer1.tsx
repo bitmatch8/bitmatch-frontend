@@ -14,7 +14,7 @@ import useModal from "@/hook/useModal";
 import { getRunesList, fetchRuneSearchApi, fetchHasMintAmount } from "@/api/api";
 
 export default function Etching1(props: any) {
-    const { handleBackData } = props;
+    const { handleBackData, from2To1Data } = props;
     const [rune, setRune] = React.useState('');
     const [runes, setRunes] = React.useState([]);
     const [runeNum, setRuneNum] = React.useState(0);
@@ -170,6 +170,14 @@ export default function Etching1(props: any) {
             })
         }
     }, [])
+
+    useEffect(() => {
+        if (from2To1Data.rune) {
+            setRune(from2To1Data.rune);
+            setAamount(from2To1Data.transferAmount);
+            setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+        }
+    }, [from2To1Data])
 
     return (
         <div className="etch-blockBox">
