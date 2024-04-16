@@ -179,6 +179,12 @@ export default function Etching1(props: any) {
         }
     }, [from2To1Data])
 
+    useEffect(() => {
+        if (address) {
+            setPremineReceiveAddress(address);      
+        }
+    }, [])
+
     return (
         <div className="etch-blockBox">
             <EtchFlowPath flowType={1} flowName="transfer"></EtchFlowPath>
