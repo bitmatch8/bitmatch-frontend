@@ -48,7 +48,7 @@ export const fetchFeesApi = () => {
 };
 
 export const fetchRuneSearchApi = (name: string) => {
-  return Ajax.get(`/runestone/search/runes/by/name/${name}`);
+  return Ajax.get(`/runestone/search/runes/${name}`);
 };
 
 // 根据rune name返回所需tx等值
@@ -64,5 +64,3 @@ export const fetchHasMintAmount = (name: string) => {
 export const getRunesList = (address: string) => {
   return Ajax.get(`/runestone/search/user/runes/list/${address}`);
 };
-
-

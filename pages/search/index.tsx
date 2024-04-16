@@ -50,6 +50,8 @@ const SearchSvg: React.FC = () => {
     </SearchIconBox>
   );
 };
+
+// 根据rune查询结果
 interface RuneResultProps {
   runeInfo: any;
 }
@@ -78,6 +80,38 @@ const RuneResultCom: React.FC<RuneResultProps> = ({ runeInfo }) => {
         })}
       </ul>
     </RuneResultBox>
+  );
+};
+
+// 根据地址查询结果
+interface AddrResultProps {
+  runeList: any;
+}
+const AddrResultCom: React.FC<AddrResultProps> = ({ runeList }) => {
+  return (
+    <AddrResultBox>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 5 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
+        {runeList.map((item: any, index: number) => {
+          return (
+            <Grid item xs={2} sm={4} md={4} key={index}>
+              <div className="gridBox">
+                <div className="nameBox">{item.rune_name}</div>
+                <div className="contBox">
+                  <div className="balanceBox">{item.balance}</div>
+                  <div className="ownerBox">
+                    Ower: {hidehash(item.address, 5)}
+                  </div>
+                </div>
+              </div>
+            </Grid>
+          );
+        })}
+      </Grid>
+    </AddrResultBox>
   );
 };
 
@@ -115,7 +149,7 @@ export default function SearchPage() {
             value={searchKey}
             onInput={handleInput}
             autoComplete="off"
-            placeholder="Search Rune"
+            placeholder="Search Rune or Address"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="end">
@@ -127,50 +161,40 @@ export default function SearchPage() {
         </div>
       </InputBox>
       <Spaced size="60" />
-
-      {result === null ? (
-        <>
-          {searchKey && (
-            <SearchingBox>
-              <SearchingImg src={searchingImg} alt="" />
-              <div className="text">Search in progress …</div>
-            </SearchingBox>
-          )}
-        </>
-      ) : (
-        <>
-          {result?.exist && result?.runeInfo ? (
-            <RuneResultCom runeInfo={result.runeInfo} />
-          ) : (
-            <NodataBox>
-              <NodataImg src={nodataImg} alt="" />
-              <div className="text">No data retrieved</div>
-            </NodataBox>
-          )}
-        </>
-      )}
-
-      {/* <AddrResultBox>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 5 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {addrInfo.map((item, index) => {
-            return (
-              <Grid item xs={2} sm={4} md={4} key={index}>
-                <div className="gridBox">
-                  <div className="addrBox">{item.addr}</div>
-                  <div className="contBox">
-                    <div className="amountBox">{item.amount}</div>
-                    <div className="ownerBox">Ower: {hidehash(item.owner)}</div>
-                  </div>
-                </div>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </AddrResultBox> */}
+      <ResultBox>
+        {result === null ? (
+          <>
+            {searchKey && (
+              <SearchingBox>
+                <SearchingImg src={searchingImg} alt="" />
+                <div className="text">Search in progress …</div>
+              </SearchingBox>
+            )}
+          </>
+        ) : (
+          <>
+            {result?.exist ? (
+              <>
+                {result?.type === "byname" && (
+                  <RuneResultCom runeInfo={result.runeInfo}></RuneResultCom>
+                )}
+                {result?.type === "byaddress" && (
+                  <AddrResultCom runeList={result.runeList}></AddrResultCom>
+                )}
+              </>
+            ) : (
+              <>
+                {searchKey && (
+                  <NodataBox>
+                    <NodataImg src={nodataImg} alt="" />
+                    <div className="text">No data retrieved</div>
+                  </NodataBox>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </ResultBox>
     </Page>
   );
 }
@@ -196,6 +220,9 @@ const InputBox = styled.div`
     border-radius: 24px;
     cursor: pointer;
   }
+`;
+const ResultBox = styled.div`
+  min-height: 220px;
 `;
 const RuneResultBox = styled.div`
   padding: 40px;
@@ -249,17 +276,20 @@ const AddrResultBox = styled.div`
     background: #181b20;
     border-radius: 36px;
   }
-  .addrBox {
+  .nameBox {
     color: #ffffff;
     text-align: center;
     margin-bottom: 40px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .contBox {
     background: #000000;
     border-radius: 24px;
     padding: 40px 12px;
   }
-  .amountBox {
+  .balanceBox {
     font-size: 40px;
     color: #f7931a;
     line-height: 40px;
