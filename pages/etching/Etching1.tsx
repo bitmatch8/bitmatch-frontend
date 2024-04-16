@@ -85,9 +85,9 @@ export default function Etching1(props: any) {
     const runeVal: string = event.target.value;
     var regex = /^[A-Za-z·]$/;
     let errorChar = false;
-    let upperStr = '';
-    for (let i=0;i<runeVal.length;i++) {
-      if (runeVal[0] === '·') {
+    let upperStr = "";
+    for (let i = 0; i < runeVal.length; i++) {
+      if (runeVal[0] === "·") {
         errorChar = true;
         break;
       }
@@ -412,16 +412,16 @@ export default function Etching1(props: any) {
         setCap(from2To1Data.cap);
         setAmount(from2To1Data.amount);
         setOffOrHei(from2To1Data.timeType);
-        if (from2To1Data.timeType === 'offset') {
+        if (from2To1Data.timeType === "offset") {
           setOffset(from2To1Data.offset);
         }
-        if (from2To1Data.timeType === 'height') {
+        if (from2To1Data.timeType === "height") {
           setStartHeight(from2To1Data.start);
           setEndHeight(from2To1Data.end);
         }
       }
     }
-  }, [from2To1Data])
+  }, [from2To1Data]);
 
   return (
     <div className="etch-blockBox">
@@ -589,8 +589,8 @@ export default function Etching1(props: any) {
                 <p className="etch-formErrorTip">{offsetErrorTip}</p>
               </div>
             )}
-            {
-              offOrHei === "height" && <div className="etch-formItemBox etch-formTtemBox2">
+            {offOrHei === "height" && (
+              <div className="etch-formItemBox etch-formTtemBox2">
                 <div className="etch-formItemInner">
                   <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">
@@ -635,7 +635,7 @@ export default function Etching1(props: any) {
                   </div>
                 </div>
               </div>
-            }
+            )}
           </div>
         )}
       </div>

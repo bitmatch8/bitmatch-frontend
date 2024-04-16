@@ -6,6 +6,10 @@ import {
   ADDRESS_TYPE_P2TR,
   generatePsbt,
   pushPsbt,
+  TESTNET_NETWORK_URL,
+  LIVENET_NETWORK_URL,
+  COMPANY_ADDRESS,
+  COMPANY_FEE,
 } from "./psbt1";
 import { Address } from "@cmdcode/tapscript";
 
@@ -28,7 +32,7 @@ export const LOWEST_FEE = 550;
 export function getSpacers(rune: string): number[] {
   let result: number[] = [];
   const arr = rune.split("·");
-  arr.reduce((accumulator, currentValue, currentIndex, array) => {
+  arr.reduce((accumulator, currentValue) => {
     result.push(accumulator + currentValue.length - 1);
     return accumulator + currentValue.length;
   }, 0);
@@ -44,4 +48,8 @@ export {
   ADDRESS_TYPE_P2TR,
   generatePsbt,
   pushPsbt,
+  TESTNET_NETWORK_URL,
+  LIVENET_NETWORK_URL,
+  COMPANY_ADDRESS,
+  COMPANY_FEE,
 };
