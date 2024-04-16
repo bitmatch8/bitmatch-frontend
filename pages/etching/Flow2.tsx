@@ -20,7 +20,7 @@ export default function Etching2(props: any) {
   const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState("");
   const [unsignedPsbt, setUnsignedPsbt] = useState<any>(null);
   const [byteNum, setByteNum] = React.useState(88);
-  const [networkFeeShow, setNetworkFeeShow] = React.useState(0);
+  const [networkFeeShow, setNetworkFeeShow] = React.useState("");
   const [networkFeeDollerShow, setNetworkFeeDollerShow] = React.useState("");
   const [feeBySizeShow, setFeeBySizeShow] = React.useState("");
   const [feeBySizeDolloerShow, setFeeBySizeDolloerShow] = React.useState("");
@@ -307,7 +307,7 @@ export default function Etching2(props: any) {
     const btcPrice = await getBTCPrice();
     // 获取Network Fee是多少聪
     const networkFeeSats = sats * byteNum;
-    setNetworkFeeShow(networkFeeSats);
+    setNetworkFeeShow(networkFeeSats.toFixed(2));
     // 根据聪费率转换美元
     const networkFeeDoller = satsToUSD(networkFeeSats, btcPrice);
     const netFeeDollerShow = Number(networkFeeDoller).toFixed(2);
