@@ -373,26 +373,30 @@ export default function Etching1(props: any) {
       }
       if (offOrHei === "offset") {
         if (!offset) {
-          setCapErrorTip("Please input Offset");
+          setOffsetErrorTip("Please input Offset");
           return false;
         }
         if (offsetErrorTip) {
           return false;
         }
       }
-      if (!startHeight) {
-        setCapErrorTip("Please input Start Height");
-        return false;
-      }
-      if (startHeightErrorTip) {
-        return false;
-      }
-      if (!endHeight) {
-        setCapErrorTip("Please input End Height");
-        return false;
-      }
-      if (endHeightErrorTip) {
-        return false;
+      if (offOrHei === "height") {
+        setOffsetErrorTip("");
+
+        if (!startHeight) {
+          setSstartHeightErrorTip("Please input Start Height");
+          return false;
+        }
+        if (startHeightErrorTip) {
+          return false;
+        }
+        if (!endHeight) {
+          setEndHeightErrorTip("Please input End Height");
+          return false;
+        }
+        if (endHeightErrorTip) {
+          return false;
+        }
       }
     }
     return true;
