@@ -12,6 +12,42 @@ import {
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
 import { getRunesList, fetchRuneSearchApi, fetchHasMintAmount } from "@/api/api";
+import SelectIcon from "@/components/Svg/SelectIcon";
+
+const SelectSvg: React.FC = () => {
+  return (
+    <div className="etch-selectIconBox">
+      <SelectIcon width={20} fill="#6F6F76" />
+    </div>
+  );
+};
+
+const dropdownStyle = {
+    "&& .MuiMenu-paper": {
+      background: "transparent",
+      paddingTop: "8px",
+    },
+    "&& .MuiList-root": {
+      background: "#181B20",
+      borderRadius: "12px",
+      border: "2px solid #6F6F76",
+      padding: 0,
+      overflow: "hidden",
+    },
+    "&& .MuiMenuItem-root": {
+      padding: "12px 20px",
+      fontSize: "24px",
+      color: "#DBDBDB",
+      "&:hover": {
+        backgroundColor: "#24272B",
+        color: "#F7931A",
+      },
+    },
+    "&& .MuiMenuItem-root.Mui-selected": {
+      backgroundColor: "#24272B",
+      color: "#F7931A",
+    },
+  };
 
 export default function Etching1(props: any) {
     const { handleBackData, from2To1Data } = props;
@@ -198,18 +234,23 @@ export default function Etching1(props: any) {
                         <span className="etch-itemTitle">Rune</span>
                     </div>
                     <div className="etch-inputBox1">
-                        <Select
-                            value={rune}
-                            onChange={handleRuneChange}
-                            displayEmpty
-                            placeholder="Please check rune"
-                        >
-                            {
-                                runes.map((item: any, index: number) => (
-                                    <MenuItem value={item.rune_name} key={index}>{ item.rune_name }</MenuItem>
-                                ))
-                            }
-                        </Select>
+                    <Select
+                        value={rune}
+                        displayEmpty
+                        IconComponent={SelectSvg}
+                        MenuProps={{
+                            sx: dropdownStyle,
+                        }}
+                        onChange={handleRuneChange}
+                    >
+                        {runes.map((item: any, index: number) => {
+                        return (
+                            <MenuItem value={item.rune_name} key={index}>
+                            { item.rune_name }
+                            </MenuItem>
+                        );
+                        })}
+                    </Select>
                     </div>
                     <p className="etch-formErrorTip etch-formErrorTipMintRune">
                         <span>{ runeErrorTip }</span>

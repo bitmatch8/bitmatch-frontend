@@ -744,3 +744,9 @@ input:focus {
         background-size: 100%;
     }
 }
+.etch-selectIconBox {
+    position: absolute;
+    right: 16px;
+    display: flex;
+    align-items: center;
+}
