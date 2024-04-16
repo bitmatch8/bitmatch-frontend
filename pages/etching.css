@@ -237,7 +237,7 @@ input:focus {
                 color: #FFFFFF;
                 line-height: 70px;
             }
-            .mui-style-1i6mb4l-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+            .MuiInputBase-root {
                 width: 98%;
                 margin-left: 1%;
                 margin-top: 6px;
