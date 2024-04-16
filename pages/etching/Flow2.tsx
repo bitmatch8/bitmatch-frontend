@@ -13,7 +13,7 @@ export default function Etching2(props: any) {
 
   const [sats, setSats] = React.useState(12);
   const [stasCurIndex, setStasCurIndex] = React.useState(2);
-  const [inputStas3, setInputStas3] = React.useState('25');
+  const [inputStas3, setInputStas3] = React.useState("25");
   const [etchingLoading, setEtchingLoading] = useState(false);
   const { address, balance, wallterType } = useSelector(selectWallter);
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
@@ -70,7 +70,7 @@ export default function Etching2(props: any) {
 
   const handleStas3 = (event: React.ChangeEvent<HTMLInputElement>) => {
     const stas3Val = event.target.value;
-    if (stas3Val && (isNaN(Number(stas3Val)) || Number(stas3Val)<=0)) {
+    if (stas3Val && (isNaN(Number(stas3Val)) || Number(stas3Val) <= 0)) {
       return;
     }
     setInputStas3(event.target.value);
@@ -80,10 +80,10 @@ export default function Etching2(props: any) {
   const handleCheckStas3 = (event: React.ChangeEvent<HTMLInputElement>) => {
     const stas3Val = event.target.value;
     if (Number(stas3Val) <= 8 || !stas3Val) {
-      setInputStas3('9');
+      setInputStas3("9");
       setSats(9);
     }
-  }
+  };
 
   const handleSats = (curIndex: number, num: number) => {
     setStasCurIndex(curIndex);
@@ -144,30 +144,30 @@ export default function Etching2(props: any) {
       const runesStone = generateRunesStoneData();
 
       // const runesStone = {
-      //   etching: {
-      //     rune: "RUNE",
-      //     symbol: "$",
-      //     premine: BigInt(10000),
-      //     terms: {
-      //       cap: BigInt(10000),
-      //       amount: BigInt(10),
-      //     },
-      //   },
+      //   // etching: {
+      //   //   rune: "RUNE",
+      //   //   symbol: "$",
+      //   //   premine: BigInt(10000),
+      //   //   terms: {
+      //   //     cap: BigInt(10000),
+      //   //     amount: BigInt(10),
+      //   //   },
+      //   // },
       //   // mint: {
-      //   //   block: 2585958,
-      //   //   tx: 114,
+      //   //   block: BigInt(2586522),
+      //   //   tx: 1985,
       //   // },
       //   // pointer: 0,
-      //   // edicts: [
-      //   //   {
-      //   //     id: {
-      //   //       block: 2585958,
-      //   //       tx: 114,
-      //   //     },
-      //   //     amount: 2, // tranfer的总量
-      //   //     output: 0, //默认先写0，后面再调整具体
-      //   //   },
-      //   // ],
+      //   edicts: [
+      //     {
+      //       id: {
+      //         block: BigInt(2586522),
+      //         tx: 1985,
+      //       },
+      //       amount: 2, // tranfer的总量
+      //       output: 0, //默认先写0，后面再调整具体
+      //     },
+      //   ],
       // };
 
       //1.生成Buffer
@@ -192,7 +192,7 @@ export default function Etching2(props: any) {
       );
       console.log("----unsignedPsbt----", unsignedPsbt);
       setUnsignedPsbt(unsignedPsbt);
-      setByteNum((unsignedPsbt as any).vsize);
+      setByteNum((unsignedPsbt as any).vsize || 0);
     } catch (e: any) {
       throw new Error(e);
     }
@@ -379,7 +379,7 @@ export default function Etching2(props: any) {
           <div className="etch-descTopDetailBox">
             <p className="etch-descDetailTopTxt">
               <span>Detail：</span>
-              <span>～ { byteNum }vB</span>
+              <span>～ {byteNum}vB</span>
             </p>
             <div className="etch-descWord">{JSON.stringify(formDataBack)}</div>
           </div>
@@ -412,7 +412,12 @@ export default function Etching2(props: any) {
           >
             <p className="etch-cardTopTit">Custom</p>
             <div className="etch-cardCustomInput">
-              <input type="text" value={inputStas3} onChange={handleStas3} onBlur={handleCheckStas3} />
+              <input
+                type="text"
+                value={inputStas3}
+                onChange={handleStas3}
+                onBlur={handleCheckStas3}
+              />
             </div>
             <p className="etch-cardSats">sats/vB</p>
             <p className="etch-cardWithin">Within 30 mins</p>
@@ -476,7 +481,7 @@ export default function Etching2(props: any) {
           <span className="etch-balanceTxt">Balance</span>
           <span className="etch-balanceNum">{balance.total / 1e8} BTC</span>
         </div>
-        {balance.total < psbt.LOWEST_FEE ? (
+        {balance.confirmed < Number(totalNumDomShow) ? (
           <div className="etch-bottomBtn etch-bottomBtnLoading">
             Insufficient Balance
           </div>
