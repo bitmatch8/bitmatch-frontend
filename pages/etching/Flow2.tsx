@@ -70,13 +70,20 @@ export default function Etching2(props: any) {
 
   const handleStas3 = (event: React.ChangeEvent<HTMLInputElement>) => {
     const stas3Val = event.target.value;
-    if (Number(stas3Val) <= 8) {
+    if (stas3Val && (isNaN(Number(stas3Val)) || Number(stas3Val)<=0)) {
       return;
     }
     setInputStas3(event.target.value);
     setSats(Number(event.target.value));
     setStasCurIndex(3);
   };
+  const handleCheckStas3 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const stas3Val = event.target.value;
+    if (Number(stas3Val) <= 8 || !stas3Val) {
+      setInputStas3('9');
+      setSats(9);
+    }
+  }
 
   const handleSats = (curIndex: number, num: number) => {
     setStasCurIndex(curIndex);
@@ -405,7 +412,7 @@ export default function Etching2(props: any) {
           >
             <p className="etch-cardTopTit">Custom</p>
             <div className="etch-cardCustomInput">
-              <input type="text" value={inputStas3} onChange={handleStas3} />
+              <input type="text" value={inputStas3} onChange={handleStas3} onBlur={handleCheckStas3} />
             </div>
             <p className="etch-cardSats">sats/vB</p>
             <p className="etch-cardWithin">Within 30 mins</p>
