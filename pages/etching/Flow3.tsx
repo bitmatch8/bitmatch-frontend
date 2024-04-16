@@ -16,10 +16,11 @@ export default function Etching3(props: any) {
     handleBackFlow3(flowName);
   };
   const go2mmp = () => {
-    const url =
+    const url = `${
       network === "testnet"
-        ? `${psbt.TESTNET_NETWORK_URL}/tx/${flow3TxHash}`
-        : `${psbt.LIVENET_NETWORK_URL}/tx/${flow3TxHash}`;
+        ? psbt.TESTNET_NETWORK_URL
+        : psbt.LIVENET_NETWORK_URL
+    }/tx/${flow3TxHash}`;
     window.open(url, "_blank");
   };
   const go2CopyHash = () => {

@@ -2,10 +2,24 @@ import { base64, hex } from "@scure/base";
 import * as btc from "@scure/btc-signer";
 import * as secp256k1 from "@noble/secp256k1";
 import axios from "axios";
+import * as store from "@/lib/redux/store";
 
-const SERVER_URL = "https://mempool.space/testnet/api";
+export const TESTNET_NETWORK_URL = "https://mempool.space/testnet";
+export const LIVENET_NETWORK_URL = "https://mempool.space";
 
-const NETWORK = btc.TEST_NETWORK;
+export const COMPANY_ADDRESS = ""; //公司收钱地址
+export const COMPANY_FEE = BigInt(0); //公司收取的服务费
+
+const currentNetwork =
+  store.reduxStore.getState().wallter.network ||
+  process.env.NEXT_PUBLIC_NETWORK;
+
+const SERVER_URL =
+  currentNetwork === "testnet"
+    ? `${TESTNET_NETWORK_URL}/api`
+    : `${LIVENET_NETWORK_URL}/api`;
+
+const NETWORK = currentNetwork == "testnet" ? btc.TEST_NETWORK : btc.NETWORK;
 const MIN_RELAY_FEE = 1000;
 
 const DUMMY_PRIVATEKEY =
@@ -161,12 +175,16 @@ export const generatePsbt = async (
     //   BigInt("我们的服务费"),
     //   NETWORK
     // );
+    COMPANY_FEE > 0 &&
+      tx.addOutputAddress(COMPANY_ADDRESS, COMPANY_FEE, NETWORK);
 
     dummyTx.addOutputAddress(recipientAddress, BigInt(payment.amount), NETWORK);
     for (let i = 0; i < opNum; i++) {
       dummyTx.addOutput({ script: opReturnOutput, amount: BigInt(0) }); //TODO:
     }
     // '我们的服务费' > 0 &&  dummyTx.addOutputAddress("我们的地址", BigInt("我们的服务费"), NETWORK);
+    COMPANY_FEE > 0 &&
+      dummyTx.addOutputAddress(COMPANY_ADDRESS, COMPANY_FEE, NETWORK);
 
     let response = await axios.get(
       `${SERVER_URL}/address/${payment.address}/utxo`
