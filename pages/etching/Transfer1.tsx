@@ -241,6 +241,13 @@ export default function Etching1(props: any) {
                             MenuProps={{
                                 sx: dropdownStyle,
                             }}
+                            renderValue={(selected) => {
+                                if (selected.length === 0) {
+                                    return <span className="etch-selectDefaultVal">Select Rune</span>;
+                                }
+                    
+                                return selected;
+                            }}
                             onChange={handleRuneChange}
                         >
                             {runes.map((item: any, index: number) => {

@@ -10,7 +10,7 @@ import {
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
 import { fetchRuneSearchApi, fetchHasMintAmount } from "@/api/api";
-import useSwr from "@/hook/useSwr";
+import TextField from '@mui/material/TextField';
 
 export default function Mint1(props: any) {
     const { handleBackData, from2To1Data } = props;
@@ -131,6 +131,20 @@ export default function Mint1(props: any) {
             setMmintAmount(Number(event.target.value));
         }
     };
+    const addMinAmount = () => {
+        let mintAmountAdd1 = mintAmount + 1;
+        if (mintAmountAdd1 * 2100 > runeNum) {
+            return;
+        }
+        setMmintAmount(mintAmountAdd1);
+    }
+    const subMinAmount = () => {
+        let mintAmountSub1 = mintAmount - 1;
+        if (mintAmountSub1 * 2100 > runeNum || mintAmountSub1<=0) {
+            return;
+        }
+        setMmintAmount(mintAmountSub1);
+    }
     const setPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPremineReceiveAddress(event.target.value);
     };
@@ -232,6 +246,8 @@ export default function Mint1(props: any) {
                     <div className="etch-inputBox1 etch-mintAmontBox">
                         <div className="etch-mitAmontInputBox">
                             <input type="number" min={1} placeholder="1" value={mintAmount} onChange={setMintAmount} />
+                            <span className="etch-upArrow" onClick={addMinAmount}></span>
+                            <span className="etch-downArrow" onClick={subMinAmount}></span>
                         </div>
                         <div className="etch-amontRightBox">
                             <p className="etch-amontRightTop">X 2100 {rune}</p>

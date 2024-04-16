@@ -274,11 +274,15 @@ input:focus {
                     border-color: #181B20 !important;
                 }
             }
+            .etch-selectDefaultVal {
+                color: #6F6F76;
+            }
         }
         .etch-mintAmontBox {
             border: none;
             display: flex;
             .etch-mitAmontInputBox {
+                position: relative;
                 display: flex;
                 width: 560px;
                 height: 100px;
@@ -294,6 +298,43 @@ input:focus {
                     font-size: 32px;
                     color: #FFF;
                     border: none;
+                }
+                input::-webkit-outer-spin-button,
+                input::-webkit-inner-spin-button {
+                    -webkit-appearance: none !important;
+                }
+                input[type='number'] {
+                    -moz-appearance: textfield;
+                }
+                .etch-upArrow {
+                    position: absolute;
+                    top: 30px;
+                    right: 40px;
+                    display: inline-block;
+                    width: 0;
+                    height: 0;
+                    border-left: 16px solid transparent; /* 左边透明 */
+                    border-right: 16px solid transparent; /* 右边透明 */
+                    border-bottom: 14px solid #6F6F76; 
+                    border-radius: 8px;
+                    &:active {
+                        border-bottom: 14px solid #F7931A;
+                    }
+                }
+                .etch-downArrow {
+                    position: absolute;
+                    top: 50px;
+                    right: 40px;
+                    display: inline-block;
+                    width: 0;
+                    height: 0;
+                    border-left: 16px solid transparent; /* 左边透明 */
+                    border-right: 16px solid transparent; /* 右边透明 */
+                    border-top: 14px solid #6F6F76; /* 底部蓝色 */
+                    border-radius: 8px;
+                    &:active {
+                        border-top: 14px solid #F7931A;
+                    }
                 }
             }
             .etch-amontRightBox {
