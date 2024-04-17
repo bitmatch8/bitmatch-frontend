@@ -77,7 +77,6 @@ export default function Mint1(props: any) {
         const runeValLength = runeVal.length;
         if (runeVal[0] === "·" || runeVal[runeValLength - 1] === ".") {
             setRuneErrorTip("The first and last characters cannot be .");
-            // setRune("");
             return;
         }
         let charArr = [];
@@ -95,14 +94,12 @@ export default function Mint1(props: any) {
             }
             }
         }
-        if (charArr.length < 13) {
-            setRuneErrorTip("Rune Cannot be less than 13 letters");
-            // setRune("");
+        if (charArr.length < 13 || charArr.length > 28) {
+            setRuneErrorTip("Rune 13 to 28 letters");
             return;
-        }
+          }
         if (isUpperLetter) {
             setRuneErrorTip("Characters must be all uppercase");
-            // setRune("");
             return;
         }
         setRuneErrorTip("");
