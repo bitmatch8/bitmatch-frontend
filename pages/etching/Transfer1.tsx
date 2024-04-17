@@ -208,7 +208,7 @@ export default function Etching1(props: any) {
                 } 
             })
         }
-    }, [])
+    }, [address])
 
     useEffect(() => {
         if (from2To1Data.rune) {
