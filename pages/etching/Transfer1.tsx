@@ -178,7 +178,7 @@ export default function Etching1(props: any) {
             transferAmount: amount,
             premineReceiveAddress,
             block,
-            tx,
+            tx: Number(tx),
         };
         
         handleBackData(callbackData);
@@ -274,7 +274,7 @@ export default function Etching1(props: any) {
                         <span className="etch-itemTitle">Amount</span>
                     </div>
                     <div className="etch-inputBox1">
-                        <input type="text" placeholder="1" value={amount} onChange={setAmount} onBlur={checkAmount} />
+                        <input type="text" value={amount} onChange={setAmount} onBlur={checkAmount} />
                     </div>
                     <p className="etch-formErrorTip">{ amountErrorTip }</p>
                 </div>

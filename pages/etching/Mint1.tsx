@@ -19,6 +19,7 @@ export default function Mint1(props: any) {
     const [runeNum, setRuneNum] = React.useState(0);
     const [runeErrorTip, setRuneErrorTip] = React.useState("");
     const [mintAmount, setMmintAmount] = React.useState(1);
+    const [amountUnit, setAmountUnit] = React.useState(0);
     const [mintAmountErrorTip, setMmintAmountErrorTip] = React.useState("");
     const [totalMintAmount, setTotalMintAmount] = React.useState(2100);
     const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
@@ -109,6 +110,8 @@ export default function Mint1(props: any) {
             let runeid = res['result']['rune']&&res['result']['rune']['runeid'] || '0:0';
             setTx(runeid.split(':')[1]);
             setBlock(runeid.split(':')[0]);
+            setAmountUnit(res['result']['rune']&&res['result']['rune']['mint_amount'] || 0);
+            
             // 获取剩余可Mint数量
             const premineNum = res['result']['rune']&&res['result']['rune']['premine'] || 0;
             const capacityNum = res['result']['rune']&&res['result']['rune']['capacity'] || 0;
@@ -123,7 +126,7 @@ export default function Mint1(props: any) {
     };
     const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
         let amountValue = Number(event.target.value);
-        if (amountValue * 2100 > runeNum) {
+        if (amountValue * amountUnit > runeNum) {
             return;
         } else {
             setMmintAmount(Number(event.target.value));
@@ -131,14 +134,14 @@ export default function Mint1(props: any) {
     };
     const addMinAmount = () => {
         let mintAmountAdd1 = mintAmount + 1;
-        if (mintAmountAdd1 * 2100 > runeNum) {
+        if (mintAmountAdd1 * amountUnit > runeNum) {
             return;
         }
         setMmintAmount(mintAmountAdd1);
     }
     const subMinAmount = () => {
         let mintAmountSub1 = mintAmount - 1;
-        if (mintAmountSub1 * 2100 > runeNum || mintAmountSub1<=0) {
+        if (mintAmountSub1 * amountUnit > runeNum || mintAmountSub1<=0) {
             return;
         }
         setMmintAmount(mintAmountSub1);
@@ -163,7 +166,7 @@ export default function Mint1(props: any) {
         if (runeErrorTip) {
             return false;
         }
-        if (mintAmount*2100 > runeNum) {
+        if (mintAmount*amountUnit > runeNum) {
             setRuneErrorTip("Rune Insufficient quantity");
             return;
         }
@@ -190,7 +193,7 @@ export default function Mint1(props: any) {
             mintAmount: totalMintAmount,
             premineReceiveAddress,
             block,
-            tx,
+            tx: Number(tx),
         };
         
         handleBackData(callbackData);
@@ -206,6 +209,24 @@ export default function Mint1(props: any) {
             setTotalMintAmount(from2To1Data.mintAmount);
             setMmintAmount(from2To1Data.mintAmount/2100);
             setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+            // 根据rune name获取amount的unit值
+            const runeVal = from2To1Data.rune;
+            fetchRuneSearchApi(runeVal).then((res) => {
+                let runeid = res['result']['rune']&&res['result']['rune']['runeid'] || '0:0';
+                setTx(runeid.split(':')[1]);
+                setBlock(runeid.split(':')[0]);
+                setAmountUnit(res['result']['rune']&&res['result']['rune']['mint_amount'] || 0);
+                
+                // 获取剩余可Mint数量
+                const premineNum = res['result']['rune']&&res['result']['rune']['premine'] || 0;
+                const capacityNum = res['result']['rune']&&res['result']['rune']['capacity'] || 0;
+                let totalNum = premineNum + capacityNum;
+                fetchHasMintAmount(runeVal).then((mres) => {
+                    const hasMintNum = mres['result']['mintAmount'];
+                    let renuNumShow = totalNum - hasMintNum;
+                    setRuneNum(renuNumShow);
+                })
+            })
         }
     }, [from2To1Data])
 
@@ -243,7 +264,7 @@ export default function Mint1(props: any) {
                 <div className="etch-formItemBox">
                     <div className="etch-formTitleBox">
                         <span className="etch-star">*</span>
-                        <span className="etch-itemTitle">Amount</span>
+                        <span className="etch-itemTitle">Repeat Mint</span>
                     </div>
                     <div className="etch-inputBox1 etch-mintAmontBox">
                         <div className="etch-mitAmontInputBox">
@@ -252,8 +273,8 @@ export default function Mint1(props: any) {
                             <span className="etch-downArrow" onClick={subMinAmount}></span>
                         </div>
                         <div className="etch-amontRightBox">
-                            <p className="etch-amontRightTop">X 2100 {rune}</p>
-                            <p className="etch-amontRightBottom">Total <span>{totalMintAmount}</span> {rune}</p>
+                            <p className="etch-amontRightTop">X {amountUnit} {rune}</p>
+                            <p className="etch-amontRightBottom">Total <span>{amountUnit*mintAmount}</span> {rune}</p>
                         </div>
                     </div>
                     <p className="etch-formErrorTip">{ mintAmountErrorTip }</p>

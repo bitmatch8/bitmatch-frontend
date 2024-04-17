@@ -223,7 +223,7 @@ export default function Etching1(props: any) {
       return;
     }
     if (Number(mintAmountValue) > Number(cap)) {
-      setAmountErrorTip("Mint Amount cannot be greater than Public Amount");
+      setAmountErrorTip("Mint Amount cannot be greater than Capacity");
       return;
     }
     setAmount(event.target.value);
@@ -240,7 +240,7 @@ export default function Etching1(props: any) {
       return;
     }
     if (Number(mintAmountValue) > Number(cap)) {
-      setAmountErrorTip("Mint Amount cannot be greater than Public Amount");
+      setAmountErrorTip("Mint Amount cannot be greater than Capacity");
       setAmount("");
       return;
     }
@@ -474,7 +474,6 @@ export default function Etching1(props: any) {
           <div className="etch-inputBox1">
             <input
               type="text"
-              placeholder="21000000"
               value={cap}
               onChange={setPublicAmount}
               onBlur={checkPublicAmount}
@@ -490,7 +489,6 @@ export default function Etching1(props: any) {
           <div className="etch-inputBox1">
             <input
               type="text"
-              placeholder="2100"
               value={amount}
               onChange={setMintAmount}
               onBlur={checkMintAmount}
@@ -583,7 +581,6 @@ export default function Etching1(props: any) {
                   <div className="etch-inputBox1">
                     <input
                       type="text"
-                      placeholder="8400000"
                       className="etch-mintHeightInput"
                       value={startHeight}
                       onChange={setStartHeightNumber}
@@ -603,7 +600,6 @@ export default function Etching1(props: any) {
                   <div className="etch-inputBox1">
                     <input
                       type="text"
-                      placeholder="2100"
                       className="etch-mintHeightInput"
                       value={endHeight}
                       onChange={setEndtHeightNumber}
@@ -623,7 +619,6 @@ export default function Etching1(props: any) {
               <div className="etch-inputBox1">
                 <input
                   type="text"
-                  placeholder="21000000"
                   value={premine}
                   onChange={setPremineAmount}
                   onBlur={checkPremineAmount}
