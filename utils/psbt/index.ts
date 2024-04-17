@@ -27,7 +27,7 @@ export function getUnisatAddressType(address: string): string {
       return "UNKENOW_ADDR";
   }
 }
-export const LOWEST_FEE = 550;
+export const LOWEST_FEE = 546;
 
 export function getSpacers(rune: string): number[] {
   let result: number[] = [];

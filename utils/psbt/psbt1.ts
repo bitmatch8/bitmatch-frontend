@@ -8,7 +8,7 @@ export const TESTNET_NETWORK_URL = "https://mempool.space/testnet";
 export const LIVENET_NETWORK_URL = "https://mempool.space";
 
 export const COMPANY_ADDRESS = ""; //公司收钱地址
-export const COMPANY_FEE = BigInt(1000); //公司收取的服务费
+export const COMPANY_FEE = 2000; //公司收取的服务费
 
 const currentNetwork =
   store.reduxStore.getState().wallter.network ||
@@ -31,6 +31,8 @@ export const ADDRESS_TYPE_P2PKH = "p2pkh";
 export const ADDRESS_TYPE_P2SH_P2WPKH = "p2sh_p2wpkh";
 export const ADDRESS_TYPE_P2WPKH = "p2wpkh";
 export const ADDRESS_TYPE_P2TR = "p2tr";
+
+export let pageVsize = 0;
 
 const getInputInfo = async (
   addressType: string,
@@ -109,7 +111,6 @@ export const generatePsbt = async (
   try {
     const tx = new btc.Transaction({ allowUnknownOutputs: true });
     const dummyTx = new btc.Transaction({ allowUnknownOutputs: true });
-    console.log("payment in generate psbt:", payment);
     let totalUtxoValue = 0;
 
     if (ordinals) {
@@ -176,7 +177,7 @@ export const generatePsbt = async (
     //   NETWORK
     // );
     COMPANY_FEE > 0 &&
-      tx.addOutputAddress(payment.address, COMPANY_FEE, NETWORK);
+      tx.addOutputAddress(payment.address, BigInt(COMPANY_FEE), NETWORK);
 
     dummyTx.addOutputAddress(recipientAddress, BigInt(payment.amount), NETWORK);
     for (let i = 0; i < opNum; i++) {
@@ -184,7 +185,9 @@ export const generatePsbt = async (
     }
     // '我们的服务费' > 0 &&  dummyTx.addOutputAddress("我们的地址", BigInt("我们的服务费"), NETWORK);
     COMPANY_FEE > 0 &&
-      dummyTx.addOutputAddress(payment.address, COMPANY_FEE, NETWORK);
+      dummyTx.addOutputAddress(payment.address, BigInt(COMPANY_FEE), NETWORK);
+
+    debugger;
 
     let response = await axios.get(
       `${SERVER_URL}/address/${payment.address}/utxo`
@@ -231,7 +234,7 @@ export const generatePsbt = async (
       feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount;
 
       totalUtxoValue += paymentUtxo.value;
-      if (totalUtxoValue >= payment.amount + feeAmount) {
+      if (totalUtxoValue >= payment.amount + feeAmount + COMPANY_FEE) {
         dummyTx.addOutputAddress(payment.address, BigInt(feeAmount), NETWORK);
 
         feeTx = btc.Transaction.fromPSBT(dummyTx.toPSBT());
@@ -244,19 +247,22 @@ export const generatePsbt = async (
         if (totalUtxoValue >= payment.amount + 100 * feeRate + feeAmount) {
           tx.addOutputAddress(
             payment.address,
-            BigInt(totalUtxoValue - payment.amount - feeAmount),
+            BigInt(totalUtxoValue - payment.amount - feeAmount - COMPANY_FEE),
             NETWORK
           );
         }
 
         const psbt = tx.toPSBT();
         const psbtBase64 = base64.encode(psbt);
-        console.log();
 
         return {
           psbt,
           psbtBase64,
           paymentUtxoCount,
+          vsize: feeTx.vsize,
+        };
+      } else {
+        return {
           vsize: feeTx.vsize,
         };
       }
