@@ -248,7 +248,7 @@ export default function Etching2(props: any) {
       runesStone = {
         mint: {
           block: BigInt(block),
-          tx: tx,
+          tx: Number(tx),
         },
         pointer: 0,
       };
@@ -258,7 +258,7 @@ export default function Etching2(props: any) {
           {
             id: {
               block: BigInt(block),
-              tx: tx,
+              tx: Number(tx),
             },
             amount: BigInt(transferAmount),
             output: 0,
