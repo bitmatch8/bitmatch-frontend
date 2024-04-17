@@ -24,7 +24,7 @@ export default function Mint1(props: any) {
     const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
     const [premineReceiveAddressErrorTip, setPremineReceiveAddressErrorTip] =
     React.useState("");
-    const [block, setBlock] = React.useState(0);
+    const [block, setBlock] = React.useState('');
     const [tx, setTx] = React.useState('');
 
     const {
@@ -109,8 +109,9 @@ export default function Mint1(props: any) {
 
         // 获取所需的tx和block数据
         fetchRuneSearchApi(runeVal).then((res) => {
-            setTx(res['result']['rune']&&res['result']['rune']['txid'] || 0);
-            setBlock(res['result']['rune']&&res['result']['rune']['height'] || 0);
+            let runeid = res['result']['rune']&&res['result']['rune']['runeid'] || '0:0';
+            setTx(runeid.split(':')[1]);
+            setBlock(runeid.split(':')[0]);
             // 获取剩余可Mint数量
             const premineNum = res['result']['rune']&&res['result']['rune']['premine'] || 0;
             const capacityNum = res['result']['rune']&&res['result']['rune']['capacity'] || 0;
