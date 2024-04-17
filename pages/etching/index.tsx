@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Page from "@/components/Page";
 // import History from "./History";
@@ -58,6 +58,17 @@ export default function IndexPage() {
     setFlowIndex(1);
   };
 
+  useEffect(() => {
+    const searchInputDom = document.getElementById('etchSearchInput');
+    if (searchInputDom) {
+      searchInputDom.addEventListener('keyup', function(event: any) {
+        if (event.keyCode === 13 && searchVal) {
+          router.push("/search?q=" + searchVal);
+        }
+      });
+    }
+  }, [searchVal])
+
   return (
     <Page>
       <div className="etching-topHeader">
@@ -66,7 +77,7 @@ export default function IndexPage() {
           <div className="etch-bottomLine"></div>
         </div>
         <div className="etch-topRightSearchBox">
-          <input type="text" onChange={setSearchValue} value={searchVal} placeholder="Search Rune or Address" />
+          <input type="text" onChange={setSearchValue} id="etchSearchInput" value={searchVal} placeholder="Search Rune or Address" />
           <span className="etch-topRightBtn" onClick={go2SearchPage}></span>
         </div>
       </div>
