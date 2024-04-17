@@ -334,7 +334,7 @@ export default function Etching2(props: any) {
 
   useEffect(() => {
     initPsbt();
-  }, []);
+  }, [sats]);
 
   // 计算Network Fee
   useEffect(() => {
