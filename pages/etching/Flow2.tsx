@@ -185,7 +185,7 @@ export default function Etching2(props: any) {
       const unsignedPsbt = await psbt.generatePsbt(
         payment,
         null,
-        premineReceiveAddress,
+        premineReceiveAddress || address,
         sats,
         opReturnOutput.encodedRunestone,
         flowName == "mint" ? mintAmount : 1
@@ -221,39 +221,22 @@ export default function Etching2(props: any) {
       const initRunesStone = {
         runeName: rune,
         divisibility: divisibility,
-        premine: BigInt(premine),
         spacers: psbt.getSpacers(rune),
         symbol: "⧉",
-      };
-      let terms: any = {};
-      if (publicMintChecked) {
-        terms = {
+        terms: {
           cap: BigInt(cap),
           amount: BigInt(amount),
-        };
-        if (timeType == "offset") {
-          terms = {
-            ...terms,
-            // offset: {
-            //   start: BigInt(start),
-            //   end: BigInt(end),
-            // },
-          };
-        } else {
-          terms = {
-            ...terms,
-            height: {
-              start: BigInt(start),
-              end: BigInt(end),
-            },
-          };
-        }
-      }
+        },
+      };
       runesStone = publicMintChecked
         ? {
             etching: {
               ...initRunesStone,
-              terms,
+              premine: BigInt(premine),
+              [timeType]: {
+                start: BigInt(start),
+                end: BigInt(end),
+              },
             },
           }
         : {
@@ -265,7 +248,7 @@ export default function Etching2(props: any) {
       runesStone = {
         mint: {
           block: BigInt(block),
-          tx: tx,
+          tx: Number(tx),
         },
         pointer: 0,
       };
@@ -275,7 +258,7 @@ export default function Etching2(props: any) {
           {
             id: {
               block: BigInt(block),
-              tx: tx,
+              tx: Number(tx),
             },
             amount: BigInt(transferAmount),
             output: 0,
