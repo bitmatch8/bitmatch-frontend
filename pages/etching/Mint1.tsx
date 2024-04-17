@@ -95,8 +95,8 @@ export default function Mint1(props: any) {
             }
             }
         }
-        if (charArr.length !== 13) {
-            setRuneErrorTip("Rune must 13 letters");
+        if (charArr.length < 13) {
+            setRuneErrorTip("Rune Cannot be less than 13 letters");
             // setRune("");
             return;
         }
@@ -165,6 +165,10 @@ export default function Mint1(props: any) {
         }
         if (runeErrorTip) {
             return false;
+        }
+        if (mintAmount*2100 > runeNum) {
+            setRuneErrorTip("Rune Insufficient quantity");
+            return;
         }
         if (!mintAmount) {
             setMmintAmountErrorTip('Please Input Amount');

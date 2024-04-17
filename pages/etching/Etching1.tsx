@@ -133,8 +133,8 @@ export default function Etching1(props: any) {
         }
       }
     }
-    if (charArr.length !== 13) {
-      setRuneErrorTip("Rune must 13 letters");
+    if (charArr.length < 13) {
+      setRuneErrorTip("Rune Cannot be less than 13 letters");
       // setRune("");
       return;
     }
