@@ -94,8 +94,8 @@ export default function Mint1(props: any) {
             }
             }
         }
-        if (charArr.length < 13 || charArr.length > 28) {
-            setRuneErrorTip("Rune 13 to 28 letters");
+        if (charArr.length < 12 || charArr.length > 28) {
+            setRuneErrorTip("Rune 12 to 28 letters");
             return;
           }
         if (isUpperLetter) {
@@ -227,7 +227,7 @@ export default function Mint1(props: any) {
                     <div className="etch-inputBox1">
                         <input
                             type="text"
-                            placeholder="13 letter identifier like ”ABCDE.FGHI”"
+                            placeholder="12 letter identifier like ”ABCDE.FGHI”"
                             value={rune}
                             onChange={setRuneName}
                             onBlur={checkRuneName}

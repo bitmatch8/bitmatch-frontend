@@ -58,7 +58,7 @@ export default function Etching1(props: any) {
   const RuneTipText = useMemo(
     () => (
       <div className="etch-tipInnerBox">
-        <p>13 characters</p>
+        <p>12 characters</p>
         <p>Can contain a "." between characters.</p>
       </div>
     ),
@@ -133,8 +133,8 @@ export default function Etching1(props: any) {
         }
       }
     }
-    if (charArr.length < 13 || charArr.length > 28) {
-      setRuneErrorTip("Rune 13 to 28 letters");
+    if (charArr.length < 12 || charArr.length > 28) {
+      setRuneErrorTip("Rune 12 to 28 letters");
       // setRune("");
       return;
     }
@@ -472,7 +472,7 @@ export default function Etching1(props: any) {
           <div className="etch-inputBox1">
             <input
               type="text"
-              placeholder="13 letter identifier like ”ABCDE.FGHI”"
+              placeholder="12 letter identifier like ”ABCDE.FGHI”"
               value={rune}
               onChange={setRuneName}
               onBlur={checkRuneName}
@@ -483,38 +483,38 @@ export default function Etching1(props: any) {
         <div className="etch-formItemBox">
           <div className="etch-formTitleBox">
             <span className="etch-star">*</span>
-            <span className="etch-itemTitle">Premine Amount</span>
+            <span className="etch-itemTitle">Capacity</span>
           </div>
           <div className="etch-inputBox1">
             <input
               type="text"
               placeholder="21000000"
-              value={premine}
-              onChange={setPremineAmount}
-              onBlur={checkPremineAmount}
+              value={cap}
+              onChange={setPublicAmount}
+              onBlur={checkPublicAmount}
             />
           </div>
-          <p className="etch-formErrorTip">{premineErrorTip}</p>
+          <p className="etch-formErrorTip">{capErrorTip}</p>
         </div>
         <div className="etch-formItemBox">
           <div className="etch-formTitleBox">
             <span className="etch-star">*</span>
-            <span className="etch-itemTitle">Premine Receive Address</span>
+            <span className="etch-itemTitle">Mint Amount</span>
           </div>
           <div className="etch-inputBox1">
             <input
               type="text"
-              placeholder="bc1p…"
-              value={premineReceiveAddress}
-              onChange={setPremineRecAdd}
-              onBlur={checkPremineRecAdd}
+              placeholder="2100"
+              value={amount}
+              onChange={setMintAmount}
+              onBlur={checkMintAmount}
             />
           </div>
-          <p className="etch-formErrorTip">{premineReceiveAddressErrorTip}</p>
+          <p className="etch-formErrorTip">{amountErrorTip}</p>
         </div>
 
         <div className="etch-mintSetBtnBox">
-          <span className="etch-mintSetTit">Public Mint</span>
+          <span className="etch-mintSetTit">Advanced Options</span>
           <div className="etch-mintSetSwitchBox">
             <Switch
               checked={checked}
@@ -530,46 +530,7 @@ export default function Etching1(props: any) {
                 <div className="etch-formItemBox">
                   <div className="etch-formTitleBox">
                     <span className="etch-star">*</span>
-                    <span className="etch-itemTitle">Public Amount</span>
-                  </div>
-                  <div className="etch-inputBox1">
-                    <input
-                      type="text"
-                      placeholder="21000000"
-                      value={cap}
-                      onChange={setPublicAmount}
-                      onBlur={checkPublicAmount}
-                    />
-                  </div>
-                  <p className="etch-formErrorTip">{capErrorTip}</p>
-                </div>
-              </div>
-              <div className="etch-formItemInner">
-                <div className="etch-formItemBox">
-                  <div className="etch-formTitleBox">
-                    <span className="etch-star">*</span>
-                    <span className="etch-itemTitle">Mint Amount</span>
-                  </div>
-                  <div className="etch-inputBox1">
-                    <input
-                      type="text"
-                      placeholder="2100"
-                      value={amount}
-                      onChange={setMintAmount}
-                      onBlur={checkMintAmount}
-                    />
-                  </div>
-                  <p className="etch-formErrorTip">{amountErrorTip}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="etch-formItemBox etch-formTtemBox2">
-              <div className="etch-formItemInner">
-                <div className="etch-formItemBox">
-                  <div className="etch-formTitleBox">
-                    <span className="etch-star">*</span>
-                    <span className="etch-itemTitle">Time Type</span>
+                    <span className="etch-itemTitle">Height Selection</span>
                   </div>
                   <div
                     className={`etch-inputBox1 etch-timeType ${
@@ -602,7 +563,7 @@ export default function Etching1(props: any) {
                 </div>
               </div>
             </div>
-            {offOrHei === "offset" && (
+            {/* {offOrHei === "offset" && (
               <div className="etch-formItemBox">
                 <div className="etch-formTitleBox">
                   <span className="etch-star">*</span>
@@ -622,54 +583,84 @@ export default function Etching1(props: any) {
                 </div>
                 <p className="etch-formErrorTip">{offsetErrorTip}</p>
               </div>
-            )}
-            {offOrHei === "height" && (
-              <div className="etch-formItemBox etch-formTtemBox2">
-                <div className="etch-formItemInner">
-                  <div className="etch-formItemBox">
-                    <div className="etch-formTitleBox">
-                      <span className="etch-star">*</span>
-                      <span className="etch-itemTitle">Height</span>
-                      <TextTooltip arrow title={RuneHieghtTipText}>
-                        <span className="etch-askIcon"></span>
-                      </TextTooltip>
-                    </div>
-                    <div className="etch-inputBox1">
-                      <input
-                        type="text"
-                        placeholder="8400000"
-                        className="etch-mintHeightInput"
-                        value={startHeight}
-                        onChange={setStartHeightNumber}
-                        onBlur={checkStartHeightNumber}
-                      />
-                      <span className="etch-mintHieghtZc">Start Height</span>
-                    </div>
-                    <p className="etch-formErrorTip">{startHeightErrorTip}</p>
+            )} */}
+            <div className="etch-formItemBox etch-formTtemBox2">
+              <div className="etch-formItemInner">
+                <div className="etch-formItemBox">
+                  <div className="etch-formTitleBox">
+                    <span className="etch-star">*</span>
+                    <span className="etch-itemTitle">{offOrHei === "height" ? 'Height' : 'Offset'}</span>
+                    <TextTooltip arrow title={offOrHei === "height" ? RuneHieghtTipText : RuneOffsetTipText}>
+                      <span className="etch-askIcon"></span>
+                    </TextTooltip>
                   </div>
-                </div>
-                <div className="etch-formItemInner">
-                  <div className="etch-formItemBox">
-                    <div className="etch-formTitleBox">
-                      <span className="etch-star"></span>
-                      <span className="etch-itemTitle"></span>
-                    </div>
-                    <div className="etch-inputBox1">
-                      <input
-                        type="text"
-                        placeholder="2100"
-                        className="etch-mintHeightInput"
-                        value={endHeight}
-                        onChange={setEndtHeightNumber}
-                        onBlur={checkEndtHeightNumber}
-                      />
-                      <span className="etch-mintHieghtZc">End Height</span>
-                    </div>
-                    <p className="etch-formErrorTip">{endHeightErrorTip}</p>
+                  <div className="etch-inputBox1">
+                    <input
+                      type="text"
+                      placeholder="8400000"
+                      className="etch-mintHeightInput"
+                      value={startHeight}
+                      onChange={setStartHeightNumber}
+                      onBlur={checkStartHeightNumber}
+                    />
+                    <span className="etch-mintHieghtZc">Start Height</span>
                   </div>
+                  <p className="etch-formErrorTip">{startHeightErrorTip}</p>
                 </div>
               </div>
-            )}
+              <div className="etch-formItemInner">
+                <div className="etch-formItemBox">
+                  <div className="etch-formTitleBox">
+                    <span className="etch-star"></span>
+                    <span className="etch-itemTitle"></span>
+                  </div>
+                  <div className="etch-inputBox1">
+                    <input
+                      type="text"
+                      placeholder="2100"
+                      className="etch-mintHeightInput"
+                      value={endHeight}
+                      onChange={setEndtHeightNumber}
+                      onBlur={checkEndtHeightNumber}
+                    />
+                    <span className="etch-mintHieghtZc">End Height</span>
+                  </div>
+                  <p className="etch-formErrorTip">{endHeightErrorTip}</p>
+                </div>
+              </div>
+            </div>
+            <div className="etch-formItemBox">
+              <div className="etch-formTitleBox">
+                <span className="etch-star">*</span>
+                <span className="etch-itemTitle">Premine Amount</span>
+              </div>
+              <div className="etch-inputBox1">
+                <input
+                  type="text"
+                  placeholder="21000000"
+                  value={premine}
+                  onChange={setPremineAmount}
+                  onBlur={checkPremineAmount}
+                />
+              </div>
+              <p className="etch-formErrorTip">{premineErrorTip}</p>
+            </div>
+            <div className="etch-formItemBox">
+              <div className="etch-formTitleBox">
+                <span className="etch-star">*</span>
+                <span className="etch-itemTitle">Premine Receive Address</span>
+              </div>
+              <div className="etch-inputBox1">
+                <input
+                  type="text"
+                  placeholder="bc1p…"
+                  value={premineReceiveAddress}
+                  onChange={setPremineRecAdd}
+                  onBlur={checkPremineRecAdd}
+                />
+              </div>
+              <p className="etch-formErrorTip">{premineReceiveAddressErrorTip}</p>
+            </div>
           </div>
         )}
       </div>
