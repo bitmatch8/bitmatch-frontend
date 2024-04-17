@@ -204,7 +204,7 @@ export default function Etching1(props: any) {
       Number(pubAmontValue) <= 0 ||
       Number(pubAmontValue) % 1 !== 0
     ) {
-      setCapErrorTip("Public Amount must be a positive integer");
+      setCapErrorTip("Capacity must be a positive integer");
       setCap("");
       return;
     }
@@ -337,6 +337,14 @@ export default function Etching1(props: any) {
     setEndHeightErrorTip("");
   };
 
+  const handleSetOffOrHei = (type: string) => {
+    setOffOrHei(type);
+    setStartHeight('');
+    setEndHeight('');
+    setSstartHeightErrorTip('');
+    setEndHeightErrorTip('');
+  }
+
   const checkFormData = () => {
     if (!rune) {
       setRuneErrorTip("Please input Rune");
@@ -345,58 +353,46 @@ export default function Etching1(props: any) {
     if (runeErrorTip) {
       return false;
     }
-    if (!premine) {
-      setPremineErrorTip("Please input Premine Amount");
+    if (!cap) {
+      setCapErrorTip("Please input Capacity");
       return false;
     }
-    if (premineErrorTip) {
+    if (capErrorTip) {
       return false;
     }
-    if (!premineReceiveAddress) {
-      setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
+    if (!amount) {
+      setAmountErrorTip("Please input Mint Amount");
       return false;
     }
-    if (checked) {
-      if (!cap) {
-        setCapErrorTip("Please input Public Amount");
-        return false;
-      }
-      if (capErrorTip) {
-        return false;
-      }
-      if (!amount) {
-        setAmountErrorTip("Please input Mint Amount");
-        return false;
-      }
-      if (amountErrorTip) {
-        return false;
-      }
-      if (offOrHei === "offset") {
-        if (!offset) {
-          setOffsetErrorTip("Please input Offset");
-          return false;
-        }
-        if (offsetErrorTip) {
-          return false;
-        }
-      }
-      if (offOrHei === "height") {
-        setOffsetErrorTip("");
+    if (amountErrorTip) {
+      return false;
+    }
 
-        if (!startHeight) {
-          setSstartHeightErrorTip("Please input Start Height");
-          return false;
-        }
-        if (startHeightErrorTip) {
-          return false;
-        }
-        if (!endHeight) {
-          setEndHeightErrorTip("Please input End Height");
-          return false;
-        }
-        if (endHeightErrorTip) {
-          return false;
-        }
+    if (checked) {
+      if (!startHeight) {
+        setSstartHeightErrorTip("Please input Start Height");
+        return false;
+      }
+      if (startHeightErrorTip) {
+        return false;
+      }
+      if (!endHeight) {
+        setEndHeightErrorTip("Please input End Height");
+        return false;
+      }
+      if (endHeightErrorTip) {
+        return false;
+      }
+      if (!premine) {
+        setPremineErrorTip("Please input Premine Amount");
+        return false;
+      }
+      if (premineErrorTip) {
+        return false;
+      }
+      if (!premineReceiveAddress) {
+        setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
+        return false;
       }
     }
     return true;
@@ -411,21 +407,16 @@ export default function Etching1(props: any) {
       flowIndex: 2,
       rune,
       divisibility: 0,
-      premine,
-      premineReceiveAddress,
+      cap,
+      amount,
       publicMintChecked: checked,
     };
     if (checked) {
-      callbackData["cap"] = cap;
-      callbackData["amount"] = amount;
+      callbackData["premine"] = premine;
+      callbackData["premineReceiveAddress"] = premineReceiveAddress;
       callbackData["timeType"] = offOrHei;
-      if (offOrHei === "offset") {
-        callbackData["offset"] = offset;
-      }
-      if (offOrHei === "height") {
-        callbackData["start"] = startHeight;
-        callbackData["end"] = endHeight;
-      }
+      callbackData["start"] = startHeight;
+      callbackData["end"] = endHeight;
     }
     handleBackData(callbackData);
   };
@@ -433,20 +424,15 @@ export default function Etching1(props: any) {
   useEffect(() => {
     if (from2To1Data.rune) {
       setRune(from2To1Data.rune);
-      setPremine(from2To1Data.premine);
-      setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+      setCap(from2To1Data.cap);
+      setAmount(from2To1Data.amount);
       setChecked(from2To1Data.publicMintChecked);
       if (from2To1Data.publicMintChecked) {
-        setCap(from2To1Data.cap);
-        setAmount(from2To1Data.amount);
+        setPremine(from2To1Data.premine);
+        setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
         setOffOrHei(from2To1Data.timeType);
-        if (from2To1Data.timeType === "offset") {
-          setOffset(from2To1Data.offset);
-        }
-        if (from2To1Data.timeType === "height") {
-          setStartHeight(from2To1Data.start);
-          setEndHeight(from2To1Data.end);
-        }
+        setStartHeight(from2To1Data.start);
+        setEndHeight(from2To1Data.end);
       }
     }
   }, [from2To1Data]);
@@ -536,7 +522,7 @@ export default function Etching1(props: any) {
                     className={`etch-inputBox1 etch-timeType ${
                       offOrHei === "offset" ? "cur" : ""
                     }`}
-                    onClick={() => setOffOrHei("offset")}
+                    onClick={() => handleSetOffOrHei("offset")}
                   >
                     Offset
                     <span className="etch-timeTypeCur"></span>
@@ -554,7 +540,7 @@ export default function Etching1(props: any) {
                     className={`etch-inputBox1 etch-timeType ${
                       offOrHei === "height" ? "cur" : ""
                     }`}
-                    onClick={() => setOffOrHei("height")}
+                    onClick={() => handleSetOffOrHei("height")}
                   >
                     Height
                     <span className="etch-timeTypeCur"></span>
