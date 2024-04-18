@@ -8,6 +8,8 @@ import { usePathname, useRouter, useParams } from "next/navigation";
 import ToastModals from "@/context/ToastModals";
 import { useDispatch, addToast } from "@/lib/redux";
 import dynamic from "next/dynamic";
+import etchingNewImg from "@/assets/img/etching-new-iocn.svg";
+import Image from 'next/image'
 const ConnectButton = dynamic(import("./ConnectButton"), { ssr: false });
 export const TopBar = () => {
   const pathname = usePathname();
@@ -55,6 +57,9 @@ export const TopBar = () => {
             href={link.path}
           >
             {link.title}
+            {
+              link.title === 'Etching' && <EtchingNew src={etchingNewImg} alt="etching" />     
+            }
           </LinkItem>
         ))}
       </MenusBox>
@@ -111,4 +116,12 @@ const TopBarBox = styled.div`
   justify-content: space-between;
   align-items: center;
   position: relative;
+`;
+
+const EtchingNew = styled(Image)`
+  position: absolute;
+  right: -30px;
+  top: -10px;
+  width: 33px;
+  height: 16px;
 `;

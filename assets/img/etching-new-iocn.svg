@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="33px" height="16px" viewBox="0 0 33 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 13</title>
+    <defs>
+        <linearGradient x1="110.373163%" y1="50%" x2="4.25927268%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#61D8DA" offset="0%"></stop>
+            <stop stop-color="#FFA0E0" offset="39.9784297%"></stop>
+            <stop stop-color="#FFEF80" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Etching" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="etching-信息输入报错" transform="translate(-980, -33)">
+            <g id="编组-13" transform="translate(980, 33)">
+                <path d="M4,0 L29,0 C31.209139,-4.05812251e-16 33,1.790861 33,4 L33,12 C33,14.209139 31.209139,16 29,16 L0,16 L0,16 L0,4 C-2.705415e-16,1.790861 1.790861,4.05812251e-16 4,0 Z" id="矩形" fill="url(#linearGradient-1)"></path>
+                <g id="NEW" transform="translate(4.77, 5)" fill="#000000" fill-rule="nonzero">
+                    <polygon id="路径" points="0 0 0 7 1.51 7 1.51 2.51 4.9 7 6.34 7 6.34 0 4.84 0 4.84 4.5 1.44 0"></polygon>
+                    <polygon id="路径" points="7.88 0 7.88 7 13.32 7 13.32 5.69 9.46 5.69 9.46 4.14 12.83 4.14 12.83 2.83 9.46 2.83 9.46 1.31 13.21 1.31 13.21 0"></polygon>
+                    <polygon id="路径" points="13.79 0 16.1 7 17.73 7 19.17 2.01 20.58 7 22.21 7 24.53 0 22.91 0 21.45 5.28 19.97 0 18.42 0 16.96 5.28 15.49 0"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
