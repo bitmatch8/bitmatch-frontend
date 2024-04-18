@@ -655,7 +655,7 @@ export default function Etching1(props: any) {
 
       <div className="etch-bottomBalanceBox">
         <span className="etch-balanceTxt">Balance</span>
-        <span className="etch-balanceNum">{balance.total / 1e8} BTC</span>
+        <span className="etch-balanceNum">{balance.confirmed / 1e8} BTC</span>
       </div>
       {address ? (
         <>
