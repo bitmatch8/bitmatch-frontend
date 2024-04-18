@@ -93,13 +93,13 @@ export default function Etching1(props: any) {
       setTx(runeid.split(":")[1]);
       setBlock(runeid.split(":")[0]);
       // 获取剩余可Mint数量
-      const premineNum = res["result"]["rune"]["premine"] || 0;
-      const capacityNum = res["result"]["rune"]["capacity"] || 0;
-      let totalNum = premineNum + capacityNum;
+      // const premineNum = res["result"]["rune"]["premine"] || 0;
+      // const capacityNum = res["result"]["rune"]["capacity"] || 0;
+      // let totalNum = premineNum + capacityNum;
       fetchHasMintAmount(runeVal).then((mres) => {
         const hasMintNum = mres["result"]["mintAmount"];
-        let renuNumShow = totalNum - hasMintNum;
-        setRuneNum(renuNumShow);
+        // let renuNumShow = totalNum - hasMintNum;
+        setRuneNum(hasMintNum);
       });
     });
   };
@@ -204,19 +204,21 @@ export default function Etching1(props: any) {
             setTx(runeid.split(":")[1]);
             setBlock(runeid.split(":")[0]);
             // 获取剩余可Mint数量
-            const premineNum =
-              (res["result"]["rune"] && res["result"]["rune"]["premine"]) || 0;
-            const capacityNum =
-              (res["result"]["rune"] && res["result"]["rune"]["capacity"]) || 0;
-            let totalNum = premineNum + capacityNum;
+            // const premineNum =
+            //   (res["result"]["rune"] && res["result"]["rune"]["premine"]) || 0;
+            // const capacityNum =
+            //   (res["result"]["rune"] && res["result"]["rune"]["capacity"]) || 0;
+            // let totalNum = premineNum + capacityNum;
             fetchHasMintAmount(runeVal).then((mres) => {
               const hasMintNum = mres["result"]["mintAmount"];
-              let renuNumShow = totalNum - hasMintNum;
-              setRuneNum(renuNumShow);
+              // let renuNumShow = totalNum - hasMintNum;
+              setRuneNum(hasMintNum);
             });
           });
         }
       });
+
+      setPremineReceiveAddress(address);
     }
   }, [address]);
 
@@ -227,12 +229,6 @@ export default function Etching1(props: any) {
       setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
     }
   }, [from2To1Data]);
-
-  useEffect(() => {
-    if (address) {
-      setPremineReceiveAddress(address);
-    }
-  }, [address]);
 
   return (
     <div className="etch-blockBox">
@@ -275,7 +271,7 @@ export default function Etching1(props: any) {
             <span>{runeErrorTip}</span>
             {rune && (
               <span>
-                {rune} only has {runeNum} left to mint
+                {rune} only has {runeNum} left to transfer
               </span>
             )}
           </p>
