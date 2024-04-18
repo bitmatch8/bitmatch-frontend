@@ -234,7 +234,14 @@ export const generatePsbt = async (
       feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount;
 
       totalUtxoValue += paymentUtxo.value;
-      if (totalUtxoValue >= payment.amount + feeAmount + COMPANY_FEE) {
+      console.log(
+        "----psbt total----:",
+        payment.amount + feeAmount + COMPANY_FEE + feeAmount * 0.05
+      );
+      if (
+        totalUtxoValue >=
+        payment.amount + feeAmount + COMPANY_FEE + feeAmount * 0.05
+      ) {
         dummyTx.addOutputAddress(payment.address, BigInt(feeAmount), NETWORK);
 
         feeTx = btc.Transaction.fromPSBT(dummyTx.toPSBT());
@@ -247,7 +254,13 @@ export const generatePsbt = async (
         if (totalUtxoValue >= payment.amount + 100 * feeRate + feeAmount) {
           tx.addOutputAddress(
             payment.address,
-            BigInt(totalUtxoValue - payment.amount - feeAmount - COMPANY_FEE),
+            BigInt(
+              totalUtxoValue -
+                payment.amount -
+                feeAmount -
+                COMPANY_FEE -
+                -feeAmount * 0.05
+            ),
             NETWORK
           );
         }
