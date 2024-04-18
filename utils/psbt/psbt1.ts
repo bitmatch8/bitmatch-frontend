@@ -2,7 +2,6 @@ import { base64, hex } from "@scure/base";
 import * as btc from "@scure/btc-signer";
 import * as secp256k1 from "@noble/secp256k1";
 import axios from "axios";
-import * as store from "@/lib/redux/store";
 
 export const TESTNET_NETWORK_URL = "https://mempool.space/testnet";
 export const LIVENET_NETWORK_URL = "https://mempool.space";
