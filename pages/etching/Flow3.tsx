@@ -17,7 +17,7 @@ export default function Etching3(props: any) {
   };
   const go2mmp = () => {
     const url = `${
-      network === "testnet"
+      process.env.NEXT_PUBLIC_NETWORK === "testnet"
         ? psbt.TESTNET_NETWORK_URL
         : psbt.LIVENET_NETWORK_URL
     }/tx/${flow3TxHash}`;

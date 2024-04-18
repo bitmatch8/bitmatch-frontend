@@ -7,9 +7,7 @@ import * as store from "@/lib/redux/store";
 export const TESTNET_NETWORK_URL = "https://mempool.space/testnet";
 export const LIVENET_NETWORK_URL = "https://mempool.space";
 
-const currentNetwork =
-  store.reduxStore.getState().wallter.network ||
-  process.env.NEXT_PUBLIC_NETWORK;
+const currentNetwork = process.env.NEXT_PUBLIC_NETWORK;
 
 export const COMPANY_ADDRESS = "bc1qq65pwqd0a5f3aqgufu8c5a90gnn7cd8aukq2x3"; //公司收钱地址
 export const COMPANY_FEE = 2000; //公司收取的服务费
