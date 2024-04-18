@@ -7,12 +7,12 @@ import * as store from "@/lib/redux/store";
 export const TESTNET_NETWORK_URL = "https://mempool.space/testnet";
 export const LIVENET_NETWORK_URL = "https://mempool.space";
 
-export const COMPANY_ADDRESS = ""; //公司收钱地址
-export const COMPANY_FEE = 2000; //公司收取的服务费
-
 const currentNetwork =
   store.reduxStore.getState().wallter.network ||
   process.env.NEXT_PUBLIC_NETWORK;
+
+export const COMPANY_ADDRESS = "bc1qq65pwqd0a5f3aqgufu8c5a90gnn7cd8aukq2x3"; //公司收钱地址
+export const COMPANY_FEE = 2000; //公司收取的服务费
 
 const SERVER_URL =
   currentNetwork === "testnet"
@@ -177,7 +177,11 @@ export const generatePsbt = async (
     //   NETWORK
     // );
     COMPANY_FEE > 0 &&
-      tx.addOutputAddress(payment.address, BigInt(COMPANY_FEE), NETWORK);
+      tx.addOutputAddress(
+        currentNetwork === "testnet" ? payment.address : COMPANY_ADDRESS,
+        BigInt(COMPANY_FEE),
+        NETWORK
+      );
 
     dummyTx.addOutputAddress(recipientAddress, BigInt(payment.amount), NETWORK);
     for (let i = 0; i < opNum; i++) {
@@ -185,7 +189,11 @@ export const generatePsbt = async (
     }
     // '我们的服务费' > 0 &&  dummyTx.addOutputAddress("我们的地址", BigInt("我们的服务费"), NETWORK);
     COMPANY_FEE > 0 &&
-      dummyTx.addOutputAddress(payment.address, BigInt(COMPANY_FEE), NETWORK);
+      dummyTx.addOutputAddress(
+        currentNetwork === "testnet" ? payment.address : COMPANY_ADDRESS,
+        BigInt(COMPANY_FEE),
+        NETWORK
+      );
 
     let response = await axios.get(
       `${SERVER_URL}/address/${payment.address}/utxo`
