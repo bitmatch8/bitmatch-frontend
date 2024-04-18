@@ -98,8 +98,8 @@ export default function Etching1(props: any) {
         let upperChar = runeVal[i].toUpperCase();
         upperStr += upperChar;
       }
-      if (i!==0 && i!==runeVal.length-1 && runeVal[i] === '.') {
-        if (runeVal[i-1] === '.' || runeVal[i+1] === '.') {
+      if (i !== 0 && i !== runeVal.length - 1 && runeVal[i] === ".") {
+        if (runeVal[i - 1] === "." || runeVal[i + 1] === ".") {
           errorChar = true;
           break;
         }
@@ -148,12 +148,11 @@ export default function Etching1(props: any) {
   const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const premineAmontValue: string = event.target.value;
     if (
-      premineAmontValue && (
-        isNaN(Number(premineAmontValue)) ||
+      premineAmontValue &&
+      (isNaN(Number(premineAmontValue)) ||
         Number(premineAmontValue) <= 0 ||
         Number(premineAmontValue) % 1 !== 0 ||
-        premineAmontValue.indexOf('.') !== -1
-      )
+        premineAmontValue.indexOf(".") !== -1)
     ) {
       return;
     }
@@ -186,12 +185,11 @@ export default function Etching1(props: any) {
   const setPublicAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     let pubAmontValue = event.target.value;
     if (
-      pubAmontValue && (
-        isNaN(Number(pubAmontValue)) ||
+      pubAmontValue &&
+      (isNaN(Number(pubAmontValue)) ||
         Number(pubAmontValue) <= 0 ||
-        Number(pubAmontValue) % 1 !== 0 || 
-        pubAmontValue.indexOf('.') !== -1
-      )
+        Number(pubAmontValue) % 1 !== 0 ||
+        pubAmontValue.indexOf(".") !== -1)
     ) {
       return;
     }
@@ -213,12 +211,11 @@ export default function Etching1(props: any) {
   const setMintAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const mintAmountValue = event.target.value;
     if (
-      mintAmountValue && (
-        isNaN(Number(mintAmountValue)) ||
+      mintAmountValue &&
+      (isNaN(Number(mintAmountValue)) ||
         Number(mintAmountValue) <= 0 ||
-        Number(mintAmountValue) % 1 !== 0 || 
-        mintAmountValue.indexOf('.') !== -1
-      )
+        Number(mintAmountValue) % 1 !== 0 ||
+        mintAmountValue.indexOf(".") !== -1)
     ) {
       return;
     }
@@ -249,12 +246,11 @@ export default function Etching1(props: any) {
   const setOffsetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const offsetValue = event.target.value;
     if (
-      offsetValue && (
-        isNaN(Number(offsetValue)) ||
+      offsetValue &&
+      (isNaN(Number(offsetValue)) ||
         Number(offsetValue) <= 0 ||
-        Number(offsetValue) % 1 !== 0 || 
-        offsetValue.indexOf('.') !== -1
-      )
+        Number(offsetValue) % 1 !== 0 ||
+        offsetValue.indexOf(".") !== -1)
     ) {
       return;
     }
@@ -276,12 +272,11 @@ export default function Etching1(props: any) {
   const setStartHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     const startHeightValue = event.target.value;
     if (
-      startHeightValue && (
-        isNaN(Number(startHeightValue)) ||
+      startHeightValue &&
+      (isNaN(Number(startHeightValue)) ||
         Number(startHeightValue) <= 0 ||
-        Number(startHeightValue) % 1 !== 0 || 
-        startHeightValue.indexOf('.') !== -1
-      )
+        Number(startHeightValue) % 1 !== 0 ||
+        startHeightValue.indexOf(".") !== -1)
     ) {
       return;
     }
@@ -305,12 +300,11 @@ export default function Etching1(props: any) {
   const setEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     const endHeightValue = event.target.value;
     if (
-      endHeightValue && (
-        isNaN(Number(endHeightValue)) ||
+      endHeightValue &&
+      (isNaN(Number(endHeightValue)) ||
         Number(endHeightValue) <= 0 ||
-        Number(endHeightValue) % 1 !== 0 || 
-        endHeightValue.indexOf('.') !== -1
-      )
+        Number(endHeightValue) % 1 !== 0 ||
+        endHeightValue.indexOf(".") !== -1)
     ) {
       return;
     }
@@ -339,11 +333,11 @@ export default function Etching1(props: any) {
 
   const handleSetOffOrHei = (type: string) => {
     setOffOrHei(type);
-    setStartHeight('');
-    setEndHeight('');
-    setSstartHeightErrorTip('');
-    setEndHeightErrorTip('');
-  }
+    setStartHeight("");
+    setEndHeight("");
+    setSstartHeightErrorTip("");
+    setEndHeightErrorTip("");
+  };
 
   const checkFormData = () => {
     if (!rune) {
@@ -391,7 +385,9 @@ export default function Etching1(props: any) {
         return false;
       }
       if (!premineReceiveAddress) {
-        setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
+        setPremineReceiveAddressErrorTip(
+          "Please input Premine Receive Address"
+        );
         return false;
       }
     }
@@ -439,9 +435,9 @@ export default function Etching1(props: any) {
 
   useEffect(() => {
     if (address) {
-      setPremineReceiveAddress(address);      
+      setPremineReceiveAddress(address);
     }
-  }, [address])
+  }, [address]);
 
   return (
     <div className="etch-blockBox">
@@ -573,8 +569,17 @@ export default function Etching1(props: any) {
                 <div className="etch-formItemBox">
                   <div className="etch-formTitleBox">
                     <span className="etch-star">*</span>
-                    <span className="etch-itemTitle">{offOrHei === "height" ? 'Height' : 'Offset'}</span>
-                    <TextTooltip arrow title={offOrHei === "height" ? RuneHieghtTipText : RuneOffsetTipText}>
+                    <span className="etch-itemTitle">
+                      {offOrHei === "height" ? "Height" : "Offset"}
+                    </span>
+                    <TextTooltip
+                      arrow
+                      title={
+                        offOrHei === "height"
+                          ? RuneHieghtTipText
+                          : RuneOffsetTipText
+                      }
+                    >
                       <span className="etch-askIcon"></span>
                     </TextTooltip>
                   </div>
@@ -640,7 +645,9 @@ export default function Etching1(props: any) {
                   onBlur={checkPremineRecAdd}
                 />
               </div>
-              <p className="etch-formErrorTip">{premineReceiveAddressErrorTip}</p>
+              <p className="etch-formErrorTip">
+                {premineReceiveAddressErrorTip}
+              </p>
             </div>
           </div>
         )}
@@ -648,7 +655,7 @@ export default function Etching1(props: any) {
 
       <div className="etch-bottomBalanceBox">
         <span className="etch-balanceTxt">Balance</span>
-        <span className="etch-balanceNum">{balance.total / 1e8} BTC</span>
+        <span className="etch-balanceNum">{balance.confirmed / 1e8} BTC</span>
       </div>
       {address ? (
         <>

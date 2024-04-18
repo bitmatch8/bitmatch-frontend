@@ -187,8 +187,6 @@ export const generatePsbt = async (
     COMPANY_FEE > 0 &&
       dummyTx.addOutputAddress(payment.address, BigInt(COMPANY_FEE), NETWORK);
 
-    // debugger;
-
     let response = await axios.get(
       `${SERVER_URL}/address/${payment.address}/utxo`
     );
