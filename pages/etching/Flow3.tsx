@@ -10,7 +10,6 @@ export default function Etching3(props: any) {
   delete formDataBack.flowIndex;
 
   const [isCopiedHash, setIsCopiedHash] = React.useState(false);
-  const { network } = useSelector(selectWallter);
 
   const go2Flow1 = () => {
     handleBackFlow3(flowName);
