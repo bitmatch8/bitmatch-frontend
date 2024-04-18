@@ -824,3 +824,65 @@ input:focus {
     display: flex;
     align-items: center;
 }
+.etch-bigCover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.6);
+    .cover-box {
+        width: 600px;
+        height: 454px;
+        padding: 50px;
+        background: #181B20;
+        border-radius: 30px;
+        .tip-content {
+            height: 160px;
+            font-weight: 500;
+            font-size: 24px;
+            color: #C2C5C8;
+            line-height: 32px;
+        }
+        .check-box {
+            margin-top: 32px;
+            height: 32px;
+            padding-left: 40px;
+            line-height: 32px;
+            font-weight: 500;
+            font-size: 24px;
+            color: #C2C5C8;
+            background: url(../assets/img/etch-check-img.png) no-repeat;
+            background-position: left;
+            background-size: 32px 32px;
+            cursor: pointer;
+            user-select: none;
+            &.checked-box {
+                background: url(../assets/img/etch-checked-img.png) no-repeat;
+                background-position: left;
+                background-size: 32px 32px;
+            }
+        }
+        .etch-cover-btn {
+            margin-top: 50px;
+            width: 500px;
+            height: 80px;
+            background: #292C30;
+            border-radius: 16px;
+            font-weight: 500;
+            font-size: 22px;
+            color: rgba(111,111,118,0.6);
+            line-height: 80px;
+            text-align: center;
+            &.etch-cover-btn-ok {
+                background: #F7931A;
+                color: #FFFFFF;
+                cursor: pointer;
+            }
+        }
+    }
+}
