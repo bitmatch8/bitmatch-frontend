@@ -22,7 +22,7 @@ export const TopBar = () => {
       path: "/lists",
     },
     {
-      title: "Marketplace",
+      title: "Etching",
       path: "/etching",
       // tip: "Coming Soon",
     },
