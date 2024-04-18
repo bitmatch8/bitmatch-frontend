@@ -187,8 +187,6 @@ export const generatePsbt = async (
     COMPANY_FEE > 0 &&
       dummyTx.addOutputAddress(payment.address, BigInt(COMPANY_FEE), NETWORK);
 
-    debugger;
-
     let response = await axios.get(
       `${SERVER_URL}/address/${payment.address}/utxo`
     );
@@ -231,7 +229,7 @@ export const generatePsbt = async (
       feeTx.finalize();
 
       let feeAmount = feeTx.vsize * feeRate;
-      feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount;
+      feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount; //
 
       totalUtxoValue += paymentUtxo.value;
       console.log(
@@ -240,7 +238,7 @@ export const generatePsbt = async (
       );
       if (
         totalUtxoValue >=
-        payment.amount + feeAmount + COMPANY_FEE + feeAmount * 0.05
+        payment.amount + feeAmount + COMPANY_FEE + Math.ceil(feeAmount * 0.05)
       ) {
         dummyTx.addOutputAddress(payment.address, BigInt(feeAmount), NETWORK);
 
@@ -251,7 +249,14 @@ export const generatePsbt = async (
         feeAmount = feeTx.vsize * feeRate;
         feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount;
 
-        if (totalUtxoValue >= payment.amount + 100 * feeRate + feeAmount) {
+        if (
+          totalUtxoValue >=
+          payment.amount +
+            100 * feeRate +
+            feeAmount +
+            COMPANY_FEE +
+            Math.ceil(feeAmount * 0.05)
+        ) {
           tx.addOutputAddress(
             payment.address,
             BigInt(
@@ -259,7 +264,7 @@ export const generatePsbt = async (
                 payment.amount -
                 feeAmount -
                 COMPANY_FEE -
-                -feeAmount * 0.05
+                Math.ceil(feeAmount * 0.05)
             ),
             NETWORK
           );
