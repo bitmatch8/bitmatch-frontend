@@ -206,6 +206,10 @@ export const generatePsbt = async (
     paymentUtxos = paymentUtxos.sort((a: any, b: any) => b.value - a.value);
     let paymentUtxoCount = 0;
 
+    if (paymentUtxos.length === 0) {
+      let feeTx = btc.Transaction.fromPSBT(dummyTx.toPSBT());
+      return { vsize: feeTx.vsize };
+    }
     for (const paymentUtxo of paymentUtxos) {
       const paymentInput = await getInputInfo(
         payment.addressType,
