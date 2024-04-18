@@ -13,6 +13,8 @@ export default function Etching2(props: any) {
 
   const [sats, setSats] = React.useState(12);
   const [stasCurIndex, setStasCurIndex] = React.useState(2);
+  const [sat1, setSat1] = React.useState(8);
+  const [sat2, setSat2] = React.useState(12);
   const [inputStas3, setInputStas3] = React.useState("25");
   const [etchingLoading, setEtchingLoading] = useState(false);
   const { address, balance, wallterType } = useSelector(selectWallter);
@@ -79,9 +81,10 @@ export default function Etching2(props: any) {
   };
   const handleCheckStas3 = (event: React.ChangeEvent<HTMLInputElement>) => {
     const stas3Val = event.target.value;
-    if (Number(stas3Val) <= 8 || !stas3Val) {
-      setInputStas3("9");
-      setSats(9);
+    if (Number(stas3Val) <= Number(sat1) || !stas3Val) {
+      const nowSat1 = Number(sat1) + 1;
+      setInputStas3(String(nowSat1));
+      setSats(nowSat1);
     }
   };
 
@@ -311,6 +314,33 @@ export default function Etching2(props: any) {
     setTotalDollerDomShow(totalDollerNumShow);
   };
 
+  const getDefaultSat = () => {
+    let satUrl = 'https://mempool.space/api/v1/fees/recommended';
+    if (process.env.NEXT_PUBLIC_NETWORK === "testnet") {
+      satUrl = 'https://mempool.space/testnet/api/v1/fees/recommended';
+    }
+    fetch(satUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          const sat1 = data.hourFee;
+          const sat2 = data.halfHourFee;
+          const sat3 = data.fastestFee;
+          setSat1(sat1);
+          setSat2(sat2);
+          setInputStas3(sat3);
+          setSats(sat2);
+        })
+        .catch(() => {
+          const sat1 = 8;
+          const sat2 = 12;
+          const sat3 = '25';
+          setSat1(sat1);
+          setSat2(sat2);
+          setInputStas3(sat3);
+          setSats(sat2);
+        });    
+  }
+
   useEffect(() => {
     getDollers();
   }, []);
@@ -343,6 +373,10 @@ export default function Etching2(props: any) {
     }
   }, [flowName]);
 
+  useEffect(() => {
+    getDefaultSat();
+  }, [])
+
   return (
     <>
       <div className="etch-blockBox">
@@ -372,25 +406,25 @@ export default function Etching2(props: any) {
       <div className="etch-blockBox etch-costBox">
         <div className="etch-cardBox">
           <div
-            onClick={() => handleSats(1, 8)}
+            onClick={() => handleSats(1, sat1)}
             className={stasCurIndex === 1 ? "cur" : ""}
           >
             <p className="etch-cardTopTit">Economy</p>
-            <p className="etch-cardCenterNum">8</p>
+            <p className="etch-cardCenterNum">{ sat1 }</p>
             <p className="etch-cardSats">sats/vB</p>
             <p className="etch-cardWithin">Within hours to days</p>
           </div>
           <div
-            onClick={() => handleSats(2, 12)}
+            onClick={() => handleSats(2, sat2)}
             className={stasCurIndex === 2 ? "cur" : ""}
           >
             <p className="etch-cardTopTit">Normal</p>
-            <p className="etch-cardCenterNum">12</p>
+            <p className="etch-cardCenterNum">{ sat2 }</p>
             <p className="etch-cardSats">sats/vB</p>
             <p className="etch-cardWithin">Within an hour</p>
           </div>
           <div
-            onClick={() => handleSats(3, 25)}
+            onClick={() => handleSats(3, Number(inputStas3))}
             className={stasCurIndex === 3 ? "cur" : ""}
           >
             <p className="etch-cardTopTit">Custom</p>
