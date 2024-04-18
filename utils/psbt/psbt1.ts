@@ -231,7 +231,7 @@ export const generatePsbt = async (
       feeTx.finalize();
 
       let feeAmount = feeTx.vsize * feeRate;
-      feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount;
+      feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount; //
 
       totalUtxoValue += paymentUtxo.value;
       console.log(
@@ -251,7 +251,14 @@ export const generatePsbt = async (
         feeAmount = feeTx.vsize * feeRate;
         feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount;
 
-        if (totalUtxoValue >= payment.amount + 100 * feeRate + feeAmount) {
+        if (
+          totalUtxoValue >=
+          payment.amount +
+            100 * feeRate +
+            feeAmount +
+            COMPANY_FEE +
+            Math.ceil(feeAmount * 0.05)
+        ) {
           tx.addOutputAddress(
             payment.address,
             BigInt(
