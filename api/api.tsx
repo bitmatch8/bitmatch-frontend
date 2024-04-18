@@ -48,15 +48,15 @@ export const fetchFeesApi = () => {
 };
 
 export const fetchRuneSearchApi = (name: string) => {
-  return Ajax.get(`/runestone/search/runes/${name}`);
+  return Ajax.get(`/rune/runestone/search/runes/${name}`);
 };
 
 // 根据rune name 返回已经Mint的数量
 export const fetchHasMintAmount = (name: string) => {
-  return Ajax.get(`/runestone/search/runes/minted/amount/${name}`);
+  return Ajax.get(`/rune/runestone/search/runes/minted/amount/${name}`);
 };
 
 // 获取用户下的rune列表
 export const getRunesList = (address: string) => {
-  return Ajax.get(`/runestone/search/user/runes/list/${address}`);
+  return Ajax.get(`/rune/runestone/search/user/runes/list/${address}`);
 };
