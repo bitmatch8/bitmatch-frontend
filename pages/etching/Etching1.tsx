@@ -302,6 +302,11 @@ export default function Etching1(props: any) {
       setStartHeight("");
       return;
     }
+    if (endHeight && Number(endHeight)<=Number(startHeightValue)) {
+      setSstartHeightErrorTip("End Height must more than Start Height");
+      setStartHeight("");
+      return;
+    }
     setSstartHeightErrorTip("");
   };
   const setEndtHeightNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -320,6 +325,11 @@ export default function Etching1(props: any) {
   const checkEndtHeightNumber = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    if (!startHeight) {
+      setEndHeightErrorTip("Please input Start Height");
+      setEndHeight("");
+      return;
+    }
     const endHeightValue = event.target.value;
     if (
       isNaN(Number(endHeightValue)) ||
