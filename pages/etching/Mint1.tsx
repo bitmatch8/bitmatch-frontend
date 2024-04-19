@@ -107,6 +107,10 @@ export default function Mint1(props: any) {
 
     // 获取所需的tx和block数据
     fetchRuneSearchApi(runeVal).then((res) => {
+      if (!res || res['result'] || res['result']['exist']) {
+        setRuneErrorTip("Rune does not exist");
+        return;
+      }
       let runeid =
         (res["result"]["rune"] && res["result"]["rune"]["runeid"]) || "0:0";
       setTx(runeid.split(":")[1]);
@@ -137,6 +141,9 @@ export default function Mint1(props: any) {
     }
   };
   const addMinAmount = () => {
+    if (runeNum === 0) {
+      return;
+    }
     let mintAmountAdd1 = mintAmount + 1;
     if (mintAmountAdd1 * amountUnit > runeNum) {
       return;
