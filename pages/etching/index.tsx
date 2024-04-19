@@ -17,7 +17,7 @@ export default function IndexPage() {
   const [twoTo1Data, set2to1Data] = React.useState({});
 
   const [knowCheck, setKknowCheck] = React.useState(false);
-  const [coverShow, setCoverShow] = React.useState(true);
+  const [coverShow, setCoverShow] = React.useState(false);
 
   const router = useRouter();
 
@@ -84,9 +84,17 @@ export default function IndexPage() {
   }, [searchVal])
 
   useEffect(() => {
-    if (window.location.href.indexOf('type=dev') !== -1) {
+    fetch('https://mempool.space/api/blocks/tip/height')
+    .then((response) => response.json())
+    .then((data) => {
+      if (data && Number(data)<840000) {
+        setCoverShow(true);
+        return;
+      }
+    })
+    .catch(() => {
       setCoverShow(false);
-    }
+    })
   }, [])
 
   return (
