@@ -170,7 +170,7 @@ export default function Mint1(props: any) {
     if (runeErrorTip) {
       return false;
     }
-    if (mintAmount * amountUnit > runeNum) {
+    if (mintAmount * amountUnit > runeNum || runeNum === 0) {
       setRuneErrorTip("Rune Insufficient quantity");
       return;
     }
