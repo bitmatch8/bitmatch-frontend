@@ -11,6 +11,7 @@ import {
 } from "@/lib/redux";
 import { ConnectModal } from "@/components/Page/TopBar/ConnectButton";
 import useModal from "@/hook/useModal";
+import { fetchRuneSearchApi } from "@/api/api";
 
 export default function Etching1(props: any) {
   const { handleBackData, from2To1Data } = props;
@@ -143,7 +144,13 @@ export default function Etching1(props: any) {
       // setRune("");
       return;
     }
-    setRuneErrorTip("");
+    fetchRuneSearchApi(runeVal).then((res) => {
+      if (res && res['result'] && res['result']['exist']) {
+        setRuneErrorTip("");
+      } else {
+        setRuneErrorTip("Rune already exists");
+      }
+    })
   };
   const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const premineAmontValue: string = event.target.value;
