@@ -276,6 +276,21 @@ input:focus {
             .etch-selectDefaultVal {
                 color: #6F6F76;
             }
+            .etch-runePointer {
+                position: absolute;
+                right: 22px;
+                top: 30px;
+                width: 30px;
+                height: 30px;
+                background: #F7931A;
+                border-radius: 6px;
+                color: #FFF;
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;
+                line-height: 30px;
+                cursor: pointer;
+            }
         }
         .etch-mintAmontBox {
             border: none;

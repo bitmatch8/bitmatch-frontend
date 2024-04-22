@@ -65,6 +65,23 @@ export default function Etching1(props: any) {
     ),
     []
   );
+  const CapacityTipText = useMemo(
+    () => (
+      <div className="etch-tipInnerBox">
+        <p>the amount of runes each</p>
+        <p>mint transaction receives.</p>
+      </div>
+    ),
+    []
+  );
+  const MintAmountTipText = useMemo(
+    () => (
+      <div className="etch-tipInnerBox">
+        <p>the allowed number of mints.</p>
+      </div>
+    ),
+    []
+  );
   const RuneOffsetTipText = useMemo(
     () => (
       <div className="etch-tipInnerBox">
@@ -82,28 +99,31 @@ export default function Etching1(props: any) {
     []
   );
 
+  const addRunePoint = () => {
+    const runeVal = rune;
+    const runeLength = runeVal.length;
+    if (runeVal[runeLength-1] === '•') {
+      return;
+    }
+    const newRune = runeVal + '•';
+    setRune(newRune);
+    const runeDom = document.getElementById('runeInput');
+    if (runeDom) {
+      runeDom.focus();
+    }
+  }
   const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const runeVal: string = event.target.value;
-    var regex = /^[A-Za-z.]$/;
+    var regex = /^[A-Za-z•]$/;
     let errorChar = false;
     let upperStr = "";
     for (let i = 0; i < runeVal.length; i++) {
-      if (runeVal[0] === ".") {
-        errorChar = true;
-        break;
-      }
       if (!regex.test(runeVal[i])) {
         errorChar = true;
         break;
       } else {
         let upperChar = runeVal[i].toUpperCase();
         upperStr += upperChar;
-      }
-      if (i !== 0 && i !== runeVal.length - 1 && runeVal[i] === ".") {
-        if (runeVal[i - 1] === "." || runeVal[i + 1] === ".") {
-          errorChar = true;
-          break;
-        }
       }
     }
     if (errorChar) {
@@ -114,15 +134,14 @@ export default function Etching1(props: any) {
   const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const runeVal: string = event.target.value;
     const runeValLength = runeVal.length;
-    if (runeVal[0] === "." || runeVal[runeValLength - 1] === ".") {
-      setRuneErrorTip("The first and last characters cannot be .");
-      // setRune("");
+    if (runeVal[runeValLength - 1] === "•") {
+      setRuneErrorTip("The last characters cannot be •");
       return;
     }
     let charArr = [];
     let isUpperLetter = false; // 验证是否是大写字母
     for (let i = 0; i < runeValLength; i++) {
-      if (runeVal[i] !== ".") {
+      if (runeVal[i] !== "•") {
         charArr.push(runeVal[i]);
         if (
           runeVal.charCodeAt(i) >= 0x0041 &&
@@ -136,15 +155,14 @@ export default function Etching1(props: any) {
     }
     if (charArr.length < 12 || charArr.length > 28) {
       setRuneErrorTip("Rune 12 to 28 letters");
-      // setRune("");
       return;
     }
     if (isUpperLetter) {
       setRuneErrorTip("Characters must be all uppercase");
-      // setRune("");
       return;
     }
     setRuneErrorTip("");
+    // 获取所需的tx和block数据
     fetchRuneSearchApi(runeVal).then((res) => {
       if (res && res['result'] && res['result']['exist']) {
         setRuneErrorTip("Rune already exists");
@@ -476,39 +494,54 @@ export default function Etching1(props: any) {
               value={rune}
               onChange={setRuneName}
               onBlur={checkRuneName}
+              id="runeInput"
             />
+            <span className="etch-runePointer" onClick={addRunePoint}>•</span>
           </div>
           <p className="etch-formErrorTip">{runeErrorTip}</p>
         </div>
-        <div className="etch-formItemBox">
-          <div className="etch-formTitleBox">
-            <span className="etch-star">*</span>
-            <span className="etch-itemTitle">Capacity</span>
+
+        <div className="etch-formItemBox etch-formTtemBox2">
+          <div className="etch-formItemInner">
+            <div className="etch-formItemBox">
+              <div className="etch-formTitleBox">
+                <span className="etch-star">*</span>
+                <span className="etch-itemTitle">Capacity</span>
+                <TextTooltip arrow title={CapacityTipText}>
+                  <span className="etch-askIcon"></span>
+                </TextTooltip>
+              </div>
+              <div className="etch-inputBox1">
+                <input
+                  type="text"
+                  value={cap}
+                  onChange={setPublicAmount}
+                  onBlur={checkPublicAmount}
+                />
+              </div>
+              <p className="etch-formErrorTip">{capErrorTip}</p>
+            </div>
           </div>
-          <div className="etch-inputBox1">
-            <input
-              type="text"
-              value={cap}
-              onChange={setPublicAmount}
-              onBlur={checkPublicAmount}
-            />
+          <div className="etch-formItemInner">
+            <div className="etch-formItemBox">
+              <div className="etch-formTitleBox">
+                <span className="etch-star">*</span>
+                <span className="etch-itemTitle">Mint Amount</span>
+                <TextTooltip arrow title={MintAmountTipText}>
+                  <span className="etch-askIcon"></span>
+                </TextTooltip>
+              </div>
+              <div className="etch-inputBox1">
+                <input
+                  type="text"
+                  value={amount}
+                  onChange={setMintAmount}
+                  onBlur={checkMintAmount}
+                />
+              </div>
+              <p className="etch-formErrorTip">{amountErrorTip}</p>
+            </div>
           </div>
-          <p className="etch-formErrorTip">{capErrorTip}</p>
-        </div>
-        <div className="etch-formItemBox">
-          <div className="etch-formTitleBox">
-            <span className="etch-star">*</span>
-            <span className="etch-itemTitle">Mint Amount</span>
-          </div>
-          <div className="etch-inputBox1">
-            <input
-              type="text"
-              value={amount}
-              onChange={setMintAmount}
-              onBlur={checkMintAmount}
-            />
-          </div>
-          <p className="etch-formErrorTip">{amountErrorTip}</p>
         </div>
 
         <div className="etch-mintSetBtnBox">
