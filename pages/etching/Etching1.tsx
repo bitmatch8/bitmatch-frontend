@@ -144,6 +144,7 @@ export default function Etching1(props: any) {
       // setRune("");
       return;
     }
+    setRuneErrorTip("");
     fetchRuneSearchApi(runeVal).then((res) => {
       if (res && res['result'] && res['result']['exist']) {
         setRuneErrorTip("Rune already exists");
