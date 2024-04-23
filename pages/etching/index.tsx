@@ -17,7 +17,6 @@ export default function IndexPage() {
   const [twoTo1Data, set2to1Data] = React.useState({});
 
   const [knowCheck, setKknowCheck] = React.useState(false);
-  const [coverShow, setCoverShow] = React.useState(false);
 
   const router = useRouter();
 
@@ -65,12 +64,6 @@ export default function IndexPage() {
     const newKnowCheck = !oldKnowCheck;
     setKknowCheck(newKnowCheck);
   }
-  const handleCloseCover = () => {
-    if (!knowCheck) {
-      return;
-    }
-    setCoverShow(false);
-  }
 
   useEffect(() => {
     const searchInputDom = document.getElementById('etchSearchInput');
@@ -82,20 +75,6 @@ export default function IndexPage() {
       });
     }
   }, [searchVal])
-
-  useEffect(() => {
-    fetch('https://mempool.space/api/blocks/tip/height')
-    .then((response) => response.json())
-    .then((data) => {
-      if (data && Number(data)<840000) {
-        setCoverShow(true);
-        return;
-      }
-    })
-    .catch(() => {
-      setCoverShow(false);
-    })
-  }, [])
 
   return (
     <Page>
@@ -165,16 +144,6 @@ export default function IndexPage() {
         )}
       </div>
       {/* <History></History> */}
-      {
-        coverShow && <div className="etch-bigCover">
-          <div className="cover-box">
-            <div className="tip-content">Runes etching and mint before the block height reaches 840000 are not recognized and are only for experience.
-  Please check the block height before operation.</div>
-            <div className={`check-box ${knowCheck?'checked-box':''}`} onClick={handleChangeCoverCheck}>I already know it.</div>
-            <div className={`etch-cover-btn ${knowCheck?'etch-cover-btn-ok':''}`} onClick={handleCloseCover}>Confirm</div>
-          </div>
-        </div>
-      }
     </Page>
   );
 }

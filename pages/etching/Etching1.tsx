@@ -19,6 +19,7 @@ export default function Etching1(props: any) {
   const [checked, setChecked] = React.useState(false);
   const [rune, setRune] = React.useState("");
   const [runeErrorTip, setRuneErrorTip] = React.useState("");
+  const [symbol, setSymbol] = React.useState("");
   const [premine, setPremine] = React.useState("");
   const [premineErrorTip, setPremineErrorTip] = React.useState("");
   const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
@@ -171,6 +172,18 @@ export default function Etching1(props: any) {
       }
     })
   };
+  const setSymbolVal = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const symVal: string = event.target.value;
+    if (symVal.length > 1) {
+      return;
+    }
+    if (symVal && symVal.charCodeAt(0)>=97 && symVal.charCodeAt(0)<=122) {
+      let symValUpper = symVal.toUpperCase();
+      setSymbol(symValUpper);
+      return;
+    }
+    setSymbol(symVal);
+  }
   const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const premineAmontValue: string = event.target.value;
     if (
@@ -438,6 +451,7 @@ export default function Etching1(props: any) {
     let callbackData: any = {
       flowIndex: 2,
       rune,
+      symbol,
       divisibility: 0,
       cap,
       amount,
@@ -456,6 +470,7 @@ export default function Etching1(props: any) {
   useEffect(() => {
     if (from2To1Data.rune) {
       setRune(from2To1Data.rune);
+      setSymbol(from2To1Data.symbol);
       setCap(from2To1Data.cap);
       setAmount(from2To1Data.amount);
       setChecked(from2To1Data.publicMintChecked);
@@ -499,6 +514,21 @@ export default function Etching1(props: any) {
             <span className="etch-runePointer" onClick={addRunePoint}>•</span>
           </div>
           <p className="etch-formErrorTip">{runeErrorTip}</p>
+        </div>
+
+        <div className="etch-formItemBox">
+          <div className="etch-formTitleBox">
+            <span className="etch-star"></span>
+            <span className="etch-itemTitle">Symbol</span>
+          </div>
+          <div className="etch-inputBox1">
+            <input
+              type="text"
+              value={symbol}
+              onChange={setSymbolVal}
+            />
+          </div>
+          <p className="etch-formErrorTip"></p>
         </div>
 
         <div className="etch-formItemBox etch-formTtemBox2">
