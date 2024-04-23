@@ -20,6 +20,7 @@ export default function Etching1(props: any) {
   const [rune, setRune] = React.useState("");
   const [runeErrorTip, setRuneErrorTip] = React.useState("");
   const [symbol, setSymbol] = React.useState("");
+  const [symbolErrorTip, setSymbolErrorTip] = React.useState("");
   const [premine, setPremine] = React.useState("");
   const [premineErrorTip, setPremineErrorTip] = React.useState("");
   const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
@@ -173,16 +174,16 @@ export default function Etching1(props: any) {
     })
   };
   const setSymbolVal = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const symVal: string = event.target.value;
-    if (symVal.length > 1) {
+    setSymbol(event.target.value);
+  }
+  const checkSymbolVal = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const symVal = event.target.value;
+    const regex = /^[\s\S]$/u;
+    if (!regex.test(symVal)) {
+      setSymbolErrorTip('Please enter a single Unicode character.');
       return;
     }
-    if (symVal && symVal.charCodeAt(0)>=97 && symVal.charCodeAt(0)<=122) {
-      let symValUpper = symVal.toUpperCase();
-      setSymbol(symValUpper);
-      return;
-    }
-    setSymbol(symVal);
+    setSymbolErrorTip('');
   }
   const setPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const premineAmontValue: string = event.target.value;
@@ -396,6 +397,9 @@ export default function Etching1(props: any) {
     if (runeErrorTip) {
       return false;
     }
+    if (symbolErrorTip) {
+      return false;
+    }
     if (!cap) {
       setCapErrorTip("Please input Capacity");
       return false;
@@ -523,12 +527,15 @@ export default function Etching1(props: any) {
           </div>
           <div className="etch-inputBox1">
             <input
+              className="etch-symbolInput"
               type="text"
+              placeholder="The symbol of the rune."
               value={symbol}
               onChange={setSymbolVal}
+              onBlur={checkSymbolVal}
             />
           </div>
-          <p className="etch-formErrorTip"></p>
+          <p className="etch-formErrorTip">{ symbolErrorTip }</p>
         </div>
 
         <div className="etch-formItemBox etch-formTtemBox2">

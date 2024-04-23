@@ -291,6 +291,11 @@ input:focus {
                 line-height: 30px;
                 cursor: pointer;
             }
+            .etch-symbolInput {
+                margin-top: 30px;
+                height: 40px;
+                line-height: 40px;
+            }
         }
         .etch-mintAmontBox {
             border: none;
