@@ -31,7 +31,7 @@ export const LOWEST_FEE = 546;
 
 export function getSpacers(rune: string): number[] {
   let result: number[] = [];
-  const arr = rune.split(".");
+  const arr = rune.split("•");
   arr.reduce((accumulator, currentValue) => {
     result.push(accumulator + currentValue.length - 1);
     return accumulator + currentValue.length;
