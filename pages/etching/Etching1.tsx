@@ -70,8 +70,7 @@ export default function Etching1(props: any) {
   const CapacityTipText = useMemo(
     () => (
       <div className="etch-tipInnerBox">
-        <p>the amount of runes each</p>
-        <p>mint transaction receives.</p>
+        <p>the allowed number of mints.</p>
       </div>
     ),
     []
@@ -79,7 +78,8 @@ export default function Etching1(props: any) {
   const MintAmountTipText = useMemo(
     () => (
       <div className="etch-tipInnerBox">
-        <p>the allowed number of mints.</p>
+        <p>the amount of runes each</p>
+        <p>mint transaction receives.</p>
       </div>
     ),
     []
@@ -92,6 +92,17 @@ export default function Etching1(props: any) {
     ),
     []
   );
+  const premineAmountTipText = useMemo(
+    () => (
+      <div className="etch-tipInnerBox">
+        <p>The Premine field</p>
+        <p>contains the amount</p>
+        <p>of premined runes.</p>
+      </div>
+    ),
+    []
+  );
+  
   const RuneHieghtTipText = useMemo(
     () => (
       <div className="etch-tipInnerBox">
@@ -178,6 +189,10 @@ export default function Etching1(props: any) {
   }
   const checkSymbolVal = (event: React.ChangeEvent<HTMLInputElement>) => {
     const symVal = event.target.value;
+    if (!symVal) {
+      setSymbolErrorTip('');
+      return;
+    }
     const regex = /^[\s\S]$/u;
     if (!regex.test(symVal)) {
       setSymbolErrorTip('Please enter a single Unicode character.');
@@ -200,6 +215,11 @@ export default function Etching1(props: any) {
   };
   const checkPremineAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     const premineAmontValue: string = event.target.value;
+    if (!premineAmontValue && premineAmontValue !== '0') {
+      setPremineErrorTip("");
+      setPremine("");
+      return;
+    }
     if (
       isNaN(Number(premineAmontValue)) ||
       Number(premineAmontValue) <= 0 ||
@@ -244,6 +264,10 @@ export default function Etching1(props: any) {
     ) {
       setCapErrorTip("Capacity must be a positive integer");
       setCap("");
+      return;
+    }
+    if (Number(pubAmontValue) < Number(amount)) {
+      setCapErrorTip("Mint Amount cannot be greater than Capacity");
       return;
     }
     setCapErrorTip("");
@@ -397,9 +421,6 @@ export default function Etching1(props: any) {
     if (runeErrorTip) {
       return false;
     }
-    if (symbolErrorTip) {
-      return false;
-    }
     if (!cap) {
       setCapErrorTip("Please input Capacity");
       return false;
@@ -412,6 +433,12 @@ export default function Etching1(props: any) {
       return false;
     }
     if (amountErrorTip) {
+      return false;
+    }
+    if (symbolErrorTip) {
+      return false;
+    }
+    if (premineErrorTip) {
       return false;
     }
 
@@ -430,13 +457,11 @@ export default function Etching1(props: any) {
       if (endHeightErrorTip) {
         return false;
       }
-      if (!premine) {
-        setPremineErrorTip("Please input Premine Amount");
-        return false;
-      }
-      if (premineErrorTip) {
-        return false;
-      }
+      // if (!premine) {
+      //   setPremineErrorTip("Please input Premine Amount");
+      //   return false;
+      // }
+      
       if (!premineReceiveAddress) {
         setPremineReceiveAddressErrorTip(
           "Please input Premine Receive Address"
@@ -461,9 +486,11 @@ export default function Etching1(props: any) {
       amount,
       publicMintChecked: checked,
     };
-    if (checked) {
+    if (premine) {
       callbackData["premine"] = premine;
       callbackData["premineReceiveAddress"] = premineReceiveAddress;
+    }
+    if (checked) {
       callbackData["timeType"] = offOrHei;
       callbackData["start"] = startHeight;
       callbackData["end"] = endHeight;
@@ -478,9 +505,9 @@ export default function Etching1(props: any) {
       setCap(from2To1Data.cap);
       setAmount(from2To1Data.amount);
       setChecked(from2To1Data.publicMintChecked);
+      setPremine(from2To1Data.premine);
+      setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
       if (from2To1Data.publicMintChecked) {
-        setPremine(from2To1Data.premine);
-        setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
         setOffOrHei(from2To1Data.timeType);
         setStartHeight(from2To1Data.start);
         setEndHeight(from2To1Data.end);
@@ -518,24 +545,6 @@ export default function Etching1(props: any) {
             <span className="etch-runePointer" onClick={addRunePoint}>•</span>
           </div>
           <p className="etch-formErrorTip">{runeErrorTip}</p>
-        </div>
-
-        <div className="etch-formItemBox">
-          <div className="etch-formTitleBox">
-            <span className="etch-star"></span>
-            <span className="etch-itemTitle">Symbol</span>
-          </div>
-          <div className="etch-inputBox1">
-            <input
-              className="etch-symbolInput"
-              type="text"
-              placeholder="The symbol of the rune."
-              value={symbol}
-              onChange={setSymbolVal}
-              onBlur={checkSymbolVal}
-            />
-          </div>
-          <p className="etch-formErrorTip">{ symbolErrorTip }</p>
         </div>
 
         <div className="etch-formItemBox etch-formTtemBox2">
@@ -578,6 +587,49 @@ export default function Etching1(props: any) {
               </div>
               <p className="etch-formErrorTip">{amountErrorTip}</p>
             </div>
+          </div>
+        </div>
+
+        <div className="etch-formItemBox etch-formTtemBox2">
+          <div className="etch-formItemInner">
+            <div className="etch-formItemBox">
+              <div className="etch-formTitleBox">
+                <span className="etch-star"></span>
+                <span className="etch-itemTitle">Symbol&nbsp;&nbsp;(optional)</span>
+              </div>
+              <div className="etch-inputBox1">
+                <input
+                  className="etch-symbolInput"
+                  type="text"
+                  placeholder="The symbol of the rune."
+                  value={symbol}
+                  onChange={setSymbolVal}
+                  onBlur={checkSymbolVal}
+                />
+              </div>
+              <p className="etch-formErrorTip">{ symbolErrorTip }</p>
+            </div>
+          </div>
+          <div className="etch-formItemInner">
+            <div className="etch-formItemBox">
+                <div className="etch-formTitleBox">
+                  <span className="etch-star"></span>
+                  <span className="etch-itemTitle">Premine Amount&nbsp;&nbsp;(optional)</span>
+                  <TextTooltip arrow title={premineAmountTipText}>
+                    <span className="etch-askIcon"></span>
+                  </TextTooltip>
+                </div>
+                <div className="etch-inputBox1">
+                  <input
+                    type="text"
+                    placeholder="The premine amount."
+                    value={premine}
+                    onChange={setPremineAmount}
+                    onBlur={checkPremineAmount}
+                  />
+                </div>
+                <p className="etch-formErrorTip">{premineErrorTip}</p>
+              </div>
           </div>
         </div>
 
@@ -703,21 +755,6 @@ export default function Etching1(props: any) {
                   <p className="etch-formErrorTip">{endHeightErrorTip}</p>
                 </div>
               </div>
-            </div>
-            <div className="etch-formItemBox">
-              <div className="etch-formTitleBox">
-                <span className="etch-star">*</span>
-                <span className="etch-itemTitle">Premine Amount</span>
-              </div>
-              <div className="etch-inputBox1">
-                <input
-                  type="text"
-                  value={premine}
-                  onChange={setPremineAmount}
-                  onBlur={checkPremineAmount}
-                />
-              </div>
-              <p className="etch-formErrorTip">{premineErrorTip}</p>
             </div>
             <div className="etch-formItemBox">
               <div className="etch-formTitleBox">
