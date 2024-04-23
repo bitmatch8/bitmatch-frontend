@@ -216,37 +216,39 @@ export default function Etching2(props: any) {
       tx, //根据符文名称请求符文信息接口，接口返回的 tx hash/index
       block, //根据符文名称请求符文信息接口，接口返回的 block height
       publicMintChecked = false,
+      symbol
     } = formData;
 
     let runesStone: RunestoneSpec = {};
 
     if (flowName == "etching") {
-      const initRunesStone = {
+      let initRunesStone = {
         runeName: rune,
         divisibility: divisibility,
         spacers: psbt.getSpacers(rune),
-        symbol: "⧉",
+        symbol,
         terms: {
           cap: BigInt(cap),
           amount: BigInt(amount),
         },
       };
+      symbol == '' && delete initRunesStone.symbol;
       runesStone = publicMintChecked
         ? {
-            etching: {
-              ...initRunesStone,
-              premine: BigInt(premine),
-              [timeType]: {
-                start: BigInt(start),
-                end: BigInt(end),
-              },
+          etching: {
+            ...initRunesStone,
+            premine: BigInt(premine),
+            [timeType]: {
+              start: BigInt(start),
+              end: BigInt(end),
             },
-          }
+          },
+        }
         : {
-            etching: {
-              ...initRunesStone,
-            },
-          };
+          etching: {
+            ...initRunesStone,
+          },
+        };
     } else if (flowName === "mint") {
       runesStone = {
         mint: {
@@ -320,25 +322,25 @@ export default function Etching2(props: any) {
       satUrl = 'https://mempool.space/testnet/api/v1/fees/recommended';
     }
     fetch(satUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          const sat1 = data.hourFee;
-          const sat2 = data.halfHourFee;
-          const sat3 = data.fastestFee;
-          setSat1(sat1);
-          setSat2(sat2);
-          setInputStas3(sat3);
-          setSats(sat2);
-        })
-        .catch(() => {
-          const sat1 = 8;
-          const sat2 = 12;
-          const sat3 = '25';
-          setSat1(sat1);
-          setSat2(sat2);
-          setInputStas3(sat3);
-          setSats(sat2);
-        });    
+      .then((response) => response.json())
+      .then((data) => {
+        const sat1 = data.hourFee;
+        const sat2 = data.halfHourFee;
+        const sat3 = data.fastestFee;
+        setSat1(sat1);
+        setSat2(sat2);
+        setInputStas3(sat3);
+        setSats(sat2);
+      })
+      .catch(() => {
+        const sat1 = 8;
+        const sat2 = 12;
+        const sat3 = '25';
+        setSat1(sat1);
+        setSat2(sat2);
+        setInputStas3(sat3);
+        setSats(sat2);
+      });
   }
 
   useEffect(() => {
@@ -410,7 +412,7 @@ export default function Etching2(props: any) {
             className={stasCurIndex === 1 ? "cur" : ""}
           >
             <p className="etch-cardTopTit">Economy</p>
-            <p className="etch-cardCenterNum">{ sat1 }</p>
+            <p className="etch-cardCenterNum">{sat1}</p>
             <p className="etch-cardSats">sats/vB</p>
             <p className="etch-cardWithin">Within hours to days</p>
           </div>
@@ -419,7 +421,7 @@ export default function Etching2(props: any) {
             className={stasCurIndex === 2 ? "cur" : ""}
           >
             <p className="etch-cardTopTit">Normal</p>
-            <p className="etch-cardCenterNum">{ sat2 }</p>
+            <p className="etch-cardCenterNum">{sat2}</p>
             <p className="etch-cardSats">sats/vB</p>
             <p className="etch-cardWithin">Within an hour</p>
           </div>
@@ -496,9 +498,9 @@ export default function Etching2(props: any) {
 
         <div className="etch-bottomBalanceBox">
           <span className="etch-balanceTxt">Balance</span>
-          <span className="etch-balanceNum">{balance.confirmed  / 1e8} BTC</span>
+          <span className="etch-balanceNum">{balance.confirmed / 1e8} BTC</span>
         </div>
-        {balance.confirmed  < Number(totalNumDomShow) ? (
+        {balance.confirmed < Number(totalNumDomShow) ? (
           <div className="etch-bottomBtn etch-bottomBtnLoading">
             Insufficient Balance
           </div>
