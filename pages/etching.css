@@ -453,6 +453,26 @@ input:focus {
         }
     }
 }
+.etch-etchingMaxSupply {
+    height: 20px;
+    line-height: 20px;
+    font-size: 20px;
+    .tit {
+        color: #6F6F76;
+    }
+    .total {
+        margin-left: 12px;
+        color: #F7931A;
+    }
+    .count {
+        margin-left: 12px;
+        color: #FFF;
+        &.countStar {
+            position: relative;
+            top: 4px;
+        }
+    }
+}
 .etch-bottomBalanceBox {
     margin: 120px 40px 0;
     height: 24px;

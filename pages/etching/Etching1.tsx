@@ -37,6 +37,7 @@ export default function Etching1(props: any) {
   const [startHeightErrorTip, setSstartHeightErrorTip] = React.useState("");
   const [endHeight, setEndHeight] = React.useState("");
   const [endHeightErrorTip, setEndHeightErrorTip] = React.useState("");
+  const [maxSupply, setMaxSupply] = React.useState("0");
 
   const {
     address,
@@ -521,6 +522,12 @@ export default function Etching1(props: any) {
     }
   }, [address]);
 
+  useEffect(() => {
+    let totalMaxSupplyNum = Number(premine) + Number(cap) * Number(amount);
+    let maxSupplyShow = totalMaxSupplyNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setMaxSupply(maxSupplyShow);
+  }, [premine, cap, amount])
+
   return (
     <div className="etch-blockBox">
       <EtchFlowPath flowType={1} flowName="etching"></EtchFlowPath>
@@ -631,6 +638,27 @@ export default function Etching1(props: any) {
                 <p className="etch-formErrorTip">{premineErrorTip}</p>
               </div>
           </div>
+        </div>
+
+        <div className="etch-etchingMaxSupply">
+          <span className="tit">Max supply:</span>
+          <span className="total">{ maxSupply }</span>
+          {
+            cap && amount && <span className="count">=</span>
+          }
+          {
+            premine && cap && amount && <>
+              <span className="count">{ premine }</span>
+              <span className="count">+</span>
+            </>
+          }
+          {
+            cap && amount && <>
+              <span className="count">{ cap }</span>
+              <span className="count countStar">*</span>
+              <span className="count">{ amount }</span>
+            </>
+          }
         </div>
 
         <div className="etch-mintSetBtnBox">
@@ -782,6 +810,7 @@ export default function Etching1(props: any) {
         <span className="etch-balanceTxt">Balance</span>
         <span className="etch-balanceNum">{balance.confirmed / 1e8} BTC</span>
       </div>
+
       {address ? (
         <>
           {connectStatus === "loading" ? (
