@@ -15,14 +15,14 @@ const useRuneSearch = (arg: any, api: any, opt: any): any => {
         runeList = [] as any;
       if (res?.type === "byname") {
         runeInfo = [
-          { name: "rune", label: "Rune", value: rune.name },
+          { name: "rune", label: "Rune", value: rune.runeName },
           // { name: "etcher", label: "Etcher", value: "" },
           {
             name: "amount",
             label: "Total Amount",
             value: (rune?.premine || 0) + (rune?.capacity || 0),
           },
-          { name: "height", label: "Height", value: rune.height },
+          { name: "height", label: "Height", value: rune.blockHeight },
           // { name: "time", label: "Timestamp", value: "" },
           {
             name: "transaction",

@@ -97,7 +97,7 @@ export default function Etching1(props: any) {
       // const capacityNum = res["result"]["rune"]["capacity"] || 0;
       // let totalNum = premineNum + capacityNum;
       fetchHasMintAmount(runeVal).then((mres) => {
-        const hasMintNum = mres["result"]["mintAmount"];
+        const hasMintNum = mres["result"]["mintAmount"] || 0;
         // let renuNumShow = totalNum - hasMintNum;
         setRuneNum(hasMintNum);
       });
@@ -195,7 +195,7 @@ export default function Etching1(props: any) {
           setRunes(res["result"]["runes"]);
 
           // 获取所需的tx和block数据
-          let runeVal = res["result"]["runes"][0]["rune_name"];
+          let runeVal = res["result"]["runes"][0]["runeName"];
           setRune(runeVal);
           fetchRuneSearchApi(runeVal).then((res) => {
             let runeid =
@@ -203,14 +203,8 @@ export default function Etching1(props: any) {
               "0:0";
             setTx(runeid.split(":")[1]);
             setBlock(runeid.split(":")[0]);
-            // 获取剩余可Mint数量
-            // const premineNum =
-            //   (res["result"]["rune"] && res["result"]["rune"]["premine"]) || 0;
-            // const capacityNum =
-            //   (res["result"]["rune"] && res["result"]["rune"]["capacity"]) || 0;
-            // let totalNum = premineNum + capacityNum;
             fetchHasMintAmount(runeVal).then((mres) => {
-              const hasMintNum = mres["result"]["mintAmount"];
+              const hasMintNum = mres["result"]["mintAmount"] || 0;
               // let renuNumShow = totalNum - hasMintNum;
               setRuneNum(hasMintNum);
             });
@@ -260,8 +254,8 @@ export default function Etching1(props: any) {
             >
               {runes.map((item: any, index: number) => {
                 return (
-                  <MenuItem value={item.rune_name} key={index}>
-                    {item.rune_name}
+                  <MenuItem value={item.runeName} key={index}>
+                    {item.runeName}
                   </MenuItem>
                 );
               })}
