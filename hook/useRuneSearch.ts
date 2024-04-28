@@ -31,7 +31,7 @@ const useRuneSearch = (arg: any, api: any, opt: any): any => {
           },
         ];
       } else if (res?.type === "byaddress") {
-        runeList = [...res.runes];
+        runeList = [...res.rune];
       }
 
       return {

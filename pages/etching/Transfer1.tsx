@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
 import EtchFlowPath from "@/components/EtchFlowPath";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -66,6 +66,8 @@ export default function Etching1(props: any) {
     React.useState("");
   const [block, setBlock] = React.useState("");
   const [tx, setTx] = React.useState("");
+
+  const flag = useRef<boolean>(true); // 避免useEffect2次执行
 
   const {
     address,
@@ -189,6 +191,10 @@ export default function Etching1(props: any) {
   };
 
   useEffect(() => {
+    if (flag.current) {
+      flag.current = false;
+      return;
+    }
     if (address) {
       getRunesList(address).then((res) => {
         if (res["result"]["runes"].length > 0) {
@@ -206,7 +212,7 @@ export default function Etching1(props: any) {
             fetchHasMintAmount(runeVal).then((mres) => {
               const hasMintNum = mres["result"]["mintAmount"] || 0;
               // let renuNumShow = totalNum - hasMintNum;
-              setRuneNum(hasMintNum);
+              setRuneNum(10);
             });
           });
         }
