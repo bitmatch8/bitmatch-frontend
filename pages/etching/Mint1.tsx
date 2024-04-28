@@ -110,7 +110,7 @@ export default function Mint1(props: any) {
 
     // 获取所需的tx和block数据
     fetchRuneSearchApi(runeVal).then((res) => {
-      if (!res || res['result'] || res['result']['exist']) {
+      if (!res || !res['result'] || !res['result']['exist']) {
         setRuneErrorTip("Rune does not exist");
         return;
       }
@@ -119,7 +119,7 @@ export default function Mint1(props: any) {
       setTx(runeid.split(":")[1]);
       setBlock(runeid.split(":")[0]);
       setAmountUnit(
-        (res["result"]["rune"] && res["result"]["rune"]["mint_amount"]) || 0
+        (res["result"]["rune"] && res["result"]["rune"]["mintAmount"]) || 0
       );
 
       // 获取剩余可Mint数量
@@ -127,10 +127,10 @@ export default function Mint1(props: any) {
         (res["result"]["rune"] && res["result"]["rune"]["premine"]) || 0;
       const capacityNum =
         (res["result"]["rune"] && res["result"]["rune"]["capacity"]) || 0;
-      let totalNum = premineNum + capacityNum;
+      let totalNum = Number(premineNum) + Number(capacityNum);
       fetchHasMintAmount(runeVal).then((mres) => {
-        const hasMintNum = mres["result"]["mintAmount"];
-        let renuNumShow = totalNum - hasMintNum;
+        const hasMintNum = mres["result"]["mintAmount"] || 0;
+        let renuNumShow = totalNum - Number(hasMintNum);
         setRuneNum(renuNumShow);
       });
     });
@@ -231,7 +231,7 @@ export default function Mint1(props: any) {
         setTx(runeid.split(":")[1]);
         setBlock(runeid.split(":")[0]);
         setAmountUnit(
-          (res["result"]["rune"] && res["result"]["rune"]["mint_amount"]) || 0
+          (res["result"]["rune"] && res["result"]["rune"]["mintAmount"]) || 0
         );
 
         // 获取剩余可Mint数量
@@ -239,10 +239,10 @@ export default function Mint1(props: any) {
           (res["result"]["rune"] && res["result"]["rune"]["premine"]) || 0;
         const capacityNum =
           (res["result"]["rune"] && res["result"]["rune"]["capacity"]) || 0;
-        let totalNum = premineNum + capacityNum;
+        let totalNum = Number(premineNum) + Number(capacityNum);
         fetchHasMintAmount(runeVal).then((mres) => {
-          const hasMintNum = mres["result"]["mintAmount"];
-          let renuNumShow = totalNum - hasMintNum;
+          const hasMintNum = mres["result"]["mintAmount"] || 0;
+          let renuNumShow = totalNum - Number(hasMintNum);
           setRuneNum(renuNumShow);
         });
       });
