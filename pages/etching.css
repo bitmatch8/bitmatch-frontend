@@ -731,11 +731,11 @@ input:focus {
         }
         .etch-countNull {
             display: inline-block;
-            width: 190px;
+            width: 150px;
         }
         .etch-countValue {
             display: inline-block;
-            width: 186px;
+            width: 226px;
             font-weight: 600;
             font-size: 24px;
             color: #FFFFFF;
@@ -744,6 +744,7 @@ input:focus {
         .etch-countDoller {
             display: inline-block;
             width: 130px;
+            padding-left: 20px;
             font-weight: 600;
             font-size: 24px;
             color: #6F6F76;
