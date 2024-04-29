@@ -109,7 +109,7 @@ export default function Mint1(props: any) {
     setRuneErrorTip("");
 
     // 获取所需的tx和block数据
-    fetchRuneSearchApi(runeVal).then((res) => {
+    fetchRuneSearchApi(runeVal.replaceAll('•', '')).then((res) => {
       if (!res || !res['result'] || !res['result']['exist']) {
         setRuneErrorTip("Rune does not exist");
         return;
@@ -128,7 +128,7 @@ export default function Mint1(props: any) {
       const capacityNum =
         (res["result"]["rune"] && res["result"]["rune"]["capacity"]) || 0;
       let totalNum = Number(premineNum) + Number(capacityNum);
-      fetchHasMintAmount(runeVal).then((mres) => {
+      fetchHasMintAmount(runeVal.replaceAll('•', '')).then((mres) => {
         const hasMintNum = mres["result"]["mintAmount"] || 0;
         let renuNumShow = totalNum - Number(hasMintNum);
         setRuneNum(renuNumShow);
@@ -225,7 +225,7 @@ export default function Mint1(props: any) {
       setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
       // 根据rune name获取amount的unit值
       const runeVal = from2To1Data.rune;
-      fetchRuneSearchApi(runeVal).then((res) => {
+      fetchRuneSearchApi(runeVal.replaceAll('•', '')).then((res) => {
         let runeid =
           (res["result"]["rune"] && res["result"]["rune"]["runeid"]) || "0:0";
         setTx(runeid.split(":")[1]);
@@ -240,7 +240,7 @@ export default function Mint1(props: any) {
         const capacityNum =
           (res["result"]["rune"] && res["result"]["rune"]["capacity"]) || 0;
         let totalNum = Number(premineNum) + Number(capacityNum);
-        fetchHasMintAmount(runeVal).then((mres) => {
+        fetchHasMintAmount(runeVal.replaceAll('•', '')).then((mres) => {
           const hasMintNum = mres["result"]["mintAmount"] || 0;
           let renuNumShow = totalNum - Number(hasMintNum);
           setRuneNum(renuNumShow);

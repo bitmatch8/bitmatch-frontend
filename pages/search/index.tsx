@@ -117,7 +117,7 @@ const AddrResultCom: React.FC<AddrResultProps> = ({ runeList }) => {
 
 export default function SearchPage() {
   const [searchKey, setSearchKey] = useState(""); // 查询使用的条件
-  const debouncedSearchTerm = useDebounce(searchKey, 500);
+  const debouncedSearchTerm = useDebounce(searchKey.replaceAll('•', ''), 500);
 
   // 获取搜索结果
   const { result } = useRuneSearch(debouncedSearchTerm, fetchRuneSearchApi, {});

@@ -87,7 +87,7 @@ export default function Etching1(props: any) {
     setRune(event.target.value);
     let runeVal = event.target.value;
     // 获取所需的tx和block数据
-    fetchRuneSearchApi(runeVal).then((res) => {
+    fetchRuneSearchApi(runeVal.replaceAll('•', '')).then((res) => {
       let runeid =
         (res["result"]["rune"] && res["result"]["rune"]["runeid"]) || "0:0";
       setTx(runeid.split(":")[1]);
@@ -96,7 +96,7 @@ export default function Etching1(props: any) {
       // const premineNum = res["result"]["rune"]["premine"] || 0;
       // const capacityNum = res["result"]["rune"]["capacity"] || 0;
       // let totalNum = premineNum + capacityNum;
-      fetchHasMintAmount(runeVal).then((mres) => {
+      fetchHasMintAmount(runeVal.replaceAll('•', '')).then((mres) => {
         const hasMintNum = mres["result"]["mintAmount"] || 0;
         // let renuNumShow = totalNum - hasMintNum;
         setRuneNum(hasMintNum);
@@ -197,13 +197,13 @@ export default function Etching1(props: any) {
           // 获取所需的tx和block数据
           let runeVal = res["result"]["runes"][0]["runeName"];
           setRune(runeVal);
-          fetchRuneSearchApi(runeVal).then((res) => {
+          fetchRuneSearchApi(runeVal.replaceAll('•', '')).then((res) => {
             let runeid =
               (res["result"]["rune"] && res["result"]["rune"]["runeid"]) ||
               "0:0";
             setTx(runeid.split(":")[1]);
             setBlock(runeid.split(":")[0]);
-            fetchHasMintAmount(runeVal).then((mres) => {
+            fetchHasMintAmount(runeVal.replaceAll('•', '')).then((mres) => {
               const hasMintNum = mres["result"]["mintAmount"] || 0;
               // let renuNumShow = totalNum - hasMintNum;
               setRuneNum(hasMintNum);

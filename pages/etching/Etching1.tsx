@@ -177,7 +177,7 @@ export default function Etching1(props: any) {
     }
     setRuneErrorTip("");
     // 获取所需的tx和block数据
-    fetchRuneSearchApi(runeVal).then((res) => {
+    fetchRuneSearchApi(runeVal.replaceAll('•', '')).then((res) => {
       if (res && res['result'] && res['result']['exist']) {
         setRuneErrorTip("Rune already exists");
       } else {
