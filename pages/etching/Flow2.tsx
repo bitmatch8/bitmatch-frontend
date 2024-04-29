@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import EtchFlowPath from "@/components/EtchFlowPath";
 import TextTooltip from "@/components/TextTooltip";
-import { encodeRunestone, RunestoneSpec } from "@/utils/runestone-lib";
+import { encodeRunestone } from '@magiceden-oss/runestone-lib';
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, useDispatch, addToast } from "@/lib/redux";
 
@@ -146,33 +146,25 @@ export default function Etching2(props: any) {
       } = formData;
       const runesStone = generateRunesStoneData();
 
-      // const runesStone = {
-      //   // etching: {
-      //   //   rune: "RUNE",
-      //   //   symbol: "$",
-      //   //   premine: BigInt(10000),
-      //   //   terms: {
-      //   //     cap: BigInt(10000),
-      //   //     amount: BigInt(10),
-      //   //   },
-      //   // },
-      //   // mint: {
-      //   //   block: BigInt(2586522),
-      //   //   tx: 1985,
-      //   // },
-      //   // pointer: 0,
-      //   edicts: [
-      //     {
-      //       id: {
-      //         block: BigInt(2586522),
-      //         tx: 1985,
-      //       },
-      //       amount: 2, // tranfer的总量
-      //       output: 0, //默认先写0，后面再调整具体
-      //     },
-      //   ],
-      // };
 
+      // const runesStone = {
+      //   etching: {
+      //     runeName: 'THIS•IS•AN•EXAMPLE•RUNE',
+      //     divisibility: 0,
+      //     premine: BigInt(0),
+      //     symbol: '',
+      //     terms: {
+      //       cap: BigInt(69),
+      //       amount: BigInt(420),
+      //       offset: {
+      //         end: BigInt(9001),
+      //       },
+      //     },
+      //     turbo: true,
+      //   },
+      // }
+
+      console.log("----runesStone----", runesStone);
       //1.生成Buffer
       const opReturnOutput = encodeRunestone(runesStone);
       console.log("----opReturnOutput----", opReturnOutput.encodedRunestone);
@@ -219,18 +211,19 @@ export default function Etching2(props: any) {
       symbol
     } = formData;
 
-    let runesStone: RunestoneSpec = {};
+    let runesStone = {};
 
     if (flowName == "etching") {
       let initRunesStone = {
         runeName: rune,
         divisibility: divisibility,
-        spacers: psbt.getSpacers(rune),
+        // spacers: psbt.getSpacers(rune),
         symbol,
         terms: {
           cap: BigInt(cap),
           amount: BigInt(amount),
         },
+        turbo: true
       };
       symbol == '' && delete initRunesStone.symbol;
       runesStone = publicMintChecked
@@ -271,7 +264,6 @@ export default function Etching2(props: any) {
         ],
       };
     }
-    console.log("----runesStone----", runesStone);
     return runesStone;
   };
   const satsToUSD = (sats: number, bitcoinPriceUSD: any) => {

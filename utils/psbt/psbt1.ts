@@ -110,55 +110,6 @@ export const generatePsbt = async (
     const dummyTx = new btc.Transaction({ allowUnknownOutputs: true });
     let totalUtxoValue = 0;
 
-    if (ordinals) {
-      let response = await axios.get(
-        `${SERVER_URL}/address/${ordinals.address}/utxo`
-      );
-
-      if (!response || response.status !== 200 || !response.data) {
-        console.error("No ordinals UTXO exist");
-        return;
-      }
-
-      let ordinalsUtxos = response.data.data;
-      ordinalsUtxos = ordinalsUtxos.filter((utxo: any) => !utxo.isSpent);
-
-      const ordinalsUtxo = ordinalsUtxos.find((ordinalsUtxo: any) => {
-        return ordinalsUtxo.inscriptions.find(
-          (inscription: any) =>
-            inscription.inscriptionId === ordinals.inscriptionId
-        );
-      });
-
-      if (!ordinalsUtxo) {
-        console.error("Ordinals UTXO not exist");
-        return;
-      }
-
-      const ordinalsInput = await getInputInfo(
-        ordinals.addressType,
-        hex.decode(ordinals.publicKey),
-        ordinalsUtxo.txid,
-        ordinalsUtxo.vout,
-        ordinalsUtxo.amount
-      );
-
-      const dummyOrdinalsInput = await getInputInfo(
-        ordinals.addressType,
-        dummyPublicKey,
-        ordinalsUtxo.txid,
-        ordinalsUtxo.vout,
-        ordinalsUtxo.amount
-      );
-
-      payment.amount += ordinalsUtxo.amount;
-      totalUtxoValue += ordinalsUtxo.amount;
-
-      tx.addInput(ordinalsInput);
-
-      dummyTx.addInput(dummyOrdinalsInput);
-    }
-
     if (!payment.amount) {
       console.error("Empty output");
       return;
@@ -166,13 +117,8 @@ export const generatePsbt = async (
 
     tx.addOutputAddress(recipientAddress, BigInt(payment.amount), NETWORK);
     for (let i = 0; i < opNum; i++) {
-      tx.addOutput({ script: opReturnOutput, amount: BigInt(0) }); //TODO:
+      tx.addOutput({ script: opReturnOutput, amount: BigInt(0) });
     }
-    // '我们的服务费' > 0 && tx.addOutputAddress(
-    //   "我们的地址",
-    //   BigInt("我们的服务费"),
-    //   NETWORK
-    // );
     COMPANY_FEE > 0 &&
       tx.addOutputAddress(
         currentNetwork === "testnet" ? payment.address : COMPANY_ADDRESS,
@@ -182,9 +128,8 @@ export const generatePsbt = async (
 
     dummyTx.addOutputAddress(recipientAddress, BigInt(payment.amount), NETWORK);
     for (let i = 0; i < opNum; i++) {
-      dummyTx.addOutput({ script: opReturnOutput, amount: BigInt(0) }); //TODO:
+      dummyTx.addOutput({ script: opReturnOutput, amount: BigInt(0) });
     }
-    // '我们的服务费' > 0 &&  dummyTx.addOutputAddress("我们的地址", BigInt("我们的服务费"), NETWORK);
     COMPANY_FEE > 0 &&
       dummyTx.addOutputAddress(
         currentNetwork === "testnet" ? payment.address : COMPANY_ADDRESS,
@@ -206,10 +151,13 @@ export const generatePsbt = async (
     paymentUtxos = paymentUtxos.sort((a: any, b: any) => b.value - a.value);
     let paymentUtxoCount = 0;
 
+    //没有utxo则不可交易
     if (paymentUtxos.length === 0) {
       let feeTx = btc.Transaction.fromPSBT(dummyTx.toPSBT());
       return { vsize: feeTx.vsize };
     }
+
+    //钱够继续创建psbt
     for (const paymentUtxo of paymentUtxos) {
       const paymentInput = await getInputInfo(
         payment.addressType,
@@ -232,19 +180,15 @@ export const generatePsbt = async (
       dummyTx.addInput(dummyPaymentInput);
 
       paymentUtxoCount++;
-
       let feeTx = btc.Transaction.fromPSBT(dummyTx.toPSBT());
-      feeTx.sign(hex.decode(DUMMY_PRIVATEKEY));
-      feeTx.finalize();
-
-      let feeAmount = feeTx.vsize * feeRate;
-      feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount; //
-
+      let feeAmount = MIN_RELAY_FEE;
+      try {
+        feeTx.sign(hex.decode(DUMMY_PRIVATEKEY));
+        feeTx.finalize();
+        feeAmount = feeTx.vsize * feeRate;
+        feeAmount = feeAmount < MIN_RELAY_FEE ? MIN_RELAY_FEE : feeAmount;
+      } catch {}
       totalUtxoValue += paymentUtxo.value;
-      console.log(
-        "----psbt total----:",
-        payment.amount + feeAmount + COMPANY_FEE + feeAmount * 0.05
-      );
       if (
         totalUtxoValue >=
         payment.amount + feeAmount + COMPANY_FEE + Math.ceil(feeAmount * 0.05)
@@ -280,15 +224,30 @@ export const generatePsbt = async (
         }
 
         const psbt = tx.toPSBT();
+
+        // //
+        // const tx3 = btc.Transaction.fromPSBT(psbt);
+        // console.log("tx3", tx3);
+        // for (let i = 0; i < tx3.inputs.length; i++) {
+        //   tx3.updateInput(i, { sighashType: btc.SigHash.SINGLE });
+        //   console.log("btc.SigHash", btc.SigHash);
+        // }
+        // const psbt3 = tx3.toPSBT();
+
+        // //
         const psbtBase64 = base64.encode(psbt);
+        const psbtHex = hex.encode(psbt);
 
         return {
           psbt,
           psbtBase64,
+          psbtHex,
           paymentUtxoCount,
           vsize: feeTx.vsize,
         };
-      } else {
+      }
+
+      if (paymentUtxoCount === paymentUtxos.length) {
         return {
           vsize: feeTx.vsize,
         };
