@@ -227,7 +227,8 @@ export default function Etching2(props: any) {
       capacity: cap,
       mint_amount: amount,
       receiver: premineReceiveAddress || address,
-      fee_rate: sats
+      fee_rate: sats,
+      divisibility: 0
     }
     !premine && delete submitData.premine
     symbol === '' && delete submitData.symbol
