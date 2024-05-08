@@ -16,8 +16,8 @@ const nextConfig = {
         destination: "https://mempool.space/api/v1/:path*",
       },
       {
-        source: "/api/rune/:path*",
-        destination: `${process.env.NEXT_PUBLIC_RUNE_URL}/:path*`,
+        source: "/api/runestone/:path*",
+        destination: `${process.env.NEXT_PUBLIC_RUNE_URL}/runestone/:path*`,
       },
       {
         source: "/api/:path*",
