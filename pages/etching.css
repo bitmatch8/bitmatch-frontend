@@ -579,13 +579,11 @@ input:focus {
     }
     .etch-descTopDetailBox {
         margin-top: 40px;
-        height: 200px;
+        height: 156px;
         background: #181B20;
         box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
         border-radius: 24px;
         padding: 40px;
-        overflow-x: hidden;
-        overflow-y: auto;
     }
     .etch-descDetailTopTxt {
         margin: 0;

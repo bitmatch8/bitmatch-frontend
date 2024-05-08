@@ -187,7 +187,14 @@ export default function Etching2(props: any) {
       );
       console.log("----unsignedPsbt----", unsignedPsbt);
       setUnsignedPsbt(unsignedPsbt);
-      setByteNum((unsignedPsbt as any).vsize || 0);
+      // 如果是etching就自己算字节
+      if (flowName === 'etching') {
+        const utf8Bytes = new TextEncoder().encode(formData.rune);
+        setByteNum(utf8Bytes.length);
+      } else {
+        setByteNum((unsignedPsbt as any).vsize || 0);
+      }
+      
     } catch (e: any) {
       throw new Error(e);
     }
@@ -390,7 +397,7 @@ export default function Etching2(props: any) {
               <span>Detail：</span>
               <span>～ {byteNum}vB</span>
             </p>
-            <div className="etch-descWord">{JSON.stringify(formDataBack)}</div>
+            <div className="etch-descWord">Etching {formDataBack.rune}</div>
           </div>
         </div>
       </div>
