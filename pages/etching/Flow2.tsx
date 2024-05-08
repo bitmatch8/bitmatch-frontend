@@ -4,7 +4,7 @@ import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestone } from '@magiceden-oss/runestone-lib';
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, useDispatch, addToast } from "@/lib/redux";
-
+import { fetchEtching } from '@/api/api'
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
 
@@ -28,7 +28,9 @@ export default function Etching2(props: any) {
   const [feeBySizeDolloerShow, setFeeBySizeDolloerShow] = React.useState("");
   const [totalNumDomShow, setTotalNumDomShow] = React.useState("");
   const [totalDollerDomShow, setTotalDollerDomShow] = React.useState("");
+  const [etchingReceiverAddress, setEtchingReceiverAddress] = useState<string>('')
   const dispatch = useDispatch();
+
 
   const getBTCPrice = () => {
     return new Promise((resolve, reject) => {
@@ -101,10 +103,10 @@ export default function Etching2(props: any) {
   };
 
   const go2Pay = async () => {
+    //若非p2tr地址不允许sign&pay
     const addressType = psbt.getUnisatAddressType(address as string);
     if (
-      addressType == psbt.ADDRESS_TYPE_P2PKH ||
-      addressType === psbt.ADDRESS_TYPE_P2SH_P2WPKH
+      addressType !== psbt.ADDRESS_TYPE_P2TR
     ) {
       dispatch(
         addToast({
@@ -114,7 +116,29 @@ export default function Etching2(props: any) {
       );
       return;
     }
+    //可以sign&pay
     setEtchingLoading(true);
+    //etching
+    if (flowName === 'etching') {
+      console.log('totalNumDomShow', totalNumDomShow)
+      if (!etchingReceiverAddress) {
+        setEtchingLoading(false);
+        return
+      }
+      try {
+        const txhash = await wallet.sendBitcoin(etchingReceiverAddress, Number(totalNumDomShow))
+        if (txhash) {
+          handleBackFlow2(flowName, 3, txhash);
+        } else {
+          throw new Error("unisat sign & push failed");
+        }
+        setEtchingLoading(false);
+      } catch (e) {
+        setEtchingLoading(false);
+      }
+      return
+    }
+    //mint|transter
     if (!unsignedPsbt) {
       setEtchingLoading(false);
       throw new Error("unsignedPsbt error");
@@ -135,7 +159,7 @@ export default function Etching2(props: any) {
       console.log(e);
     }
   };
-  //Psbt
+  // init Psbt
   const initPsbt = async () => {
     console.log("第一个页面的表单数据1", formData);
     try {
@@ -145,25 +169,6 @@ export default function Etching2(props: any) {
         premineReceiveAddress, //页面上etching/min/transfer第一步三个Receive Address相关字段都传这个
       } = formData;
       const runesStone = generateRunesStoneData();
-
-
-      // const runesStone = {
-      //   etching: {
-      //     runeName: 'THIS•IS•AN•EXAMPLE•RUNE',
-      //     divisibility: 0,
-      //     premine: BigInt(0),
-      //     symbol: '',
-      //     terms: {
-      //       cap: BigInt(69),
-      //       amount: BigInt(420),
-      //       offset: {
-      //         end: BigInt(9001),
-      //       },
-      //     },
-      //     turbo: true,
-      //   },
-      // }
-
       console.log("----runesStone----", runesStone);
       //1.生成Buffer
       const opReturnOutput = encodeRunestone(runesStone);
@@ -194,62 +199,67 @@ export default function Etching2(props: any) {
       } else {
         setByteNum((unsignedPsbt as any).vsize || 0);
       }
-      
+
     } catch (e: any) {
       throw new Error(e);
     }
   };
 
-  //生成 runesStone 数据
-  const generateRunesStoneData = () => {
+  //init etching
+  const initEtching = async () => {
     const {
       amount,
       cap,
-      divisibility,
       end,
       premine,
       rune,
       start,
       timeType,
+      publicMintChecked = false,
+      symbol,
+      turbo = false,
+      premineReceiveAddress
+    } = formData;
+
+    let submitData: any = {
+      sender: address,
+      rune_name: rune,
+      premine,
+      symbol,
+      capacity: cap,
+      mint_amount: amount,
+      receiver: premineReceiveAddress || address,
+      fee_rate: sats
+    }
+    !premine && delete submitData.premine
+    symbol === '' && delete submitData.symbol
+    if (publicMintChecked) {
+      submitData = {
+        ...submitData,
+        [timeType == 'offset' ? 'offset_start' : 'start_height']: Number(start),
+        [timeType == 'offset' ? 'offset_end' : 'end_height']: Number(end),
+        turbo
+      }
+    }
+    console.log('submitData', submitData)
+    const res = await fetchEtching(submitData)
+    const { code, result } = res
+    if (code == 0) {
+      const { receiver, network_fee } = result //TODO: 此处的network_fee字段就是从后端拿到的需要渲染到页面上的
+      setEtchingReceiverAddress(receiver)
+    }
+  }
+  //生成 runesStone 数据
+  const generateRunesStoneData = () => {
+    const {
       transferAmount, //页面上transfer第一步的Amount
       tx, //根据符文名称请求符文信息接口，接口返回的 tx hash/index
       block, //根据符文名称请求符文信息接口，接口返回的 block height
-      publicMintChecked = false,
-      symbol
     } = formData;
 
     let runesStone = {};
 
-    if (flowName == "etching") {
-      let initRunesStone = {
-        runeName: rune,
-        divisibility: divisibility,
-        // spacers: psbt.getSpacers(rune),
-        symbol,
-        terms: {
-          cap: BigInt(cap),
-          amount: BigInt(amount),
-        },
-        turbo: true
-      };
-      symbol == '' && delete initRunesStone.symbol;
-      runesStone = publicMintChecked
-        ? {
-          etching: {
-            ...initRunesStone,
-            premine: BigInt(premine),
-            [timeType]: {
-              start: BigInt(start),
-              end: BigInt(end),
-            },
-          },
-        }
-        : {
-          etching: {
-            ...initRunesStone,
-          },
-        };
-    } else if (flowName === "mint") {
+    if (flowName === "mint") {
       runesStone = {
         mint: {
           block: BigInt(block),
@@ -345,7 +355,11 @@ export default function Etching2(props: any) {
   }, []);
 
   useEffect(() => {
-    initPsbt();
+    if (flowName == 'etching') {
+      initEtching()
+    } else {
+      initPsbt();
+    }
   }, [sats]);
 
   // 计算Network Fee

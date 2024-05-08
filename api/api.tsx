@@ -60,3 +60,8 @@ export const fetchHasMintAmount = (name: string) => {
 export const getRunesList = (address: string) => {
   return Ajax.get(`/runestone/search/user/runes/list/${address}`);
 };
+
+// etching获取打款地址
+export const fetchEtching = (data: any) => {
+  return Ajax.post("/runestone/search/user/rune", data);
+};
