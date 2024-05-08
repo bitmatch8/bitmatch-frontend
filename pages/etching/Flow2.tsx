@@ -22,7 +22,7 @@ export default function Etching2(props: any) {
   const [serviceFeeeDolloer, setServiceFeeeDolloer] = React.useState("");
   const [unsignedPsbt, setUnsignedPsbt] = useState<any>(null);
   const [byteNum, setByteNum] = React.useState(88);
-  const [networkFeeShow, setNetworkFeeShow] = React.useState("");
+  const [networkFeeShow, setNetworkFeeShow] = React.useState(0);
   const [networkFeeDollerShow, setNetworkFeeDollerShow] = React.useState("");
   const [feeBySizeShow, setFeeBySizeShow] = React.useState("");
   const [feeBySizeDolloerShow, setFeeBySizeDolloerShow] = React.useState("");
@@ -193,12 +193,7 @@ export default function Etching2(props: any) {
       console.log("----unsignedPsbt----", unsignedPsbt);
       setUnsignedPsbt(unsignedPsbt);
       // 如果是etching就自己算字节
-      if (flowName === 'etching') {
-        const utf8Bytes = new TextEncoder().encode(formData.rune);
-        setByteNum(utf8Bytes.length);
-      } else {
-        setByteNum((unsignedPsbt as any).vsize || 0);
-      }
+      setByteNum((unsignedPsbt as any).vsize || 0);
 
     } catch (e: any) {
       throw new Error(e);
@@ -220,6 +215,10 @@ export default function Etching2(props: any) {
       turbo = false,
       premineReceiveAddress
     } = formData;
+
+    // etching的情况下，虚拟字节需要自己算
+    const utf8Bytes = new TextEncoder().encode(rune);
+    setByteNum(utf8Bytes.length);
 
     let submitData: any = {
       sender: address,
@@ -246,6 +245,7 @@ export default function Etching2(props: any) {
     const { code, result } = res
     if (code == 0) {
       const { receiver, network_fee } = result //TODO: 此处的network_fee字段就是从后端拿到的需要渲染到页面上的
+      setNetworkFeeShow(Number(network_fee));      
       setEtchingReceiverAddress(receiver)
     }
   }
@@ -299,24 +299,24 @@ export default function Etching2(props: any) {
     setServiceFeeeDolloer(serviceFeeValueShow);
   };
 
-  const getNetworkFeeDoller = async (sats: any, byteNum: any) => {
+  const getNetworkFeeDoller = async (networkFeeShow: number) => {
     // 获取比特币当前价格
     const btcPrice = await getBTCPrice();
     // 获取Network Fee是多少聪
-    const networkFeeSats = sats * byteNum;
-    setNetworkFeeShow(String(Math.ceil(networkFeeSats)));
+    // const networkFeeSats = sats * byteNum;
+    // setNetworkFeeShow(String(Math.ceil(networkFeeSats)));
     // 根据聪费率转换美元
-    const networkFeeDoller = satsToUSD(networkFeeSats, btcPrice);
+    const networkFeeDoller = satsToUSD(networkFeeShow, btcPrice);
     const netFeeDollerShow = Number(networkFeeDoller).toFixed(2);
     setNetworkFeeDollerShow(netFeeDollerShow);
     // Fee by Size 的展示
-    const feeSize = Number(networkFeeSats) * 0.05;
-    setFeeBySizeShow(String(Math.ceil(networkFeeSats * 0.05)));
+    const feeSize = Number(networkFeeShow) * 0.05;
+    setFeeBySizeShow(String(Math.ceil(networkFeeShow * 0.05)));
     const feeSizeDoller = satsToUSD(feeSize, btcPrice);
     const feeSizeDollerShow = feeSizeDoller.toFixed(2);
     setFeeBySizeDolloerShow(String(feeSizeDollerShow));
     // 总价的计算展示
-    const totalNum = 546 + 2000 + networkFeeSats + feeSize;
+    const totalNum = 546 + 2000 + networkFeeShow + feeSize;
     setTotalNumDomShow(String(Math.ceil(totalNum)));
     const totalDollerNum = satsToUSD(totalNum, btcPrice);
     const totalDollerNumShow = totalDollerNum.toFixed(2);
@@ -364,8 +364,8 @@ export default function Etching2(props: any) {
 
   // 计算Network Fee
   useEffect(() => {
-    getNetworkFeeDoller(sats, byteNum);
-  }, [sats, byteNum]);
+    getNetworkFeeDoller(networkFeeShow);
+  }, [networkFeeShow]);
 
   const btnText = useMemo(() => {
     if (flowName === "etching") {
