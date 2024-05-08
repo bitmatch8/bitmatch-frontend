@@ -819,7 +819,7 @@ export default function Etching1(props: any) {
             </div>
             
             <div className="etch-mintSetBtnBox etch-mintTurbo">
-              <span className="etch-mintSetTit">Turbo</span>
+              <span className="etch-mintSetTit grayTit">Turbo</span>
               <TextTooltip
                 arrow
                 title={TurboTipText}

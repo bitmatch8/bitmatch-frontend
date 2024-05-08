@@ -431,6 +431,9 @@ input:focus {
             font-size: 24px;
             color: #FFFFFF;
             line-height: 24px;
+            &.grayTit {
+                color: #6F6F76;
+            }
         }
         .etch-mintSetSwitchBox {
             margin-left: 28px;
