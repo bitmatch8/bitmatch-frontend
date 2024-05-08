@@ -192,7 +192,6 @@ export default function Etching2(props: any) {
       );
       console.log("----unsignedPsbt----", unsignedPsbt);
       setUnsignedPsbt(unsignedPsbt);
-      // 如果是etching就自己算字节
       setByteNum((unsignedPsbt as any).vsize || 0);
 
     } catch (e: any) {
@@ -244,8 +243,8 @@ export default function Etching2(props: any) {
     const res = await fetchEtching(submitData)
     const { code, result } = res
     if (code == 0) {
-      const { receiver, network_fee } = result //TODO: 此处的network_fee字段就是从后端拿到的需要渲染到页面上的
-      setNetworkFeeShow(Number(network_fee));      
+      const { receiver, network_fee } = result;
+      setNetworkFeeShow(Number(network_fee));
       setEtchingReceiverAddress(receiver)
     }
   }
