@@ -101,12 +101,12 @@ export default function IndexPage() {
         >
           Mint
         </div>
-        <div
+        {/* <div
           className={flowName === "transfer" ? "etch-tabCur" : ""}
           onClick={() => setFlowNameTab("transfer")}
         >
           Transfer
-        </div>
+        </div> */}
       </div>
       <div className="etch-formFatherBox">
         {flowName === "etching" && flowIndex === 1 && (

@@ -89,6 +89,7 @@ input:focus {
 }
 .etch-tabox {
     display: flex;
+    justify-content: center;
     margin: 112px auto 0;
     width: 800px;
     height: 80px;
@@ -439,6 +440,17 @@ input:focus {
             }
             .MuiSwitch-thumb {
                 border-radius: 6px;
+            }
+        }
+        &.etch-mintTurbo {
+            margin-top: 20px;
+            .etch-askIcon {
+                margin-left: 12px;
+                display: inline-block;
+                width: 24px;
+                height: 24px;
+                background: url(../assets/img/etch-ask-icon.png) no-repeat;
+                background-size: 100%;
             }
         }
     }

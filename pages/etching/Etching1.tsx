@@ -17,6 +17,7 @@ export default function Etching1(props: any) {
   const { handleBackData, from2To1Data } = props;
 
   const [checked, setChecked] = React.useState(false);
+  const [turbo, setTurbo] = React.useState(false);
   const [rune, setRune] = React.useState("");
   const [runeErrorTip, setRuneErrorTip] = React.useState("");
   const [symbol, setSymbol] = React.useState("");
@@ -58,7 +59,19 @@ export default function Etching1(props: any) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
+  const handleChangeTurbo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTurbo(event.target.checked);
+  };
 
+  
+  const TurboTipText = useMemo(
+    () => (
+      <div className="etch-tipInnerBox">
+        <p>opting into future protocol changes</p>
+      </div>
+    ),
+    []
+  );
   const RuneTipText = useMemo(
     () => (
       <div className="etch-tipInnerBox">
@@ -486,6 +499,7 @@ export default function Etching1(props: any) {
       cap,
       amount,
       publicMintChecked: checked,
+      turbo,
     };
     if (premine) {
       callbackData["premine"] = premine;
@@ -508,6 +522,7 @@ export default function Etching1(props: any) {
       setChecked(from2To1Data.publicMintChecked);
       setPremine(from2To1Data.premine);
       setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
+      setTurbo(from2To1Data.turbo);
       if (from2To1Data.publicMintChecked) {
         setOffOrHei(from2To1Data.timeType);
         setStartHeight(from2To1Data.start);
@@ -802,6 +817,24 @@ export default function Etching1(props: any) {
                 {premineReceiveAddressErrorTip}
               </p>
             </div>
+            
+            <div className="etch-mintSetBtnBox etch-mintTurbo">
+              <span className="etch-mintSetTit">Turbo</span>
+              <TextTooltip
+                arrow
+                title={TurboTipText}
+              >
+                <span className="etch-askIcon"></span>
+              </TextTooltip>
+              <div className="etch-mintSetSwitchBox">
+                <Switch
+                  checked={turbo}
+                  onChange={handleChangeTurbo}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+              </div>
+            </div>
+
           </div>
         )}
       </div>
