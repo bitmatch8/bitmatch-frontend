@@ -287,22 +287,20 @@ export default function Etching2(props: any) {
     const btcPrice = await getBTCPrice();
     // 获取Network Fee是多少聪
     const networkFeeSats = sats * byteNum;
-    setNetworkFeeShow(networkFeeSats.toFixed(2));
+    setNetworkFeeShow(String(Math.ceil(networkFeeSats)));
     // 根据聪费率转换美元
     const networkFeeDoller = satsToUSD(networkFeeSats, btcPrice);
     const netFeeDollerShow = Number(networkFeeDoller).toFixed(2);
     setNetworkFeeDollerShow(netFeeDollerShow);
     // Fee by Size 的展示
     const feeSize = Number(networkFeeSats) * 0.05;
-    const feeSizeShow = (Number(networkFeeSats) * 0.05).toFixed(2);
-    setFeeBySizeShow(String(feeSizeShow));
+    setFeeBySizeShow(String(Math.ceil(networkFeeSats * 0.05)));
     const feeSizeDoller = satsToUSD(feeSize, btcPrice);
     const feeSizeDollerShow = feeSizeDoller.toFixed(2);
     setFeeBySizeDolloerShow(String(feeSizeDollerShow));
     // 总价的计算展示
     const totalNum = 546 + 2000 + networkFeeSats + feeSize;
-    const totalNumShow = totalNum.toFixed(2);
-    setTotalNumDomShow(totalNumShow);
+    setTotalNumDomShow(String(Math.ceil(totalNum)));
     const totalDollerNum = satsToUSD(totalNum, btcPrice);
     const totalDollerNumShow = totalDollerNum.toFixed(2);
     setTotalDollerDomShow(totalDollerNumShow);
