@@ -202,10 +202,10 @@ export default function Etching2(props: any) {
   //init etching
   const initEtching = async () => {
     const {
-      amount,
-      cap,
+      amount = '0',
+      cap = '0',
       end,
-      premine,
+      premine = '0',
       rune,
       start,
       timeType,
@@ -222,29 +222,44 @@ export default function Etching2(props: any) {
     let submitData: any = {
       sender: address,
       rune_name: rune,
+      divisibility: 0,
       premine,
-      symbol,
+      symbol: symbol == '' ? '¤' : symbol,
       capacity: cap,
       mint_amount: amount,
-      receiver: premineReceiveAddress || address,
+      offset_start: 0,
+      offset_end: 0,
+      start_height: 0,
+      end_height: 0,
+      turbo,
+      receiver_addr: premineReceiveAddress || address,
       fee_rate: sats,
-      divisibility: 0
     }
-    !premine && delete submitData.premine
-    symbol === '' && delete submitData.symbol
     if (publicMintChecked) {
-      submitData = {
-        ...submitData,
-        [timeType == 'offset' ? 'offset_start' : 'start_height']: Number(start),
-        [timeType == 'offset' ? 'offset_end' : 'end_height']: Number(end),
-        turbo
+      if (timeType == 'offset') {
+        submitData = {
+          ...submitData,
+          offset_start: start,
+          offset_end: end,
+          start_height: 0,
+          end_height: 0
+        }
+      } else {
+        submitData = {
+          ...submitData,
+          offset_start: 0,
+          offset_end: 0,
+          start_height: start,
+          end_height: end
+        }
       }
     }
     console.log('submitData', submitData)
     const res = await fetchEtching(submitData)
+    console.log('res', res)
     const { code, result } = res
     if (code == 0) {
-      const { receiver, network_fee } = result;
+      const { receiver, network_fee } = result?.result;
       setNetworkFeeShow(Number(network_fee));
       setEtchingReceiverAddress(receiver)
     }

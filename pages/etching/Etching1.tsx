@@ -180,8 +180,8 @@ export default function Etching1(props: any) {
         }
       }
     }
-    if (charArr.length < 12 || charArr.length > 28) {
-      setRuneErrorTip("Rune 12 to 28 letters");
+    if (charArr.length < 12 || charArr.length > 26) {
+      setRuneErrorTip("Rune 12 to 26 letters");
       return;
     }
     if (isUpperLetter) {
