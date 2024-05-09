@@ -1,74 +1,75 @@
-import Button from "@/components/Button";
+// import Button from "@/components/Button";
 import { Spaced } from "@/components/Spaced";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import InputBase from "@mui/material/InputBase";
+// import MenuItem from "@mui/material/MenuItem";
+// import FormControl from "@mui/material/FormControl";
+// import Select, { SelectChangeEvent } from "@mui/material/Select";
+// import InputBase from "@mui/material/InputBase";
 import styled from "@emotion/styled";
 import React, { useState } from "react";
-import Pagination from "@/components/Pagination";
+// import Pagination from "@/components/Pagination";
 import ValueSkeleton from "@/components/ValueSkeleton";
 import { dateFormat, hidehash } from "@/utils";
 import CopySvg from "@/components/CopySvg";
 import EmptyList from "@/components/OrderHistory/EmptyList";
 import useHistory, { HistoryItemProps } from "@/hook/useRuneHistory";
-import { selectBuy, useSelector } from "@/lib/redux";
-import SelectIcon from "@/components/Svg/SelectIcon";
+import { selectBuy, useSelector, selectWallter } from "@/lib/redux";
+// import SelectIcon from "@/components/Svg/SelectIcon";
 
-const SelectSvg: React.FC = () => {
-  return (
-    <SelectIconBox>
-      <SelectIcon width={20} fill="#6F6F76" />
-    </SelectIconBox>
-  );
-};
 
-const SelectInput = styled(InputBase)(() => ({
-  "& .MuiInputBase-input": {
-    borderRadius: "12px",
-    position: "relative",
-    backgroundColor: "transparent",
-    border: "2px solid #6F6F76",
-    color: "#DBDBDB",
-    fontSize: "24px",
-    fontWeight: 600,
-    minHeight: 0,
-    lineHeight: "24px",
-    padding: "16px 6px 16px 24px",
-    "&:focus": {
-      borderColor: "#F7931A",
-      borderRadius: "12px",
-    },
-  },
-  "& .MuiInputBase-input.MuiSelect-select": { minHeight: 0 },
-}));
+// const SelectSvg: React.FC = () => {
+//   return (
+//     <SelectIconBox>
+//       <SelectIcon width={20} fill="#6F6F76" />
+//     </SelectIconBox>
+//   );
+// };
 
-const dropdownStyle = {
-  "&& .MuiMenu-paper": {
-    background: "transparent",
-    paddingTop: "8px",
-  },
-  "&& .MuiList-root": {
-    background: "#181B20",
-    borderRadius: "12px",
-    border: "2px solid #6F6F76",
-    padding: 0,
-    overflow: "hidden",
-  },
-  "&& .MuiMenuItem-root": {
-    padding: "12px 20px",
-    fontSize: "24px",
-    color: "#DBDBDB",
-    "&:hover": {
-      backgroundColor: "#24272B",
-      color: "#F7931A",
-    },
-  },
-  "&& .MuiMenuItem-root.Mui-selected": {
-    backgroundColor: "#24272B",
-    color: "#F7931A",
-  },
-};
+// const SelectInput = styled(InputBase)(() => ({
+//   "& .MuiInputBase-input": {
+//     borderRadius: "12px",
+//     position: "relative",
+//     backgroundColor: "transparent",
+//     border: "2px solid #6F6F76",
+//     color: "#DBDBDB",
+//     fontSize: "24px",
+//     fontWeight: 600,
+//     minHeight: 0,
+//     lineHeight: "24px",
+//     padding: "16px 6px 16px 24px",
+//     "&:focus": {
+//       borderColor: "#F7931A",
+//       borderRadius: "12px",
+//     },
+//   },
+//   "& .MuiInputBase-input.MuiSelect-select": { minHeight: 0 },
+// }));
+
+// const dropdownStyle = {
+//   "&& .MuiMenu-paper": {
+//     background: "transparent",
+//     paddingTop: "8px",
+//   },
+//   "&& .MuiList-root": {
+//     background: "#181B20",
+//     borderRadius: "12px",
+//     border: "2px solid #6F6F76",
+//     padding: 0,
+//     overflow: "hidden",
+//   },
+//   "&& .MuiMenuItem-root": {
+//     padding: "12px 20px",
+//     fontSize: "24px",
+//     color: "#DBDBDB",
+//     "&:hover": {
+//       backgroundColor: "#24272B",
+//       color: "#F7931A",
+//     },
+//   },
+//   "&& .MuiMenuItem-root.Mui-selected": {
+//     backgroundColor: "#24272B",
+//     color: "#F7931A",
+//   },
+// };
 
 const RuneHistoryHead: React.FC = () => {
   return (
@@ -127,16 +128,16 @@ const RuneHistoryItem: React.FC<{
   return (
     <RuneHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <RuneHistoryLineBox>
-        <RuneHistoryItemBox className="rune">{item.rune}</RuneHistoryItemBox>
+        <RuneHistoryItemBox className="rune">{item.runeName}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="types">{item.type}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="amount">
-          {item.amount}
+          {item.mintAmount}
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="from_address">
           <CopyItem text={item.fromaddr} />
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="receive_address">
-          <CopyItem text={item.receivedAddr} />
+          <CopyItem text={item.receriverAddr} />
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="fee">{item.fee}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="state">{item.state}</RuneHistoryItemBox>
@@ -145,72 +146,50 @@ const RuneHistoryItem: React.FC<{
   );
 };
 
-const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
+const RuneHistory: React.FC<{ title?: any }> = ({
   title,
-  address,
-  pid,
 }) => {
   const [page, setPage] = useState(1);
-  const [historyType, setHistoryType] = useState("all");
-  const pageSize = 10;
+  // const [historyType, setHistoryType] = useState("all");
+  const pageSize = 100000;
   const [index, setIndex] = useState<number | null>(null);
   const { refresh_opt } = useSelector(selectBuy);
+  const { address } = useSelector(selectWallter);
 
-  // const { list: lists, total } = useHistory(
-  //   {
-  //     pageNum: page,
-  //     fromAddr: address,
-  //     pid,
-  //     pageSize,
-  //   },
-  //   { refreshInterval: refresh_opt }
-  // );
-
-  const lists = [
+  const { list: lists, total } = useHistory(
     {
-      rune: "A·B·C·A·W·E·V·R·S·F·E·E",
-      type: "Etching",
-      amount: 2000,
-      fromaddr: "bc1pabcd789bcd789",
-      receivedAddr: "bc1pabcd789bcd789",
-      fee: 0.23567894,
-      state: "Tx submited",
+      pageNum: page,
+      fromAddr: address,
+      pageSize,
     },
-    {
-      rune: "A·B·C·A·W·E·V·R·S·F·E·E2",
-      type: "Mint",
-      amount: 20005,
-      fromaddr: "bc1pabcd789bcd789",
-      receivedAddr: "bc1pabcd789bcd789",
-      fee: 0.23567894,
-      state: "Minting",
-    },
-  ];
-  const total = 200;
-  const reload = (page: any) => {
-    setPage(page);
-  };
+    { refreshInterval: refresh_opt }
+  );
+  // const reload = (page: any) => {
+  //   setPage(page);
+  // };
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setHistoryType(event.target.value);
-  };
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setHistoryType(event.target.value);
+  // };
 
-  const typeList = [
-    { value: "all", label: "All" },
-    { value: "etching", label: "Etching" },
-    { value: "mint", label: "Mint" },
-    { value: "transfer", label: "Transfer" },
-  ];
+  // const typeList = [
+  //   { value: "all", label: "All" },
+  //   { value: "etching", label: "Etching" },
+  //   { value: "mint", label: "Mint" },
+  //   { value: "transfer", label: "Transfer" },
+  // ];
 
   return (
     <>
-      {title ? (
-        title
-      ) : (
-        <>
-          <PageTitleBox>
-            <span>History</span>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
+      {
+        address && <>
+          {title ? (
+            title
+          ) : (
+            <>
+              <PageTitleBox>
+                <span>History</span>
+                {/* <FormControl sx={{ m: 1, minWidth: 200 }}>
               <Select
                 value={historyType}
                 displayEmpty
@@ -229,31 +208,31 @@ const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
                   );
                 })}
               </Select>
-            </FormControl>
-          </PageTitleBox>
-          <Spaced size="80" />
-        </>
-      )}
-      <RuneHistoryBox>
-        <RuneHistoryHead />
-        <RuneContainerBox>
-          {lists === null ? (
-            [null, null, null].map((_, key) => <EmptyLine key={key} />)
-          ) : lists.length === 0 ? (
-            <EmptyList />
-          ) : (
-            lists.map((item: any, key: number) => (
-              <RuneHistoryItem
-                key={key}
-                item={item}
-                show={index === key}
-                onClick={() => (index === key ? setIndex(null) : setIndex(key))}
-              />
-            ))
+            </FormControl> */}
+              </PageTitleBox>
+              <Spaced size="80" />
+            </>
           )}
-        </RuneContainerBox>
-        <Spaced size="36" />
-        {/* {total > pageSize ? (
+          <RuneHistoryBox>
+            <RuneHistoryHead />
+            <RuneContainerBox>
+              {lists === null ? (
+                [null, null, null].map((_, key) => <EmptyLine key={key} />)
+              ) : lists.length === 0 ? (
+                <EmptyList />
+              ) : (
+                lists.map((item: any, key: number) => (
+                  <RuneHistoryItem
+                    key={key}
+                    item={item}
+                    show={index === key}
+                    onClick={() => (index === key ? setIndex(null) : setIndex(key))}
+                  />
+                ))
+              )}
+            </RuneContainerBox>
+            <Spaced size="36" />
+            {/* {total > pageSize ? (
           <Pagination
             total={total}
             pageSize={pageSize}
@@ -263,7 +242,9 @@ const RuneHistory: React.FC<{ address?: any; pid?: any; title?: any }> = ({
         ) : (
           ""
         )} */}
-      </RuneHistoryBox>
+          </RuneHistoryBox></>
+      }
+
     </>
   );
 };

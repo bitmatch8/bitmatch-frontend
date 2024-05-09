@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Page from "@/components/Page";
-// import History from "./History";
+import History from "./History";
 import Etching1 from "./Etching1";
 import Flow2 from "./Flow2";
 import Flow3 from "./Flow3";
@@ -68,7 +68,7 @@ export default function IndexPage() {
   useEffect(() => {
     const searchInputDom = document.getElementById('etchSearchInput');
     if (searchInputDom) {
-      searchInputDom.addEventListener('keyup', function(event: any) {
+      searchInputDom.addEventListener('keyup', function (event: any) {
         if (event.keyCode === 13 && searchVal) {
           router.push("/search?q=" + searchVal);
         }
@@ -143,7 +143,7 @@ export default function IndexPage() {
           ></Flow3>
         )}
       </div>
-      {/* <History></History> */}
+      <History />
     </Page>
   );
 }
