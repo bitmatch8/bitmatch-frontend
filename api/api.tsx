@@ -63,5 +63,5 @@ export const getRunesList = (address: string) => {
 
 // etching获取打款地址
 export const fetchEtching = (data: any) => {
-  return Ajax.post("/runestone/search/user/rune", data);
+  return Ajax.post("/runestone/sendPostRequest", data);
 };
