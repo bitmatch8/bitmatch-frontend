@@ -11,11 +11,11 @@ export default function Etching2(props: any) {
   let formDataBack = JSON.parse(JSON.stringify(formData));
   delete formDataBack.flowIndex;
 
-  const [sats, setSats] = React.useState(12);
+  const [sats, setSats] = React.useState(0);
   const [stasCurIndex, setStasCurIndex] = React.useState(2);
-  const [sat1, setSat1] = React.useState(8);
-  const [sat2, setSat2] = React.useState(12);
-  const [inputStas3, setInputStas3] = React.useState("25");
+  const [sat1, setSat1] = React.useState(0);
+  const [sat2, setSat2] = React.useState(0);
+  const [inputStas3, setInputStas3] = React.useState("0");
   const [etchingLoading, setEtchingLoading] = useState(false);
   const { address, balance, wallterType } = useSelector(selectWallter);
   const [satsInRuneDoller, setSatsInRuneDoller] = React.useState("");
@@ -376,14 +376,6 @@ export default function Etching2(props: any) {
     getDollers();
   }, []);
 
-  useEffect(() => {
-    if (flowName == 'etching') {
-      initEtching()
-    } else {
-      initPsbt();
-    }
-  }, [sats]);
-
   // 计算Network Fee
   useEffect(() => {
     getNetworkFeeDoller(networkFeeShow);
@@ -411,6 +403,17 @@ export default function Etching2(props: any) {
   useEffect(() => {
     getDefaultSat();
   }, [])
+
+  useEffect(() => {
+    if (Number(sats) === 0) {
+      return;
+    }
+    if (flowName == 'etching') {
+      initEtching()
+    } else {
+      initPsbt();
+    }
+  }, [sats]);
 
   return (
     <>
