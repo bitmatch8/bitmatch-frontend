@@ -11,6 +11,7 @@ export type HistoryItemProps = {
   status?: OrderState;
   amount?: string;
   receiveaddress?: string;
+  runeName?: string;
 };
 type props = {
   sender: any;

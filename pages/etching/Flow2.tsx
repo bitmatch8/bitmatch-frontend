@@ -150,7 +150,7 @@ export default function Etching2(props: any) {
       console.log("txid", txid);
       if (txid) {
         const { rune, mintAmount, premineReceiveAddress } = formData
-        fetchMintSubmit({ hash: txid, runename: rune, amount: mintAmount, receiveaddress: premineReceiveAddress }).then(res => {
+        fetchMintSubmit({ hash: txid, runename: rune, amount: mintAmount, receiveaddress: premineReceiveAddress, sender: address }).then(res => {
           if (res.code === 0) {
             handleBackFlow2(flowName, 3, txid);
           }

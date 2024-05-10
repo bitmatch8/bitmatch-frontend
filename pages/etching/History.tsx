@@ -136,21 +136,19 @@ const RuneHistoryItem: React.FC<{
   return (
     <RuneHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <RuneHistoryLineBox>
-        <RuneHistoryItemBox className="rune">{item.runename}</RuneHistoryItemBox>
-        <RuneHistoryItemBox className="types">{flowType == 'etching' ? 'Etching' : 'Mint'}</RuneHistoryItemBox>
+        <RuneHistoryItemBox className="rune">{flowType === 'etching' ? item.runeName : item.runename}</RuneHistoryItemBox>
+        < RuneHistoryItemBox className="types">{flowType == 'etching' ? 'Etching' : 'Mint'}</>
         <RuneHistoryItemBox className="amount">
-          {item.amount}
+          {flowType === 'etching' ? item.mintAmount : item.amount}
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="from_address">
           <CopyItem text={item.sender as string} />
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="receive_address">
-          <CopyItem text={item.receiveaddress as string} />
+          <CopyItem text={flowType === 'etching' ? item.receriverAddr as string : item.receiveaddress as string} />
         </RuneHistoryItemBox>
         {/* <RuneHistoryItemBox className="fee">{item.fee}</RuneHistoryItemBox> */}
-        <>{
-          flowType === 'mint' && <RuneHistoryItemBox className="state">{item.status}</RuneHistoryItemBox>
-        }</>
+        <RuneHistoryItemBox className="state">{item.status}</RuneHistoryItemBox>
       </RuneHistoryLineBox>
     </RuneHistoryLineDetailBox>
   );
