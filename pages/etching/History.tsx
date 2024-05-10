@@ -334,6 +334,9 @@ const RuneHistoryLineBox = styled(RuneHistoryHeadBox)`
 const RuneHistoryItemBase = styled.div`
   &.rune {
     width: 200px;
+    overflow: hidden; /* 确保超出容器的文本被裁剪 */
+    white-space: nowrap; /* 确保文本在一行内显示 */
+    text-overflow: ellipsis; /* 使用省略号表示文本超出 */
   }
   &.types {
     width: 200px;
