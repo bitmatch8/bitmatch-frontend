@@ -96,12 +96,9 @@ const RuneHistoryHead: React.FC<{
       {/* <RuneHistoryHeadItemBox className="fee">
         <span>Fee</span>
       </RuneHistoryHeadItemBox> */}
-      <>{
-        flowType === 'mint' && <RuneHistoryHeadItemBox className="state">
-          <span>Status</span>
-        </RuneHistoryHeadItemBox>
-      }</>
-
+      <RuneHistoryHeadItemBox className="state">
+        <span>Status</span>
+      </RuneHistoryHeadItemBox>
     </RuneHistoryHeadBox>
   );
 };
@@ -137,7 +134,7 @@ const RuneHistoryItem: React.FC<{
     <RuneHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <RuneHistoryLineBox>
         <RuneHistoryItemBox className="rune">{flowType === 'etching' ? item.runeName : item.runename}</RuneHistoryItemBox>
-        < RuneHistoryItemBox className="types">{flowType == 'etching' ? 'Etching' : 'Mint'}</>
+        <RuneHistoryItemBox className="types">{flowType == 'etching' ? 'Etching' : 'Mint'}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="amount">
           {flowType === 'etching' ? item.mintAmount : item.amount}
         </RuneHistoryItemBox>
