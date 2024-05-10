@@ -1,4 +1,4 @@
-import { fetchRuneOrderList } from "@/api/api";
+import { fetchRuneEtchingList, fetchRuneMintList } from "@/api/api";
 import { OrderState } from "@/utils/types";
 import { useMemo } from "react";
 import useSWR from "swr";
@@ -7,17 +7,17 @@ export type HistoryItemProps = {
   type: string;
   mintAmount: string;
   fee: string;
-  fromaddr: string;
+  sender: string;
   receriverAddr: string;
-  state: OrderState;
+  status: OrderState;
 };
 type props = {
-  fromAddr: any;
+  sender: any;
   pageNum: any;
   pageSize: any;
 };
 const useHistory = (arg: props, opt: any = {}): { list: any[]; total: any } => {
-  const { data, isLoading, error } = useSWR(arg, fetchRuneOrderList, opt);
+  const { data, isLoading, error } = useSWR(arg, fetchRuneEtchingList, opt);
   const result = useMemo(() => {
     if (error || isLoading === true || !data) {
       return { list: null, total: 0 };

@@ -6,7 +6,7 @@ import { Spaced } from "@/components/Spaced";
 // import InputBase from "@mui/material/InputBase";
 import styled from "@emotion/styled";
 import React, { useState } from "react";
-// import Pagination from "@/components/Pagination";
+import Pagination from "@/components/Pagination";
 import ValueSkeleton from "@/components/ValueSkeleton";
 import { dateFormat, hidehash } from "@/utils";
 import CopySvg from "@/components/CopySvg";
@@ -14,6 +14,8 @@ import EmptyList from "@/components/OrderHistory/EmptyList";
 import useHistory, { HistoryItemProps } from "@/hook/useRuneHistory";
 import { selectBuy, useSelector, selectWallter } from "@/lib/redux";
 // import SelectIcon from "@/components/Svg/SelectIcon";
+import { useEffect } from 'react';
+import { RefreshConfig } from "@/utils/config"
 
 
 // const SelectSvg: React.FC = () => {
@@ -71,7 +73,9 @@ import { selectBuy, useSelector, selectWallter } from "@/lib/redux";
 //   },
 // };
 
-const RuneHistoryHead: React.FC = () => {
+const RuneHistoryHead: React.FC<{
+  flowType?: string
+}> = ({ flowType }) => {
   return (
     <RuneHistoryHeadBox>
       <RuneHistoryHeadItemBox className="rune">
@@ -89,12 +93,15 @@ const RuneHistoryHead: React.FC = () => {
       <RuneHistoryHeadItemBox className="receive_address">
         <span>Receive address</span>
       </RuneHistoryHeadItemBox>
-      <RuneHistoryHeadItemBox className="fee">
+      {/* <RuneHistoryHeadItemBox className="fee">
         <span>Fee</span>
-      </RuneHistoryHeadItemBox>
-      <RuneHistoryHeadItemBox className="state">
-        <span>State</span>
-      </RuneHistoryHeadItemBox>
+      </RuneHistoryHeadItemBox> */}
+      <>{
+        flowType === 'mint' && <RuneHistoryHeadItemBox className="state">
+          <span>Status</span>
+        </RuneHistoryHeadItemBox>
+      }</>
+
     </RuneHistoryHeadBox>
   );
 };
@@ -124,49 +131,52 @@ const RuneHistoryItem: React.FC<{
   item: HistoryItemProps;
   onClick: any;
   show: boolean;
-}> = ({ item, show, onClick }) => {
+  flowType?: string
+}> = ({ item, show, onClick, flowType }) => {
   return (
     <RuneHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <RuneHistoryLineBox>
         <RuneHistoryItemBox className="rune">{item.runeName}</RuneHistoryItemBox>
-        <RuneHistoryItemBox className="types">{item.type}</RuneHistoryItemBox>
+        <RuneHistoryItemBox className="types">{flowType == 'etching' ? 'Etching' : 'Mint'}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="amount">
           {item.mintAmount}
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="from_address">
-          <CopyItem text={item.fromaddr} />
+          <CopyItem text={item.sender} />
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="receive_address">
           <CopyItem text={item.receriverAddr} />
         </RuneHistoryItemBox>
-        <RuneHistoryItemBox className="fee">{item.fee}</RuneHistoryItemBox>
-        <RuneHistoryItemBox className="state">{item.state}</RuneHistoryItemBox>
+        {/* <RuneHistoryItemBox className="fee">{item.fee}</RuneHistoryItemBox> */}
+        <>{
+          flowType === 'mint' && <RuneHistoryItemBox className="state">{item.status}</RuneHistoryItemBox>
+        }</>
       </RuneHistoryLineBox>
     </RuneHistoryLineDetailBox>
   );
 };
 
-const RuneHistory: React.FC<{ title?: any }> = ({
+const RuneHistory: React.FC<{ title?: any, flowName: string }> = ({
   title,
+  flowName
 }) => {
   const [page, setPage] = useState(1);
   // const [historyType, setHistoryType] = useState("all");
-  const pageSize = 100000;
+  const pageSize = 10;
   const [index, setIndex] = useState<number | null>(null);
-  const { refresh_opt } = useSelector(selectBuy);
   const { address } = useSelector(selectWallter);
 
   const { list: lists, total } = useHistory(
     {
       pageNum: page,
-      fromAddr: address,
+      sender: address,
       pageSize,
     },
-    { refreshInterval: refresh_opt }
+    { refreshInterval: RefreshConfig.publicInfo_refreshInterval },
   );
-  // const reload = (page: any) => {
-  //   setPage(page);
-  // };
+  const reload = (page: any) => {
+    setPage(page);
+  };
 
   // const handleChange = (event: SelectChangeEvent) => {
   //   setHistoryType(event.target.value);
@@ -179,17 +189,16 @@ const RuneHistory: React.FC<{ title?: any }> = ({
   //   { value: "transfer", label: "Transfer" },
   // ];
 
+
   return (
     <>
-      {
-        address && <>
-          {title ? (
-            title
-          ) : (
-            <>
-              <PageTitleBox>
-                <span>History</span>
-                {/* <FormControl sx={{ m: 1, minWidth: 200 }}>
+      {title ? (
+        title
+      ) : (
+        <>
+          <PageTitleBox>
+            <span>History</span>
+            {/* <FormControl sx={{ m: 1, minWidth: 200 }}>
               <Select
                 value={historyType}
                 displayEmpty
@@ -209,30 +218,31 @@ const RuneHistory: React.FC<{ title?: any }> = ({
                 })}
               </Select>
             </FormControl> */}
-              </PageTitleBox>
-              <Spaced size="80" />
-            </>
+          </PageTitleBox>
+          <Spaced size="80" />
+        </>
+      )}
+      <RuneHistoryBox>
+        <RuneHistoryHead flowType={flowName} />
+        <RuneContainerBox>
+          {lists === null ? (
+            [null, null, null].map((_, key) => <EmptyLine key={key} />)
+          ) : lists.length === 0 ? (
+            <EmptyList />
+          ) : (
+            lists.map((item: any, key: number) => (
+              <RuneHistoryItem
+                key={key}
+                item={item}
+                show={index === key}
+                onClick={() => (index === key ? setIndex(null) : setIndex(key))}
+                flowType={flowName}
+              />
+            ))
           )}
-          <RuneHistoryBox>
-            <RuneHistoryHead />
-            <RuneContainerBox>
-              {lists === null ? (
-                [null, null, null].map((_, key) => <EmptyLine key={key} />)
-              ) : lists.length === 0 ? (
-                <EmptyList />
-              ) : (
-                lists.map((item: any, key: number) => (
-                  <RuneHistoryItem
-                    key={key}
-                    item={item}
-                    show={index === key}
-                    onClick={() => (index === key ? setIndex(null) : setIndex(key))}
-                  />
-                ))
-              )}
-            </RuneContainerBox>
-            <Spaced size="36" />
-            {/* {total > pageSize ? (
+        </RuneContainerBox>
+        <Spaced size="36" />
+        {total > pageSize ? (
           <Pagination
             total={total}
             pageSize={pageSize}
@@ -241,11 +251,8 @@ const RuneHistory: React.FC<{ title?: any }> = ({
           />
         ) : (
           ""
-        )} */}
-          </RuneHistoryBox></>
-      }
-
-    </>
+        )}
+      </RuneHistoryBox></>
   );
 };
 export default RuneHistory;
@@ -333,16 +340,16 @@ const RuneHistoryItemBase = styled.div`
     width: 200px;
   }
   &.types {
-    width: 160px;
+    width: 200px;
   }
   &.amount {
-    width: 120px;
+    width: 200px;
   }
   &.from_address {
-    width: 180px;
+    width: 200px;
   }
   &.receive_address {
-    width: 180px;
+    width: 200px;
   }
   &.fee {
     width: 160px;

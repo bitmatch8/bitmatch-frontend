@@ -4,7 +4,7 @@ import TextTooltip from "@/components/TextTooltip";
 import { encodeRunestone } from '@magiceden-oss/runestone-lib';
 import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, useDispatch, addToast } from "@/lib/redux";
-import { fetchEtching } from '@/api/api'
+import { fetchEtching, fetchMintSubmit } from '@/api/api'
 export default function Etching2(props: any) {
   const { formData, handleBackFlow2, flowName } = props;
 
@@ -149,7 +149,14 @@ export default function Etching2(props: any) {
       const txid = await wallet.pushPsbt(signedPsbtBase64);
       console.log("txid", txid);
       if (txid) {
-        handleBackFlow2(flowName, 3, txid);
+        const { rune, mintAmount, premineReceiveAddress } = formData
+        fetchMintSubmit({ hash: txid, runename: rune, amount: mintAmount, receiveaddress: premineReceiveAddress }).then(res => {
+          if (res.code === 0) {
+            handleBackFlow2(flowName, 3, txid);
+          }
+        }).finally(() => {
+          setEtchingLoading(false);
+        })
       } else {
         throw new Error("unisat sign & push failed");
       }

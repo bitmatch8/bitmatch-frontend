@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Page from "@/components/Page";
 import History from "./History";
@@ -7,6 +7,8 @@ import Flow2 from "./Flow2";
 import Flow3 from "./Flow3";
 import Mint1 from "./Mint1";
 import Transfer1 from "./Transfer1";
+
+import { useSelector, selectWallter } from "@/lib/redux";
 
 export default function IndexPage() {
   const [flowName, setFlowName] = React.useState("etching");
@@ -19,6 +21,8 @@ export default function IndexPage() {
   const [knowCheck, setKknowCheck] = React.useState(false);
 
   const router = useRouter();
+  const { address } = useSelector(selectWallter);
+
 
   const getFlow1Data = (data: any) => {
     const { flowIndex } = data;
@@ -75,6 +79,10 @@ export default function IndexPage() {
       });
     }
   }, [searchVal])
+
+
+
+
 
   return (
     <Page>
@@ -143,7 +151,7 @@ export default function IndexPage() {
           ></Flow3>
         )}
       </div>
-      <History />
+      <>{address && <History flowName={flowName} />}</>
     </Page>
   );
 }
