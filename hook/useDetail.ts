@@ -63,7 +63,7 @@ const useDetail = (id: any) => {
     detail?.pubid && (!publicInfo || tabId === DetailInfoType.public)
       ? fetchWhtielistInfoApi
       : null,
-    { refreshInterval: RefreshConfig.publicInfo_refreshInterval }
+    { refreshInterval: RefreshConfig.rune_refreshInterval }
   )
 
   const { result: res_whiteInfo, mutate: whiteMutate } = useSwr(
