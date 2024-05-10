@@ -136,16 +136,16 @@ const RuneHistoryItem: React.FC<{
   return (
     <RuneHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <RuneHistoryLineBox>
-        <RuneHistoryItemBox className="rune">{item.runeName}</RuneHistoryItemBox>
+        <RuneHistoryItemBox className="rune">{item.runename}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="types">{flowType == 'etching' ? 'Etching' : 'Mint'}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="amount">
-          {item.mintAmount}
+          {item.amount}
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="from_address">
-          <CopyItem text={item.sender} />
+          <CopyItem text={item.sender as string} />
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="receive_address">
-          <CopyItem text={item.receriverAddr} />
+          <CopyItem text={item.receiveaddress as string} />
         </RuneHistoryItemBox>
         {/* <RuneHistoryItemBox className="fee">{item.fee}</RuneHistoryItemBox> */}
         <>{
@@ -171,6 +171,7 @@ const RuneHistory: React.FC<{ title?: any, flowName: string }> = ({
       pageNum: page,
       sender: address,
       pageSize,
+      etchingType: flowName
     },
     { refreshInterval: RefreshConfig.publicInfo_refreshInterval },
   );
