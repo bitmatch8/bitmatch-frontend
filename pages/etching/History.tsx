@@ -96,12 +96,9 @@ const RuneHistoryHead: React.FC<{
       {/* <RuneHistoryHeadItemBox className="fee">
         <span>Fee</span>
       </RuneHistoryHeadItemBox> */}
-      <>{
-        flowType === 'mint' && <RuneHistoryHeadItemBox className="state">
-          <span>Status</span>
-        </RuneHistoryHeadItemBox>
-      }</>
-
+      <RuneHistoryHeadItemBox className="state">
+        <span>Status</span>
+      </RuneHistoryHeadItemBox>
     </RuneHistoryHeadBox>
   );
 };
@@ -136,21 +133,19 @@ const RuneHistoryItem: React.FC<{
   return (
     <RuneHistoryLineDetailBox className={`${show ? "pull-up" : ""}`}>
       <RuneHistoryLineBox>
-        <RuneHistoryItemBox className="rune">{item.runeName}</RuneHistoryItemBox>
+        <RuneHistoryItemBox className="rune">{flowType === 'etching' ? item.runeName : item.runename}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="types">{flowType == 'etching' ? 'Etching' : 'Mint'}</RuneHistoryItemBox>
         <RuneHistoryItemBox className="amount">
-          {item.mintAmount}
+          {flowType === 'etching' ? item.mintAmount : item.amount}
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="from_address">
-          <CopyItem text={item.sender} />
+          <CopyItem text={item.sender as string} />
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="receive_address">
-          <CopyItem text={item.receriverAddr} />
+          <CopyItem text={flowType === 'etching' ? item.receriverAddr as string : item.receiveaddress as string} />
         </RuneHistoryItemBox>
         {/* <RuneHistoryItemBox className="fee">{item.fee}</RuneHistoryItemBox> */}
-        <>{
-          flowType === 'mint' && <RuneHistoryItemBox className="state">{item.status}</RuneHistoryItemBox>
-        }</>
+        <RuneHistoryItemBox className="state">{item.status}</RuneHistoryItemBox>
       </RuneHistoryLineBox>
     </RuneHistoryLineDetailBox>
   );
@@ -171,6 +166,7 @@ const RuneHistory: React.FC<{ title?: any, flowName: string }> = ({
       pageNum: page,
       sender: address,
       pageSize,
+      etchingType: flowName
     },
     { refreshInterval: RefreshConfig.publicInfo_refreshInterval },
   );
@@ -338,6 +334,9 @@ const RuneHistoryLineBox = styled(RuneHistoryHeadBox)`
 const RuneHistoryItemBase = styled.div`
   &.rune {
     width: 200px;
+    overflow: hidden; /* 确保超出容器的文本被裁剪 */
+    white-space: nowrap; /* 确保文本在一行内显示 */
+    text-overflow: ellipsis; /* 使用省略号表示文本超出 */
   }
   &.types {
     width: 200px;
