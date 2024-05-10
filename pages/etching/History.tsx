@@ -14,6 +14,7 @@ import EmptyList from "@/components/OrderHistory/EmptyList";
 import useHistory, { HistoryItemProps } from "@/hook/useRuneHistory";
 import { selectBuy, useSelector, selectWallter } from "@/lib/redux";
 // import SelectIcon from "@/components/Svg/SelectIcon";
+import { useEffect } from 'react';
 
 
 // const SelectSvg: React.FC = () => {
@@ -134,7 +135,7 @@ const RuneHistoryItem: React.FC<{
           {item.mintAmount}
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="from_address">
-          <CopyItem text={item.fromaddr} />
+          <CopyItem text={item.sender} />
         </RuneHistoryItemBox>
         <RuneHistoryItemBox className="receive_address">
           <CopyItem text={item.receriverAddr} />
@@ -155,12 +156,14 @@ const RuneHistory: React.FC<{ title?: any }> = ({
   const [index, setIndex] = useState<number | null>(null);
   const { refresh_opt } = useSelector(selectBuy);
   const { address } = useSelector(selectWallter);
+  const [timer, setTimer] = useState(0)
 
   const { list: lists, total } = useHistory(
     {
       pageNum: page,
       fromAddr: address,
       pageSize,
+      timer
     },
     { refreshInterval: refresh_opt }
   );
@@ -179,17 +182,25 @@ const RuneHistory: React.FC<{ title?: any }> = ({
   //   { value: "transfer", label: "Transfer" },
   // ];
 
+  useEffect(() => {
+    const t = setInterval(() => {
+      setTimer((num) => num + 1)
+    }, 15000)
+
+    return () => {
+      clearInterval(t)
+    }
+  }, [])
+
   return (
     <>
-      {
-        address && <>
-          {title ? (
-            title
-          ) : (
-            <>
-              <PageTitleBox>
-                <span>History</span>
-                {/* <FormControl sx={{ m: 1, minWidth: 200 }}>
+      {title ? (
+        title
+      ) : (
+        <>
+          <PageTitleBox>
+            <span>History</span>
+            {/* <FormControl sx={{ m: 1, minWidth: 200 }}>
               <Select
                 value={historyType}
                 displayEmpty
@@ -209,30 +220,30 @@ const RuneHistory: React.FC<{ title?: any }> = ({
                 })}
               </Select>
             </FormControl> */}
-              </PageTitleBox>
-              <Spaced size="80" />
-            </>
+          </PageTitleBox>
+          <Spaced size="80" />
+        </>
+      )}
+      <RuneHistoryBox>
+        <RuneHistoryHead />
+        <RuneContainerBox>
+          {lists === null ? (
+            [null, null, null].map((_, key) => <EmptyLine key={key} />)
+          ) : lists.length === 0 ? (
+            <EmptyList />
+          ) : (
+            lists.map((item: any, key: number) => (
+              <RuneHistoryItem
+                key={key}
+                item={item}
+                show={index === key}
+                onClick={() => (index === key ? setIndex(null) : setIndex(key))}
+              />
+            ))
           )}
-          <RuneHistoryBox>
-            <RuneHistoryHead />
-            <RuneContainerBox>
-              {lists === null ? (
-                [null, null, null].map((_, key) => <EmptyLine key={key} />)
-              ) : lists.length === 0 ? (
-                <EmptyList />
-              ) : (
-                lists.map((item: any, key: number) => (
-                  <RuneHistoryItem
-                    key={key}
-                    item={item}
-                    show={index === key}
-                    onClick={() => (index === key ? setIndex(null) : setIndex(key))}
-                  />
-                ))
-              )}
-            </RuneContainerBox>
-            <Spaced size="36" />
-            {/* {total > pageSize ? (
+        </RuneContainerBox>
+        <Spaced size="36" />
+        {/* {total > pageSize ? (
           <Pagination
             total={total}
             pageSize={pageSize}
@@ -242,10 +253,7 @@ const RuneHistory: React.FC<{ title?: any }> = ({
         ) : (
           ""
         )} */}
-          </RuneHistoryBox></>
-      }
-
-    </>
+      </RuneHistoryBox></>
   );
 };
 export default RuneHistory;

@@ -47,7 +47,7 @@ export default function Mint1(props: any) {
   const addRunePoint = () => {
     const runeVal = rune;
     const runeLength = runeVal.length;
-    if (runeVal[runeLength-1] === '•') {
+    if (runeVal[runeLength - 1] === '•') {
       return;
     }
     const newRune = runeVal + '•';
@@ -98,8 +98,8 @@ export default function Mint1(props: any) {
         }
       }
     }
-    if (charArr.length < 12 || charArr.length > 28) {
-      setRuneErrorTip("Rune 12 to 28 letters");
+    if (charArr.length < 12 || charArr.length > 26) {
+      setRuneErrorTip("Rune 12 to 26 letters");
       return;
     }
     if (isUpperLetter) {
@@ -331,7 +331,7 @@ export default function Mint1(props: any) {
 
       <div className="etch-bottomBalanceBox">
         <span className="etch-balanceTxt">Balance</span>
-        <span className="etch-balanceNum">{balance.confirmed  / 1e8} BTC</span>
+        <span className="etch-balanceNum">{balance.confirmed / 1e8} BTC</span>
       </div>
       {address ? (
         <>

@@ -7,7 +7,7 @@ export type HistoryItemProps = {
   type: string;
   mintAmount: string;
   fee: string;
-  fromaddr: string;
+  sender: string;
   receriverAddr: string;
   state: OrderState;
 };
@@ -15,6 +15,7 @@ type props = {
   fromAddr: any;
   pageNum: any;
   pageSize: any;
+  timer: number;
 };
 const useHistory = (arg: props, opt: any = {}): { list: any[]; total: any } => {
   const { data, isLoading, error } = useSWR(arg, fetchRuneOrderList, opt);
