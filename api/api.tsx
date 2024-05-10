@@ -77,3 +77,8 @@ export const fetchRuneMintList = (params: any) => {
   const query_params = objectToUrlParams(params);
   return Ajax.get(`/runestone/search/oder1/list?${query_params}`);
 };
+
+//runes 提交mint信息
+export const fetchMintSubmit = (data: any) => {
+  return Ajax.post("/runestone/mempoolstatus/save/mint", data);
+};
