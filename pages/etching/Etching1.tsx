@@ -128,15 +128,18 @@ export default function Etching1(props: any) {
 
   const addRunePoint = () => {
     const runeVal = rune;
-    const runeLength = runeVal.length;
-    if (runeVal[runeLength-1] === '•') {
-      return;
-    }
-    const newRune = runeVal + '•';
-    setRune(newRune);
-    const runeDom = document.getElementById('runeInput');
-    if (runeDom) {
-      runeDom.focus();
+    const runeInputDom = document.getElementById('runeInput') as HTMLInputElement;
+    if (runeInputDom) {
+      const cursorPosition = runeInputDom.selectionStart || 0; // 获取光标位置
+      if (runeVal[cursorPosition-1]&&runeVal[cursorPosition-1]==='•' || runeVal[cursorPosition]&&runeVal[cursorPosition]==='•') {
+        runeInputDom.focus();
+        return;
+      }
+      const textBeforeCursor = runeInputDom.value.substring(0, cursorPosition);
+      const textAfterCursor = runeInputDom.value.substring(cursorPosition);
+      const newVal = textBeforeCursor + '•' + textAfterCursor;
+      setRune(newVal);
+      runeInputDom.focus();
     }
   }
   const setRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
