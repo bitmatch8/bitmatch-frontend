@@ -67,13 +67,13 @@ export const fetchEtching = (data: any) => {
 };
 
 // runes etching列表
-export const fetchRuneEtchingList = ({ etchingType, ...params }: any) => {
+export const fetchRuneEtchingList = ({ etchingType, txid, ...params }: any) => {
   const query_params = objectToUrlParams(params);
   return Ajax.get(`/runestone/search/order/list?${query_params}`);
 };
 
 //runes mint列表
-export const fetchRuneMintList = ({ etchingType, ...params }: any) => {
+export const fetchRuneMintList = ({ etchingType, txid,...params }: any) => {
   const query_params = objectToUrlParams(params);
   return Ajax.get(`/runestone/search/mint/order/list?${query_params}`);
 };

@@ -151,9 +151,10 @@ const RuneHistoryItem: React.FC<{
   );
 };
 
-const RuneHistory: React.FC<{ title?: any, flowName: string }> = ({
+const RuneHistory: React.FC<{ title?: any, flowName: string ,txid?:string}> = ({
   title,
-  flowName
+  flowName,
+  txid
 }) => {
   const [page, setPage] = useState(1);
   // const [historyType, setHistoryType] = useState("all");
@@ -166,7 +167,8 @@ const RuneHistory: React.FC<{ title?: any, flowName: string }> = ({
       pageNum: page,
       sender: address,
       pageSize,
-      etchingType: flowName
+      etchingType: flowName,
+      txid
     },
     { refreshInterval: RefreshConfig.publicInfo_refreshInterval },
   );

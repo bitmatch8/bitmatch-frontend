@@ -18,6 +18,7 @@ type props = {
   pageNum: any;
   pageSize: any;
   etchingType?: string;
+  txid?: string;
 };
 const useHistory = (arg: props, opt: any = {}): { list: any[]; total: any } => {
   const { data, isLoading, error } = useSWR(
