@@ -166,7 +166,7 @@ export default function Mint1(props: any) {
   const checkPremineRecAdd = (event: React.ChangeEvent<HTMLInputElement>) => {
     const premineAddressValue = event.target.value;
     if (!premineAddressValue) {
-      setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
+      setPremineReceiveAddressErrorTip("Please input Receive Address");
       return;
     }
     setPremineReceiveAddressErrorTip("");
@@ -189,7 +189,7 @@ export default function Mint1(props: any) {
       return false;
     }
     if (!premineReceiveAddress) {
-      setPremineReceiveAddressErrorTip("Please input Premine Receive Address");
+      setPremineReceiveAddressErrorTip("Please input Receive Address");
       return false;
     }
     return true;
@@ -314,7 +314,7 @@ export default function Mint1(props: any) {
         <div className="etch-formItemBox">
           <div className="etch-formTitleBox">
             <span className="etch-star">*</span>
-            <span className="etch-itemTitle">Premine Receive Address</span>
+            <span className="etch-itemTitle">Receive Address</span>
           </div>
           <div className="etch-inputBox1">
             <input
