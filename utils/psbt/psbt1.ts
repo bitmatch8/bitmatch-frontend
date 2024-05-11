@@ -154,6 +154,7 @@ export const generatePsbt = async (
     //没有utxo则不可交易
     if (paymentUtxos.length === 0) {
       let feeTx = btc.Transaction.fromPSBT(dummyTx.toPSBT());
+      console.log("没有utxo");
       return { vsize: feeTx.vsize };
     }
 
@@ -248,6 +249,7 @@ export const generatePsbt = async (
       }
 
       if (paymentUtxoCount === paymentUtxos.length) {
+        console.log("余额不足");
         return {
           vsize: feeTx.vsize,
         };
