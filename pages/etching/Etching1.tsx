@@ -149,6 +149,11 @@ export default function Etching1(props: any) {
         errorChar = true;
         break;
       } else {
+        //圆点不能连续多个，只能单个单个的出现
+        if (runeVal[i]==='•' && runeVal[i+1]==='•') {
+          errorChar = true;
+          break;
+        }
         let upperChar = runeVal[i].toUpperCase();
         upperStr += upperChar;
       }
@@ -156,6 +161,7 @@ export default function Etching1(props: any) {
     if (errorChar) {
       return;
     }
+
     setRune(upperStr);
   };
   const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
