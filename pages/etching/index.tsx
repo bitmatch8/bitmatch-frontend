@@ -21,6 +21,7 @@ export default function IndexPage() {
 
   const router = useRouter();
   const { address } = useSelector(selectWallter);
+  const [txid, setTxid] = useState('');
 
 
   const getFlow1Data = (data: any) => {
@@ -79,6 +80,8 @@ export default function IndexPage() {
     }
   }, [searchVal])
 
+  const reloadList = (txid: string) => { setTxid(txid) }
+
   return (
     <Page>
       <div className="etching-topHeader">
@@ -135,6 +138,7 @@ export default function IndexPage() {
             flowName={flowName}
             formData={formData}
             handleBackFlow2={getFlow2BackData}
+            reloadList={reloadList}
           ></Flow2>
         )}
         {flowIndex === 3 && (
@@ -147,7 +151,7 @@ export default function IndexPage() {
         )}
       </div>
       <>
-        {address && <History flowName={flowName} />}</>
+        {address && <History flowName={flowName} txid={txid} />}</>
     </Page>
   );
 }

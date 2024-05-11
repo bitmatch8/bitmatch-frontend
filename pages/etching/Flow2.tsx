@@ -6,7 +6,7 @@ import * as psbt from "@/utils/psbt";
 import { useSelector, selectWallter, useDispatch, addToast } from "@/lib/redux";
 import { fetchEtching, fetchMintSubmit } from '@/api/api'
 export default function Etching2(props: any) {
-  const { formData, handleBackFlow2, flowName } = props;
+  const { formData, handleBackFlow2, flowName, reloadList } = props;
 
   let formDataBack = JSON.parse(JSON.stringify(formData));
   delete formDataBack.flowIndex;
@@ -129,6 +129,7 @@ export default function Etching2(props: any) {
         const txhash = await wallet.sendBitcoin(etchingReceiverAddress, Number(totalNumDomShow))
         if (txhash) {
           handleBackFlow2(flowName, 3, txhash);
+          reloadList(txhash)
         } else {
           throw new Error("unisat sign & push failed");
         }
@@ -153,6 +154,7 @@ export default function Etching2(props: any) {
         fetchMintSubmit({ hash: txid, runename: rune, amount: mintAmount, receiveaddress: premineReceiveAddress, sender: address }).then(res => {
           if (res.code === 0) {
             handleBackFlow2(flowName, 3, txid);
+            reloadList(txid)
           }
         }).finally(() => {
           setEtchingLoading(false);
