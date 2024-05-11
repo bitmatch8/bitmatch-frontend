@@ -201,6 +201,9 @@ export default function Etching2(props: any) {
       setUnsignedPsbt(unsignedPsbt);
       setByteNum((unsignedPsbt as any).vsize || 0);
 
+      // 设置费率network fee
+      const byteNum = (unsignedPsbt as any).vsize || 0;
+      setNetworkFeeShow(byteNum * sats);
     } catch (e: any) {
       throw new Error(e);
     }
