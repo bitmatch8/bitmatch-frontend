@@ -105,6 +105,13 @@ export const generatePsbt = async (
   opReturnOutput: Buffer,
   opNum: number
 ) => {
+  console.log("generatePsbt", {
+    payment,
+    recipientAddress,
+    feeRate,
+    opReturnOutput,
+    opNum,
+  });
   try {
     const tx = new btc.Transaction({ allowUnknownOutputs: true });
     const dummyTx = new btc.Transaction({ allowUnknownOutputs: true });
@@ -225,17 +232,6 @@ export const generatePsbt = async (
         }
 
         const psbt = tx.toPSBT();
-
-        // //
-        // const tx3 = btc.Transaction.fromPSBT(psbt);
-        // console.log("tx3", tx3);
-        // for (let i = 0; i < tx3.inputs.length; i++) {
-        //   tx3.updateInput(i, { sighashType: btc.SigHash.SINGLE });
-        //   console.log("btc.SigHash", btc.SigHash);
-        // }
-        // const psbt3 = tx3.toPSBT();
-
-        // //
         const psbtBase64 = base64.encode(psbt);
         const psbtHex = hex.encode(psbt);
 
