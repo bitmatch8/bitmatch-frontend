@@ -215,7 +215,7 @@ export default function Mint1(props: any) {
 
   useEffect(() => {
     setTotalMintAmount(amountUnit * mintAmount);
-  }, [mintAmount]);
+  }, [mintAmount, amountUnit]);
 
   useEffect(() => {
     if (from2To1Data.rune) {
