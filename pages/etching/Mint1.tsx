@@ -21,7 +21,7 @@ export default function Mint1(props: any) {
   const [mintAmount, setMmintAmount] = React.useState(1);
   const [amountUnit, setAmountUnit] = React.useState(0);
   const [mintAmountErrorTip, setMmintAmountErrorTip] = React.useState("");
-  const [totalMintAmount, setTotalMintAmount] = React.useState(2100);
+  const [totalMintAmount, setTotalMintAmount] = React.useState(0);
   const [premineReceiveAddress, setPremineReceiveAddress] = React.useState("");
   const [premineReceiveAddressErrorTip, setPremineReceiveAddressErrorTip] =
     React.useState("");
@@ -214,14 +214,14 @@ export default function Mint1(props: any) {
   };
 
   useEffect(() => {
-    setTotalMintAmount(2100 * mintAmount);
+    setTotalMintAmount(amountUnit * mintAmount);
   }, [mintAmount]);
 
   useEffect(() => {
     if (from2To1Data.rune) {
       setRune(from2To1Data.rune);
       setTotalMintAmount(from2To1Data.mintAmount);
-      setMmintAmount(from2To1Data.mintAmount / 2100);
+      
       setPremineReceiveAddress(from2To1Data.premineReceiveAddress);
       // 根据rune name获取amount的unit值
       const runeVal = from2To1Data.rune;
@@ -233,6 +233,7 @@ export default function Mint1(props: any) {
         setAmountUnit(
           (res["result"]["rune"] && res["result"]["rune"]["mintAmount"]) || 0
         );
+        setMmintAmount(from2To1Data.mintAmount / ((res["result"]["rune"] && res["result"]["rune"]["mintAmount"]) || 0));
 
         // 获取剩余可Mint数量
         const premineNum =
