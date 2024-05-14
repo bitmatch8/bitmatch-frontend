@@ -170,8 +170,8 @@ export default function Etching1(props: any) {
   const checkRuneName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const runeVal: string = event.target.value;
     const runeValLength = runeVal.length;
-    if (runeVal[runeValLength - 1] === "•") {
-      setRuneErrorTip("The last characters cannot be •");
+    if (runeVal[0] === "•" || runeVal[runeValLength - 1] === "•") {
+      setRuneErrorTip("The first and last characters cannot be •");
       return;
     }
     let charArr = [];
