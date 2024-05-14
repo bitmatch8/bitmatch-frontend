@@ -112,6 +112,11 @@ export default function Mint1(props: any) {
     fetchRuneSearchApi(runeVal.replaceAll('•', '')).then((res) => {
       if (!res || !res['result'] || !res['result']['exist']) {
         setRuneErrorTip("Rune does not exist");
+
+        setTx('');
+        setBlock('');
+        setAmountUnit(0);
+        setRuneNum(0);
         return;
       }
       let runeid =
