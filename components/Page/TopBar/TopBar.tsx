@@ -25,8 +25,9 @@ export const TopBar = () => {
     },
     {
       title: "Etching",
-      path: "/etching",
-      // tip: "Coming Soon",
+      // path: "/etching",
+      path: "",
+      tip: "Coming Soon",
     },
     {
       title: "Genesis NFT",
@@ -44,22 +45,19 @@ export const TopBar = () => {
           <LinkItem
             key={key}
             className={pathname === link.path ? "active" : ""}
-            // onClick={() =>
-            //   link.tip
-            //     ? dispatch(
-            //         addToast({
-            //           icon: "warning",
-            //           contxt: link.tip,
-            //         })
-            //       )
-            //     : ""
-            // }
+            onClick={() =>
+              link.tip
+                ? dispatch(
+                    addToast({
+                      icon: "warning",
+                      contxt: link.tip,
+                    })
+                  )
+                : ""
+            }
             href={link.path}
           >
             {link.title}
-            {
-              link.title === 'Etching' && <EtchingNew src={etchingNewImg} alt="etching" />     
-            }
           </LinkItem>
         ))}
       </MenusBox>
